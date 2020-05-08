@@ -18,19 +18,22 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using AInq.Support.Background.WorkElements;
 using Microsoft.Extensions.DependencyInjection;
 using Nito.AsyncEx;
+using static AInq.Support.Background.WorkElements.WorkWrapperFactory;
+using static AInq.Support.Background.WorkElements.WorkFactory;
 
-namespace AInq.Support.Background.Queue
+namespace AInq.Support.Background.WorkQueue
 {
     internal class WorkQueueManager : IWorkQueue
     {
-        protected internal ConcurrentQueue<WorkWrapper.IWorkWrapper> Queue { get; } = new ConcurrentQueue<WorkWrapper.IWorkWrapper>();
+        protected internal ConcurrentQueue<IWorkWrapper> Queue { get; } = new ConcurrentQueue<IWorkWrapper>();
         protected internal AsyncAutoResetEvent NewWorkEvent { get; } = new AsyncAutoResetEvent(false);
 
         Task IWorkQueue.EnqueueWork(IWork work, CancellationToken cancellation)
         {
-            var (workWrapper, task) = WorkWrapper.CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), cancellation);
+            var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), cancellation);
             Queue.Enqueue(workWrapper);
             NewWorkEvent.Set();
             return task;
@@ -38,7 +41,7 @@ namespace AInq.Support.Background.Queue
 
         Task IWorkQueue.EnqueueWork<TWork>(CancellationToken cancellation)
         {
-            var (workWrapper, task) = WorkWrapper.CreateWorkWrapper(WorkFactory.CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), cancellation);
+            var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), cancellation);
             Queue.Enqueue(workWrapper);
             NewWorkEvent.Set();
             return task;
@@ -46,7 +49,7 @@ namespace AInq.Support.Background.Queue
 
         Task<TResult> IWorkQueue.EnqueueWork<TResult>(IWork<TResult> work, CancellationToken cancellation)
         {
-            var (workWrapper, task) = WorkWrapper.CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), cancellation);
+            var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), cancellation);
             Queue.Enqueue(workWrapper);
             NewWorkEvent.Set();
             return task;
@@ -54,7 +57,7 @@ namespace AInq.Support.Background.Queue
 
         Task<TResult> IWorkQueue.EnqueueWork<TWork, TResult>(CancellationToken cancellation)
         {
-            var (workWrapper, task) = WorkWrapper.CreateWorkWrapper(WorkFactory.CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), cancellation);
+            var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), cancellation);
             Queue.Enqueue(workWrapper);
             NewWorkEvent.Set();
             return task;
@@ -62,7 +65,7 @@ namespace AInq.Support.Background.Queue
 
         Task IWorkQueue.EnqueueAsyncWork(IAsyncWork work, CancellationToken cancellation)
         {
-            var (workWrapper, task) = WorkWrapper.CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), cancellation);
+            var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), cancellation);
             Queue.Enqueue(workWrapper);
             NewWorkEvent.Set();
             return task;
@@ -70,7 +73,7 @@ namespace AInq.Support.Background.Queue
 
         Task IWorkQueue.EnqueueAsyncWork<TWork>(CancellationToken cancellation)
         {
-            var (workWrapper, task) = WorkWrapper.CreateWorkWrapper(WorkFactory.CreateWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), cancellation);
+            var (workWrapper, task) = CreateWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), cancellation);
             Queue.Enqueue(workWrapper);
             NewWorkEvent.Set();
             return task;
@@ -78,7 +81,7 @@ namespace AInq.Support.Background.Queue
 
         Task<TResult> IWorkQueue.EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, CancellationToken cancellation)
         {
-            var (workWrapper, task) = WorkWrapper.CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), cancellation);
+            var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), cancellation);
             Queue.Enqueue(workWrapper);
             NewWorkEvent.Set();
             return task;
@@ -86,7 +89,7 @@ namespace AInq.Support.Background.Queue
 
         Task<TResult> IWorkQueue.EnqueueAsyncWork<TWork, TResult>(CancellationToken cancellation)
         {
-            var (workWrapper, task) = WorkWrapper.CreateWorkWrapper(WorkFactory.CreateWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), cancellation);
+            var (workWrapper, task) = CreateWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), cancellation);
             Queue.Enqueue(workWrapper);
             NewWorkEvent.Set();
             return task;

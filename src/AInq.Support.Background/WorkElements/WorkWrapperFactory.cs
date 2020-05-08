@@ -18,14 +18,11 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Support.Background
+namespace AInq.Support.Background.WorkElements
 {
-    internal static class WorkWrapper
+    internal static class WorkWrapperFactory
     {
-        internal interface IWorkWrapper
-        {
-            Task DoWorkAsync(IServiceProvider provider, CancellationToken cancellation);
-        }
+        #region Wrappers
 
         private class SimpleWorkWrapper : IWorkWrapper
         {
@@ -165,25 +162,27 @@ namespace AInq.Support.Background
             }
         }
 
-        public static (IWorkWrapper, Task) CreateWorkWrapper(IWork work, CancellationToken cancellation)
+        #endregion
+
+        public static (IWorkWrapper Work, Task Task) CreateWorkWrapper(IWork work, CancellationToken cancellation)
         {
             var wrapper = new SimpleWorkWrapper(work, cancellation);
             return (wrapper, wrapper.WorkTask);
         }
 
-        public static (IWorkWrapper, Task<TResult>) CreateWorkWrapper<TResult>(IWork<TResult> work, CancellationToken cancellation)
+        public static (IWorkWrapper Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IWork<TResult> work, CancellationToken cancellation)
         {
             var wrapper = new SimpleWorkWrapper<TResult>(work, cancellation);
             return (wrapper, wrapper.WorkTask);
         }
 
-        public static (IWorkWrapper, Task) CreateWorkWrapper(IAsyncWork work, CancellationToken cancellation)
+        public static (IWorkWrapper Work, Task Task) CreateWorkWrapper(IAsyncWork work, CancellationToken cancellation)
         {
             var wrapper = new AsyncWorkWrapper(work, cancellation);
             return (wrapper, wrapper.WorkTask);
         }
 
-        public static (IWorkWrapper, Task<TResult>) CreateWorkWrapper<TResult>(IAsyncWork<TResult> work, CancellationToken cancellation)
+        public static (IWorkWrapper Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IAsyncWork<TResult> work, CancellationToken cancellation)
         {
             var wrapper = new AsyncWorkWrapper<TResult>(work, cancellation);
             return (wrapper, wrapper.WorkTask);

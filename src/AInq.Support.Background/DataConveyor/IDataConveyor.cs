@@ -14,29 +14,13 @@
  * limitations under the License.
  */
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Support.Background
+namespace AInq.Support.Background.DataConveyor
 {
-    public interface IWork
+    public interface IDataConveyor<in TData, TResult>
     {
-        void DoWork(IServiceProvider serviceProvider);
-    }
-
-    public interface IWork<out TResult>
-    {
-        TResult DoWork(IServiceProvider serviceProvider);
-    }
-
-    public interface IAsyncWork
-    {
-        Task DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation);
-    }
-
-    public interface IAsyncWork<TResult>
-    {
-        Task<TResult> DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation);
+        Task<TResult> EnqueueData(TData data, CancellationToken cancellation = default);
     }
 }

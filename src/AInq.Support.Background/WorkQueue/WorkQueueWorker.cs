@@ -17,12 +17,13 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AInq.Support.Background.WorkElements;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nito.AsyncEx;
 using Nito.AsyncEx.Interop;
 
-namespace AInq.Support.Background.Queue
+namespace AInq.Support.Background.WorkQueue
 {
     internal class WorkQueueWorker : IHostedService, IDisposable
     {
@@ -44,7 +45,7 @@ namespace AInq.Support.Background.Queue
             return !_workQueueManager.Queue.IsEmpty;
         }
 
-        protected async Task DoWorkAsync(WorkWrapper.IWorkWrapper work)
+        protected async Task DoWorkAsync(IWorkWrapper work)
         {
             using var scope = _provider.CreateScope();
             await work.DoWorkAsync(scope.ServiceProvider, _cancellation.Token);

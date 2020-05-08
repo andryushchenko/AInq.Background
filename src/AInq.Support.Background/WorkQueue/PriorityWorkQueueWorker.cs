@@ -18,7 +18,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AInq.Support.Background.Queue
+namespace AInq.Support.Background.WorkQueue
 {
     internal sealed class PriorityWorkQueueWorker : WorkQueueWorker
     {

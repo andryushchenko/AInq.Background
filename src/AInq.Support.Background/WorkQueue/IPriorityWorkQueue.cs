@@ -16,8 +16,9 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using AInq.Support.Background.WorkElements;
 
-namespace AInq.Support.Background
+namespace AInq.Support.Background.WorkQueue
 
 {
     public interface IPriorityWorkQueue : IWorkQueue

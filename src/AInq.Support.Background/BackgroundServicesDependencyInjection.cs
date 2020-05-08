@@ -15,12 +15,12 @@
  */
 
 using System.Linq;
-using AInq.Support.Background.Queue;
+using AInq.Support.Background.WorkQueue;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AInq.Support.Background
 {
-    public static class DependencyInjection
+    public static class BackgroundServicesDependencyInjection
     {
         public static IServiceCollection AddWorkQueue(this IServiceCollection services)
         {
