@@ -25,14 +25,10 @@ namespace AInq.Support.Background
         private readonly Action<IServiceProvider> _work;
 
         internal SimpleWork(Action<IServiceProvider> work)
-        {
-            _work = work ?? throw new ArgumentNullException(nameof(work));
-        }
+            => _work = work ?? throw new ArgumentNullException(nameof(work));
 
         void IWork.DoWork(IServiceProvider serviceProvider)
-        {
-            _work.Invoke(serviceProvider);
-        }
+            => _work.Invoke(serviceProvider);
     }
 
     internal class SimpleWork<TResult> : IWork<TResult>
@@ -40,14 +36,10 @@ namespace AInq.Support.Background
         private readonly Func<IServiceProvider, TResult> _work;
 
         internal SimpleWork(Func<IServiceProvider, TResult> work)
-        {
-            _work = work ?? throw new ArgumentNullException(nameof(work));
-        }
+            => _work = work ?? throw new ArgumentNullException(nameof(work));
 
         TResult IWork<TResult>.DoWork(IServiceProvider serviceProvider)
-        {
-            return _work.Invoke(serviceProvider);
-        }
+            => _work.Invoke(serviceProvider);
     }
 
     internal class SimpleAsyncWork : IAsyncWork
@@ -55,14 +47,10 @@ namespace AInq.Support.Background
         private readonly Func<IServiceProvider, CancellationToken, Task> _work;
 
         internal SimpleAsyncWork(Func<IServiceProvider, CancellationToken, Task> work)
-        {
-            _work = work ?? throw new ArgumentNullException(nameof(work));
-        }
+            => _work = work ?? throw new ArgumentNullException(nameof(work));
 
         async Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-        {
-            await _work.Invoke(serviceProvider, cancellation);
-        }
+            => await _work.Invoke(serviceProvider, cancellation);
     }
 
     internal class SimpleAsyncWork<TResult> : IAsyncWork<TResult>
@@ -70,13 +58,9 @@ namespace AInq.Support.Background
         private readonly Func<IServiceProvider, CancellationToken, Task<TResult>> _work;
 
         internal SimpleAsyncWork(Func<IServiceProvider, CancellationToken, Task<TResult>> work)
-        {
-            _work = work ?? throw new ArgumentNullException(nameof(work));
-        }
+            => _work = work ?? throw new ArgumentNullException(nameof(work));
 
         async Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-        {
-            return await _work.Invoke(serviceProvider, cancellation);
-        }
+            => await _work.Invoke(serviceProvider, cancellation);
     }
 }

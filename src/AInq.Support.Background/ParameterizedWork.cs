@@ -32,9 +32,7 @@ namespace AInq.Support.Background
         }
 
         void IWork.DoWork(IServiceProvider serviceProvider)
-        {
-            _work.Invoke(serviceProvider, _param);
-        }
+            => _work.Invoke(serviceProvider, _param);
     }
 
     public class ParameterizedWork<TParam, TResult> : IWork<TResult>
@@ -49,9 +47,7 @@ namespace AInq.Support.Background
         }
 
         TResult IWork<TResult>.DoWork(IServiceProvider serviceProvider)
-        {
-            return _work.Invoke(serviceProvider, _param);
-        }
+            => _work.Invoke(serviceProvider, _param);
     }
 
     public class ParameterizedAsyncWork<TParam> : IAsyncWork
@@ -66,9 +62,7 @@ namespace AInq.Support.Background
         }
 
         async Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-        {
-            await _work.Invoke(serviceProvider, _param, cancellation);
-        }
+            => await _work.Invoke(serviceProvider, _param, cancellation);
     }
 
     public class ParameterizedAsyncWork<TParam, TResult> : IAsyncWork<TResult>
@@ -83,8 +77,6 @@ namespace AInq.Support.Background
         }
 
         async Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-        {
-            return await _work.Invoke(serviceProvider, _param, cancellation);
-        }
+            => await _work.Invoke(serviceProvider, _param, cancellation);
     }
 }
