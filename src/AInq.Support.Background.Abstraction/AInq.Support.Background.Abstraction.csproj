@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -11,14 +11,11 @@
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Support.Background</PackageProjectUrl>
     <Version>0.1.0</Version>
     <LangVersion>latest</LangVersion>
+    <RootNamespace>AInq.Support.Background</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nito.AsyncEx" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\AInq.Support.Background.Abstraction\AInq.Support.Background.Abstraction.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.0.0" />
   </ItemGroup>
 
 </Project>
