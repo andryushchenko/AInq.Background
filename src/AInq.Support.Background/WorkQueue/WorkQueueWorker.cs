@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using AInq.Support.Background.WorkElements;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nito.AsyncEx;
 using Nito.AsyncEx.Interop;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AInq.Support.Background.WorkQueue
 {
@@ -38,17 +38,26 @@ namespace AInq.Support.Background.WorkQueue
             _provider = provider;
         }
 
-        protected virtual async Task<bool> GetNextWorkAsync()
+        protected virtual async Task<bool> DoNextWorkAsync()
         {
             if (!_workQueueManager.Queue.TryDequeue(out var work)) return false;
-            await DoWorkAsync(work);
-            return !_workQueueManager.Queue.IsEmpty;
+            if (await DoWorkAsync(work))
+                return !_workQueueManager.Queue.IsEmpty;
+            _workQueueManager.Queue.Enqueue(work);
+            return true;
         }
 
-        protected async Task DoWorkAsync(IWorkWrapper work)
+        protected async Task<bool> DoWorkAsync(IWorkWrapper work)
         {
             using var scope = _provider.CreateScope();
-            await work.DoWorkAsync(scope.ServiceProvider, _cancellation.Token);
+            try
+            {
+                return await work.DoWorkAsync(scope.ServiceProvider, _cancellation.Token);
+            }
+            catch (Exception)
+            {
+                return true;
+            }
         }
 
         private async Task Worker()
@@ -56,7 +65,7 @@ namespace AInq.Support.Background.WorkQueue
             using var cancel = WaitHandleAsyncFactory.FromWaitHandle(_cancellation.Token.WaitHandle);
             while (!_cancellation.IsCancellationRequested)
             {
-                while (await GetNextWorkAsync()) { }
+                while (await DoNextWorkAsync()) { }
                 await Task.WhenAny(_workQueueManager.NewWorkEvent.WaitAsync(), cancel);
             }
         }

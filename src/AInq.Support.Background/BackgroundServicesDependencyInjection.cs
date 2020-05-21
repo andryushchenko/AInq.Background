@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using System.Linq;
 using AInq.Support.Background.WorkQueue;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 
 namespace AInq.Support.Background
 {

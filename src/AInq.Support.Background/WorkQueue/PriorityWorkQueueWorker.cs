@@ -30,13 +30,15 @@ namespace AInq.Support.Background.WorkQueue
             _priorityWorkQueueManager = priorityWorkQueueManager;
         }
 
-        protected override async Task<bool> GetNextWorkAsync()
+        protected override async Task<bool> DoNextWorkAsync()
         {
             var currentQueue = _priorityWorkQueueManager.Queues.Reverse().FirstOrDefault(queue => !queue.IsEmpty);
             if (currentQueue == null) return false;
             if (!currentQueue.TryDequeue(out var work)) return false;
-            await DoWorkAsync(work);
-            return !_priorityWorkQueueManager.Queues.All(queue => queue.IsEmpty);
+            if (await DoWorkAsync(work))
+                return !_priorityWorkQueueManager.Queues.All(queue => queue.IsEmpty);
+            currentQueue.Enqueue(work);
+            return true;
         }
     }
 }

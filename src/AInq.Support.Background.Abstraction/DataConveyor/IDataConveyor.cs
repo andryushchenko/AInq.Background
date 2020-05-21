@@ -21,6 +21,6 @@ namespace AInq.Support.Background.DataConveyor
 {
     public interface IDataConveyor<in TData, TResult>
     {
-        Task<TResult> EnqueueData(TData data, CancellationToken cancellation = default);
+        Task<TResult> ProcessDataAsync(TData data, CancellationToken cancellation = default, int attemptsCount = 1);
     }
 }

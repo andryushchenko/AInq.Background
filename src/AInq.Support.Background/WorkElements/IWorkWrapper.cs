@@ -22,6 +22,6 @@ namespace AInq.Support.Background.WorkElements
 {
     internal interface IWorkWrapper
     {
-        Task DoWorkAsync(IServiceProvider provider, CancellationToken cancellation);
+        Task<bool> DoWorkAsync(IServiceProvider provider, CancellationToken cancellation = default);
     }
 }

@@ -25,6 +25,6 @@ namespace AInq.Support.Background.DataConveyor
         TimeSpan Timeout { get; }
         Task StartConveyorAsync(CancellationToken cancellation = default);
         Task<TResult> ProcessDataAsync(TData data, CancellationToken cancellation = default);
-        Task StopConveyorAsync();
+        Task StopConveyorAsync(CancellationToken cancellation = default);
     }
 }

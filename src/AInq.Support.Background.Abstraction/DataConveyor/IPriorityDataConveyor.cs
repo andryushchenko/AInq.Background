@@ -22,6 +22,6 @@ namespace AInq.Support.Background.DataConveyor
     public interface IPriorityDataConveyor<in TData, TResult> : IDataConveyor<TData, TResult>
     {
         int MaxPriority { get; }
-        Task<TResult> EnqueueData(TData data, int priority, CancellationToken cancellation = default);
+        Task<TResult> ProcessDataAsync(TData data, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
     }
 }

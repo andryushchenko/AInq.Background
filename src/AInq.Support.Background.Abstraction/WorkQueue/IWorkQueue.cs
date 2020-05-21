@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
+using AInq.Support.Background.WorkElements;
 using System.Threading;
 using System.Threading.Tasks;
-using AInq.Support.Background.WorkElements;
 
 namespace AInq.Support.Background.WorkQueue
 
 {
     public interface IWorkQueue
     {
-        Task EnqueueWork(IWork work, CancellationToken cancellation = default);
-        Task EnqueueWork<TWork>(CancellationToken cancellation = default) where TWork : IWork;
-        Task<TResult> EnqueueWork<TResult>(IWork<TResult> work, CancellationToken cancellation = default);
-        Task<TResult> EnqueueWork<TWork, TResult>(CancellationToken cancellation = default) where TWork : IWork<TResult>;
-        Task EnqueueAsyncWork(IAsyncWork work, CancellationToken cancellation = default);
-        Task EnqueueAsyncWork<TWork>(CancellationToken cancellation = default) where TWork : IAsyncWork;
-        Task<TResult> EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, CancellationToken cancellation = default);
-        Task<TResult> EnqueueAsyncWork<TWork, TResult>(CancellationToken cancellation = default) where TWork : IAsyncWork<TResult>;
+        Task EnqueueWork(IWork work, CancellationToken cancellation = default, int attemptsCount = 1);
+        Task EnqueueWork<TWork>(CancellationToken cancellation = default, int attemptsCount = 1) where TWork : IWork;
+        Task<TResult> EnqueueWork<TResult>(IWork<TResult> work, CancellationToken cancellation = default, int attemptsCount = 1);
+        Task<TResult> EnqueueWork<TWork, TResult>(CancellationToken cancellation = default, int attemptsCount = 1) where TWork : IWork<TResult>;
+        Task EnqueueAsyncWork(IAsyncWork work, CancellationToken cancellation = default, int attemptsCount = 1);
+        Task EnqueueAsyncWork<TAsyncWork>(CancellationToken cancellation = default, int attemptsCount = 1) where TAsyncWork : IAsyncWork;
+        Task<TResult> EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, CancellationToken cancellation = default, int attemptsCount = 1);
+        Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(CancellationToken cancellation = default, int attemptsCount = 1) where TAsyncWork : IAsyncWork<TResult>;
     }
 }
