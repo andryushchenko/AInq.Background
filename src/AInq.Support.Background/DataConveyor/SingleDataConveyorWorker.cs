@@ -14,41 +14,38 @@
  * limitations under the License.
  */
 
-using AInq.Support.Background.WorkElements;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nito.AsyncEx;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Support.Background.WorkQueue
+namespace AInq.Support.Background.DataConveyor
 {
-    internal class WorkQueueWorker : IHostedService, IDisposable
+    internal class SingleDataConveyorWorker<TData, TResult> : IHostedService, IDisposable
     {
-        private readonly WorkQueueManager _queueManager;
-        private readonly IServiceProvider _provider;
+        private readonly DataConveyorManager<TData, TResult> _conveyorManager;
         private readonly CancellationTokenSource _cancellation = new CancellationTokenSource();
+        private readonly IDataConveyorMachine<TData, TResult> _machine;
         private Task _worker;
 
-        internal WorkQueueWorker(WorkQueueManager queueManager, IServiceProvider provider)
+        internal SingleDataConveyorWorker(DataConveyorManager<TData, TResult> conveyorManager, IDataConveyorMachine<TData, TResult> machine)
         {
-            _queueManager = queueManager;
-            _provider = provider;
+            _conveyorManager = conveyorManager ?? throw new ArgumentNullException(nameof(conveyorManager));
+            _machine = machine ?? throw new ArgumentNullException(nameof(machine));
         }
 
-        protected virtual async Task<bool> DoNextWorkAsync()
+        protected virtual async Task<bool> ProcessNextElementAsync()
         {
-            if (!_queueManager.Queue.TryDequeue(out var work)) return false;
-            if (await DoWorkAsync(work)) return !_queueManager.Queue.IsEmpty;
-            _queueManager.Queue.Enqueue(work);
+            if (!_conveyorManager.Queue.TryDequeue(out var element)) return false;
+            if (await ProcessElementAsync(element)) return !_conveyorManager.Queue.IsEmpty;
+            _conveyorManager.Queue.Enqueue(element);
             return true;
         }
 
-        protected async Task<bool> DoWorkAsync(IWorkWrapper work)
+        protected async Task<bool> ProcessElementAsync(DataConveyorElement<TData, TResult> element)
         {
-            using var scope = _provider.CreateScope();
-            return await work.DoWorkAsync(scope.ServiceProvider, _cancellation.Token);
+            return await element.ProcessDataAsync(_machine, _cancellation.Token);
         }
 
         private async Task Worker()
@@ -56,8 +53,12 @@ namespace AInq.Support.Background.WorkQueue
             while (!_cancellation.IsCancellationRequested)
                 try
                 {
-                    await _queueManager.NewWorkEvent.WaitAsync(_cancellation.Token);
-                    while (await DoNextWorkAsync()) { }
+                    await _conveyorManager.NewDataEvent.WaitAsync(_cancellation.Token);
+                    await _machine.StartConveyorAsync(_cancellation.Token);
+                    while (await ProcessNextElementAsync())
+                        if (_machine.Timeout.HasValue)
+                            await Task.Delay(_machine.Timeout.Value);
+                    await _machine.StopConveyorAsync(_cancellation.Token);
                 }
                 catch (OperationCanceledException)
                 {

@@ -22,8 +22,6 @@ namespace AInq.Support.Background.WorkElements
 {
     internal static class WorkWrapperFactory
     {
-        #region Wrappers
-
         private class SimpleWorkWrapper : IWorkWrapper
         {
             private readonly IWork _work;
@@ -33,6 +31,7 @@ namespace AInq.Support.Background.WorkElements
 
             internal SimpleWorkWrapper(IWork work, int attemptsCount, CancellationToken innerCancellation)
             {
+                if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
                 _work = work;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -42,7 +41,7 @@ namespace AInq.Support.Background.WorkElements
 
             Task<bool> IWorkWrapper.DoWorkAsync(IServiceProvider provider, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain <= 0) throw new InvalidOperationException();
+                if (_attemptsRemain <= 0) return Task.FromResult(true);
                 _attemptsRemain--;
                 try
                 {
@@ -50,22 +49,18 @@ namespace AInq.Support.Background.WorkElements
                     _innerCancellation.ThrowIfCancellationRequested();
                     _work.DoWork(provider);
                     _completion.TrySetResult(true);
-                    return Task.FromResult(true);
                 }
                 catch (OperationCanceledException ex)
                 {
-                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
-                        return Task.FromResult(false);
+                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested) return Task.FromResult(false);
                     _completion.TrySetCanceled(ex.CancellationToken);
-                    return Task.FromResult(true);
                 }
                 catch (Exception ex)
                 {
-                    if (_attemptsRemain > 0)
-                        return Task.FromResult(false);
+                    if (_attemptsRemain > 0) return Task.FromResult(false);
                     _completion.TrySetException(ex);
-                    return Task.FromResult(true);
                 }
+                return Task.FromResult(true);
             }
         }
 
@@ -78,6 +73,7 @@ namespace AInq.Support.Background.WorkElements
 
             internal SimpleWorkWrapper(IWork<TResult> work, int attemptsCount, CancellationToken innerCancellation)
             {
+                if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
                 _work = work;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -87,29 +83,25 @@ namespace AInq.Support.Background.WorkElements
 
             Task<bool> IWorkWrapper.DoWorkAsync(IServiceProvider provider, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain <= 0) throw new InvalidOperationException();
+                if (_attemptsRemain <= 0) return Task.FromResult(true);
                 _attemptsRemain--;
                 try
                 {
                     outerCancellation.ThrowIfCancellationRequested();
                     _innerCancellation.ThrowIfCancellationRequested();
                     _completion.TrySetResult(_work.DoWork(provider));
-                    return Task.FromResult(true);
                 }
                 catch (OperationCanceledException ex)
                 {
-                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
-                        return Task.FromResult(false);
+                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested) return Task.FromResult(false);
                     _completion.TrySetCanceled(ex.CancellationToken);
-                    return Task.FromResult(true);
                 }
                 catch (Exception ex)
                 {
-                    if (_attemptsRemain > 0)
-                        return Task.FromResult(false);
+                    if (_attemptsRemain > 0) return Task.FromResult(false);
                     _completion.TrySetException(ex);
-                    return Task.FromResult(true);
                 }
+                return Task.FromResult(true);
             }
         }
 
@@ -122,6 +114,7 @@ namespace AInq.Support.Background.WorkElements
 
             internal AsyncWorkWrapper(IAsyncWork work, int attemptsCount, CancellationToken innerCancellation)
             {
+                if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
                 _work = work;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -131,7 +124,7 @@ namespace AInq.Support.Background.WorkElements
 
             async Task<bool> IWorkWrapper.DoWorkAsync(IServiceProvider provider, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain <= 0) throw new InvalidOperationException();
+                if (_attemptsRemain <= 0) return true;
                 _attemptsRemain--;
                 using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
                 try
@@ -139,22 +132,18 @@ namespace AInq.Support.Background.WorkElements
                     aggregateCancellation.Token.ThrowIfCancellationRequested();
                     await _work.DoWorkAsync(provider, aggregateCancellation.Token);
                     _completion.TrySetResult(true);
-                    return true;
                 }
                 catch (OperationCanceledException ex)
                 {
-                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
-                        return false;
+                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested) return false;
                     _completion.TrySetCanceled(ex.CancellationToken);
-                    return true;
                 }
                 catch (Exception ex)
                 {
-                    if (_attemptsRemain > 0)
-                        return false;
+                    if (_attemptsRemain > 0) return false;
                     _completion.TrySetException(ex);
-                    return true;
                 }
+                return true;
             }
         }
 
@@ -167,6 +156,7 @@ namespace AInq.Support.Background.WorkElements
 
             internal AsyncWorkWrapper(IAsyncWork<TResult> work, int attemptsCount, CancellationToken innerCancellation)
             {
+                if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
                 _work = work;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -176,33 +166,27 @@ namespace AInq.Support.Background.WorkElements
 
             async Task<bool> IWorkWrapper.DoWorkAsync(IServiceProvider provider, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain <= 0) throw new InvalidOperationException();
+                if (_attemptsRemain <= 0) return true;
                 _attemptsRemain--;
                 using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
                 try
                 {
                     aggregateCancellation.Token.ThrowIfCancellationRequested();
                     _completion.TrySetResult(await _work.DoWorkAsync(provider, aggregateCancellation.Token));
-                    return true;
                 }
                 catch (OperationCanceledException ex)
                 {
-                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
-                        return false;
+                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested) return false;
                     _completion.TrySetCanceled(ex.CancellationToken);
-                    return true;
                 }
                 catch (Exception ex)
                 {
-                    if (_attemptsRemain > 0)
-                        return false;
+                    if (_attemptsRemain > 0) return false;
                     _completion.TrySetException(ex);
-                    return true;
                 }
+                return true;
             }
         }
-
-        #endregion
 
         public static (IWorkWrapper Work, Task Task) CreateWorkWrapper(IWork work, int attemptsCount = 1, CancellationToken cancellation = default)
         {

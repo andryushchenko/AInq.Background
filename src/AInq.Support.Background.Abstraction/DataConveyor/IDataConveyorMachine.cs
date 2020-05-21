@@ -20,9 +20,9 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.DataConveyor
 {
-    public interface IConveyorMachine<in TData, TResult>
+    public interface IDataConveyorMachine<in TData, TResult>
     {
-        TimeSpan Timeout { get; }
+        TimeSpan? Timeout { get; }
         Task StartConveyorAsync(CancellationToken cancellation = default);
         Task<TResult> ProcessDataAsync(TData data, CancellationToken cancellation = default);
         Task StopConveyorAsync(CancellationToken cancellation = default);

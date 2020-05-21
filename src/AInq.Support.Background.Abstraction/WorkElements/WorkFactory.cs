@@ -22,7 +22,6 @@ namespace AInq.Support.Background.WorkElements
 {
     public static class WorkFactory
     {
-        #region Simple works
 
         private class SimpleWork : IWork
         {
@@ -67,10 +66,6 @@ namespace AInq.Support.Background.WorkElements
             async Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
                 => await _work.Invoke(serviceProvider, cancellation);
         }
-
-        #endregion
-
-        #region Parametrized works
 
         private class ParameterizedWork<TParam> : IWork
         {
@@ -131,8 +126,6 @@ namespace AInq.Support.Background.WorkElements
             async Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
                 => await _work.Invoke(serviceProvider, _param, cancellation);
         }
-
-        #endregion
 
         public static IWork CreateWork(Action work)
             => work != null

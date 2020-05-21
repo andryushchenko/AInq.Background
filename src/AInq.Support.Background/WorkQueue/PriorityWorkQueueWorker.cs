@@ -22,21 +22,19 @@ namespace AInq.Support.Background.WorkQueue
 {
     internal sealed class PriorityWorkQueueWorker : WorkQueueWorker
     {
-        private readonly PriorityWorkQueueManager _priorityWorkQueueManager;
+        private readonly PriorityWorkQueueManager _queueManager;
 
-        internal PriorityWorkQueueWorker(PriorityWorkQueueManager priorityWorkQueueManager, IServiceProvider provider)
-            : base(priorityWorkQueueManager, provider)
+        internal PriorityWorkQueueWorker(PriorityWorkQueueManager queueManager, IServiceProvider provider) : base(queueManager, provider)
         {
-            _priorityWorkQueueManager = priorityWorkQueueManager;
+            _queueManager = queueManager;
         }
 
         protected override async Task<bool> DoNextWorkAsync()
         {
-            var currentQueue = _priorityWorkQueueManager.Queues.Reverse().FirstOrDefault(queue => !queue.IsEmpty);
+            var currentQueue = _queueManager.Queues.Reverse().FirstOrDefault(queue => !queue.IsEmpty);
             if (currentQueue == null) return false;
             if (!currentQueue.TryDequeue(out var work)) return false;
-            if (await DoWorkAsync(work))
-                return !_priorityWorkQueueManager.Queues.All(queue => queue.IsEmpty);
+            if (await DoWorkAsync(work)) return !_queueManager.Queues.All(queue => queue.IsEmpty);
             currentQueue.Enqueue(work);
             return true;
         }
