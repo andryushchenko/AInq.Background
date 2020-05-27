@@ -17,14 +17,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AInq.Support.Background.Managers;
 
-namespace AInq.Support.Background.DataConveyor
+namespace AInq.Support.Background.Processors
 {
-    public interface IDataConveyorMachine<in TData, TResult>
+    internal interface ITaskProcessor<TArgument, TMetadata>
     {
-        TimeSpan? Timeout { get; }
-        Task StartConveyorAsync(CancellationToken cancellation = default);
-        Task<TResult> ProcessDataAsync(TData data, CancellationToken cancellation = default);
-        Task StopConveyorAsync(CancellationToken cancellation = default);
+        Task ProcessPendingTasksAsync(ITaskQueueManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation = default);
     }
 }

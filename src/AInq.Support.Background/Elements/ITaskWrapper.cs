@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Support.Background.DataConveyor
+namespace AInq.Support.Background.Elements
 {
-    public interface IDataConveyor<in TData, TResult>
+    internal interface ITaskWrapper<in TArgument>
     {
-        Task<TResult> ProcessDataAsync(TData data, CancellationToken cancellation = default, int attemptsCount = 1);
+        Task<bool> ExecuteAsync(TArgument argument, IServiceProvider provider, CancellationToken cancellation = default);
     }
 }

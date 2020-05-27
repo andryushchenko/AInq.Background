@@ -18,7 +18,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Support.Background.WorkElements
+namespace AInq.Support.Background
 {
     public static class WorkFactory
     {

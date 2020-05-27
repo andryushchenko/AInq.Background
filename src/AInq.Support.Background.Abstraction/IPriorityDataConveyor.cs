@@ -17,7 +17,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Support.Background.DataConveyor
+namespace AInq.Support.Background
 {
     public interface IPriorityDataConveyor<in TData, TResult> : IDataConveyor<TData, TResult>
     {

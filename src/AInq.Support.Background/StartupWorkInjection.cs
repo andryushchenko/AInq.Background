@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-using AInq.Support.Background.WorkElements;
-using AInq.Support.Background.WorkQueue;
+using AInq.Support.Background.Elements;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
-using static AInq.Support.Background.WorkElements.WorkFactory;
-using static AInq.Support.Background.WorkElements.WorkWrapperFactory;
+using static AInq.Support.Background.Elements.WorkWrapperFactory;
+using static AInq.Support.Background.WorkFactory;
 
 namespace AInq.Support.Background
 {
@@ -30,35 +29,35 @@ namespace AInq.Support.Background
         public static async Task DoStartupWork(this IHost host, CancellationToken cancellation = default)
         {
             using var scope = host.Services.CreateScope();
-            foreach (var work in scope.ServiceProvider.GetServices<IWorkWrapper>())
+            foreach (var work in scope.ServiceProvider.GetServices<ITaskWrapper<object>>())
             {
                 using var localScope = scope.ServiceProvider.CreateScope();
-                await work.DoWorkAsync(localScope.ServiceProvider, cancellation);
+                await work.ExecuteAsync(null, localScope.ServiceProvider, cancellation);
             }
         }
 
         public static IServiceCollection AddStartupWork(this IServiceCollection services, IWork work)
             => services.AddSingleton(CreateWorkWrapper(work).Work);
 
-        public static IServiceCollection AddStartupWork<TWork>(this IServiceCollection services) where TWork : IWork
+        public static IServiceCollection AddStartupWork<TWork>(this IServiceCollection services) where TWork:IWork
             => services.AddSingleton(CreateWorkWrapper(CreateWork(provider => provider.GetService<TWork>()?.DoWork(provider))).Work);
 
         public static IServiceCollection AddStartupAsyncWork(this IServiceCollection services, IAsyncWork work)
             => services.AddSingleton(CreateWorkWrapper(work).Work);
 
-        public static IServiceCollection AddStartupAsyncWork<TWork>(this IServiceCollection services) where TWork : IAsyncWork
+        public static IServiceCollection AddStartupAsyncWork<TWork>(this IServiceCollection services) where TWork:IAsyncWork
             => services.AddSingleton(CreateWorkWrapper(CreateWork((provider, token) => provider.GetService<TWork>()?.DoWorkAsync(provider, token) ?? Task.CompletedTask)).Work);
 
         public static IServiceCollection AddStartupQueuedWork(this IServiceCollection services, IWork work, int attemptsCount = 1)
             => services.AddSingleton(CreateWorkWrapper(CreateWork(provider => provider.GetService<IWorkQueue>()?.EnqueueWork(work, attemptsCount: attemptsCount))).Work);
 
-        public static IServiceCollection AddStartupQueuedWork<TWork>(this IServiceCollection services, int attemptsCount = 1) where TWork : IWork
+        public static IServiceCollection AddStartupQueuedWork<TWork>(this IServiceCollection services, int attemptsCount = 1) where TWork:IWork
             => services.AddSingleton(CreateWorkWrapper(CreateWork(provider => provider.GetService<IWorkQueue>()?.EnqueueWork<TWork>(attemptsCount: attemptsCount))).Work);
 
         public static IServiceCollection AddStartupQueuedAsyncWork(this IServiceCollection services, IAsyncWork work, int attemptsCount = 1)
             => services.AddSingleton(CreateWorkWrapper(CreateWork(provider => provider.GetService<IWorkQueue>()?.EnqueueAsyncWork(work, attemptsCount: attemptsCount))).Work);
 
-        public static IServiceCollection AddStartupQueuedAsyncWork<TWork>(this IServiceCollection services, int attemptsCount = 1) where TWork : IAsyncWork
+        public static IServiceCollection AddStartupQueuedAsyncWork<TWork>(this IServiceCollection services, int attemptsCount = 1) where TWork:IAsyncWork
             => services.AddSingleton(CreateWorkWrapper(CreateWork(provider => provider.GetService<IWorkQueue>()?.EnqueueAsyncWork<TWork>(attemptsCount: attemptsCount))).Work);
     }
 }

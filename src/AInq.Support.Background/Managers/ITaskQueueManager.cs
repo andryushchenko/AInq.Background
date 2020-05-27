@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-using System;
+using AInq.Support.Background.Elements;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Support.Background.WorkElements
+namespace AInq.Support.Background.Managers
 {
-    internal interface IWorkWrapper
+    internal interface ITaskQueueManager<TArgument, TMetadata>
     {
-        Task<bool> DoWorkAsync(IServiceProvider provider, CancellationToken cancellation = default);
+        bool HasTask { get; }
+
+        Task WaitForTaskAsync(CancellationToken cancellation = default);
+        (ITaskWrapper<TArgument>, TMetadata) GetTask();
+        void RevertTask(ITaskWrapper<TArgument> task, TMetadata metadata);
     }
 }

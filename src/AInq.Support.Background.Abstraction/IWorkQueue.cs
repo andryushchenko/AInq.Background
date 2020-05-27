@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-using AInq.Support.Background.WorkElements;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Support.Background.WorkQueue
+namespace AInq.Support.Background
 
 {
     public interface IWorkQueue

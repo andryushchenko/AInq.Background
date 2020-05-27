@@ -14,22 +14,37 @@
  * limitations under the License.
  */
 
-using AInq.Support.Background.WorkElements;
+using AInq.Support.Background.Elements;
 using Microsoft.Extensions.DependencyInjection;
 using Nito.AsyncEx;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
-using static AInq.Support.Background.WorkElements.WorkFactory;
-using static AInq.Support.Background.WorkElements.WorkWrapperFactory;
+using static AInq.Support.Background.Elements.WorkWrapperFactory;
+using static AInq.Support.Background.WorkFactory;
 
-namespace AInq.Support.Background.WorkQueue
+namespace AInq.Support.Background.Managers
 {
-    internal class WorkQueueManager : IWorkQueue
+    internal class WorkQueueManager : IWorkQueue, ITaskQueueManager<object, object>
     {
-        protected internal ConcurrentQueue<IWorkWrapper> Queue { get; } = new ConcurrentQueue<IWorkWrapper>();
-        protected internal AsyncAutoResetEvent NewWorkEvent { get; } = new AsyncAutoResetEvent(false);
+        protected readonly ConcurrentQueue<ITaskWrapper<object>> Queue = new ConcurrentQueue<ITaskWrapper<object>>();
+        protected readonly AsyncAutoResetEvent NewWorkEvent = new AsyncAutoResetEvent(false);
+
+        bool ITaskQueueManager<object, object>.HasTask => !Queue.IsEmpty;
+
+        Task ITaskQueueManager<object, object>.WaitForTaskAsync(CancellationToken cancellation)
+            => Queue.IsEmpty
+                ? NewWorkEvent.WaitAsync(cancellation)
+                : Task.CompletedTask;
+
+        (ITaskWrapper<object>, object) ITaskQueueManager<object, object>.GetTask()
+            => (Queue.TryDequeue(out var task)
+                ? task
+                : null, null);
+
+        void ITaskQueueManager<object, object>.RevertTask(ITaskWrapper<object> task, object metadata)
+            => Queue.Enqueue(task);
 
         Task IWorkQueue.EnqueueWork(IWork work, CancellationToken cancellation, int attemptsCount)
         {

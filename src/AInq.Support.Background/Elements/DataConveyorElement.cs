@@ -18,9 +18,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Support.Background.DataConveyor
+namespace AInq.Support.Background.Elements
 {
-    internal class DataConveyorElement<TData, TResult>
+    internal class DataConveyorElement<TData, TResult> : ITaskWrapper<IDataConveyorMachine<TData, TResult>>
     {
         private readonly TData _data;
         private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
@@ -37,15 +37,15 @@ namespace AInq.Support.Background.DataConveyor
             _attemptsRemain = attemptsCount;
         }
 
-        internal async Task<bool> ProcessDataAsync(IDataConveyorMachine<TData, TResult> machine, CancellationToken outerCancellation)
+        async Task<bool> ITaskWrapper<IDataConveyorMachine<TData, TResult>>.ExecuteAsync(IDataConveyorMachine<TData, TResult> argument, IServiceProvider provider, CancellationToken cancellation)
         {
             if (_attemptsRemain <= 0) return true;
             _attemptsRemain--;
-            using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
+            using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, cancellation);
             try
             {
                 aggregateCancellation.Token.ThrowIfCancellationRequested();
-                _completion.TrySetResult(await machine.ProcessDataAsync(_data, aggregateCancellation.Token));
+                _completion.TrySetResult(await argument.ProcessDataAsync(_data, provider, aggregateCancellation.Token));
             }
             catch (ArgumentException ex)
             {

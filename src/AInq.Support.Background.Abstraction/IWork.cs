@@ -16,7 +16,7 @@
 
 using System;
 
-namespace AInq.Support.Background.WorkElements
+namespace AInq.Support.Background
 {
     public interface IWork
     {

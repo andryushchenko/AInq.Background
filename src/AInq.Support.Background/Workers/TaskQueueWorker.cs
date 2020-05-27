@@ -14,41 +14,29 @@
  * limitations under the License.
  */
 
-using AInq.Support.Background.WorkElements;
-using Microsoft.Extensions.DependencyInjection;
+using AInq.Support.Background.Managers;
+using AInq.Support.Background.Processors;
 using Microsoft.Extensions.Hosting;
 using Nito.AsyncEx;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Support.Background.WorkQueue
+namespace AInq.Support.Background.Workers
 {
-    internal class WorkQueueWorker : IHostedService, IDisposable
+    internal class TaskQueueWorker<TArgument, TMetadata> : IHostedService, IDisposable
     {
-        private readonly WorkQueueManager _queueManager;
         private readonly IServiceProvider _provider;
+        private readonly ITaskQueueManager<TArgument, TMetadata> _manager;
+        private readonly ITaskProcessor<TArgument, TMetadata> _processor;
         private readonly CancellationTokenSource _cancellation = new CancellationTokenSource();
         private Task _worker;
 
-        internal WorkQueueWorker(WorkQueueManager queueManager, IServiceProvider provider)
+        public TaskQueueWorker(IServiceProvider provider, ITaskQueueManager<TArgument, TMetadata> manager, ITaskProcessor<TArgument, TMetadata> processor)
         {
-            _queueManager = queueManager;
             _provider = provider;
-        }
-
-        protected virtual async Task<bool> DoNextWorkAsync()
-        {
-            if (!_queueManager.Queue.TryDequeue(out var work)) return false;
-            if (await DoWorkAsync(work)) return !_queueManager.Queue.IsEmpty;
-            _queueManager.Queue.Enqueue(work);
-            return true;
-        }
-
-        protected async Task<bool> DoWorkAsync(IWorkWrapper work)
-        {
-            using var scope = _provider.CreateScope();
-            return await work.DoWorkAsync(scope.ServiceProvider, _cancellation.Token);
+            _manager = manager;
+            _processor = processor;
         }
 
         private async Task Worker()
@@ -56,8 +44,8 @@ namespace AInq.Support.Background.WorkQueue
             while (!_cancellation.IsCancellationRequested)
                 try
                 {
-                    await _queueManager.NewWorkEvent.WaitAsync(_cancellation.Token);
-                    while (await DoNextWorkAsync()) { }
+                    await _manager.WaitForTaskAsync(_cancellation.Token);
+                    await _processor.ProcessPendingTasksAsync(_manager, _provider, _cancellation.Token);
                 }
                 catch (OperationCanceledException)
                 {

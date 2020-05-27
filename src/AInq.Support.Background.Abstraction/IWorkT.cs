@@ -15,13 +15,11 @@
  */
 
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Support.Background.WorkElements
+namespace AInq.Support.Background
 {
-    public interface IAsyncWork<TResult>
+    public interface IWork<out TResult>
     {
-        Task<TResult> DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation = default);
+        TResult DoWork(IServiceProvider serviceProvider);
     }
 }

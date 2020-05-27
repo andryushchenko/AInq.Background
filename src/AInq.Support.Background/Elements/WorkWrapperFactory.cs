@@ -18,11 +18,11 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Support.Background.WorkElements
+namespace AInq.Support.Background.Elements
 {
     internal static class WorkWrapperFactory
     {
-        private class SimpleWorkWrapper : IWorkWrapper
+        private class SimpleWorkWrapper : ITaskWrapper<object>
         {
             private readonly IWork _work;
             private readonly TaskCompletionSource<bool> _completion = new TaskCompletionSource<bool>();
@@ -39,7 +39,7 @@ namespace AInq.Support.Background.WorkElements
 
             internal Task WorkTask => _completion.Task;
 
-            Task<bool> IWorkWrapper.DoWorkAsync(IServiceProvider provider, CancellationToken outerCancellation)
+            Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, CancellationToken outerCancellation)
             {
                 if (_attemptsRemain <= 0) return Task.FromResult(true);
                 _attemptsRemain--;
@@ -64,7 +64,7 @@ namespace AInq.Support.Background.WorkElements
             }
         }
 
-        private class SimpleWorkWrapper<TResult> : IWorkWrapper
+        private class SimpleWorkWrapper<TResult> : ITaskWrapper<object>
         {
             private readonly IWork<TResult> _work;
             private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
@@ -81,7 +81,7 @@ namespace AInq.Support.Background.WorkElements
 
             internal Task<TResult> WorkTask => _completion.Task;
 
-            Task<bool> IWorkWrapper.DoWorkAsync(IServiceProvider provider, CancellationToken outerCancellation)
+            Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, CancellationToken outerCancellation)
             {
                 if (_attemptsRemain <= 0) return Task.FromResult(true);
                 _attemptsRemain--;
@@ -105,7 +105,7 @@ namespace AInq.Support.Background.WorkElements
             }
         }
 
-        private class AsyncWorkWrapper : IWorkWrapper
+        private class AsyncWorkWrapper : ITaskWrapper<object>
         {
             private readonly IAsyncWork _work;
             private readonly TaskCompletionSource<bool> _completion = new TaskCompletionSource<bool>();
@@ -122,7 +122,7 @@ namespace AInq.Support.Background.WorkElements
 
             internal Task WorkTask => _completion.Task;
 
-            async Task<bool> IWorkWrapper.DoWorkAsync(IServiceProvider provider, CancellationToken outerCancellation)
+            async Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, CancellationToken outerCancellation)
             {
                 if (_attemptsRemain <= 0) return true;
                 _attemptsRemain--;
@@ -147,7 +147,7 @@ namespace AInq.Support.Background.WorkElements
             }
         }
 
-        private class AsyncWorkWrapper<TResult> : IWorkWrapper
+        private class AsyncWorkWrapper<TResult> : ITaskWrapper<object>
         {
             private readonly IAsyncWork<TResult> _work;
             private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
@@ -164,7 +164,7 @@ namespace AInq.Support.Background.WorkElements
 
             internal Task<TResult> WorkTask => _completion.Task;
 
-            async Task<bool> IWorkWrapper.DoWorkAsync(IServiceProvider provider, CancellationToken outerCancellation)
+            async Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, CancellationToken outerCancellation)
             {
                 if (_attemptsRemain <= 0) return true;
                 _attemptsRemain--;
@@ -188,28 +188,28 @@ namespace AInq.Support.Background.WorkElements
             }
         }
 
-        public static (IWorkWrapper Work, Task Task) CreateWorkWrapper(IWork work, int attemptsCount = 1, CancellationToken cancellation = default)
+        public static (ITaskWrapper<object> Work, Task Task) CreateWorkWrapper(IWork work, int attemptsCount = 1, CancellationToken cancellation = default)
         {
             if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
             var wrapper = new SimpleWorkWrapper(work, attemptsCount, cancellation);
             return (wrapper, wrapper.WorkTask);
         }
 
-        public static (IWorkWrapper Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IWork<TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
+        public static (ITaskWrapper<object> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IWork<TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
         {
             if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
             var wrapper = new SimpleWorkWrapper<TResult>(work, attemptsCount, cancellation);
             return (wrapper, wrapper.WorkTask);
         }
 
-        public static (IWorkWrapper Work, Task Task) CreateWorkWrapper(IAsyncWork work, int attemptsCount = 1, CancellationToken cancellation = default)
+        public static (ITaskWrapper<object> Work, Task Task) CreateWorkWrapper(IAsyncWork work, int attemptsCount = 1, CancellationToken cancellation = default)
         {
             if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
             var wrapper = new AsyncWorkWrapper(work, attemptsCount, cancellation);
             return (wrapper, wrapper.WorkTask);
         }
 
-        public static (IWorkWrapper Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IAsyncWork<TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
+        public static (ITaskWrapper<object> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IAsyncWork<TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
         {
             if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
             var wrapper = new AsyncWorkWrapper<TResult>(work, attemptsCount, cancellation);
