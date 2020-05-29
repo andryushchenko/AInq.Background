@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Workers
 {
-    internal class TaskQueueWorker<TArgument, TMetadata> : IHostedService, IDisposable
+    internal sealed class TaskQueueWorker<TArgument, TMetadata> : IHostedService, IDisposable
     {
         private readonly IServiceProvider _provider;
         private readonly ITaskQueueManager<TArgument, TMetadata> _manager;

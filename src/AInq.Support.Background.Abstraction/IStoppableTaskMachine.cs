@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-using AInq.Support.Background.Managers;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Support.Background.Processors
+namespace AInq.Support.Background
 {
-    internal interface ITaskProcessor<TArgument, TMetadata>
+    public interface IStoppableTaskMachine
     {
-        Task ProcessPendingTasksAsync(ITaskQueueManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation = default);
+        bool IsRunning { get; }
+
+        Task StartMachineAsync(CancellationToken cancellation = default);
+        Task StopMachineAsync(CancellationToken cancellation = default);
     }
 }

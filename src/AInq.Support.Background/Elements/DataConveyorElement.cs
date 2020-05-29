@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Elements
 {
-    internal class DataConveyorElement<TData, TResult> : ITaskWrapper<IDataConveyorMachine<TData, TResult>>
+    internal sealed class DataConveyorElement<TData, TResult> : ITaskWrapper<IDataConveyorMachine<TData, TResult>>
     {
         private readonly TData _data;
         private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
@@ -31,7 +31,8 @@ namespace AInq.Support.Background.Elements
 
         internal DataConveyorElement(TData data, CancellationToken innerCancellation, int attemptsCount)
         {
-            if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+            if (attemptsCount < 1)
+                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             _data = data;
             _innerCancellation = innerCancellation;
             _attemptsRemain = attemptsCount;
@@ -39,7 +40,10 @@ namespace AInq.Support.Background.Elements
 
         async Task<bool> ITaskWrapper<IDataConveyorMachine<TData, TResult>>.ExecuteAsync(IDataConveyorMachine<TData, TResult> argument, IServiceProvider provider, CancellationToken cancellation)
         {
-            if (_attemptsRemain <= 0) return true;
+            if (_attemptsRemain < 1)
+                return true;
+            if (argument == null)
+                return false;
             _attemptsRemain--;
             using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, cancellation);
             try
@@ -53,12 +57,14 @@ namespace AInq.Support.Background.Elements
             }
             catch (OperationCanceledException ex)
             {
-                if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested) return false;
+                if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
+                    return false;
                 _completion.TrySetCanceled(ex.CancellationToken);
             }
             catch (Exception ex)
             {
-                if (_attemptsRemain > 0) return false;
+                if (_attemptsRemain > 0)
+                    return false;
                 _completion.TrySetException(ex);
             }
             return true;

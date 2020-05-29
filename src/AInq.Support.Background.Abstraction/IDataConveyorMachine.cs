@@ -22,9 +22,6 @@ namespace AInq.Support.Background
 {
     public interface IDataConveyorMachine<in TData, TResult>
     {
-        TimeSpan? Timeout { get; }
-        Task StartConveyorAsync(CancellationToken cancellation = default);
         Task<TResult> ProcessDataAsync(TData data, IServiceProvider provider, CancellationToken cancellation = default);
-        Task StopConveyorAsync(CancellationToken cancellation = default);
     }
 }

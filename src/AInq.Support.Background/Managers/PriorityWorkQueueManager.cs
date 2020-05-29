@@ -51,14 +51,16 @@ namespace AInq.Support.Background.Managers
 
         void ITaskQueueManager<object, int>.RevertTask(ITaskWrapper<object> task, int metadata)
         {
-            if (metadata < 0 || metadata > _maxPriority) throw new ArgumentOutOfRangeException(nameof(metadata));
+            if (metadata < 0 || metadata > _maxPriority)
+                throw new ArgumentOutOfRangeException(nameof(metadata), metadata, null);
             _queues[metadata].Enqueue(task);
             NewWorkEvent.Set();
         }
 
         internal PriorityWorkQueueManager(int maxPriority)
         {
-            if (maxPriority < 0) throw new ArgumentOutOfRangeException(nameof(maxPriority));
+            if (maxPriority < 0)
+                throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, null);
             _maxPriority = maxPriority;
             var queues = new ConcurrentQueue<ITaskWrapper<object>>[_maxPriority + 1];
             queues[0] = Queue;
@@ -69,8 +71,10 @@ namespace AInq.Support.Background.Managers
 
         Task IPriorityWorkQueue.EnqueueWork(IWork work, int priority, CancellationToken cancellation, int attemptsCount)
         {
-            if (priority < 0 || priority > _maxPriority) throw new ArgumentOutOfRangeException(nameof(priority));
-            if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+            if (priority < 0 || priority > _maxPriority)
+                throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
+            if (attemptsCount < 1)
+                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
             _queues[priority].Enqueue(workWrapper);
             NewWorkEvent.Set();
@@ -79,8 +83,10 @@ namespace AInq.Support.Background.Managers
 
         Task IPriorityWorkQueue.EnqueueWork<TWork>(int priority, CancellationToken cancellation, int attemptsCount)
         {
-            if (priority < 0 || priority > _maxPriority) throw new ArgumentOutOfRangeException(nameof(priority));
-            if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+            if (priority < 0 || priority > _maxPriority)
+                throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
+            if (attemptsCount < 1)
+                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), attemptsCount, cancellation);
             _queues[priority].Enqueue(workWrapper);
             NewWorkEvent.Set();
@@ -89,8 +95,10 @@ namespace AInq.Support.Background.Managers
 
         Task<TResult> IPriorityWorkQueue.EnqueueWork<TResult>(IWork<TResult> work, int priority, CancellationToken cancellation, int attemptsCount)
         {
-            if (priority < 0 || priority > _maxPriority) throw new ArgumentOutOfRangeException(nameof(priority));
-            if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+            if (priority < 0 || priority > _maxPriority)
+                throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
+            if (attemptsCount < 1)
+                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
             _queues[priority].Enqueue(workWrapper);
             NewWorkEvent.Set();
@@ -99,8 +107,10 @@ namespace AInq.Support.Background.Managers
 
         Task<TResult> IPriorityWorkQueue.EnqueueWork<TWork, TResult>(int priority, CancellationToken cancellation, int attemptsCount)
         {
-            if (priority < 0 || priority > _maxPriority) throw new ArgumentOutOfRangeException(nameof(priority));
-            if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+            if (priority < 0 || priority > _maxPriority)
+                throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
+            if (attemptsCount < 1)
+                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), attemptsCount, cancellation);
             _queues[priority].Enqueue(workWrapper);
             NewWorkEvent.Set();
@@ -109,8 +119,10 @@ namespace AInq.Support.Background.Managers
 
         Task IPriorityWorkQueue.EnqueueAsyncWork(IAsyncWork work, int priority, CancellationToken cancellation, int attemptsCount)
         {
-            if (priority < 0 || priority > _maxPriority) throw new ArgumentOutOfRangeException(nameof(priority));
-            if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+            if (priority < 0 || priority > _maxPriority)
+                throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
+            if (attemptsCount < 1)
+                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
             _queues[priority].Enqueue(workWrapper);
             NewWorkEvent.Set();
@@ -119,8 +131,10 @@ namespace AInq.Support.Background.Managers
 
         Task IPriorityWorkQueue.EnqueueAsyncWork<TWork>(int priority, CancellationToken cancellation, int attemptsCount)
         {
-            if (priority < 0 || priority > _maxPriority) throw new ArgumentOutOfRangeException(nameof(priority));
-            if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+            if (priority < 0 || priority > _maxPriority)
+                throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
+            if (attemptsCount < 1)
+                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             var (workWrapper, task) = CreateWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), attemptsCount, cancellation);
             _queues[priority].Enqueue(workWrapper);
             NewWorkEvent.Set();
@@ -129,8 +143,10 @@ namespace AInq.Support.Background.Managers
 
         Task<TResult> IPriorityWorkQueue.EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, int priority, CancellationToken cancellation, int attemptsCount)
         {
-            if (priority < 0 || priority > _maxPriority) throw new ArgumentOutOfRangeException(nameof(priority));
-            if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+            if (priority < 0 || priority > _maxPriority)
+                throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
+            if (attemptsCount < 1)
+                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
             _queues[priority].Enqueue(workWrapper);
             NewWorkEvent.Set();
@@ -139,8 +155,10 @@ namespace AInq.Support.Background.Managers
 
         Task<TResult> IPriorityWorkQueue.EnqueueAsyncWork<TWork, TResult>(int priority, CancellationToken cancellation, int attemptsCount)
         {
-            if (priority < 0 || priority > _maxPriority) throw new ArgumentOutOfRangeException(nameof(priority));
-            if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+            if (priority < 0 || priority > _maxPriority)
+                throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
+            if (attemptsCount < 1)
+                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             var (workWrapper, task) = CreateWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), attemptsCount, cancellation);
             _queues[priority].Enqueue(workWrapper);
             NewWorkEvent.Set();

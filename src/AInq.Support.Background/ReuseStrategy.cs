@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-using AInq.Support.Background.Managers;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Support.Background.Processors
+namespace AInq.Support.Background
 {
-    internal interface ITaskProcessor<TArgument, TMetadata>
+    public enum ReuseStrategy
     {
-        Task ProcessPendingTasksAsync(ITaskQueueManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation = default);
+        Static,
+        Reuse,
+        OneTime
     }
 }

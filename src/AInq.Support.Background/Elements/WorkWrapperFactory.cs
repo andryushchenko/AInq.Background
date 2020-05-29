@@ -31,7 +31,7 @@ namespace AInq.Support.Background.Elements
 
             internal SimpleWorkWrapper(IWork work, int attemptsCount, CancellationToken innerCancellation)
             {
-                if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+                if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
                 _work = work;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -41,7 +41,7 @@ namespace AInq.Support.Background.Elements
 
             Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain <= 0) return Task.FromResult(true);
+                if (_attemptsRemain < 1) return Task.FromResult(true);
                 _attemptsRemain--;
                 try
                 {
@@ -73,7 +73,7 @@ namespace AInq.Support.Background.Elements
 
             internal SimpleWorkWrapper(IWork<TResult> work, int attemptsCount, CancellationToken innerCancellation)
             {
-                if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+                if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
                 _work = work;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -83,7 +83,7 @@ namespace AInq.Support.Background.Elements
 
             Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain <= 0) return Task.FromResult(true);
+                if (_attemptsRemain < 1) return Task.FromResult(true);
                 _attemptsRemain--;
                 try
                 {
@@ -114,7 +114,7 @@ namespace AInq.Support.Background.Elements
 
             internal AsyncWorkWrapper(IAsyncWork work, int attemptsCount, CancellationToken innerCancellation)
             {
-                if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+                if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
                 _work = work;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -124,7 +124,7 @@ namespace AInq.Support.Background.Elements
 
             async Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain <= 0) return true;
+                if (_attemptsRemain < 1) return true;
                 _attemptsRemain--;
                 using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
                 try
@@ -156,7 +156,7 @@ namespace AInq.Support.Background.Elements
 
             internal AsyncWorkWrapper(IAsyncWork<TResult> work, int attemptsCount, CancellationToken innerCancellation)
             {
-                if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+                if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
                 _work = work;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -166,7 +166,7 @@ namespace AInq.Support.Background.Elements
 
             async Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain <= 0) return true;
+                if (_attemptsRemain < 1) return true;
                 _attemptsRemain--;
                 using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
                 try
@@ -190,28 +190,28 @@ namespace AInq.Support.Background.Elements
 
         public static (ITaskWrapper<object> Work, Task Task) CreateWorkWrapper(IWork work, int attemptsCount = 1, CancellationToken cancellation = default)
         {
-            if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+            if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             var wrapper = new SimpleWorkWrapper(work, attemptsCount, cancellation);
             return (wrapper, wrapper.WorkTask);
         }
 
         public static (ITaskWrapper<object> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IWork<TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
         {
-            if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+            if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             var wrapper = new SimpleWorkWrapper<TResult>(work, attemptsCount, cancellation);
             return (wrapper, wrapper.WorkTask);
         }
 
         public static (ITaskWrapper<object> Work, Task Task) CreateWorkWrapper(IAsyncWork work, int attemptsCount = 1, CancellationToken cancellation = default)
         {
-            if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+            if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             var wrapper = new AsyncWorkWrapper(work, attemptsCount, cancellation);
             return (wrapper, wrapper.WorkTask);
         }
 
         public static (ITaskWrapper<object> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IAsyncWork<TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
         {
-            if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+            if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             var wrapper = new AsyncWorkWrapper<TResult>(work, attemptsCount, cancellation);
             return (wrapper, wrapper.WorkTask);
         }

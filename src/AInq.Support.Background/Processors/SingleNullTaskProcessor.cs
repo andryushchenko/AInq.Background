@@ -21,8 +21,18 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Processors
 {
-    internal interface ITaskProcessor<TArgument, TMetadata>
+    internal sealed class SingleNullTaskProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata> where TArgument:class
     {
-        Task ProcessPendingTasksAsync(ITaskQueueManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation = default);
+        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskQueueManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
+        {
+            if (!manager.HasTask) return;
+            while (manager.HasTask)
+            {
+                var (task, metadata) = manager.GetTask();
+                if (task == null) break;
+                if (!await task.ExecuteAsync(null, provider, cancellation))
+                    manager.RevertTask(task, metadata);
+            }
+        }
     }
 }

@@ -32,7 +32,8 @@ namespace AInq.Support.Background.Managers
 
         internal PriorityDataConveyorManager(int maxPriority)
         {
-            if (maxPriority < 0) throw new ArgumentOutOfRangeException(nameof(maxPriority));
+            if (maxPriority < 0)
+                throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, null);
             _maxPriority = maxPriority;
             var queues = new ConcurrentQueue<ITaskWrapper<IDataConveyorMachine<TData, TResult>>>[_maxPriority + 1];
             queues[0] = Queue;
@@ -46,8 +47,10 @@ namespace AInq.Support.Background.Managers
 
         Task<TResult> IPriorityDataConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, CancellationToken cancellation, int attemptsCount)
         {
-            if (priority < 0 || priority > _maxPriority) throw new ArgumentOutOfRangeException(nameof(priority));
-            if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+            if (priority < 0 || priority > _maxPriority)
+                throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
+            if (attemptsCount < 1)
+                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             var element = new DataConveyorElement<TData, TResult>(data, cancellation, attemptsCount);
             _queues[priority].Enqueue(element);
             NewDataEvent.Set();
@@ -70,7 +73,8 @@ namespace AInq.Support.Background.Managers
 
         void ITaskQueueManager<IDataConveyorMachine<TData, TResult>, int>.RevertTask(ITaskWrapper<IDataConveyorMachine<TData, TResult>> task, int metadata)
         {
-            if (metadata < 0 || metadata > _maxPriority) throw new ArgumentOutOfRangeException(nameof(metadata));
+            if (metadata < 0 || metadata > _maxPriority)
+                throw new ArgumentOutOfRangeException(nameof(metadata), metadata, null);
             _queues[metadata].Enqueue(task);
             NewDataEvent.Set();
         }

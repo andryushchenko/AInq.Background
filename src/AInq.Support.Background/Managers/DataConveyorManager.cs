@@ -30,7 +30,8 @@ namespace AInq.Support.Background.Managers
 
         Task<TResult> IDataConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
         {
-            if (attemptsCount <= 0) throw new ArgumentOutOfRangeException(nameof(attemptsCount));
+            if (attemptsCount < 1)
+                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             var element = new DataConveyorElement<TData, TResult>(data, cancellation, attemptsCount);
             Queue.Enqueue(element);
             NewDataEvent.Set();
