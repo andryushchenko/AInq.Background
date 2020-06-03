@@ -34,8 +34,8 @@ namespace AInq.Support.Background
             var manager = new WorkQueueManager();
             services.AddSingleton<IWorkQueue>(manager);
             return maxSimultaneous == 1
-                ? services.AddHostedService(provider => new TaskWorker<object, object>(provider, manager, new SingleNullTaskProcessor<object, object>()))
-                : services.AddHostedService(provider => new TaskWorker<object, object>(provider, manager, new MultipleNullTaskProcessor<object, object>(maxSimultaneous)));
+                ? services.AddHostedService(provider => new TaskWorker<object, object>(provider, manager, new SingleNullProcessor<object, object>()))
+                : services.AddHostedService(provider => new TaskWorker<object, object>(provider, manager, new MultipleNullProcessor<object, object>(maxSimultaneous)));
         }
 
         public static IServiceCollection AddPriorityWorkQueue(this IServiceCollection services, int maxPriority, int maxSimultaneous = 1)
@@ -50,8 +50,8 @@ namespace AInq.Support.Background
             services.AddSingleton<IWorkQueue>(manager)
                 .AddSingleton<IPriorityWorkQueue>(manager);
             return maxSimultaneous == 1
-                ? services.AddHostedService(provider => new TaskWorker<object, int>(provider, manager, new SingleNullTaskProcessor<object, int>()))
-                : services.AddHostedService(provider => new TaskWorker<object, int>(provider, manager, new MultipleNullTaskProcessor<object, int>(maxSimultaneous)));
+                ? services.AddHostedService(provider => new TaskWorker<object, int>(provider, manager, new SingleNullProcessor<object, int>()))
+                : services.AddHostedService(provider => new TaskWorker<object, int>(provider, manager, new MultipleNullProcessor<object, int>(maxSimultaneous)));
         }
     }
 }

@@ -19,8 +19,11 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background
 {
-    public interface IDataConveyor<in TData, TResult>
+    public interface IStoppable
     {
-        Task<TResult> ProcessDataAsync(TData data, CancellationToken cancellation = default, int attemptsCount = 1);
+        bool IsRunning { get; }
+
+        Task StartMachineAsync(CancellationToken cancellation = default);
+        Task StopMachineAsync(CancellationToken cancellation = default);
     }
 }

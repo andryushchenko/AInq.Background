@@ -22,12 +22,12 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Processors
 {
-    internal class MultipleOneTimeTaskProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
+    internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
     {
         private readonly Func<IServiceProvider, TArgument> _argumentFabric;
         private readonly SemaphoreSlim _semaphore;
 
-        internal MultipleOneTimeTaskProcessor(Func<IServiceProvider, TArgument> argumentFabric, int maxSimultaneousTasks)
+        internal MultipleOneTimeProcessor(Func<IServiceProvider, TArgument> argumentFabric, int maxSimultaneousTasks)
         {
             if (maxSimultaneousTasks < 1)
                 throw new ArgumentOutOfRangeException(nameof(maxSimultaneousTasks), maxSimultaneousTasks, null);
@@ -49,7 +49,7 @@ namespace AInq.Support.Background.Processors
                     {
                         using var taskScope = provider.CreateScope();
                         var argument = _argumentFabric.Invoke(taskScope.ServiceProvider);
-                        var machine = argument as IStoppableTaskMachine;
+                        var machine = argument as IStoppable;
                         if (machine != null && !machine.IsRunning)
                             await machine.StartMachineAsync(cancellation);
                         if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, cancellation))

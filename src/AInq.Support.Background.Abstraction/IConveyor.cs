@@ -19,9 +19,8 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background
 {
-    public interface IPriorityDataConveyor<in TData, TResult> : IDataConveyor<TData, TResult>
+    public interface IConveyor<in TData, TResult>
     {
-        int MaxPriority { get; }
-        Task<TResult> ProcessDataAsync(TData data, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
+        Task<TResult> ProcessDataAsync(TData data, CancellationToken cancellation = default, int attemptsCount = 1);
     }
 }

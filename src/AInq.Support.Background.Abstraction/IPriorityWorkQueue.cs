@@ -18,18 +18,18 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace AInq.Support.Background
-
 {
     public interface IPriorityWorkQueue : IWorkQueue
     {
         int MaxPriority { get; }
+
         Task EnqueueWork(IWork work, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
-        Task EnqueueWork<TWork>(int priority, CancellationToken cancellation = default, int attemptsCount = 1) where TWork : IWork;
+        Task EnqueueWork<TWork>(int priority, CancellationToken cancellation = default, int attemptsCount = 1) where TWork:IWork;
         Task<TResult> EnqueueWork<TResult>(IWork<TResult> work, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
-        Task<TResult> EnqueueWork<TWork, TResult>(int priority, CancellationToken cancellation = default, int attemptsCount = 1) where TWork : IWork<TResult>;
+        Task<TResult> EnqueueWork<TWork, TResult>(int priority, CancellationToken cancellation = default, int attemptsCount = 1) where TWork:IWork<TResult>;
         Task EnqueueAsyncWork(IAsyncWork work, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
-        Task EnqueueAsyncWork<TAsyncWork>(int priority, CancellationToken cancellation = default, int attemptsCount = 1) where TAsyncWork : IAsyncWork;
+        Task EnqueueAsyncWork<TAsyncWork>(int priority, CancellationToken cancellation = default, int attemptsCount = 1) where TAsyncWork:IAsyncWork;
         Task<TResult> EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
-        Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(int priority, CancellationToken cancellation = default, int attemptsCount = 1) where TAsyncWork : IAsyncWork<TResult>;
+        Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(int priority, CancellationToken cancellation = default, int attemptsCount = 1) where TAsyncWork:IAsyncWork<TResult>;
     }
 }

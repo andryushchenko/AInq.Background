@@ -30,10 +30,10 @@ namespace AInq.Support.Background.Test
                 .ConfigureServices((context, services) =>
                 {
                     services.AddTransient<TestMachine>();
-                    services.AddDataConveyor<int, int, TestMachine>(ReuseStrategy.Static, 3);
+                    services.AddConveyor<int, int, TestMachine>(ReuseStrategy.Static, 3);
                     services.AddStartupWork(WorkFactory.CreateWork(provider =>
                     {
-                        var conveyor = provider.GetRequiredService<IDataConveyor<int, int>>();
+                        var conveyor = provider.GetRequiredService<IConveyor<int, int>>();
                         for (var index = 1; index <= 20; index++)
                             conveyor.ProcessDataAsync(index);
                     }));

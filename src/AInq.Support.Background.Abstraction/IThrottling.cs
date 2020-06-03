@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-using System.Threading;
-using System.Threading.Tasks;
+using System;
 
 namespace AInq.Support.Background
 {
-    public interface IStoppableTaskMachine
+    public interface IThrottling
     {
-        bool IsRunning { get; }
-
-        Task StartMachineAsync(CancellationToken cancellation = default);
-        Task StopMachineAsync(CancellationToken cancellation = default);
+        TimeSpan Timeout { get; }
     }
 }

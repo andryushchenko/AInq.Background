@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Elements
 {
-    internal sealed class DataConveyorElement<TData, TResult> : ITaskWrapper<IDataConveyorMachine<TData, TResult>>
+    internal sealed class ConveyorElement<TData, TResult> : ITaskWrapper<IConveyorMachine<TData, TResult>>
     {
         private readonly TData _data;
         private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
@@ -29,7 +29,7 @@ namespace AInq.Support.Background.Elements
 
         internal Task<TResult> Result => _completion.Task;
 
-        internal DataConveyorElement(TData data, CancellationToken innerCancellation, int attemptsCount)
+        internal ConveyorElement(TData data, CancellationToken innerCancellation, int attemptsCount)
         {
             if (attemptsCount < 1)
                 throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
@@ -38,7 +38,7 @@ namespace AInq.Support.Background.Elements
             _attemptsRemain = attemptsCount;
         }
 
-        async Task<bool> ITaskWrapper<IDataConveyorMachine<TData, TResult>>.ExecuteAsync(IDataConveyorMachine<TData, TResult> argument, IServiceProvider provider, CancellationToken cancellation)
+        async Task<bool> ITaskWrapper<IConveyorMachine<TData, TResult>>.ExecuteAsync(IConveyorMachine<TData, TResult> argument, IServiceProvider provider, CancellationToken cancellation)
         {
             if (_attemptsRemain < 1)
                 return true;

@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Test
 {
-    public class TestMachine : IDataConveyorMachine<int, int>, IStoppableTaskMachine
+    public class TestMachine : IConveyorMachine<int, int>, IStoppable
     {
         private bool _isRunning;
         private readonly string _name;
@@ -31,7 +31,7 @@ namespace AInq.Support.Background.Test
             Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} created");
         }
 
-        async Task<int> IDataConveyorMachine<int, int>.ProcessDataAsync(int data, IServiceProvider provider, CancellationToken cancellation)
+        async Task<int> IConveyorMachine<int, int>.ProcessDataAsync(int data, IServiceProvider provider, CancellationToken cancellation)
         {
          Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} checking provider {provider}");   
             Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} processing {data}");
@@ -40,9 +40,9 @@ namespace AInq.Support.Background.Test
             return data;
         }
 
-        bool IStoppableTaskMachine.IsRunning => _isRunning;
+        bool IStoppable.IsRunning => _isRunning;
 
-        async Task IStoppableTaskMachine.StartMachineAsync(CancellationToken cancellation)
+        async Task IStoppable.StartMachineAsync(CancellationToken cancellation)
         {
             Console.WriteLine($"{DateTime.Now:T}\tStarting machine ID {_name}");
             await Task.Delay(2000, cancellation);
@@ -50,7 +50,7 @@ namespace AInq.Support.Background.Test
             Console.WriteLine($"{DateTime.Now:T}\tMachine {_name} started");
         }
 
-        async Task IStoppableTaskMachine.StopMachineAsync(CancellationToken cancellation)
+        async Task IStoppable.StopMachineAsync(CancellationToken cancellation)
         {
             Console.WriteLine($"{DateTime.Now:T}\tStopping machine ID {_name}");
             await Task.Delay(2000, cancellation);

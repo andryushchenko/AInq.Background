@@ -23,34 +23,34 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Managers
 {
-    internal class DataConveyorManager<TData, TResult> : IDataConveyor<TData, TResult>, ITaskManager<IDataConveyorMachine<TData, TResult>, object>
+    internal class ConveyorManager<TData, TResult> : IConveyor<TData, TResult>, ITaskManager<IConveyorMachine<TData, TResult>, object>
     {
         protected readonly AsyncAutoResetEvent NewDataEvent = new AsyncAutoResetEvent(false);
-        protected readonly ConcurrentQueue<ITaskWrapper<IDataConveyorMachine<TData, TResult>>> Queue = new ConcurrentQueue<ITaskWrapper<IDataConveyorMachine<TData, TResult>>>();
+        protected readonly ConcurrentQueue<ITaskWrapper<IConveyorMachine<TData, TResult>>> Queue = new ConcurrentQueue<ITaskWrapper<IConveyorMachine<TData, TResult>>>();
 
-        Task<TResult> IDataConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
+        Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
         {
             if (attemptsCount < 1)
                 throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-            var element = new DataConveyorElement<TData, TResult>(data, cancellation, attemptsCount);
+            var element = new ConveyorElement<TData, TResult>(data, cancellation, attemptsCount);
             Queue.Enqueue(element);
             NewDataEvent.Set();
             return element.Result;
         }
 
-        bool ITaskManager<IDataConveyorMachine<TData, TResult>, object>.HasTask => !Queue.IsEmpty;
+        bool ITaskManager<IConveyorMachine<TData, TResult>, object>.HasTask => !Queue.IsEmpty;
 
-        Task ITaskManager<IDataConveyorMachine<TData, TResult>, object>.WaitForTaskAsync(CancellationToken cancellation)
+        Task ITaskManager<IConveyorMachine<TData, TResult>, object>.WaitForTaskAsync(CancellationToken cancellation)
             => Queue.IsEmpty
                 ? NewDataEvent.WaitAsync(cancellation)
                 : Task.CompletedTask;
 
-        public (ITaskWrapper<IDataConveyorMachine<TData, TResult>>, object) GetTask()
+        public (ITaskWrapper<IConveyorMachine<TData, TResult>>, object) GetTask()
             => (Queue.TryDequeue(out var task)
                 ? task
                 : null, null);
 
-        void ITaskManager<IDataConveyorMachine<TData, TResult>, object>.RevertTask(ITaskWrapper<IDataConveyorMachine<TData, TResult>> task, object metadata)
+        void ITaskManager<IConveyorMachine<TData, TResult>, object>.RevertTask(ITaskWrapper<IConveyorMachine<TData, TResult>> task, object metadata)
             => Queue.Enqueue(task);
     }
 }

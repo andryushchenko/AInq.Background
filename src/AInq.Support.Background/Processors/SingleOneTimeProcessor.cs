@@ -22,8 +22,15 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Processors
 {
-    internal sealed class SingleNullTaskProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata> where TArgument:class
+    internal sealed class SingleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
     {
+        private readonly Func<IServiceProvider, TArgument> _argumentFabric;
+
+        internal SingleOneTimeProcessor(Func<IServiceProvider, TArgument> argumentFabric)
+        {
+            _argumentFabric = argumentFabric ?? throw new ArgumentNullException(nameof(argumentFabric));
+        }
+
         async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
         {
             while (manager.HasTask)
@@ -31,8 +38,14 @@ namespace AInq.Support.Background.Processors
                 var (task, metadata) = manager.GetTask();
                 if (task == null) break;
                 using var taskScope = provider.CreateScope();
-                if (!await task.ExecuteAsync(null, taskScope.ServiceProvider, cancellation))
+                var argument = _argumentFabric.Invoke(taskScope.ServiceProvider);
+                var machine = argument as IStoppable;
+                if (machine != null && !machine.IsRunning)
+                    await machine.StartMachineAsync(cancellation);
+                if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, cancellation))
                     manager.RevertTask(task, metadata);
+                if (machine != null && machine.IsRunning)
+                    await machine.StopMachineAsync(cancellation);
             }
         }
     }

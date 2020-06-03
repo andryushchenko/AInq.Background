@@ -31,8 +31,8 @@ namespace AInq.Support.Background
             using var scope = host.Services.CreateScope();
             foreach (var work in scope.ServiceProvider.GetServices<ITaskWrapper<object>>())
             {
-                using var localScope = scope.ServiceProvider.CreateScope();
-                await work.ExecuteAsync(null, localScope.ServiceProvider, cancellation);
+                using var workScope = scope.ServiceProvider.CreateScope();
+                await work.ExecuteAsync(null, workScope.ServiceProvider, cancellation);
             }
         }
 

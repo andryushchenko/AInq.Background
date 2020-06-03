@@ -25,7 +25,7 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Processors
 {
-    internal sealed class MultipleReusableTaskProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
+    internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
     {
         private readonly Func<IServiceProvider, TArgument> _argumentFabric;
         private readonly AsyncAutoResetEvent _reset = new AsyncAutoResetEvent(false);
@@ -34,7 +34,7 @@ namespace AInq.Support.Background.Processors
         private int _currentArgumentCount;
 
 
-        internal MultipleReusableTaskProcessor(Func<IServiceProvider, TArgument> argumentFabric, int maxSimultaneousTasks)
+        internal MultipleReusableProcessor(Func<IServiceProvider, TArgument> argumentFabric, int maxSimultaneousTasks)
         {
             if (maxSimultaneousTasks < 1)
                 throw new ArgumentOutOfRangeException(nameof(maxSimultaneousTasks), maxSimultaneousTasks, null);
@@ -71,11 +71,11 @@ namespace AInq.Support.Background.Processors
                 {
                     try
                     {
-                        if (argument is IStoppableTaskMachine machine && !machine.IsRunning)
-                            await machine.StartMachineAsync(cancellation);
+                        if (argument is IStoppable stoppable && !stoppable.IsRunning)
+                            await stoppable.StartMachineAsync(cancellation);
                         if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, cancellation))
                             manager.RevertTask(task, metadata);
-                        if (manager.HasTask && argument is IThrottlingTaskMachine throttling && throttling.Timeout.Ticks > 0)
+                        if (manager.HasTask && argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
                             await Task.Delay(throttling.Timeout, cancellation);
                     }
                     finally
@@ -91,8 +91,8 @@ namespace AInq.Support.Background.Processors
                 while (_reusable.TryTake(out var argument))
                 {
                     Interlocked.Decrement(ref _currentArgumentCount);
-                    if (argument is IStoppableTaskMachine machine && machine.IsRunning)
-                        _ = machine.StopMachineAsync(cancellation);
+                    if (argument is IStoppable stoppable && stoppable.IsRunning)
+                        _ = stoppable.StopMachineAsync(cancellation);
                 }
             }, cancellation);
         }

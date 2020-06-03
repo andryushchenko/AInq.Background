@@ -62,11 +62,10 @@ namespace AInq.Support.Background.Managers
             if (maxPriority < 0)
                 throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, null);
             _maxPriority = maxPriority;
-            var queues = new ConcurrentQueue<ITaskWrapper<object>>[_maxPriority + 1];
-            queues[0] = Queue;
+            _queues = new ConcurrentQueue<ITaskWrapper<object>>[_maxPriority + 1];
+            _queues[0] = Queue;
             for (var index = 1; index <= _maxPriority; index++)
-                queues[index] = new ConcurrentQueue<ITaskWrapper<object>>();
-            _queues = queues;
+                _queues[index] = new ConcurrentQueue<ITaskWrapper<object>>();
         }
 
         Task IPriorityWorkQueue.EnqueueWork(IWork work, int priority, CancellationToken cancellation, int attemptsCount)

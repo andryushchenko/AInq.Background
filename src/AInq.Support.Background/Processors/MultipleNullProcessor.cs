@@ -22,34 +22,33 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Processors
 {
-    internal sealed class SingleStaticTaskProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
+    internal sealed class MultipleNullProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata> where TArgument:class
     {
-        private readonly TArgument _argument;
+        private readonly SemaphoreSlim _semaphore;
 
-        internal SingleStaticTaskProcessor(TArgument argument)
+        internal MultipleNullProcessor(int maxSimultaneousTasks)
         {
-            _argument = argument;
+            if (maxSimultaneousTasks < 1)
+                throw new ArgumentOutOfRangeException(nameof(maxSimultaneousTasks), maxSimultaneousTasks, null);
+            _semaphore = new SemaphoreSlim(maxSimultaneousTasks);
         }
 
         async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
         {
-            if (!manager.HasTask)
-                return;
-            var machine = _argument as IStoppableTaskMachine;
-            if (machine != null && !machine.IsRunning)
-                await machine.StartMachineAsync(cancellation);
             while (manager.HasTask)
             {
                 var (task, metadata) = manager.GetTask();
-                if (task == null) break;
-                using var taskScope = provider.CreateScope();
-                if (!await task.ExecuteAsync(_argument, taskScope.ServiceProvider, cancellation))
-                    manager.RevertTask(task, metadata);
-                if (manager.HasTask && _argument is IThrottlingTaskMachine throttling && throttling.Timeout.Ticks > 0)
-                    await Task.Delay(throttling.Timeout, cancellation);
+                if (task == null) 
+                    return;
+                await _semaphore.WaitAsync(cancellation);
+                _ = Task.Run(async () =>
+                {
+                    using var taskScope = provider.CreateScope();
+                    if (!await task.ExecuteAsync(null, taskScope.ServiceProvider, cancellation))
+                        manager.RevertTask(task, metadata);
+                    _semaphore.Release();
+                }, cancellation);
             }
-            if (machine != null && machine.IsRunning)
-                await machine.StopMachineAsync(cancellation);
         }
     }
 }

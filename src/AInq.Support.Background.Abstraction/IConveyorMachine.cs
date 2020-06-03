@@ -15,11 +15,13 @@
  */
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AInq.Support.Background
 {
-    public interface IThrottlingTaskMachine
+    public interface IConveyorMachine<in TData, TResult>
     {
-        TimeSpan Timeout { get; }
+        Task<TResult> ProcessDataAsync(TData data, IServiceProvider provider, CancellationToken cancellation = default);
     }
 }

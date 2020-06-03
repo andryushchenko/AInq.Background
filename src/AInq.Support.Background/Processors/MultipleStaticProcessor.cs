@@ -25,18 +25,18 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Processors
 {
-    internal sealed class MultipleStaticTaskProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
+    internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
     {
         private readonly ConcurrentBag<TArgument> _inactive;
         private readonly ConcurrentBag<TArgument> _active;
         private readonly AsyncAutoResetEvent _reset = new AsyncAutoResetEvent(false);
 
-        internal MultipleStaticTaskProcessor(IEnumerable<TArgument> arguments)
+        internal MultipleStaticProcessor(IEnumerable<TArgument> arguments)
         {
             _inactive = new ConcurrentBag<TArgument>(arguments);
             if (_inactive.IsEmpty)
                 throw new ArgumentException("Empty collection", nameof(arguments));
-            _active = typeof(IStoppableTaskMachine).IsAssignableFrom(typeof(TArgument))
+            _active = typeof(IStoppable).IsAssignableFrom(typeof(TArgument))
                 ? new ConcurrentBag<TArgument>()
                 : _inactive;
         }
@@ -51,11 +51,11 @@ namespace AInq.Support.Background.Processors
                     await _reset.WaitAsync(cancellation);
                     continue;
                 }
-                var machine = argument as IStoppableTaskMachine;
+                var stoppable = argument as IStoppable;
                 var (task, metadata) = manager.GetTask();
                 if (task == null)
                 {
-                    if (machine != null && machine.IsRunning)
+                    if (stoppable != null && stoppable.IsRunning)
                         _active.Add(argument);
                     else _inactive.Add(argument);
                     _reset.Set();
@@ -65,25 +65,25 @@ namespace AInq.Support.Background.Processors
                 {
                     try
                     {
-                        if (machine != null && !machine.IsRunning)
-                            await machine.StartMachineAsync(cancellation);
+                        if (stoppable != null && !stoppable.IsRunning)
+                            await stoppable.StartMachineAsync(cancellation);
                         using var taskScope = provider.CreateScope();
                         if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, cancellation))
                             manager.RevertTask(task, metadata);
                         if (manager.HasTask)
                         {
-                            if (argument is IThrottlingTaskMachine throttling && throttling.Timeout.Ticks > 0)
+                            if (argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
                                 await Task.Delay(throttling.Timeout, cancellation);
                         }
                         else
                         {
-                            if (machine != null && machine.IsRunning)
-                                await machine.StopMachineAsync(cancellation);
+                            if (stoppable != null && stoppable.IsRunning)
+                                await stoppable.StopMachineAsync(cancellation);
                         }
                     }
                     finally
                     {
-                        if (machine != null && machine.IsRunning)
+                        if (stoppable != null && stoppable.IsRunning)
                             _active.Add(argument);
                         else _inactive.Add(argument);
                         _reset.Set();
@@ -99,8 +99,8 @@ namespace AInq.Support.Background.Processors
                     {
                         try
                         {
-                            if (active is IStoppableTaskMachine machine && machine.IsRunning)
-                                await machine.StopMachineAsync(cancellation);
+                            if (active is IStoppable stoppable && stoppable.IsRunning)
+                                await stoppable.StopMachineAsync(cancellation);
                         }
                         finally
                         {

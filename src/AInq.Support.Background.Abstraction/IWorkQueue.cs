@@ -18,17 +18,16 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace AInq.Support.Background
-
 {
     public interface IWorkQueue
     {
         Task EnqueueWork(IWork work, CancellationToken cancellation = default, int attemptsCount = 1);
-        Task EnqueueWork<TWork>(CancellationToken cancellation = default, int attemptsCount = 1) where TWork : IWork;
+        Task EnqueueWork<TWork>(CancellationToken cancellation = default, int attemptsCount = 1) where TWork:IWork;
         Task<TResult> EnqueueWork<TResult>(IWork<TResult> work, CancellationToken cancellation = default, int attemptsCount = 1);
-        Task<TResult> EnqueueWork<TWork, TResult>(CancellationToken cancellation = default, int attemptsCount = 1) where TWork : IWork<TResult>;
+        Task<TResult> EnqueueWork<TWork, TResult>(CancellationToken cancellation = default, int attemptsCount = 1) where TWork:IWork<TResult>;
         Task EnqueueAsyncWork(IAsyncWork work, CancellationToken cancellation = default, int attemptsCount = 1);
-        Task EnqueueAsyncWork<TAsyncWork>(CancellationToken cancellation = default, int attemptsCount = 1) where TAsyncWork : IAsyncWork;
+        Task EnqueueAsyncWork<TAsyncWork>(CancellationToken cancellation = default, int attemptsCount = 1) where TAsyncWork:IAsyncWork;
         Task<TResult> EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, CancellationToken cancellation = default, int attemptsCount = 1);
-        Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(CancellationToken cancellation = default, int attemptsCount = 1) where TAsyncWork : IAsyncWork<TResult>;
+        Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(CancellationToken cancellation = default, int attemptsCount = 1) where TAsyncWork:IAsyncWork<TResult>;
     }
 }

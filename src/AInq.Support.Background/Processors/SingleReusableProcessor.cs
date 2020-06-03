@@ -22,31 +22,35 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Processors
 {
-    internal sealed class SingleOneTimeTaskProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
+    internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
     {
         private readonly Func<IServiceProvider, TArgument> _argumentFabric;
 
-        internal SingleOneTimeTaskProcessor(Func<IServiceProvider, TArgument> argumentFabric)
+        internal SingleReusableProcessor(Func<IServiceProvider, TArgument> argumentFabric)
         {
             _argumentFabric = argumentFabric ?? throw new ArgumentNullException(nameof(argumentFabric));
         }
 
         async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
         {
+            if (!manager.HasTask)
+                return;
+            var argument = _argumentFabric.Invoke(provider);
+            var stoppable = argument as IStoppable;
+            if (stoppable != null && !stoppable.IsRunning)
+                await stoppable.StartMachineAsync(cancellation);
             while (manager.HasTask)
             {
                 var (task, metadata) = manager.GetTask();
                 if (task == null) break;
                 using var taskScope = provider.CreateScope();
-                var argument = _argumentFabric.Invoke(taskScope.ServiceProvider);
-                var machine = argument as IStoppableTaskMachine;
-                if (machine != null && !machine.IsRunning)
-                    await machine.StartMachineAsync(cancellation);
                 if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, cancellation))
                     manager.RevertTask(task, metadata);
-                if (machine != null && machine.IsRunning)
-                    await machine.StopMachineAsync(cancellation);
+                if (manager.HasTask && argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
+                    await Task.Delay(throttling.Timeout, cancellation);
             }
+            if (stoppable != null && stoppable.IsRunning)
+                await stoppable.StopMachineAsync(cancellation);
         }
     }
 }

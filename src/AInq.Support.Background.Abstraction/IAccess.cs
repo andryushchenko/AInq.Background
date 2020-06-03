@@ -15,13 +15,11 @@
  */
 
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace AInq.Support.Background
 {
-    public interface IDataConveyorMachine<in TData, TResult>
+    public interface IAccess<in TResource>
     {
-        Task<TResult> ProcessDataAsync(TData data, IServiceProvider provider, CancellationToken cancellation = default);
+        void Access(TResource parameter, IServiceProvider serviceProvider);
     }
 }

@@ -24,46 +24,46 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Managers
 {
-    internal sealed class PriorityDataConveyorManager<TData, TResult> : DataConveyorManager<TData, TResult>, IPriorityDataConveyor<TData, TResult>, ITaskManager<IDataConveyorMachine<TData, TResult>, int>
+    internal sealed class PriorityConveyorManager<TData, TResult> : ConveyorManager<TData, TResult>, IPriorityConveyor<TData, TResult>, ITaskManager<IConveyorMachine<TData, TResult>, int>
     {
         private readonly int _maxPriority;
 
-        private readonly IList<ConcurrentQueue<ITaskWrapper<IDataConveyorMachine<TData, TResult>>>> _queues;
+        private readonly IList<ConcurrentQueue<ITaskWrapper<IConveyorMachine<TData, TResult>>>> _queues;
 
-        internal PriorityDataConveyorManager(int maxPriority)
+        internal PriorityConveyorManager(int maxPriority)
         {
             if (maxPriority < 0)
                 throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, null);
             _maxPriority = maxPriority;
-            var queues = new ConcurrentQueue<ITaskWrapper<IDataConveyorMachine<TData, TResult>>>[_maxPriority + 1];
-            queues[0] = Queue;
-            for (var index = 1; index <= _maxPriority; index++) queues[index] = new ConcurrentQueue<ITaskWrapper<IDataConveyorMachine<TData, TResult>>>();
-            _queues = queues;
+            _queues = new ConcurrentQueue<ITaskWrapper<IConveyorMachine<TData, TResult>>>[_maxPriority + 1];
+            _queues[0] = Queue;
+            for (var index = 1; index <= _maxPriority; index++)
+                _queues[index] = new ConcurrentQueue<ITaskWrapper<IConveyorMachine<TData, TResult>>>();
         }
 
-        int IPriorityDataConveyor<TData, TResult>.MaxPriority => _maxPriority;
+        int IPriorityConveyor<TData, TResult>.MaxPriority => _maxPriority;
 
-        bool ITaskManager<IDataConveyorMachine<TData, TResult>, int>.HasTask => _queues.Any(queue => !queue.IsEmpty);
+        bool ITaskManager<IConveyorMachine<TData, TResult>, int>.HasTask => _queues.Any(queue => !queue.IsEmpty);
 
-        Task<TResult> IPriorityDataConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, CancellationToken cancellation, int attemptsCount)
+        Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, CancellationToken cancellation, int attemptsCount)
         {
             if (priority < 0 || priority > _maxPriority)
                 throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
             if (attemptsCount < 1)
                 throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-            var element = new DataConveyorElement<TData, TResult>(data, cancellation, attemptsCount);
+            var element = new ConveyorElement<TData, TResult>(data, cancellation, attemptsCount);
             _queues[priority].Enqueue(element);
             NewDataEvent.Set();
             return element.Result;
         }
 
 
-        Task ITaskManager<IDataConveyorMachine<TData, TResult>, int>.WaitForTaskAsync(CancellationToken cancellation)
+        Task ITaskManager<IConveyorMachine<TData, TResult>, int>.WaitForTaskAsync(CancellationToken cancellation)
             => _queues.Any(queue => !queue.IsEmpty)
                 ? Task.CompletedTask
                 : NewDataEvent.WaitAsync(cancellation);
 
-        (ITaskWrapper<IDataConveyorMachine<TData, TResult>>, int) ITaskManager<IDataConveyorMachine<TData, TResult>, int>.GetTask()
+        (ITaskWrapper<IConveyorMachine<TData, TResult>>, int) ITaskManager<IConveyorMachine<TData, TResult>, int>.GetTask()
         {
             var pendingQueue = _queues.FirstOrDefault(queue => !queue.IsEmpty);
             return pendingQueue != null && pendingQueue.TryDequeue(out var task)
@@ -71,7 +71,7 @@ namespace AInq.Support.Background.Managers
                 : (null, -1);
         }
 
-        void ITaskManager<IDataConveyorMachine<TData, TResult>, int>.RevertTask(ITaskWrapper<IDataConveyorMachine<TData, TResult>> task, int metadata)
+        void ITaskManager<IConveyorMachine<TData, TResult>, int>.RevertTask(ITaskWrapper<IConveyorMachine<TData, TResult>> task, int metadata)
         {
             if (metadata < 0 || metadata > _maxPriority)
                 throw new ArgumentOutOfRangeException(nameof(metadata), metadata, null);
