@@ -24,37 +24,8 @@ using System.Linq;
 
 namespace AInq.Support.Background
 {
-    public static class BackgroundServicesDependencyInjection
+    public static class DataConveyorInjection
     {
-        public static IServiceCollection AddWorkQueue(this IServiceCollection services, int maxSimultaneous = 1)
-        {
-            if (services.Any(service => service.ImplementationType == typeof(IWorkQueue)))
-                throw new InvalidOperationException("Service already exists");
-            if (maxSimultaneous < 1)
-                throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, null);
-            var manager = new WorkQueueManager();
-            services.AddSingleton<IWorkQueue>(manager);
-            return maxSimultaneous == 1
-                ? services.AddHostedService(provider => new TaskQueueWorker<object, object>(provider, manager, new SingleNullTaskProcessor<object, object>()))
-                : services.AddHostedService(provider => new TaskQueueWorker<object, object>(provider, manager, new MultipleNullTaskProcessor<object, object>(maxSimultaneous)));
-        }
-
-        public static IServiceCollection AddPriorityWorkQueue(this IServiceCollection services, int maxPriority, int maxSimultaneous = 1)
-        {
-            if (services.Any(service => service.ImplementationType == typeof(IWorkQueue)))
-                throw new InvalidOperationException("Service already exists");
-            if (maxPriority < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, null);
-            if (maxSimultaneous < 1)
-                throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, null);
-            var manager = new PriorityWorkQueueManager(maxPriority);
-            services.AddSingleton<IWorkQueue>(manager)
-                .AddSingleton<IPriorityWorkQueue>(manager);
-            return maxSimultaneous == 1
-                ? services.AddHostedService(provider => new TaskQueueWorker<object, int>(provider, manager, new SingleNullTaskProcessor<object, int>()))
-                : services.AddHostedService(provider => new TaskQueueWorker<object, int>(provider, manager, new MultipleNullTaskProcessor<object, int>(maxSimultaneous)));
-        }
-
         public static IServiceCollection AddDataConveyor<TData, TResult>(this IServiceCollection services, IDataConveyorMachine<TData, TResult> conveyorMachine)
         {
             if (services.Any(service => service.ImplementationType == typeof(IDataConveyor<TData, TResult>)))
@@ -136,10 +107,10 @@ namespace AInq.Support.Background
                     : services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, object>(provider, manager, new MultipleStaticTaskProcessor<IDataConveyorMachine<TData, TResult>, object>(Enumerable.Repeat(0, maxSimultaneous).Select(_ => conveyorMachineFabric.Invoke(provider))))),
                 ReuseStrategy.Reuse => maxSimultaneous == 1
                     ? services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, object>(provider, manager, new SingleReusableTaskProcessor<IDataConveyorMachine<TData, TResult>, object>(conveyorMachineFabric)))
-                    : throw new NotImplementedException(),
+                    : services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, object>(provider, manager, new MultipleReusableTaskProcessor<IDataConveyorMachine<TData, TResult>, object>(conveyorMachineFabric, maxSimultaneous))),
                 ReuseStrategy.OneTime => maxSimultaneous == 1
                     ? services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, object>(provider, manager, new SingleOneTimeTaskProcessor<IDataConveyorMachine<TData, TResult>, object>(conveyorMachineFabric)))
-                    : throw new NotImplementedException(),
+                    : services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, object>(provider, manager, new MultipleOneTimeTaskProcessor<IDataConveyorMachine<TData, TResult>, object>(conveyorMachineFabric, maxSimultaneous))),
                 _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, null)
             };
         }
@@ -164,10 +135,10 @@ namespace AInq.Support.Background
                     : services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, int>(provider, manager, new MultipleStaticTaskProcessor<IDataConveyorMachine<TData, TResult>, int>(Enumerable.Repeat(0, maxSimultaneous).Select(_ => conveyorMachineFabric.Invoke(provider)).Where(machine => machine != null)))),
                 ReuseStrategy.Reuse => maxSimultaneous == 1
                     ? services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, int>(provider, manager, new SingleReusableTaskProcessor<IDataConveyorMachine<TData, TResult>, int>(conveyorMachineFabric)))
-                    : throw new NotImplementedException(),
+                    : services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, int>(provider, manager, new MultipleReusableTaskProcessor<IDataConveyorMachine<TData, TResult>, int>(conveyorMachineFabric, maxSimultaneous))),
                 ReuseStrategy.OneTime => maxSimultaneous == 1
                     ? services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, int>(provider, manager, new SingleOneTimeTaskProcessor<IDataConveyorMachine<TData, TResult>, int>(conveyorMachineFabric)))
-                    : throw new NotImplementedException(),
+                    : services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, int>(provider, manager, new MultipleOneTimeTaskProcessor<IDataConveyorMachine<TData, TResult>, int>(conveyorMachineFabric, maxSimultaneous))),
                 _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, null)
             };
         }
@@ -187,10 +158,10 @@ namespace AInq.Support.Background
                     : services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, object>(provider, manager, new MultipleStaticTaskProcessor<IDataConveyorMachine<TData, TResult>, object>(Enumerable.Repeat(0, maxSimultaneous).Select(_ => provider.GetService<TConveyorMachine>() as IDataConveyorMachine<TData, TResult>).Where(machine => machine != null)))),
                 ReuseStrategy.Reuse => maxSimultaneous == 1
                     ? services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, object>(provider, manager, new SingleReusableTaskProcessor<IDataConveyorMachine<TData, TResult>, object>(serviceProvider => serviceProvider.GetService<TConveyorMachine>())))
-                    : throw new NotImplementedException(),
+                    : services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, object>(provider, manager, new MultipleReusableTaskProcessor<IDataConveyorMachine<TData, TResult>, object>(serviceProvider => serviceProvider.GetService<TConveyorMachine>(), maxSimultaneous))),
                 ReuseStrategy.OneTime => maxSimultaneous == 1
                     ? services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, object>(provider, manager, new SingleOneTimeTaskProcessor<IDataConveyorMachine<TData, TResult>, object>(serviceProvider => serviceProvider.GetService<TConveyorMachine>())))
-                    : throw new NotImplementedException(),
+                    : services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, object>(provider, manager, new MultipleOneTimeTaskProcessor<IDataConveyorMachine<TData, TResult>, object>(serviceProvider => serviceProvider.GetService<TConveyorMachine>(), maxSimultaneous))),
                 _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, null)
             };
         }
@@ -213,10 +184,10 @@ namespace AInq.Support.Background
                     : services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, int>(provider, manager, new MultipleStaticTaskProcessor<IDataConveyorMachine<TData, TResult>, int>(Enumerable.Repeat(0, maxSimultaneous).Select(_ => provider.GetService<TConveyorMachine>() as IDataConveyorMachine<TData, TResult>).Where(machine => machine != null)))),
                 ReuseStrategy.Reuse => maxSimultaneous == 1
                     ? services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, int>(provider, manager, new SingleReusableTaskProcessor<IDataConveyorMachine<TData, TResult>, int>(serviceProvider => serviceProvider.GetService<TConveyorMachine>())))
-                    : throw new NotImplementedException(),
+                    : services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, int>(provider, manager, new MultipleReusableTaskProcessor<IDataConveyorMachine<TData, TResult>, int>(serviceProvider => serviceProvider.GetService<TConveyorMachine>(), maxSimultaneous))),
                 ReuseStrategy.OneTime => maxSimultaneous == 1
-                    ? services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, int>(provider, manager, new SingleReusableTaskProcessor<IDataConveyorMachine<TData, TResult>, int>(serviceProvider => serviceProvider.GetService<TConveyorMachine>())))
-                    : throw new NotImplementedException(),
+                    ? services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, int>(provider, manager, new SingleOneTimeTaskProcessor<IDataConveyorMachine<TData, TResult>, int>(serviceProvider => serviceProvider.GetService<TConveyorMachine>())))
+                    : services.AddHostedService(provider => new TaskQueueWorker<IDataConveyorMachine<TData, TResult>, int>(provider, manager, new MultipleOneTimeTaskProcessor<IDataConveyorMachine<TData, TResult>, int>(serviceProvider => serviceProvider.GetService<TConveyorMachine>(), maxSimultaneous))),
                 _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, null)
             };
         }

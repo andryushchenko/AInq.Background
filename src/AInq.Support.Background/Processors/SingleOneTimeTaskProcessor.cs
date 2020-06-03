@@ -15,6 +15,7 @@
  */
 
 using AInq.Support.Background.Managers;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace AInq.Support.Background.Processors
     {
         private readonly Func<IServiceProvider, TArgument> _argumentFabric;
 
-        public SingleOneTimeTaskProcessor(Func<IServiceProvider, TArgument> argumentFabric)
+        internal SingleOneTimeTaskProcessor(Func<IServiceProvider, TArgument> argumentFabric)
         {
             _argumentFabric = argumentFabric ?? throw new ArgumentNullException(nameof(argumentFabric));
         }
@@ -34,16 +35,15 @@ namespace AInq.Support.Background.Processors
         {
             while (manager.HasTask)
             {
-                var argument = _argumentFabric.Invoke(provider);
+                var (task, metadata) = manager.GetTask();
+                if (task == null) break;
+                using var taskScope = provider.CreateScope();
+                var argument = _argumentFabric.Invoke(taskScope.ServiceProvider);
                 var machine = argument as IStoppableTaskMachine;
                 if (machine != null && !machine.IsRunning)
                     await machine.StartMachineAsync(cancellation);
-                var (task, metadata) = manager.GetTask();
-                if (task == null) break;
-                if (!await task.ExecuteAsync(argument, provider, cancellation))
+                if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, cancellation))
                     manager.RevertTask(task, metadata);
-                if (manager.HasTask && argument is IThrottlingTaskMachine throttling && throttling.Timeout.Ticks > 0)
-                    await Task.Delay(throttling.Timeout, cancellation);
                 if (machine != null && machine.IsRunning)
                     await machine.StopMachineAsync(cancellation);
             }

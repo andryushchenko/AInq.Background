@@ -15,6 +15,7 @@
  */
 
 using AInq.Support.Background.Managers;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace AInq.Support.Background.Processors
     {
         private readonly Func<IServiceProvider, TArgument> _argumentFabric;
 
-        public SingleReusableTaskProcessor(Func<IServiceProvider, TArgument> argumentFabric)
+        internal SingleReusableTaskProcessor(Func<IServiceProvider, TArgument> argumentFabric)
         {
             _argumentFabric = argumentFabric ?? throw new ArgumentNullException(nameof(argumentFabric));
         }
@@ -42,7 +43,8 @@ namespace AInq.Support.Background.Processors
             {
                 var (task, metadata) = manager.GetTask();
                 if (task == null) break;
-                if (!await task.ExecuteAsync(argument, provider, cancellation))
+                using var taskScope = provider.CreateScope();
+                if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, cancellation))
                     manager.RevertTask(task, metadata);
                 if (manager.HasTask && argument is IThrottlingTaskMachine throttling && throttling.Timeout.Ticks > 0)
                     await Task.Delay(throttling.Timeout, cancellation);

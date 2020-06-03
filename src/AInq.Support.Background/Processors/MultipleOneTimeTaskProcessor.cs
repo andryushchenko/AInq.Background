@@ -22,14 +22,16 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Processors
 {
-    internal sealed class MultipleNullTaskProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata> where TArgument:class
+    internal class MultipleOneTimeTaskProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
     {
+        private readonly Func<IServiceProvider, TArgument> _argumentFabric;
         private readonly SemaphoreSlim _semaphore;
 
-        internal MultipleNullTaskProcessor(int maxSimultaneousTasks)
+        internal MultipleOneTimeTaskProcessor(Func<IServiceProvider, TArgument> argumentFabric, int maxSimultaneousTasks)
         {
             if (maxSimultaneousTasks < 1)
                 throw new ArgumentOutOfRangeException(nameof(maxSimultaneousTasks), maxSimultaneousTasks, null);
+            _argumentFabric = argumentFabric ?? throw new ArgumentNullException(nameof(argumentFabric));
             _semaphore = new SemaphoreSlim(maxSimultaneousTasks);
         }
 
@@ -37,16 +39,29 @@ namespace AInq.Support.Background.Processors
         {
             while (manager.HasTask)
             {
+                
                 var (task, metadata) = manager.GetTask();
                 if (task == null) 
                     return;
                 await _semaphore.WaitAsync(cancellation);
                 _ = Task.Run(async () =>
                 {
-                    using var taskScope = provider.CreateScope();
-                    if (!await task.ExecuteAsync(null, taskScope.ServiceProvider, cancellation))
-                        manager.RevertTask(task, metadata);
-                    _semaphore.Release();
+                    try
+                    {
+                        using var taskScope = provider.CreateScope();
+                        var argument = _argumentFabric.Invoke(taskScope.ServiceProvider);
+                        var machine = argument as IStoppableTaskMachine;
+                        if (machine != null && !machine.IsRunning)
+                            await machine.StartMachineAsync(cancellation);
+                        if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, cancellation))
+                            manager.RevertTask(task, metadata);
+                        if (machine != null && machine.IsRunning)
+                            await machine.StopMachineAsync(cancellation);
+                    }
+                    finally
+                    {
+                        _semaphore.Release();
+                    }
                 }, cancellation);
             }
         }

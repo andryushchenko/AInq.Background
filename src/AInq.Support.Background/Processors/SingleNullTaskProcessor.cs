@@ -15,6 +15,7 @@
  */
 
 using AInq.Support.Background.Managers;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,12 +26,12 @@ namespace AInq.Support.Background.Processors
     {
         async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskQueueManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
         {
-            if (!manager.HasTask) return;
             while (manager.HasTask)
             {
                 var (task, metadata) = manager.GetTask();
                 if (task == null) break;
-                if (!await task.ExecuteAsync(null, provider, cancellation))
+                using var taskScope = provider.CreateScope();
+                if (!await task.ExecuteAsync(null, taskScope.ServiceProvider, cancellation))
                     manager.RevertTask(task, metadata);
             }
         }

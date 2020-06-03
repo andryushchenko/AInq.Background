@@ -15,6 +15,8 @@
  */
 
 using AInq.Support.Background.Managers;
+using Microsoft.Extensions.DependencyInjection;
+using Nito.AsyncEx;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -27,101 +29,86 @@ namespace AInq.Support.Background.Processors
     {
         private readonly ConcurrentBag<TArgument> _inactive;
         private readonly ConcurrentBag<TArgument> _active;
-        private readonly SemaphoreSlim _semaphore;
-        private readonly Func<ITaskQueueManager<TArgument, TMetadata>, IServiceProvider, CancellationToken, Task> _processor;
+        private readonly AsyncAutoResetEvent _reset = new AsyncAutoResetEvent(false);
 
         internal MultipleStaticTaskProcessor(IEnumerable<TArgument> arguments)
         {
             _inactive = new ConcurrentBag<TArgument>(arguments);
             if (_inactive.IsEmpty)
                 throw new ArgumentException("Empty collection", nameof(arguments));
-            if (typeof(IStoppableTaskMachine).IsAssignableFrom(typeof(TArgument)))
-            {
-                _processor = ProcessWithStartStopAsync;
-                _active = new ConcurrentBag<TArgument>();
-            }
-            else
-            {
-                _processor = ProcessAsync;
-                _active = _inactive;
-            }
-            _semaphore = new SemaphoreSlim(_inactive.Count);
+            _active = typeof(IStoppableTaskMachine).IsAssignableFrom(typeof(TArgument))
+                ? new ConcurrentBag<TArgument>()
+                : _inactive;
         }
 
         async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskQueueManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
-            => await _processor.Invoke(manager, provider, cancellation);
-
-        private async Task ProcessWithStartStopAsync(ITaskQueueManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
         {
+            var currentTasks = new LinkedList<Task>();
             while (manager.HasTask)
             {
-                await _semaphore.WaitAsync(cancellation);
+                if (!_active.TryTake(out var argument) && !_inactive.TryTake(out argument))
+                {
+                    await _reset.WaitAsync(cancellation);
+                    continue;
+                }
+                var machine = argument as IStoppableTaskMachine;
                 var (task, metadata) = manager.GetTask();
                 if (task == null)
                 {
-                    _semaphore.Release();
-                    break;
+                    if (machine != null && machine.IsRunning)
+                        await machine.StopMachineAsync(cancellation);
+                    _inactive.Add(argument);
+                    return;
                 }
-                if (_active.TryTake(out var argument) || _inactive.TryTake(out argument))
+                currentTasks.AddLast(Task.Run(async () =>
                 {
-                    _ = Task.Run(async () =>
+                    try
                     {
-                        if (argument is IStoppableTaskMachine startingMachine && !startingMachine.IsRunning)
-                            await startingMachine.StartMachineAsync(cancellation);
-                        if (!await task.ExecuteAsync(argument, provider, cancellation))
+                        if (machine != null && !machine.IsRunning)
+                            await machine.StartMachineAsync(cancellation);
+                        using var taskScope = provider.CreateScope();
+                        if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, cancellation))
                             manager.RevertTask(task, metadata);
                         if (manager.HasTask)
                         {
-                            if (manager.HasTask && argument is IThrottlingTaskMachine throttling && throttling.Timeout.Ticks > 0)
+                            if (argument is IThrottlingTaskMachine throttling && throttling.Timeout.Ticks > 0)
                                 await Task.Delay(throttling.Timeout, cancellation);
-                            _active.Add(argument);
                         }
                         else
                         {
-                            if (argument is IStoppableTaskMachine stoppingMachine && stoppingMachine.IsRunning)
-                                await stoppingMachine.StopMachineAsync(cancellation);
-                            _inactive.Add(argument);
+                            if (machine != null && machine.IsRunning)
+                                await machine.StopMachineAsync(cancellation);
                         }
-                        _semaphore.Release();
-                    }, cancellation);
-                }
-                else
-                {
-                    manager.RevertTask(task, metadata);
-                    _semaphore.Release();
-                }
+                    }
+                    finally
+                    {
+                        if (machine != null && machine.IsRunning)
+                            _active.Add(argument);
+                        else _inactive.Add(argument);
+                        _reset.Set();
+                    }
+                }, cancellation));
             }
-        }
-
-        private async Task ProcessAsync(ITaskQueueManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
-        {
-            while (manager.HasTask)
+            _ = Task.WhenAll(currentTasks).ContinueWith(task =>
             {
-                await _semaphore.WaitAsync(cancellation);
-                var (task, metadata) = manager.GetTask();
-                if (task == null)
+                while (_active.TryTake(out var argument))
                 {
-                    _semaphore.Release();
-                    break;
-                }
-                if (_inactive.TryTake(out var argument))
-                {
+                    var active = argument;
                     _ = Task.Run(async () =>
                     {
-                        if (!await task.ExecuteAsync(argument, provider, cancellation))
-                            manager.RevertTask(task, metadata);
-                        _inactive.Add(argument);
-                        if (manager.HasTask && argument is IThrottlingTaskMachine throttling && throttling.Timeout.Ticks > 0)
-                            await Task.Delay(throttling.Timeout, cancellation);
-                        _semaphore.Release();
+                        try
+                        {
+                            if (active is IStoppableTaskMachine machine && machine.IsRunning)
+                                await machine.StopMachineAsync(cancellation);
+                        }
+                        finally
+                        {
+                            _inactive.Add(active);
+                            _reset.Set();
+                        }
                     }, cancellation);
                 }
-                else
-                {
-                    manager.RevertTask(task, metadata);
-                    _semaphore.Release();
-                }
-            }
+            }, cancellation);
         }
     }
 }
