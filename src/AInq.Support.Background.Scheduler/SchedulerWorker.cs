@@ -14,33 +14,29 @@
  * limitations under the License.
  */
 
-using AInq.Support.Background.Managers;
-using AInq.Support.Background.Processors;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Nito.AsyncEx;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Nito.AsyncEx;
 
-namespace AInq.Support.Background.Workers
+namespace AInq.Support.Background
 {
-    internal sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposable
+    internal sealed class SchedulerWorker : IHostedService, IDisposable
     {
+        private readonly WorkScheduler _scheduler;
         private readonly IServiceProvider _provider;
-        private readonly ITaskManager<TArgument, TMetadata> _manager;
-        private readonly ITaskProcessor<TArgument, TMetadata> _processor;
+        private readonly ILogger<SchedulerWorker> _logger;
         private readonly CancellationTokenSource _shutdown = new CancellationTokenSource();
-        private readonly ILogger<TaskWorker<TArgument, TMetadata>> _logger;
         private Task _worker;
 
-        internal TaskWorker(IServiceProvider provider, ITaskManager<TArgument, TMetadata> manager, ITaskProcessor<TArgument, TMetadata> processor)
+        public SchedulerWorker(WorkScheduler scheduler, IServiceProvider provider)
         {
+            _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
             _provider = provider;
-            _manager = manager;
-            _processor = processor;
-            _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<TaskWorker<TArgument, TMetadata>>();
+            _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<SchedulerWorker>();
         }
 
         private async Task Worker(CancellationToken abort)
@@ -49,21 +45,11 @@ namespace AInq.Support.Background.Workers
             while (!cancellation.IsCancellationRequested)
                 try
                 {
-                    while (_manager.HasTask)
-                    {
-                        using var scope = _provider.CreateScope();
-                        await _processor.ProcessPendingTasksAsync(_manager, scope.ServiceProvider, cancellation.Token);
-
-                    }
-                    await _manager.WaitForTaskAsync(cancellation.Token);
+                    // TODO
                 }
                 catch (OperationCanceledException)
                 {
                     return;
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Unhandled error in Task Processor");
                 }
         }
 
