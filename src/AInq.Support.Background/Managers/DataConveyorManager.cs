@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Managers
 {
-    internal class DataConveyorManager<TData, TResult> : IDataConveyor<TData, TResult>, ITaskQueueManager<IDataConveyorMachine<TData, TResult>, object>
+    internal class DataConveyorManager<TData, TResult> : IDataConveyor<TData, TResult>, ITaskManager<IDataConveyorMachine<TData, TResult>, object>
     {
         protected readonly AsyncAutoResetEvent NewDataEvent = new AsyncAutoResetEvent(false);
         protected readonly ConcurrentQueue<ITaskWrapper<IDataConveyorMachine<TData, TResult>>> Queue = new ConcurrentQueue<ITaskWrapper<IDataConveyorMachine<TData, TResult>>>();
@@ -38,9 +38,9 @@ namespace AInq.Support.Background.Managers
             return element.Result;
         }
 
-        bool ITaskQueueManager<IDataConveyorMachine<TData, TResult>, object>.HasTask => !Queue.IsEmpty;
+        bool ITaskManager<IDataConveyorMachine<TData, TResult>, object>.HasTask => !Queue.IsEmpty;
 
-        Task ITaskQueueManager<IDataConveyorMachine<TData, TResult>, object>.WaitForTaskAsync(CancellationToken cancellation)
+        Task ITaskManager<IDataConveyorMachine<TData, TResult>, object>.WaitForTaskAsync(CancellationToken cancellation)
             => Queue.IsEmpty
                 ? NewDataEvent.WaitAsync(cancellation)
                 : Task.CompletedTask;
@@ -50,7 +50,7 @@ namespace AInq.Support.Background.Managers
                 ? task
                 : null, null);
 
-        void ITaskQueueManager<IDataConveyorMachine<TData, TResult>, object>.RevertTask(ITaskWrapper<IDataConveyorMachine<TData, TResult>> task, object metadata)
+        void ITaskManager<IDataConveyorMachine<TData, TResult>, object>.RevertTask(ITaskWrapper<IDataConveyorMachine<TData, TResult>> task, object metadata)
             => Queue.Enqueue(task);
     }
 }

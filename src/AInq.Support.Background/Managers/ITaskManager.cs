@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Managers
 {
-    internal interface ITaskQueueManager<TArgument, TMetadata>
+    internal interface ITaskManager<TArgument, TMetadata>
     {
         bool HasTask { get; }
 

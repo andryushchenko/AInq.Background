@@ -41,7 +41,7 @@ namespace AInq.Support.Background.Processors
                 : _inactive;
         }
 
-        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskQueueManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
+        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
         {
             var currentTasks = new LinkedList<Task>();
             while (manager.HasTask)

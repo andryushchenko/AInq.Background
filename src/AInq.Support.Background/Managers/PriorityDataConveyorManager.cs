@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace AInq.Support.Background.Managers
 {
-    internal sealed class PriorityDataConveyorManager<TData, TResult> : DataConveyorManager<TData, TResult>, IPriorityDataConveyor<TData, TResult>, ITaskQueueManager<IDataConveyorMachine<TData, TResult>, int>
+    internal sealed class PriorityDataConveyorManager<TData, TResult> : DataConveyorManager<TData, TResult>, IPriorityDataConveyor<TData, TResult>, ITaskManager<IDataConveyorMachine<TData, TResult>, int>
     {
         private readonly int _maxPriority;
 
@@ -43,7 +43,7 @@ namespace AInq.Support.Background.Managers
 
         int IPriorityDataConveyor<TData, TResult>.MaxPriority => _maxPriority;
 
-        bool ITaskQueueManager<IDataConveyorMachine<TData, TResult>, int>.HasTask => _queues.Any(queue => !queue.IsEmpty);
+        bool ITaskManager<IDataConveyorMachine<TData, TResult>, int>.HasTask => _queues.Any(queue => !queue.IsEmpty);
 
         Task<TResult> IPriorityDataConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, CancellationToken cancellation, int attemptsCount)
         {
@@ -58,12 +58,12 @@ namespace AInq.Support.Background.Managers
         }
 
 
-        Task ITaskQueueManager<IDataConveyorMachine<TData, TResult>, int>.WaitForTaskAsync(CancellationToken cancellation)
+        Task ITaskManager<IDataConveyorMachine<TData, TResult>, int>.WaitForTaskAsync(CancellationToken cancellation)
             => _queues.Any(queue => !queue.IsEmpty)
                 ? Task.CompletedTask
                 : NewDataEvent.WaitAsync(cancellation);
 
-        (ITaskWrapper<IDataConveyorMachine<TData, TResult>>, int) ITaskQueueManager<IDataConveyorMachine<TData, TResult>, int>.GetTask()
+        (ITaskWrapper<IDataConveyorMachine<TData, TResult>>, int) ITaskManager<IDataConveyorMachine<TData, TResult>, int>.GetTask()
         {
             var pendingQueue = _queues.FirstOrDefault(queue => !queue.IsEmpty);
             return pendingQueue != null && pendingQueue.TryDequeue(out var task)
@@ -71,7 +71,7 @@ namespace AInq.Support.Background.Managers
                 : (null, -1);
         }
 
-        void ITaskQueueManager<IDataConveyorMachine<TData, TResult>, int>.RevertTask(ITaskWrapper<IDataConveyorMachine<TData, TResult>> task, int metadata)
+        void ITaskManager<IDataConveyorMachine<TData, TResult>, int>.RevertTask(ITaskWrapper<IDataConveyorMachine<TData, TResult>> task, int metadata)
         {
             if (metadata < 0 || metadata > _maxPriority)
                 throw new ArgumentOutOfRangeException(nameof(metadata), metadata, null);

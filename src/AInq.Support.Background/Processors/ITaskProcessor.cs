@@ -23,6 +23,6 @@ namespace AInq.Support.Background.Processors
 {
     internal interface ITaskProcessor<TArgument, TMetadata>
     {
-        Task ProcessPendingTasksAsync(ITaskQueueManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation = default);
+        Task ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation = default);
     }
 }

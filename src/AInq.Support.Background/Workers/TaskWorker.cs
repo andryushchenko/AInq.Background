@@ -26,33 +26,34 @@ using Microsoft.Extensions.Logging;
 
 namespace AInq.Support.Background.Workers
 {
-    internal sealed class TaskQueueWorker<TArgument, TMetadata> : IHostedService, IDisposable
+    internal sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposable
     {
         private readonly IServiceProvider _provider;
-        private readonly ITaskQueueManager<TArgument, TMetadata> _manager;
+        private readonly ITaskManager<TArgument, TMetadata> _manager;
         private readonly ITaskProcessor<TArgument, TMetadata> _processor;
-        private readonly CancellationTokenSource _cancellation = new CancellationTokenSource();
-        private readonly ILogger<TaskQueueWorker<TArgument, TMetadata>> _logger;
+        private readonly CancellationTokenSource _shutdown = new CancellationTokenSource();
+        private readonly ILogger<TaskWorker<TArgument, TMetadata>> _logger;
         private Task _worker;
 
-        internal TaskQueueWorker(IServiceProvider provider, ITaskQueueManager<TArgument, TMetadata> manager, ITaskProcessor<TArgument, TMetadata> processor)
+        internal TaskWorker(IServiceProvider provider, ITaskManager<TArgument, TMetadata> manager, ITaskProcessor<TArgument, TMetadata> processor)
         {
             _provider = provider;
             _manager = manager;
             _processor = processor;
-            _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<TaskQueueWorker<TArgument, TMetadata>>();
+            _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<TaskWorker<TArgument, TMetadata>>();
         }
 
-        private async Task Worker()
+        private async Task Worker(CancellationToken abort)
         {
-            while (!_cancellation.IsCancellationRequested)
+            using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(_shutdown.Token, abort);
+            while (!cancellation.IsCancellationRequested)
                 try
                 {
-                    await _manager.WaitForTaskAsync(_cancellation.Token);
+                    await _manager.WaitForTaskAsync(cancellation.Token);
                     while (_manager.HasTask)
                     {
                         using var scope = _provider.CreateScope();
-                        await _processor.ProcessPendingTasksAsync(_manager, scope.ServiceProvider, _cancellation.Token);
+                        await _processor.ProcessPendingTasksAsync(_manager, scope.ServiceProvider, cancellation.Token);
                     }
                 }
                 catch (OperationCanceledException)
@@ -68,19 +69,19 @@ namespace AInq.Support.Background.Workers
         Task IHostedService.StartAsync(CancellationToken cancel)
         {
             cancel.ThrowIfCancellationRequested();
-            _worker = Worker();
+            _worker = Worker(cancel);
             return Task.CompletedTask;
         }
 
         async Task IHostedService.StopAsync(CancellationToken cancel)
         {
-            _cancellation.Cancel();
+            _shutdown.Cancel();
             await _worker.WaitAsync(cancel);
         }
 
         public void Dispose()
         {
-            _cancellation.Dispose();
+            _shutdown.Dispose();
             _worker.Dispose();
         }
     }

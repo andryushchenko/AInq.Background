@@ -26,24 +26,24 @@ using static AInq.Support.Background.WorkFactory;
 
 namespace AInq.Support.Background.Managers
 {
-    internal class WorkQueueManager : IWorkQueue, ITaskQueueManager<object, object>
+    internal class WorkQueueManager : IWorkQueue, ITaskManager<object, object>
     {
         protected readonly ConcurrentQueue<ITaskWrapper<object>> Queue = new ConcurrentQueue<ITaskWrapper<object>>();
         protected readonly AsyncAutoResetEvent NewWorkEvent = new AsyncAutoResetEvent(false);
 
-        bool ITaskQueueManager<object, object>.HasTask => !Queue.IsEmpty;
+        bool ITaskManager<object, object>.HasTask => !Queue.IsEmpty;
 
-        Task ITaskQueueManager<object, object>.WaitForTaskAsync(CancellationToken cancellation)
+        Task ITaskManager<object, object>.WaitForTaskAsync(CancellationToken cancellation)
             => Queue.IsEmpty
                 ? NewWorkEvent.WaitAsync(cancellation)
                 : Task.CompletedTask;
 
-        (ITaskWrapper<object>, object) ITaskQueueManager<object, object>.GetTask()
+        (ITaskWrapper<object>, object) ITaskManager<object, object>.GetTask()
             => (Queue.TryDequeue(out var task)
                 ? task
                 : null, null);
 
-        void ITaskQueueManager<object, object>.RevertTask(ITaskWrapper<object> task, object metadata)
+        void ITaskManager<object, object>.RevertTask(ITaskWrapper<object> task, object metadata)
             => Queue.Enqueue(task);
 
         Task IWorkQueue.EnqueueWork(IWork work, CancellationToken cancellation, int attemptsCount)

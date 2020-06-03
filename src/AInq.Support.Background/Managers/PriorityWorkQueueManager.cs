@@ -27,21 +27,21 @@ using static AInq.Support.Background.WorkFactory;
 
 namespace AInq.Support.Background.Managers
 {
-    internal sealed class PriorityWorkQueueManager : WorkQueueManager, IPriorityWorkQueue, ITaskQueueManager<object, int>
+    internal sealed class PriorityWorkQueueManager : WorkQueueManager, IPriorityWorkQueue, ITaskManager<object, int>
     {
         private readonly int _maxPriority;
         private readonly IList<ConcurrentQueue<ITaskWrapper<object>>> _queues;
 
         int IPriorityWorkQueue.MaxPriority => _maxPriority;
 
-        bool ITaskQueueManager<object, int>.HasTask => _queues.Any(queue => !queue.IsEmpty);
+        bool ITaskManager<object, int>.HasTask => _queues.Any(queue => !queue.IsEmpty);
 
-        Task ITaskQueueManager<object, int>.WaitForTaskAsync(CancellationToken cancellation)
+        Task ITaskManager<object, int>.WaitForTaskAsync(CancellationToken cancellation)
             => _queues.Any(queue => !queue.IsEmpty)
                 ? Task.CompletedTask
                 : NewWorkEvent.WaitAsync(cancellation);
 
-        (ITaskWrapper<object>, int) ITaskQueueManager<object, int>.GetTask()
+        (ITaskWrapper<object>, int) ITaskManager<object, int>.GetTask()
         {
             var pendingQueue = _queues.FirstOrDefault(queue => !queue.IsEmpty);
             return pendingQueue != null && pendingQueue.TryDequeue(out var task)
@@ -49,7 +49,7 @@ namespace AInq.Support.Background.Managers
                 : (null, -1);
         }
 
-        void ITaskQueueManager<object, int>.RevertTask(ITaskWrapper<object> task, int metadata)
+        void ITaskManager<object, int>.RevertTask(ITaskWrapper<object> task, int metadata)
         {
             if (metadata < 0 || metadata > _maxPriority)
                 throw new ArgumentOutOfRangeException(nameof(metadata), metadata, null);

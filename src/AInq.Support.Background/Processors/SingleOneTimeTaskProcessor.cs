@@ -31,7 +31,7 @@ namespace AInq.Support.Background.Processors
             _argumentFabric = argumentFabric ?? throw new ArgumentNullException(nameof(argumentFabric));
         }
 
-        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskQueueManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
+        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
         {
             while (manager.HasTask)
             {
