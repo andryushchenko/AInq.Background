@@ -68,6 +68,8 @@ namespace AInq.Support.Background.Processors
                 {
                     try
                     {
+                        if (argument is IStoppableTaskMachine machine && !machine.IsRunning)
+                            await machine.StartMachineAsync(cancellation);
                         if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, cancellation))
                             manager.RevertTask(task, metadata);
                         if (manager.HasTask && argument is IThrottlingTaskMachine throttling && throttling.Timeout.Ticks > 0)

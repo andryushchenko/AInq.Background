@@ -49,12 +49,13 @@ namespace AInq.Support.Background.Workers
             while (!cancellation.IsCancellationRequested)
                 try
                 {
-                    await _manager.WaitForTaskAsync(cancellation.Token);
                     while (_manager.HasTask)
                     {
                         using var scope = _provider.CreateScope();
                         await _processor.ProcessPendingTasksAsync(_manager, scope.ServiceProvider, cancellation.Token);
+
                     }
+                    await _manager.WaitForTaskAsync(cancellation.Token);
                 }
                 catch (OperationCanceledException)
                 {

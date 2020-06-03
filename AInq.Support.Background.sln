@@ -5,7 +5,13 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Support.Background", "src\AInq.Support.Background\AInq.Support.Background.csproj", "{32974B40-5FD7-472F-A0C1-F6E0AE7FF0CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AInq.Support.Background.Abstraction", "src\AInq.Support.Background.Abstraction\AInq.Support.Background.Abstraction.csproj", "{6AEA85F7-4BD2-4757-8DED-CD8BB3A96AE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Support.Background.Abstraction", "src\AInq.Support.Background.Abstraction\AInq.Support.Background.Abstraction.csproj", "{6AEA85F7-4BD2-4757-8DED-CD8BB3A96AE4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{3D6A0C84-C82A-4BDC-8120-6044DB3A6381}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{082BA690-9687-41B1-A520-0E81F9DBC7BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AInq.Support.Background.Test", "test\AInq.Support.Background.Test\AInq.Support.Background.Test.csproj", "{E1BD124B-09A7-4393-933F-501457180009}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +27,18 @@ Global
 		{6AEA85F7-4BD2-4757-8DED-CD8BB3A96AE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AEA85F7-4BD2-4757-8DED-CD8BB3A96AE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AEA85F7-4BD2-4757-8DED-CD8BB3A96AE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1BD124B-09A7-4393-933F-501457180009}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1BD124B-09A7-4393-933F-501457180009}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1BD124B-09A7-4393-933F-501457180009}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1BD124B-09A7-4393-933F-501457180009}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{32974B40-5FD7-472F-A0C1-F6E0AE7FF0CD} = {3D6A0C84-C82A-4BDC-8120-6044DB3A6381}
+		{6AEA85F7-4BD2-4757-8DED-CD8BB3A96AE4} = {3D6A0C84-C82A-4BDC-8120-6044DB3A6381}
+		{E1BD124B-09A7-4393-933F-501457180009} = {082BA690-9687-41B1-A520-0E81F9DBC7BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6F7DC389-4ECD-430D-8BE6-C057AF7470F9}
