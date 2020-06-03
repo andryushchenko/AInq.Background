@@ -63,7 +63,10 @@ namespace AInq.Support.Background.Processors
                 }
                 var (task, metadata) = manager.GetTask();
                 if (task == null)
+                {
+                    _reusable.Add(argument);
                     return;
+                }
                 currentTasks.AddLast(Task.Run(async () =>
                 {
                     try

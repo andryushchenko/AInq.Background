@@ -56,8 +56,9 @@ namespace AInq.Support.Background.Processors
                 if (task == null)
                 {
                     if (machine != null && machine.IsRunning)
-                        await machine.StopMachineAsync(cancellation);
-                    _inactive.Add(argument);
+                        _active.Add(argument);
+                    else _inactive.Add(argument);
+                    _reset.Set();
                     return;
                 }
                 currentTasks.AddLast(Task.Run(async () =>

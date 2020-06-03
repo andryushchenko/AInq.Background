@@ -39,7 +39,6 @@ namespace AInq.Support.Background.Processors
         {
             while (manager.HasTask)
             {
-                
                 var (task, metadata) = manager.GetTask();
                 if (task == null) 
                     return;
