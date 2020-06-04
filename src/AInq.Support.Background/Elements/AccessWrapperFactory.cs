@@ -17,21 +17,23 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace AInq.Support.Background.Elements
 {
     internal static class AccessWrapperFactory
     {
-        private class AccessWrapper<TParameter> : ITaskWrapper<TParameter>
+        private class AccessWrapper<TResource> : ITaskWrapper<TResource>
         {
-            private readonly IAccess<TParameter> _access;
+            private readonly IAccess<TResource> _access;
             private readonly TaskCompletionSource<bool> _completion = new TaskCompletionSource<bool>();
             private readonly CancellationToken _innerCancellation;
             private int _attemptsRemain;
 
-            internal AccessWrapper(IAccess<TParameter> access, int attemptsCount, CancellationToken innerCancellation)
+            internal AccessWrapper(IAccess<TResource> access, int attemptsCount, CancellationToken innerCancellation)
             {
-                if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
+                if (attemptsCount < 1)
+                    throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
                 _access = access;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -39,9 +41,10 @@ namespace AInq.Support.Background.Elements
 
             internal Task AccessTask => _completion.Task;
 
-            Task<bool> ITaskWrapper<TParameter>.ExecuteAsync(TParameter argument, IServiceProvider provider, CancellationToken outerCancellation)
+            Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger logger, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain < 1) return Task.FromResult(true);
+                if (_attemptsRemain < 1)
+                    return Task.FromResult(true);
                 _attemptsRemain--;
                 try
                 {
@@ -52,28 +55,34 @@ namespace AInq.Support.Background.Elements
                 }
                 catch (OperationCanceledException ex)
                 {
-                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested) return Task.FromResult(false);
+                    if (!_innerCancellation.IsCancellationRequested)
+                        _attemptsRemain++;
+                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
+                        return Task.FromResult(false);
                     _completion.TrySetCanceled(ex.CancellationToken);
                 }
                 catch (Exception ex)
                 {
-                    if (_attemptsRemain > 0) return Task.FromResult(false);
+                    logger?.LogError(ex, "Error accessing resource {1} with {0}", _access, typeof(TResource));
+                    if (_attemptsRemain > 0)
+                        return Task.FromResult(false);
                     _completion.TrySetException(ex);
                 }
                 return Task.FromResult(true);
             }
         }
 
-        private class AccessWrapper<TParameter, TResult> : ITaskWrapper<TParameter>
+        private class AccessWrapper<TResource, TResult> : ITaskWrapper<TResource>
         {
-            private readonly IAccess<TParameter, TResult> _access;
+            private readonly IAccess<TResource, TResult> _access;
             private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
             private readonly CancellationToken _innerCancellation;
             private int _attemptsRemain;
 
-            internal AccessWrapper(IAccess<TParameter, TResult> access, int attemptsCount, CancellationToken innerCancellation)
+            internal AccessWrapper(IAccess<TResource, TResult> access, int attemptsCount, CancellationToken innerCancellation)
             {
-                if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
+                if (attemptsCount < 1)
+                    throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
                 _access = access;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -81,9 +90,10 @@ namespace AInq.Support.Background.Elements
 
             internal Task<TResult> AccessTask => _completion.Task;
 
-            Task<bool> ITaskWrapper<TParameter>.ExecuteAsync(TParameter argument, IServiceProvider provider, CancellationToken outerCancellation)
+            Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger logger, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain < 1) return Task.FromResult(true);
+                if (_attemptsRemain < 1)
+                    return Task.FromResult(true);
                 _attemptsRemain--;
                 try
                 {
@@ -93,28 +103,34 @@ namespace AInq.Support.Background.Elements
                 }
                 catch (OperationCanceledException ex)
                 {
-                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested) return Task.FromResult(false);
+                    if (!_innerCancellation.IsCancellationRequested)
+                        _attemptsRemain++;
+                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
+                        return Task.FromResult(false);
                     _completion.TrySetCanceled(ex.CancellationToken);
                 }
                 catch (Exception ex)
                 {
-                    if (_attemptsRemain > 0) return Task.FromResult(false);
+                    logger?.LogError(ex, "Error accessing resource {1} with {0}", _access, typeof(TResource));
+                    if (_attemptsRemain > 0)
+                        return Task.FromResult(false);
                     _completion.TrySetException(ex);
                 }
                 return Task.FromResult(true);
             }
         }
 
-        private class AsyncAccessWrapper<TParameter> : ITaskWrapper<TParameter>
+        private class AsyncAccessWrapper<TResource> : ITaskWrapper<TResource>
         {
-            private readonly IAsyncAccess<TParameter> _access;
+            private readonly IAsyncAccess<TResource> _access;
             private readonly TaskCompletionSource<bool> _completion = new TaskCompletionSource<bool>();
             private readonly CancellationToken _innerCancellation;
             private int _attemptsRemain;
 
-            internal AsyncAccessWrapper(IAsyncAccess<TParameter> access, int attemptsCount, CancellationToken innerCancellation)
+            internal AsyncAccessWrapper(IAsyncAccess<TResource> access, int attemptsCount, CancellationToken innerCancellation)
             {
-                if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
+                if (attemptsCount < 1)
+                    throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
                 _access = access;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -122,9 +138,10 @@ namespace AInq.Support.Background.Elements
 
             internal Task AccessTask => _completion.Task;
 
-            async Task<bool> ITaskWrapper<TParameter>.ExecuteAsync(TParameter argument, IServiceProvider provider, CancellationToken outerCancellation)
+            async Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger logger, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain < 1) return true;
+                if (_attemptsRemain < 1)
+                    return true;
                 _attemptsRemain--;
                 using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
                 try
@@ -135,28 +152,34 @@ namespace AInq.Support.Background.Elements
                 }
                 catch (OperationCanceledException ex)
                 {
-                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested) return false;
+                    if (!_innerCancellation.IsCancellationRequested)
+                        _attemptsRemain++;
+                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
+                        return false;
                     _completion.TrySetCanceled(ex.CancellationToken);
                 }
                 catch (Exception ex)
                 {
-                    if (_attemptsRemain > 0) return false;
+                    logger?.LogError(ex, "Error accessing resource {1} with {0}", _access, typeof(TResource));
+                    if (_attemptsRemain > 0)
+                        return false;
                     _completion.TrySetException(ex);
                 }
                 return true;
             }
         }
 
-        private class AsyncAccessWrapper<TParameter, TResult> : ITaskWrapper<TParameter>
+        private class AsyncAccessWrapper<TResource, TResult> : ITaskWrapper<TResource>
         {
-            private readonly IAsyncAccess<TParameter, TResult> _access;
+            private readonly IAsyncAccess<TResource, TResult> _access;
             private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
             private readonly CancellationToken _innerCancellation;
             private int _attemptsRemain;
 
-            internal AsyncAccessWrapper(IAsyncAccess<TParameter, TResult> access, int attemptsCount, CancellationToken innerCancellation)
+            internal AsyncAccessWrapper(IAsyncAccess<TResource, TResult> access, int attemptsCount, CancellationToken innerCancellation)
             {
-                if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
+                if (attemptsCount < 1)
+                    throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
                 _access = access;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -164,9 +187,10 @@ namespace AInq.Support.Background.Elements
 
             internal Task<TResult> AccessTask => _completion.Task;
 
-            async Task<bool> ITaskWrapper<TParameter>.ExecuteAsync(TParameter argument, IServiceProvider provider, CancellationToken outerCancellation)
+            async Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger logger, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain < 1) return true;
+                if (_attemptsRemain < 1)
+                    return true;
                 _attemptsRemain--;
                 using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
                 try
@@ -176,43 +200,48 @@ namespace AInq.Support.Background.Elements
                 }
                 catch (OperationCanceledException ex)
                 {
-                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested) return false;
+                    if (!_innerCancellation.IsCancellationRequested)
+                        _attemptsRemain++;
+                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
+                        return false;
                     _completion.TrySetCanceled(ex.CancellationToken);
                 }
                 catch (Exception ex)
                 {
-                    if (_attemptsRemain > 0) return false;
+                    logger?.LogError(ex, "Error accessing resource {1} with {0}", _access, typeof(TResource));
+                    if (_attemptsRemain > 0)
+                        return false;
                     _completion.TrySetException(ex);
                 }
                 return true;
             }
         }
 
-        public static (ITaskWrapper<TParameter> Access, Task Task) CreateAccessWrapper<TParameter>(IAccess<TParameter> work, int attemptsCount = 1, CancellationToken cancellation = default)
+        public static (ITaskWrapper<TResource> Access, Task Task) CreateAccessWrapper<TResource>(IAccess<TResource> work, int attemptsCount = 1, CancellationToken cancellation = default)
         {
             if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-            var wrapper = new AccessWrapper<TParameter>(work, attemptsCount, cancellation);
+            var wrapper = new AccessWrapper<TResource>(work, attemptsCount, cancellation);
             return (wrapper, wrapper.AccessTask);
         }
 
-        public static (ITaskWrapper<TParameter> Access, Task<TResult> Task) CreateAccessWrapper<TParameter, TResult>(IAccess<TParameter, TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
+        public static (ITaskWrapper<TResource> Access, Task<TResult> Task) CreateAccessWrapper<TResource, TResult>(IAccess<TResource, TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
         {
             if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-            var wrapper = new AccessWrapper<TParameter, TResult>(work, attemptsCount, cancellation);
+            var wrapper = new AccessWrapper<TResource, TResult>(work, attemptsCount, cancellation);
             return (wrapper, wrapper.AccessTask);
         }
 
-        public static (ITaskWrapper<TParameter> Access, Task Task) CreateAccessWrapper<TParameter>(IAsyncAccess<TParameter> work, int attemptsCount = 1, CancellationToken cancellation = default)
+        public static (ITaskWrapper<TResource> Access, Task Task) CreateAccessWrapper<TResource>(IAsyncAccess<TResource> work, int attemptsCount = 1, CancellationToken cancellation = default)
         {
             if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-            var wrapper = new AsyncAccessWrapper<TParameter>(work, attemptsCount, cancellation);
+            var wrapper = new AsyncAccessWrapper<TResource>(work, attemptsCount, cancellation);
             return (wrapper, wrapper.AccessTask);
         }
 
-        public static (ITaskWrapper<TParameter> Access, Task<TResult> Task) CreateAccessWrapper<TParameter, TResult>(IAsyncAccess<TParameter, TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
+        public static (ITaskWrapper<TResource> Access, Task<TResult> Task) CreateAccessWrapper<TResource, TResult>(IAsyncAccess<TResource, TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
         {
             if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-            var wrapper = new AsyncAccessWrapper<TParameter, TResult>(work, attemptsCount, cancellation);
+            var wrapper = new AsyncAccessWrapper<TResource, TResult>(work, attemptsCount, cancellation);
             return (wrapper, wrapper.AccessTask);
         }
     }

@@ -16,6 +16,7 @@
 
 using AInq.Support.Background.Managers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
 using System;
 using System.Collections.Concurrent;
@@ -41,49 +42,53 @@ namespace AInq.Support.Background.Processors
                 : _inactive;
         }
 
-        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
+        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger logger, CancellationToken cancellation)
         {
             var currentTasks = new LinkedList<Task>();
-            while (manager.HasTask)
+            while (manager.HasTask && !cancellation.IsCancellationRequested)
             {
                 if (!_active.TryTake(out var argument) && !_inactive.TryTake(out argument))
                 {
-                    await _reset.WaitAsync(cancellation);
+                    if (_active.IsEmpty && _inactive.IsEmpty)
+                        await _reset.WaitAsync(cancellation);
                     continue;
                 }
-                var stoppable = argument as IStoppable;
+                var machine = argument as IStoppable;
                 var (task, metadata) = manager.GetTask();
                 if (task == null)
                 {
-                    if (stoppable != null && stoppable.IsRunning)
+                    if (machine != null && machine.IsRunning)
                         _active.Add(argument);
                     else _inactive.Add(argument);
                     _reset.Set();
-                    return;
+                    continue;
                 }
                 currentTasks.AddLast(Task.Run(async () =>
                 {
                     try
                     {
-                        if (stoppable != null && !stoppable.IsRunning)
-                            await stoppable.StartMachineAsync(cancellation);
-                        using var taskScope = provider.CreateScope();
-                        if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, cancellation))
-                            manager.RevertTask(task, metadata);
-                        if (manager.HasTask)
-                        {
-                            if (argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
-                                await Task.Delay(throttling.Timeout, cancellation);
-                        }
-                        else
-                        {
-                            if (stoppable != null && stoppable.IsRunning)
-                                await stoppable.StopMachineAsync(cancellation);
-                        }
+                        if (machine != null && !machine.IsRunning)
+                            await machine.StartMachineAsync(cancellation);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger?.LogError(ex, "Error starting machine {0}", machine);
+                        manager.RevertTask(task, metadata);
+                        _inactive.Add(argument);
+                        _reset.Set();
+                        return;
+                    }
+                    using var taskScope = provider.CreateScope();
+                    if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation))
+                        manager.RevertTask(task, metadata);
+                    try
+                    {
+                        if (manager.HasTask && argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
+                            await Task.Delay(throttling.Timeout, cancellation);
                     }
                     finally
                     {
-                        if (stoppable != null && stoppable.IsRunning)
+                        if (machine != null && machine.IsRunning)
                             _active.Add(argument);
                         else _inactive.Add(argument);
                         _reset.Set();
@@ -92,15 +97,20 @@ namespace AInq.Support.Background.Processors
             }
             _ = Task.WhenAll(currentTasks).ContinueWith(task =>
             {
-                while (_active.TryTake(out var argument))
+                while (!_active.IsEmpty && _active.TryTake(out var argument))
                 {
                     var active = argument;
                     _ = Task.Run(async () =>
                     {
+                        var machine = active as IStoppable;
                         try
                         {
-                            if (active is IStoppable stoppable && stoppable.IsRunning)
-                                await stoppable.StopMachineAsync(cancellation);
+                            if (machine != null && machine.IsRunning)
+                                await machine.StopMachineAsync(cancellation);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger?.LogError(ex, "Error stopping machine {0}", machine);
                         }
                         finally
                         {

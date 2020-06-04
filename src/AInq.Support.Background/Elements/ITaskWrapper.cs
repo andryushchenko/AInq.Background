@@ -17,11 +17,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace AInq.Support.Background.Elements
 {
     internal interface ITaskWrapper<in TArgument>
     {
-        Task<bool> ExecuteAsync(TArgument argument, IServiceProvider provider, CancellationToken cancellation = default);
+        Task<bool> ExecuteAsync(TArgument argument, IServiceProvider provider, ILogger logger = null, CancellationToken cancellation = default);
     }
 }

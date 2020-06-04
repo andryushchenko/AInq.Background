@@ -16,6 +16,7 @@
 
 using AInq.Support.Background.Managers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,18 +34,18 @@ namespace AInq.Support.Background.Processors
             _semaphore = new SemaphoreSlim(maxSimultaneousTasks);
         }
 
-        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
+        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger logger, CancellationToken cancellation)
         {
-            while (manager.HasTask)
+            while (manager.HasTask && !cancellation.IsCancellationRequested)
             {
                 var (task, metadata) = manager.GetTask();
-                if (task == null) 
-                    return;
+                if (task == null)
+                    continue;
                 await _semaphore.WaitAsync(cancellation);
                 _ = Task.Run(async () =>
                 {
                     using var taskScope = provider.CreateScope();
-                    if (!await task.ExecuteAsync(null, taskScope.ServiceProvider, cancellation))
+                    if (!await task.ExecuteAsync(null, taskScope.ServiceProvider, logger, cancellation))
                         manager.RevertTask(task, metadata);
                     _semaphore.Release();
                 }, cancellation);

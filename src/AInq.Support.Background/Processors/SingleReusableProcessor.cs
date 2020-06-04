@@ -16,6 +16,7 @@
 
 using AInq.Support.Background.Managers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,26 +32,61 @@ namespace AInq.Support.Background.Processors
             _argumentFabric = argumentFabric ?? throw new ArgumentNullException(nameof(argumentFabric));
         }
 
-        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
+        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger logger, CancellationToken cancellation)
         {
             if (!manager.HasTask)
                 return;
-            var argument = _argumentFabric.Invoke(provider);
-            var stoppable = argument as IStoppable;
-            if (stoppable != null && !stoppable.IsRunning)
-                await stoppable.StartMachineAsync(cancellation);
-            while (manager.HasTask)
+            TArgument argument;
+            try
+            {
+                argument = _argumentFabric.Invoke(provider);
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex, "Error creating argument {1} with {0}", _argumentFabric, typeof(TArgument));
+                return;
+            }
+            var machine = argument as IStoppable;
+            try
+            {
+                if (machine != null && !machine.IsRunning)
+                    await machine.StartMachineAsync(cancellation);
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex, "Error starting machine {0}", machine);
+                return;
+            }
+            while (manager.HasTask && !cancellation.IsCancellationRequested)
             {
                 var (task, metadata) = manager.GetTask();
-                if (task == null) break;
+                if (task == null)
+                    continue;
                 using var taskScope = provider.CreateScope();
-                if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, cancellation))
+                if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation))
                     manager.RevertTask(task, metadata);
-                if (manager.HasTask && argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
-                    await Task.Delay(throttling.Timeout, cancellation);
+                try
+                {
+                    if (manager.HasTask && argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
+                        await Task.Delay(throttling.Timeout, cancellation);
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
             }
-            if (stoppable != null && stoppable.IsRunning)
-                await stoppable.StopMachineAsync(cancellation);
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    if (machine != null && machine.IsRunning)
+                        await machine.StopMachineAsync(cancellation);
+                }
+                catch (Exception ex)
+                {
+                    logger?.LogError(ex, "Error stopping machine {0}", machine);
+                }
+            }, cancellation);
         }
     }
 }

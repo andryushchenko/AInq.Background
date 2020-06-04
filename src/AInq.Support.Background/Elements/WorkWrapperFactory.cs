@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,7 +32,8 @@ namespace AInq.Support.Background.Elements
 
             internal WorkWrapper(IWork work, int attemptsCount, CancellationToken innerCancellation)
             {
-                if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
+                if (attemptsCount < 1)
+                    throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
                 _work = work;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -39,9 +41,10 @@ namespace AInq.Support.Background.Elements
 
             internal Task WorkTask => _completion.Task;
 
-            Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, CancellationToken outerCancellation)
+            Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, ILogger logger, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain < 1) return Task.FromResult(true);
+                if (_attemptsRemain < 1)
+                    return Task.FromResult(true);
                 _attemptsRemain--;
                 try
                 {
@@ -52,12 +55,17 @@ namespace AInq.Support.Background.Elements
                 }
                 catch (OperationCanceledException ex)
                 {
-                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested) return Task.FromResult(false);
+                    if (!_innerCancellation.IsCancellationRequested)
+                        _attemptsRemain++;
+                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
+                        return Task.FromResult(false);
                     _completion.TrySetCanceled(ex.CancellationToken);
                 }
                 catch (Exception ex)
                 {
-                    if (_attemptsRemain > 0) return Task.FromResult(false);
+                    logger?.LogError(ex, "Error processing queued work {0}", _work);
+                    if (_attemptsRemain > 0)
+                        return Task.FromResult(false);
                     _completion.TrySetException(ex);
                 }
                 return Task.FromResult(true);
@@ -73,7 +81,8 @@ namespace AInq.Support.Background.Elements
 
             internal WorkWrapper(IWork<TResult> work, int attemptsCount, CancellationToken innerCancellation)
             {
-                if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
+                if (attemptsCount < 1)
+                    throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
                 _work = work;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -81,9 +90,10 @@ namespace AInq.Support.Background.Elements
 
             internal Task<TResult> WorkTask => _completion.Task;
 
-            Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, CancellationToken outerCancellation)
+            Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, ILogger logger, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain < 1) return Task.FromResult(true);
+                if (_attemptsRemain < 1)
+                    return Task.FromResult(true);
                 _attemptsRemain--;
                 try
                 {
@@ -93,12 +103,17 @@ namespace AInq.Support.Background.Elements
                 }
                 catch (OperationCanceledException ex)
                 {
-                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested) return Task.FromResult(false);
+                    if (!_innerCancellation.IsCancellationRequested)
+                        _attemptsRemain++;
+                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
+                        return Task.FromResult(false);
                     _completion.TrySetCanceled(ex.CancellationToken);
                 }
                 catch (Exception ex)
                 {
-                    if (_attemptsRemain > 0) return Task.FromResult(false);
+                    logger?.LogError(ex, "Error processing queued work {0}", _work);
+                    if (_attemptsRemain > 0)
+                        return Task.FromResult(false);
                     _completion.TrySetException(ex);
                 }
                 return Task.FromResult(true);
@@ -114,7 +129,8 @@ namespace AInq.Support.Background.Elements
 
             internal AsyncWorkWrapper(IAsyncWork work, int attemptsCount, CancellationToken innerCancellation)
             {
-                if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
+                if (attemptsCount < 1)
+                    throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
                 _work = work;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -122,9 +138,10 @@ namespace AInq.Support.Background.Elements
 
             internal Task WorkTask => _completion.Task;
 
-            async Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, CancellationToken outerCancellation)
+            async Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, ILogger logger, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain < 1) return true;
+                if (_attemptsRemain < 1)
+                    return true;
                 _attemptsRemain--;
                 using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
                 try
@@ -135,12 +152,17 @@ namespace AInq.Support.Background.Elements
                 }
                 catch (OperationCanceledException ex)
                 {
-                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested) return false;
+                    if (!_innerCancellation.IsCancellationRequested)
+                        _attemptsRemain++;
+                    if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
+                        return false;
                     _completion.TrySetCanceled(ex.CancellationToken);
                 }
                 catch (Exception ex)
                 {
-                    if (_attemptsRemain > 0) return false;
+                    logger?.LogError(ex, "Error processing queued work {0}", _work);
+                    if (_attemptsRemain > 0)
+                        return false;
                     _completion.TrySetException(ex);
                 }
                 return true;
@@ -156,7 +178,8 @@ namespace AInq.Support.Background.Elements
 
             internal AsyncWorkWrapper(IAsyncWork<TResult> work, int attemptsCount, CancellationToken innerCancellation)
             {
-                if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
+                if (attemptsCount < 1)
+                    throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
                 _work = work;
                 _innerCancellation = innerCancellation;
                 _attemptsRemain = attemptsCount;
@@ -164,9 +187,10 @@ namespace AInq.Support.Background.Elements
 
             internal Task<TResult> WorkTask => _completion.Task;
 
-            async Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, CancellationToken outerCancellation)
+            async Task<bool> ITaskWrapper<object>.ExecuteAsync(object argument, IServiceProvider provider, ILogger logger, CancellationToken outerCancellation)
             {
-                if (_attemptsRemain < 1) return true;
+                if (_attemptsRemain < 1)
+                    return true;
                 _attemptsRemain--;
                 using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
                 try
@@ -176,12 +200,16 @@ namespace AInq.Support.Background.Elements
                 }
                 catch (OperationCanceledException ex)
                 {
+                    if (!_innerCancellation.IsCancellationRequested)
+                        _attemptsRemain++;
                     if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested) return false;
                     _completion.TrySetCanceled(ex.CancellationToken);
                 }
                 catch (Exception ex)
                 {
-                    if (_attemptsRemain > 0) return false;
+                    logger?.LogError(ex, "Error processing queued work {0}", _work);
+                    if (_attemptsRemain > 0)
+                        return false;
                     _completion.TrySetException(ex);
                 }
                 return true;

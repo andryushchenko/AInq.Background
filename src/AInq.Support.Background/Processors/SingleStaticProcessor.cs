@@ -16,6 +16,7 @@
 
 using AInq.Support.Background.Managers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,25 +32,48 @@ namespace AInq.Support.Background.Processors
             _argument = argument;
         }
 
-        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
+        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger logger, CancellationToken cancellation)
         {
             if (!manager.HasTask)
                 return;
-            var stoppable = _argument as IStoppable;
-            if (stoppable != null && !stoppable.IsRunning)
-                await stoppable.StartMachineAsync(cancellation);
-            while (manager.HasTask)
+            var machine = _argument as IStoppable;
+            try
+            {
+                if (machine != null && !machine.IsRunning)
+                    await machine.StartMachineAsync(cancellation);
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex, "Error starting machine {0}", machine);
+                return;
+            }
+            while (manager.HasTask && !cancellation.IsCancellationRequested)
             {
                 var (task, metadata) = manager.GetTask();
-                if (task == null) break;
+                if (task == null) 
+                    continue;
                 using var taskScope = provider.CreateScope();
-                if (!await task.ExecuteAsync(_argument, taskScope.ServiceProvider, cancellation))
+                if (!await task.ExecuteAsync(_argument, taskScope.ServiceProvider, logger, cancellation))
                     manager.RevertTask(task, metadata);
-                if (manager.HasTask && _argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
-                    await Task.Delay(throttling.Timeout, cancellation);
+                try
+                {
+                    if (manager.HasTask && _argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
+                        await Task.Delay(throttling.Timeout, cancellation);
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
             }
-            if (stoppable != null && stoppable.IsRunning)
-                await stoppable.StopMachineAsync(cancellation);
+            try
+            {
+                if (machine != null && machine.IsRunning)
+                    await machine.StopMachineAsync(cancellation);
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex, "Error stopping machine {0}", machine);
+            }
         }
     }
 }

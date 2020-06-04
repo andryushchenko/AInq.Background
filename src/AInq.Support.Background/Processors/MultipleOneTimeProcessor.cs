@@ -16,6 +16,7 @@
 
 using AInq.Support.Background.Managers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,27 +36,52 @@ namespace AInq.Support.Background.Processors
             _semaphore = new SemaphoreSlim(maxSimultaneousTasks);
         }
 
-        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
+        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger logger, CancellationToken cancellation)
         {
-            while (manager.HasTask)
+            while (manager.HasTask && !cancellation.IsCancellationRequested)
             {
                 var (task, metadata) = manager.GetTask();
-                if (task == null) 
-                    return;
+                if (task == null)
+                    continue;
                 await _semaphore.WaitAsync(cancellation);
                 _ = Task.Run(async () =>
                 {
+                    using var taskScope = provider.CreateScope();
+                    TArgument argument;
                     try
                     {
-                        using var taskScope = provider.CreateScope();
-                        var argument = _argumentFabric.Invoke(taskScope.ServiceProvider);
-                        var machine = argument as IStoppable;
+                        argument = _argumentFabric.Invoke(taskScope.ServiceProvider);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger?.LogError(ex, "Error creating argument {1} with {0}", _argumentFabric, typeof(TArgument));
+                        manager.RevertTask(task, metadata);
+                        _semaphore.Release();
+                        return;
+                    }
+                    var machine = argument as IStoppable;
+                    try
+                    {
                         if (machine != null && !machine.IsRunning)
                             await machine.StartMachineAsync(cancellation);
-                        if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, cancellation))
-                            manager.RevertTask(task, metadata);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger?.LogError(ex, "Error starting machine {0}", machine);
+                        manager.RevertTask(task, metadata);
+                        _semaphore.Release();
+                        return;
+                    }
+                    if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation))
+                        manager.RevertTask(task, metadata);
+                    try
+                    {
                         if (machine != null && machine.IsRunning)
                             await machine.StopMachineAsync(cancellation);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger?.LogError(ex, "Error stopping machine {0}", machine);
                     }
                     finally
                     {

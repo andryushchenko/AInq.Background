@@ -15,6 +15,7 @@
  */
 
 using AInq.Support.Background.Managers;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +24,6 @@ namespace AInq.Support.Background.Processors
 {
     internal interface ITaskProcessor<TArgument, TMetadata>
     {
-        Task ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation = default);
+        Task ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger logger = null, CancellationToken cancellation = default);
     }
 }

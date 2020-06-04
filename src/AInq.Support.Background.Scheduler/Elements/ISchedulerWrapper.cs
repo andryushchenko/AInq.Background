@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-using AInq.Support.Background.Managers;
-using AInq.Support.Background.Workers;
-using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace AInq.Support.Background
+namespace AInq.Support.Background.Elements
 {
-    public static class SchedulerInjection
+    internal interface ISchedulerWrapper
     {
-        public static IServiceCollection AddWorkScheduler(this IServiceCollection services)
-        {
-            var scheduler = new WorkSchedulerManager();
-            return services.AddSingleton<IWorkScheduler>(scheduler)
-                .AddHostedService(provider => new SchedulerWorker(scheduler, provider));
-        }
+        DateTime? NextScheduledTime { get; }
+
+        Task<bool> ExecuteAsync(IServiceProvider provider, CancellationToken cancellation = default);
     }
 }

@@ -16,6 +16,7 @@
 
 using AInq.Support.Background.Managers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,14 +25,14 @@ namespace AInq.Support.Background.Processors
 {
     internal sealed class SingleNullProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata> where TArgument:class
     {
-        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
+        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger logger, CancellationToken cancellation)
         {
-            while (manager.HasTask)
+            while (manager.HasTask && !cancellation.IsCancellationRequested)
             {
                 var (task, metadata) = manager.GetTask();
                 if (task == null) break;
                 using var taskScope = provider.CreateScope();
-                if (!await task.ExecuteAsync(null, taskScope.ServiceProvider, cancellation))
+                if (!await task.ExecuteAsync(null, taskScope.ServiceProvider, logger, cancellation))
                     manager.RevertTask(task, metadata);
             }
         }

@@ -18,11 +18,11 @@ using AInq.Support.Background.Managers;
 using AInq.Support.Background.Processors;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace AInq.Support.Background.Workers
 {
@@ -52,8 +52,7 @@ namespace AInq.Support.Background.Workers
                     while (_manager.HasTask)
                     {
                         using var scope = _provider.CreateScope();
-                        await _processor.ProcessPendingTasksAsync(_manager, scope.ServiceProvider, cancellation.Token);
-
+                        await _processor.ProcessPendingTasksAsync(_manager, scope.ServiceProvider, _logger, cancellation.Token);
                     }
                     await _manager.WaitForTaskAsync(cancellation.Token);
                 }
@@ -63,7 +62,7 @@ namespace AInq.Support.Background.Workers
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Unhandled error in Task Processor");
+                    _logger.LogError(ex, "Unhandled error in task processor {0}", _processor.GetType());
                 }
         }
 
@@ -83,7 +82,8 @@ namespace AInq.Support.Background.Workers
         void IDisposable.Dispose()
         {
             _shutdown.Dispose();
-            _worker.Dispose();
+            if (_worker.IsCompleted || _worker.IsFaulted || _worker.IsCanceled)
+                _worker.Dispose();
         }
     }
 }

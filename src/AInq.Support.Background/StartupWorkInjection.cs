@@ -17,6 +17,7 @@
 using AInq.Support.Background.Elements;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 using static AInq.Support.Background.Elements.WorkWrapperFactory;
@@ -32,7 +33,7 @@ namespace AInq.Support.Background
             foreach (var work in scope.ServiceProvider.GetServices<ITaskWrapper<object>>())
             {
                 using var workScope = scope.ServiceProvider.CreateScope();
-                await work.ExecuteAsync(null, workScope.ServiceProvider, cancellation);
+                await work.ExecuteAsync(null, workScope.ServiceProvider, workScope.ServiceProvider.GetService<ILoggerFactory>()?.CreateLogger("Startup work"), cancellation);
             }
         }
 

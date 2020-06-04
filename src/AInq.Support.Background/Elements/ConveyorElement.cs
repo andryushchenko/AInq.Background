@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,7 +39,7 @@ namespace AInq.Support.Background.Elements
             _attemptsRemain = attemptsCount;
         }
 
-        async Task<bool> ITaskWrapper<IConveyorMachine<TData, TResult>>.ExecuteAsync(IConveyorMachine<TData, TResult> argument, IServiceProvider provider, CancellationToken cancellation)
+        async Task<bool> ITaskWrapper<IConveyorMachine<TData, TResult>>.ExecuteAsync(IConveyorMachine<TData, TResult> argument, IServiceProvider provider, ILogger logger, CancellationToken cancellation)
         {
             if (_attemptsRemain < 1)
                 return true;
@@ -53,16 +54,20 @@ namespace AInq.Support.Background.Elements
             }
             catch (ArgumentException ex)
             {
+                logger?.LogError(ex, "Bad data {0}", _data);
                 _completion.TrySetException(ex);
             }
             catch (OperationCanceledException ex)
             {
+                if (!_innerCancellation.IsCancellationRequested)
+                    _attemptsRemain++;
                 if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
                     return false;
                 _completion.TrySetCanceled(ex.CancellationToken);
             }
             catch (Exception ex)
             {
+                logger?.LogError(ex, "Error processing data {0}", _data);
                 if (_attemptsRemain > 0)
                     return false;
                 _completion.TrySetException(ex);

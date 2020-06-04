@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AInq.Support.Background.Managers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
 
-namespace AInq.Support.Background
+namespace AInq.Support.Background.Workers
 {
     internal sealed class SchedulerWorker : IHostedService, IDisposable
     {
-        private readonly WorkScheduler _scheduler;
+        private readonly WorkSchedulerManager _scheduler;
         private readonly IServiceProvider _provider;
         private readonly ILogger<SchedulerWorker> _logger;
         private readonly CancellationTokenSource _shutdown = new CancellationTokenSource();
         private Task _worker;
 
-        public SchedulerWorker(WorkScheduler scheduler, IServiceProvider provider)
+        public SchedulerWorker(WorkSchedulerManager scheduler, IServiceProvider provider)
         {
             _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
             _provider = provider;

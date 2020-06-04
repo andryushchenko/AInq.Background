@@ -16,6 +16,7 @@
 
 using AInq.Support.Background.Managers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
 using System;
 using System.Collections.Concurrent;
@@ -42,22 +43,31 @@ namespace AInq.Support.Background.Processors
             _maxArgumentCount = maxSimultaneousTasks;
         }
 
-        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, CancellationToken cancellation)
+        async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger logger, CancellationToken cancellation)
         {
             var currentTasks = new LinkedList<Task>();
-            while (manager.HasTask)
+            while (manager.HasTask && !cancellation.IsCancellationRequested)
             {
                 var taskScope = provider.CreateScope();
                 if (!_reusable.TryTake(out var argument))
                 {
                     if (_currentArgumentCount < _maxArgumentCount)
                     {
-                        argument = _argumentFabric.Invoke(taskScope.ServiceProvider);
+                        try
+                        {
+                            argument = _argumentFabric.Invoke(taskScope.ServiceProvider);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger?.LogError(ex, "Error creating argument {1} with {0}", _argumentFabric, typeof(TArgument));
+                            continue;
+                        }
                         Interlocked.Increment(ref _currentArgumentCount);
                     }
                     else
                     {
-                        await _reset.WaitAsync(cancellation);
+                        if (_reusable.IsEmpty)
+                            await _reset.WaitAsync(cancellation);
                         continue;
                     }
                 }
@@ -65,16 +75,28 @@ namespace AInq.Support.Background.Processors
                 if (task == null)
                 {
                     _reusable.Add(argument);
-                    return;
+                    continue;
                 }
                 currentTasks.AddLast(Task.Run(async () =>
                 {
+                    var machine = argument as IStoppable;
                     try
                     {
-                        if (argument is IStoppable stoppable && !stoppable.IsRunning)
-                            await stoppable.StartMachineAsync(cancellation);
-                        if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, cancellation))
-                            manager.RevertTask(task, metadata);
+                        if (machine != null && !machine.IsRunning)
+                            await machine.StartMachineAsync(cancellation);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger?.LogError(ex, "Error starting machine {0}", machine);
+                        manager.RevertTask(task, metadata);
+                        Interlocked.Decrement(ref _currentArgumentCount);
+                        _reset.Set();
+                        return;
+                    }
+                    if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation))
+                        manager.RevertTask(task, metadata);
+                    try
+                    {
                         if (manager.HasTask && argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
                             await Task.Delay(throttling.Timeout, cancellation);
                     }
@@ -88,11 +110,24 @@ namespace AInq.Support.Background.Processors
             }
             _ = Task.WhenAll(currentTasks).ContinueWith(task =>
             {
-                while (_reusable.TryTake(out var argument))
+                while (!_reusable.IsEmpty && _reusable.TryTake(out var argument))
                 {
+                    var active = argument;
                     Interlocked.Decrement(ref _currentArgumentCount);
-                    if (argument is IStoppable stoppable && stoppable.IsRunning)
-                        _ = stoppable.StopMachineAsync(cancellation);
+                    _reset.Set();
+                    _ = Task.Run(async () =>
+                    {
+                        var machine = active as IStoppable;
+                        try
+                        {
+                            if (machine != null && machine.IsRunning)
+                                await machine.StopMachineAsync(cancellation);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger?.LogError(ex, "Error stopping machine {0}", machine);
+                        }
+                    }, cancellation);
                 }
             }, cancellation);
         }
