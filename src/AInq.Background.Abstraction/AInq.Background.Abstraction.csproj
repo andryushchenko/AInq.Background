@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Product>AInq</Product>
+    <Authors>Anton Andryushchenko</Authors>
+    <RepositoryUrl>https://github.com/andryushchenko/AInq.Support.Background</RepositoryUrl>
+    <Copyright>Anton Andryushchenko</Copyright>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/andryushchenko/AInq.Support.Background</PackageProjectUrl>
+    <Version>0.4.0</Version>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <RootNamespace>AInq.Background</RootNamespace>
+  </PropertyGroup>
+
+</Project>
