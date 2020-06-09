@@ -4,7 +4,7 @@ Backgrounding utils for .NET Core
 - Work queue
 - Shared resource access queue
 - Data conveyor
-- Work scheduler (Currently TODO)
+- Work scheduler
 
 Queues and conveyor have version with prioritizing.
 
