@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-using AInq.Background.Elements;
+using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using Nito.AsyncEx;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
-using static AInq.Background.Elements.WorkWrapperFactory;
 using static AInq.Background.WorkFactory;
+using static AInq.Background.Wrappers.WorkWrapperFactory;
 
 namespace AInq.Background.Managers
 {
@@ -49,9 +49,11 @@ internal class WorkQueueManager : IWorkQueue, ITaskManager<object?, object?>
 
     Task IWorkQueue.EnqueueWork(IWork work, CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
+        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         Queue.Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;
@@ -59,9 +61,11 @@ internal class WorkQueueManager : IWorkQueue, ITaskManager<object?, object?>
 
     Task IWorkQueue.EnqueueWork<TWork>(CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), attemptsCount, cancellation);
+        var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         Queue.Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;
@@ -69,9 +73,11 @@ internal class WorkQueueManager : IWorkQueue, ITaskManager<object?, object?>
 
     Task<TResult> IWorkQueue.EnqueueWork<TResult>(IWork<TResult> work, CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
+        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         Queue.Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;
@@ -79,9 +85,11 @@ internal class WorkQueueManager : IWorkQueue, ITaskManager<object?, object?>
 
     Task<TResult> IWorkQueue.EnqueueWork<TWork, TResult>(CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), attemptsCount, cancellation);
+        var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         Queue.Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;
@@ -89,9 +97,11 @@ internal class WorkQueueManager : IWorkQueue, ITaskManager<object?, object?>
 
     Task IWorkQueue.EnqueueAsyncWork(IAsyncWork work, CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
+        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         Queue.Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;
@@ -99,9 +109,11 @@ internal class WorkQueueManager : IWorkQueue, ITaskManager<object?, object?>
 
     Task IWorkQueue.EnqueueAsyncWork<TWork>(CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (workWrapper, task) = CreateWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), attemptsCount, cancellation);
+        var (workWrapper, task) = CreateWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         Queue.Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;
@@ -109,9 +121,11 @@ internal class WorkQueueManager : IWorkQueue, ITaskManager<object?, object?>
 
     Task<TResult> IWorkQueue.EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
+        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         Queue.Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;
@@ -119,9 +133,11 @@ internal class WorkQueueManager : IWorkQueue, ITaskManager<object?, object?>
 
     Task<TResult> IWorkQueue.EnqueueAsyncWork<TWork, TResult>(CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (workWrapper, task) = CreateWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), attemptsCount, cancellation);
+        var (workWrapper, task) = CreateWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         Queue.Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;

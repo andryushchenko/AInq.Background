@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
+using AInq.Background.Wrappers;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Background.Elements
+namespace AInq.Background.Managers
 {
 
-internal interface ISchedulerWrapper
+internal interface IWorkSchedulerManager
 {
-    DateTime? NextScheduledTime { get; }
-
-    Task<bool> ExecuteAsync(IServiceProvider provider, CancellationToken cancellation = default);
+    Task WaitForNewTaskAsync(CancellationToken cancellation);
+    DateTime? GetNextTaskTime();
+    ILookup<DateTime, IScheduledTaskWrapper> GetUpcomingTasks(TimeSpan horizon);
+    void RevertWork(IScheduledTaskWrapper task);
 }
 
 }

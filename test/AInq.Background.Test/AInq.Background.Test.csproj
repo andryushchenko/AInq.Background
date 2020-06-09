@@ -9,7 +9,7 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Support.Background</PackageProjectUrl>
     <RepositoryUrl>https://github.com/andryushchenko/AInq.Support.Background</RepositoryUrl>
-    <Version>0.4.0</Version>
+    <Version>2.0.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\AInq.Background.Scheduler\AInq.Background.Scheduler.csproj" />
     <ProjectReference Include="..\..\src\AInq.Background\AInq.Background.csproj" />
   </ItemGroup>
 

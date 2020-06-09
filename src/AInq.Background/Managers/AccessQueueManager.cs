@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-using AInq.Background.Elements;
+using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using Nito.AsyncEx;
 using System;
@@ -22,7 +22,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using static AInq.Background.AccessFactory;
-using static AInq.Background.Elements.AccessWrapperFactory;
+using static AInq.Background.Wrappers.AccessWrapperFactory;
 
 namespace AInq.Background.Managers
 {
@@ -49,9 +49,11 @@ internal class AccessQueueManager<TResource> : IAccessQueue<TResource>, ITaskMan
 
     Task IAccessQueue<TResource>.EnqueueAccess(IAccess<TResource> access, CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, cancellation);
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         Queue.Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
@@ -59,10 +61,12 @@ internal class AccessQueueManager<TResource> : IAccessQueue<TResource>, ITaskMan
 
     Task IAccessQueue<TResource>.EnqueueAccess<TAccess>(CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
         var (accessWrapper, task) =
-            CreateAccessWrapper(CreateAccess<TResource>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)), attemptsCount, cancellation);
+            CreateAccessWrapper(CreateAccess<TResource>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)),
+                attemptsCount < 1
+                    ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                    : attemptsCount,
+                cancellation);
         Queue.Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
@@ -70,9 +74,11 @@ internal class AccessQueueManager<TResource> : IAccessQueue<TResource>, ITaskMan
 
     Task<TResult> IAccessQueue<TResource>.EnqueueAccess<TResult>(IAccess<TResource, TResult> access, CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, cancellation);
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         Queue.Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
@@ -80,10 +86,10 @@ internal class AccessQueueManager<TResource> : IAccessQueue<TResource>, ITaskMan
 
     Task<TResult> IAccessQueue<TResource>.EnqueueAccess<TAccess, TResult>(CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
         var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource, TResult>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)),
-            attemptsCount,
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
             cancellation);
         Queue.Enqueue(accessWrapper);
         NewAccessEvent.Set();
@@ -92,9 +98,11 @@ internal class AccessQueueManager<TResource> : IAccessQueue<TResource>, ITaskMan
 
     Task IAccessQueue<TResource>.EnqueueAsyncAccess(IAsyncAccess<TResource> access, CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, cancellation);
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         Queue.Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
@@ -102,10 +110,10 @@ internal class AccessQueueManager<TResource> : IAccessQueue<TResource>, ITaskMan
 
     Task IAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess>(CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
         var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
-            attemptsCount,
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
             cancellation);
         Queue.Enqueue(accessWrapper);
         NewAccessEvent.Set();
@@ -114,9 +122,11 @@ internal class AccessQueueManager<TResource> : IAccessQueue<TResource>, ITaskMan
 
     Task<TResult> IAccessQueue<TResource>.EnqueueAsyncAccess<TResult>(IAsyncAccess<TResource, TResult> access, CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, cancellation);
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         Queue.Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
@@ -124,11 +134,11 @@ internal class AccessQueueManager<TResource> : IAccessQueue<TResource>, ITaskMan
 
     Task<TResult> IAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess, TResult>(CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
         var (accessWrapper, task) =
             CreateAccessWrapper(CreateAccess<TResource, TResult>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
-                attemptsCount,
+                attemptsCount < 1
+                    ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                    : attemptsCount,
                 cancellation);
         Queue.Enqueue(accessWrapper);
         NewAccessEvent.Set();

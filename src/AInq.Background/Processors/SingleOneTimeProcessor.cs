@@ -20,6 +20,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Nito.AsyncEx;
 
 namespace AInq.Background.Processors
 {
@@ -66,19 +67,20 @@ internal sealed class SingleOneTimeProcessor<TArgument, TMetadata> : ITaskProces
             }
             if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation))
                 manager.RevertTask(task, metadata);
-            _ = Task.Run(async () =>
-                {
-                    try
+            Task.Run(async () =>
                     {
-                        if (machine != null && machine.IsRunning)
-                            await machine.StopMachineAsync(cancellation);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger?.LogError(ex, "Error stopping machine {0}", machine);
-                    }
-                },
-                cancellation);
+                        try
+                        {
+                            if (machine != null && machine.IsRunning)
+                                await machine.StopMachineAsync(cancellation);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger?.LogError(ex, "Error stopping machine {0}", machine);
+                        }
+                    },
+                    cancellation)
+                .Ignore();
         }
     }
 }

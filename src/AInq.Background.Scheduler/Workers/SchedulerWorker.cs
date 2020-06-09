@@ -15,6 +15,7 @@
  */
 
 using AInq.Background.Managers;
+using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -28,17 +29,19 @@ namespace AInq.Background.Workers
 
 internal sealed class SchedulerWorker : IHostedService, IDisposable
 {
-    private readonly WorkSchedulerManager _scheduler;
+    private readonly IWorkSchedulerManager _scheduler;
     private readonly IServiceProvider _provider;
     private readonly ILogger<SchedulerWorker>? _logger;
+    private readonly TimeSpan _horizon;
     private readonly CancellationTokenSource _shutdown = new CancellationTokenSource();
     private Task? _worker;
 
-    public SchedulerWorker(WorkSchedulerManager scheduler, IServiceProvider provider)
+    public SchedulerWorker(IWorkSchedulerManager scheduler, IServiceProvider provider, TimeSpan? horizon = null)
     {
-        _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
+        _scheduler = scheduler;
         _provider = provider;
         _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<SchedulerWorker>();
+        _horizon = horizon ?? TimeSpan.FromSeconds(10);
     }
 
     private async Task Worker(CancellationToken abort)
@@ -47,12 +50,46 @@ internal sealed class SchedulerWorker : IHostedService, IDisposable
         while (!cancellation.IsCancellationRequested)
             try
             {
-                // TODO
+                var pending = _scheduler.GetUpcomingTasks(_horizon);
+                foreach (var group in pending)
+                foreach (var work in group)
+                    ProcessWork(work, group.Key - DateTime.Now, cancellation.Token).Ignore();
+                var timeout = _scheduler.GetNextTaskTime()?.Subtract(_horizon).Subtract(DateTime.Now) ?? TimeSpan.MaxValue;
+                if (timeout < _horizon)
+                    continue;
+                if (timeout.TotalHours > 1)
+                    timeout = TimeSpan.FromHours(1);
+                await Task.WhenAny(Task.Delay(timeout, cancellation.Token), _scheduler.WaitForNewTaskAsync(cancellation.Token));
             }
             catch (OperationCanceledException)
             {
                 return;
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unhandled error processing scheduled tasks");
+            }
+    }
+
+    private async Task ProcessWork(IScheduledTaskWrapper work, TimeSpan delay, CancellationToken cancellation)
+    {
+        if (work.IsCanceled)
+            return;
+        try
+        {
+            if (delay > TimeSpan.Zero)
+                await Task.Delay(delay, cancellation);
+        }
+        catch (OperationCanceledException)
+        {
+            _scheduler.RevertWork(work);
+            return;
+        }
+        if (work.IsCanceled)
+            return;
+        using var scope = _provider.CreateScope();
+        if (await work.ExecuteAsync(scope.ServiceProvider, _logger, cancellation))
+            _scheduler.RevertWork(work);
     }
 
     Task IHostedService.StartAsync(CancellationToken cancel)

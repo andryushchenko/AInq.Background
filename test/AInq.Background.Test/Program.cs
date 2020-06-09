@@ -30,14 +30,24 @@ internal static class Program
         var host = new HostBuilder()
                    .ConfigureServices((context, services) =>
                    {
-                       services.AddTransient<TestMachine>();
-                       services.AddConveyor<int, int, TestMachine>(ReuseStrategy.Reuse, 3);
-                       services.AddStartupWork(WorkFactory.CreateWork(provider =>
-                       {
-                           var conveyor = provider.GetRequiredService<IConveyor<int, int>>();
-                           for (var index = 1; index <= 20; index++)
-                               conveyor.ProcessDataAsync(index);
-                       }));
+                       services.AddTransient<TestMachine>()
+                               .AddConveyor<int, int, TestMachine>(ReuseStrategy.Reuse, 3)
+                               .AddWorkScheduler()
+                               .AddWorkQueue()
+                               .AddStartupWork(WorkFactory.CreateWork(provider =>
+                               {
+                                   var conveyor = provider.GetRequiredService<IConveyor<int, int>>();
+                                   for (var index = 1; index <= 20; index++)
+                                       conveyor.ProcessDataAsync(index);
+                                   provider.GetRequiredService<IWorkScheduler>()
+                                           .AddDelayedQueueWork(WorkFactory.CreateWork(serviceProvider =>
+                                               {
+                                                   var dataConveyor = serviceProvider.GetRequiredService<IConveyor<int, int>>();
+                                                   for (var index = 1; index <= 20; index++)
+                                                       dataConveyor.ProcessDataAsync(index);
+                                               }),
+                                               TimeSpan.FromMinutes(1));
+                               }));
                    })
                    .Build();
         var cancellation = new CancellationTokenSource();

@@ -19,7 +19,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Background.Elements
+namespace AInq.Background.Wrappers
 {
 
 internal static class AccessWrapperFactory
@@ -33,8 +33,6 @@ internal static class AccessWrapperFactory
 
         internal AccessWrapper(IAccess<TResource> access, int attemptsCount, CancellationToken innerCancellation)
         {
-            if (attemptsCount < 1)
-                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             _access = access;
             _innerCancellation = innerCancellation;
             _attemptsRemain = attemptsCount;
@@ -82,8 +80,6 @@ internal static class AccessWrapperFactory
 
         internal AccessWrapper(IAccess<TResource, TResult> access, int attemptsCount, CancellationToken innerCancellation)
         {
-            if (attemptsCount < 1)
-                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             _access = access;
             _innerCancellation = innerCancellation;
             _attemptsRemain = attemptsCount;
@@ -130,8 +126,6 @@ internal static class AccessWrapperFactory
 
         internal AsyncAccessWrapper(IAsyncAccess<TResource> access, int attemptsCount, CancellationToken innerCancellation)
         {
-            if (attemptsCount < 1)
-                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             _access = access;
             _innerCancellation = innerCancellation;
             _attemptsRemain = attemptsCount;
@@ -179,8 +173,6 @@ internal static class AccessWrapperFactory
 
         internal AsyncAccessWrapper(IAsyncAccess<TResource, TResult> access, int attemptsCount, CancellationToken innerCancellation)
         {
-            if (attemptsCount < 1)
-                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             _access = access;
             _innerCancellation = innerCancellation;
             _attemptsRemain = attemptsCount;
@@ -220,31 +212,41 @@ internal static class AccessWrapperFactory
 
     public static (ITaskWrapper<TResource> Access, Task Task) CreateAccessWrapper<TResource>(IAccess<TResource> access, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var wrapper = new AccessWrapper<TResource>(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, cancellation);
+        var wrapper = new AccessWrapper<TResource>(access ?? throw new ArgumentNullException(nameof(access)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         return (wrapper, wrapper.AccessTask);
     }
 
-    public static (ITaskWrapper<TResource> Access, Task<TResult> Task) CreateAccessWrapper<TResource, TResult>(IAccess<TResource, TResult> access, int attemptsCount = 1,
-        CancellationToken cancellation = default)
+    public static (ITaskWrapper<TResource> Access, Task<TResult> Task) CreateAccessWrapper<TResource, TResult>(IAccess<TResource, TResult> access, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var wrapper = new AccessWrapper<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, cancellation);
+        var wrapper = new AccessWrapper<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         return (wrapper, wrapper.AccessTask);
     }
 
     public static (ITaskWrapper<TResource> Access, Task Task) CreateAccessWrapper<TResource>(IAsyncAccess<TResource> access, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var wrapper = new AsyncAccessWrapper<TResource>(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, cancellation);
+        var wrapper = new AsyncAccessWrapper<TResource>(access ?? throw new ArgumentNullException(nameof(access)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         return (wrapper, wrapper.AccessTask);
     }
 
-    public static (ITaskWrapper<TResource> Access, Task<TResult> Task) CreateAccessWrapper<TResource, TResult>(IAsyncAccess<TResource, TResult> access, int attemptsCount = 1,
-        CancellationToken cancellation = default)
+    public static (ITaskWrapper<TResource> Access, Task<TResult> Task) CreateAccessWrapper<TResource, TResult>(IAsyncAccess<TResource, TResult> access, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var wrapper = new AsyncAccessWrapper<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, cancellation);
+        var wrapper = new AsyncAccessWrapper<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         return (wrapper, wrapper.AccessTask);
     }
 }

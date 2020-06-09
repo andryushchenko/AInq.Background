@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-using AInq.Background.Elements;
+using AInq.Background.Wrappers;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -50,9 +50,11 @@ internal sealed class PriorityConveyorManager<TData, TResult> : ConveyorManager<
     {
         if (priority < 0 || priority > _maxPriority)
             throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var element = new ConveyorElement<TData, TResult>(data, cancellation, attemptsCount);
+        var element = new ConveyorDataWrapper<TData, TResult>(data,
+            cancellation,
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount);
         _queues[priority].Enqueue(element);
         NewDataEvent.Set();
         return element.Result;

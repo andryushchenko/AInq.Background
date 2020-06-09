@@ -19,10 +19,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Background.Elements
+namespace AInq.Background.Wrappers
 {
 
-internal sealed class ConveyorElement<TData, TResult> : ITaskWrapper<IConveyorMachine<TData, TResult>>
+internal sealed class ConveyorDataWrapper<TData, TResult> : ITaskWrapper<IConveyorMachine<TData, TResult>>
 {
     private readonly TData _data;
     private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
@@ -31,7 +31,7 @@ internal sealed class ConveyorElement<TData, TResult> : ITaskWrapper<IConveyorMa
 
     internal Task<TResult> Result => _completion.Task;
 
-    internal ConveyorElement(TData data, CancellationToken innerCancellation, int attemptsCount)
+    internal ConveyorDataWrapper(TData data, CancellationToken innerCancellation, int attemptsCount)
     {
         if (attemptsCount < 1)
             throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);

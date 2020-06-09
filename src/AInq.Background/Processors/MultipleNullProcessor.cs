@@ -17,6 +17,7 @@
 using AInq.Background.Managers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Nito.AsyncEx;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,9 +31,9 @@ internal sealed class MultipleNullProcessor<TMetadata> : ITaskProcessor<object?,
 
     internal MultipleNullProcessor(int maxSimultaneousTasks)
     {
-        if (maxSimultaneousTasks < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxSimultaneousTasks), maxSimultaneousTasks, null);
-        _semaphore = new SemaphoreSlim(maxSimultaneousTasks);
+        _semaphore = new SemaphoreSlim(maxSimultaneousTasks < 1
+            ? throw new ArgumentOutOfRangeException(nameof(maxSimultaneousTasks), maxSimultaneousTasks, null)
+            : maxSimultaneousTasks);
     }
 
     async Task ITaskProcessor<object?, TMetadata>.ProcessPendingTasksAsync(ITaskManager<object?, TMetadata> manager, IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
@@ -43,14 +44,15 @@ internal sealed class MultipleNullProcessor<TMetadata> : ITaskProcessor<object?,
             if (task == null)
                 continue;
             await _semaphore.WaitAsync(cancellation);
-            _ = Task.Run(async () =>
-                {
-                    using var taskScope = provider.CreateScope();
-                    if (!await task.ExecuteAsync(null, taskScope.ServiceProvider, logger, cancellation))
-                        manager.RevertTask(task, metadata);
-                    _semaphore.Release();
-                },
-                cancellation);
+            Task.Run(async () =>
+                    {
+                        using var taskScope = provider.CreateScope();
+                        if (!await task.ExecuteAsync(null, taskScope.ServiceProvider, logger, cancellation))
+                            manager.RevertTask(task, metadata);
+                        _semaphore.Release();
+                    },
+                    cancellation)
+                .Ignore();
         }
     }
 }

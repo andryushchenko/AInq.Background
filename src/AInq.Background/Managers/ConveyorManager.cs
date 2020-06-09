@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-using AInq.Background.Elements;
+using AInq.Background.Wrappers;
 using Nito.AsyncEx;
 using System;
 using System.Collections.Concurrent;
@@ -31,9 +31,11 @@ internal class ConveyorManager<TData, TResult> : IConveyor<TData, TResult>, ITas
 
     Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var element = new ConveyorElement<TData, TResult>(data, cancellation, attemptsCount);
+        var element = new ConveyorDataWrapper<TData, TResult>(data,
+            cancellation,
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount);
         Queue.Enqueue(element);
         NewDataEvent.Set();
         return element.Result;

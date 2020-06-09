@@ -37,10 +37,10 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
 
     internal MultipleReusableProcessor(Func<IServiceProvider, TArgument> argumentFabric, int maxSimultaneousTasks)
     {
-        if (maxSimultaneousTasks < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxSimultaneousTasks), maxSimultaneousTasks, null);
         _argumentFabric = argumentFabric ?? throw new ArgumentNullException(nameof(argumentFabric));
-        _maxArgumentCount = maxSimultaneousTasks;
+        _maxArgumentCount = maxSimultaneousTasks < 1
+            ? throw new ArgumentOutOfRangeException(nameof(maxSimultaneousTasks), maxSimultaneousTasks, null)
+            : maxSimultaneousTasks;
     }
 
     async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
@@ -109,31 +109,32 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                 },
                 cancellation));
         }
-        _ = Task.WhenAll(currentTasks)
-                .ContinueWith(task =>
+        Task.WhenAll(currentTasks)
+            .ContinueWith(task =>
+                {
+                    while (!_reusable.IsEmpty && _reusable.TryTake(out var argument))
                     {
-                        while (!_reusable.IsEmpty && _reusable.TryTake(out var argument))
-                        {
-                            var active = argument;
-                            Interlocked.Decrement(ref _currentArgumentCount);
-                            _reset.Set();
-                            _ = Task.Run(async () =>
+                        var active = argument;
+                        Interlocked.Decrement(ref _currentArgumentCount);
+                        _reset.Set();
+                        _ = Task.Run(async () =>
+                            {
+                                var machine = active as IStoppable;
+                                try
                                 {
-                                    var machine = active as IStoppable;
-                                    try
-                                    {
-                                        if (machine != null && machine.IsRunning)
-                                            await machine.StopMachineAsync(cancellation);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        logger?.LogError(ex, "Error stopping machine {0}", machine);
-                                    }
-                                },
-                                cancellation);
-                        }
-                    },
-                    cancellation);
+                                    if (machine != null && machine.IsRunning)
+                                        await machine.StopMachineAsync(cancellation);
+                                }
+                                catch (Exception ex)
+                                {
+                                    logger?.LogError(ex, "Error stopping machine {0}", machine);
+                                }
+                            },
+                            cancellation);
+                    }
+                },
+                cancellation)
+            .Ignore();
     }
 }
 

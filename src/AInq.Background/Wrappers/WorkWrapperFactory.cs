@@ -19,7 +19,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Background.Elements
+namespace AInq.Background.Wrappers
 {
 
 internal static class WorkWrapperFactory
@@ -33,8 +33,6 @@ internal static class WorkWrapperFactory
 
         internal WorkWrapper(IWork work, int attemptsCount, CancellationToken innerCancellation)
         {
-            if (attemptsCount < 1)
-                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             _work = work;
             _innerCancellation = innerCancellation;
             _attemptsRemain = attemptsCount;
@@ -82,8 +80,6 @@ internal static class WorkWrapperFactory
 
         internal WorkWrapper(IWork<TResult> work, int attemptsCount, CancellationToken innerCancellation)
         {
-            if (attemptsCount < 1)
-                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             _work = work;
             _innerCancellation = innerCancellation;
             _attemptsRemain = attemptsCount;
@@ -130,8 +126,6 @@ internal static class WorkWrapperFactory
 
         internal AsyncWorkWrapper(IAsyncWork work, int attemptsCount, CancellationToken innerCancellation)
         {
-            if (attemptsCount < 1)
-                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             _work = work;
             _innerCancellation = innerCancellation;
             _attemptsRemain = attemptsCount;
@@ -179,8 +173,6 @@ internal static class WorkWrapperFactory
 
         internal AsyncWorkWrapper(IAsyncWork<TResult> work, int attemptsCount, CancellationToken innerCancellation)
         {
-            if (attemptsCount < 1)
-                throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
             _work = work;
             _innerCancellation = innerCancellation;
             _attemptsRemain = attemptsCount;
@@ -203,7 +195,8 @@ internal static class WorkWrapperFactory
             {
                 if (!_innerCancellation.IsCancellationRequested)
                     _attemptsRemain++;
-                if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested) return false;
+                if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
+                    return false;
                 _completion.TrySetCanceled(ex.CancellationToken);
             }
             catch (Exception ex)
@@ -219,29 +212,41 @@ internal static class WorkWrapperFactory
 
     public static (ITaskWrapper<object?> Work, Task Task) CreateWorkWrapper(IWork work, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var wrapper = new WorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
+        var wrapper = new WorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         return (wrapper, wrapper.WorkTask);
     }
 
     public static (ITaskWrapper<object?> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IWork<TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var wrapper = new WorkWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
+        var wrapper = new WorkWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         return (wrapper, wrapper.WorkTask);
     }
 
     public static (ITaskWrapper<object?> Work, Task Task) CreateWorkWrapper(IAsyncWork work, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var wrapper = new AsyncWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
+        var wrapper = new AsyncWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         return (wrapper, wrapper.WorkTask);
     }
 
     public static (ITaskWrapper<object?> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IAsyncWork<TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        if (attemptsCount < 1) throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var wrapper = new AsyncWorkWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
+        var wrapper = new AsyncWorkWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         return (wrapper, wrapper.WorkTask);
     }
 }

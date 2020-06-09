@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-using AInq.Background.Elements;
+using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
-using static AInq.Background.Elements.WorkWrapperFactory;
 using static AInq.Background.WorkFactory;
+using static AInq.Background.Wrappers.WorkWrapperFactory;
 
 namespace AInq.Background
 {
@@ -31,10 +31,11 @@ public static class StartupWorkInjection
     public static async Task DoStartupWork(this IHost host, CancellationToken cancellation = default)
     {
         using var scope = host.Services.CreateScope();
+        var logger = scope.ServiceProvider.GetService<ILoggerFactory>()?.CreateLogger("Startup work");
         foreach (var work in scope.ServiceProvider.GetServices<ITaskWrapper<object?>>())
         {
             using var workScope = scope.ServiceProvider.CreateScope();
-            await work.ExecuteAsync(null, workScope.ServiceProvider, workScope.ServiceProvider.GetService<ILoggerFactory>()?.CreateLogger("Startup work"), cancellation);
+            await work.ExecuteAsync(null, workScope.ServiceProvider, logger, cancellation);
         }
     }
 

@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using AInq.Background.Managers;
 using AInq.Background.Processors;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AInq.Background.Workers
 {

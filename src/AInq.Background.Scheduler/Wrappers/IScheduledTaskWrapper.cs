@@ -19,12 +19,15 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Background.Elements
+namespace AInq.Background.Wrappers
 {
 
-internal interface ITaskWrapper<in TArgument>
+internal interface IScheduledTaskWrapper
 {
-    Task<bool> ExecuteAsync(TArgument argument, IServiceProvider provider, ILogger? logger = null, CancellationToken cancellation = default);
+    DateTime? NextScheduledTime { get; }
+    bool IsCanceled { get; }
+
+    Task<bool> ExecuteAsync(IServiceProvider provider, ILogger? logger = null, CancellationToken cancellation = default);
 }
 
 }

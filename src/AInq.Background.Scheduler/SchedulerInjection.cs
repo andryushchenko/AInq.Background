@@ -17,6 +17,8 @@
 using AInq.Background.Managers;
 using AInq.Background.Workers;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
 
 namespace AInq.Background
 {
@@ -25,6 +27,8 @@ public static class SchedulerInjection
 {
     public static IServiceCollection AddWorkScheduler(this IServiceCollection services)
     {
+        if (services.Any(service => service.ImplementationType == typeof(IWorkScheduler)))
+            throw new InvalidOperationException("Service already exists");
         var scheduler = new WorkSchedulerManager();
         return services.AddSingleton<IWorkScheduler>(scheduler)
                        .AddHostedService(provider => new SchedulerWorker(scheduler, provider));

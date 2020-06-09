@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-using AInq.Background.Wrappers;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Background.Managers
+namespace AInq.Background.Wrappers
 {
 
-internal interface ITaskManager<TArgument, TMetadata>
+internal interface ITaskWrapper<in TArgument>
 {
-    bool HasTask { get; }
-
-    Task WaitForTaskAsync(CancellationToken cancellation = default);
-    (ITaskWrapper<TArgument>?, TMetadata) GetTask();
-    void RevertTask(ITaskWrapper<TArgument> task, TMetadata metadata);
+    Task<bool> ExecuteAsync(TArgument argument, IServiceProvider provider, ILogger? logger = null, CancellationToken cancellation = default);
 }
 
 }

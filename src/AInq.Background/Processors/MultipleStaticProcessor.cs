@@ -97,13 +97,13 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                 },
                 cancellation));
         }
-        _ = Task.WhenAll(currentTasks)
-                .ContinueWith(task =>
+        Task.WhenAll(currentTasks)
+            .ContinueWith(task =>
+                {
+                    while (!_active.IsEmpty && _active.TryTake(out var argument))
                     {
-                        while (!_active.IsEmpty && _active.TryTake(out var argument))
-                        {
-                            var active = argument;
-                            _ = Task.Run(async () =>
+                        var active = argument;
+                        Task.Run(async () =>
                                 {
                                     var machine = active as IStoppable;
                                     try
@@ -121,10 +121,12 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                                         _reset.Set();
                                     }
                                 },
-                                cancellation);
-                        }
-                    },
-                    cancellation);
+                                cancellation)
+                            .Ignore();
+                    }
+                },
+                cancellation)
+            .Ignore();
     }
 }
 

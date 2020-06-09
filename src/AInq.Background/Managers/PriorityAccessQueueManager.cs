@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-using AInq.Background.Elements;
+using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Concurrent;
@@ -23,7 +23,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static AInq.Background.AccessFactory;
-using static AInq.Background.Elements.AccessWrapperFactory;
+using static AInq.Background.Wrappers.AccessWrapperFactory;
 
 namespace AInq.Background.Managers
 {
@@ -73,9 +73,11 @@ internal sealed class PriorityAccessQueueManager<TResource> : AccessQueueManager
     {
         if (priority < 0 || priority > _maxPriority)
             throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, cancellation);
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         _queues[priority].Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
@@ -85,10 +87,11 @@ internal sealed class PriorityAccessQueueManager<TResource> : AccessQueueManager
     {
         if (priority < 0 || priority > _maxPriority)
             throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (accessWrapper, task) =
-            CreateAccessWrapper(CreateAccess<TResource>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)), attemptsCount, cancellation);
+        var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         _queues[priority].Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
@@ -98,9 +101,11 @@ internal sealed class PriorityAccessQueueManager<TResource> : AccessQueueManager
     {
         if (priority < 0 || priority > _maxPriority)
             throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, cancellation);
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         _queues[priority].Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
@@ -110,10 +115,10 @@ internal sealed class PriorityAccessQueueManager<TResource> : AccessQueueManager
     {
         if (priority < 0 || priority > _maxPriority)
             throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
         var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource, TResult>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)),
-            attemptsCount,
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
             cancellation);
         _queues[priority].Enqueue(accessWrapper);
         NewAccessEvent.Set();
@@ -124,9 +129,11 @@ internal sealed class PriorityAccessQueueManager<TResource> : AccessQueueManager
     {
         if (priority < 0 || priority > _maxPriority)
             throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, cancellation);
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         _queues[priority].Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
@@ -136,10 +143,10 @@ internal sealed class PriorityAccessQueueManager<TResource> : AccessQueueManager
     {
         if (priority < 0 || priority > _maxPriority)
             throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
         var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
-            attemptsCount,
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
             cancellation);
         _queues[priority].Enqueue(accessWrapper);
         NewAccessEvent.Set();
@@ -150,9 +157,11 @@ internal sealed class PriorityAccessQueueManager<TResource> : AccessQueueManager
     {
         if (priority < 0 || priority > _maxPriority)
             throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, cancellation);
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         _queues[priority].Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
@@ -162,12 +171,11 @@ internal sealed class PriorityAccessQueueManager<TResource> : AccessQueueManager
     {
         if (priority < 0 || priority > _maxPriority)
             throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
-        var (accessWrapper, task) =
-            CreateAccessWrapper(CreateAccess<TResource, TResult>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
-                attemptsCount,
-                cancellation);
+        var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource, TResult>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
+            attemptsCount < 1
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                : attemptsCount,
+            cancellation);
         _queues[priority].Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
