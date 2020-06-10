@@ -39,7 +39,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
     {
         _argumentFabric = argumentFabric ?? throw new ArgumentNullException(nameof(argumentFabric));
         _maxArgumentCount = maxSimultaneousTasks < 1
-            ? throw new ArgumentOutOfRangeException(nameof(maxSimultaneousTasks), maxSimultaneousTasks, null)
+            ? throw new ArgumentOutOfRangeException(nameof(maxSimultaneousTasks), maxSimultaneousTasks, "Must be 1 or greater")
             : maxSimultaneousTasks;
     }
 
@@ -59,7 +59,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                     }
                     catch (Exception ex)
                     {
-                        logger?.LogError(ex, "Error creating argument {1} with {0}", _argumentFabric, typeof(TArgument));
+                        logger?.LogError(ex, "Error creating argument {Type} with {Fabric}", typeof(TArgument), _argumentFabric);
                         continue;
                     }
                     Interlocked.Increment(ref _currentArgumentCount);
@@ -79,15 +79,15 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
             }
             currentTasks.AddLast(Task.Run(async () =>
                 {
-                    var machine = argument as IStoppable;
+                    var stoppable = argument as IStoppable;
                     try
                     {
-                        if (machine != null && !machine.IsRunning)
-                            await machine.StartMachineAsync(cancellation);
+                        if (stoppable != null && !stoppable.IsRunning)
+                            await stoppable.StartMachineAsync(cancellation);
                     }
                     catch (Exception ex)
                     {
-                        logger?.LogError(ex, "Error starting machine {0}", machine);
+                        logger?.LogError(ex, "Error starting stoppable argument {Argument}", stoppable);
                         manager.RevertTask(task, metadata);
                         Interlocked.Decrement(ref _currentArgumentCount);
                         _reset.Set();
@@ -119,15 +119,15 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                         _reset.Set();
                         _ = Task.Run(async () =>
                             {
-                                var machine = active as IStoppable;
+                                var stoppable = active as IStoppable;
                                 try
                                 {
-                                    if (machine != null && machine.IsRunning)
-                                        await machine.StopMachineAsync(cancellation);
+                                    if (stoppable != null && stoppable.IsRunning)
+                                        await stoppable.StopMachineAsync(cancellation);
                                 }
                                 catch (Exception ex)
                                 {
-                                    logger?.LogError(ex, "Error stopping machine {0}", machine);
+                                    logger?.LogError(ex, "Error stopping stoppable argument {Argument}", stoppable);
                                 }
                             },
                             cancellation);

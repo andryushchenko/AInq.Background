@@ -34,7 +34,7 @@ internal sealed class ConveyorDataWrapper<TData, TResult> : ITaskWrapper<IConvey
     internal ConveyorDataWrapper(TData data, CancellationToken innerCancellation, int attemptsCount)
     {
         if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null);
+            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater");
         _data = data;
         _innerCancellation = innerCancellation;
         _attemptsRemain = attemptsCount;
@@ -55,7 +55,7 @@ internal sealed class ConveyorDataWrapper<TData, TResult> : ITaskWrapper<IConvey
         }
         catch (ArgumentException ex)
         {
-            logger?.LogError(ex, "Bad data {0}", _data);
+            logger?.LogError(ex, "Bad data {Data}", _data);
             _completion.TrySetException(ex);
         }
         catch (OperationCanceledException ex)
@@ -68,7 +68,7 @@ internal sealed class ConveyorDataWrapper<TData, TResult> : ITaskWrapper<IConvey
         }
         catch (Exception ex)
         {
-            logger?.LogError(ex, "Error processing data {0}", _data);
+            logger?.LogError(ex, "Error processing data {Data} with machine {Type}", _data, argument.GetType());
             if (_attemptsRemain > 0)
                 return false;
             _completion.TrySetException(ex);

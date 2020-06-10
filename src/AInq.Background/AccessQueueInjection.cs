@@ -41,7 +41,7 @@ public static class AccessQueueInjection
         if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
             throw new InvalidOperationException("Service already exists");
         if (maxPriority < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, null);
+            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, "Must be 0 or greater");
         var manager = new PriorityAccessQueueManager<TResource>(maxPriority);
         return services.AddSingleton<IAccessQueue<TResource>>(manager)
                        .AddSingleton<IPriorityAccessQueue<TResource>>(manager)
@@ -68,7 +68,7 @@ public static class AccessQueueInjection
         if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
             throw new InvalidOperationException("Service already exists");
         if (maxPriority < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, null);
+            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, "Must be 0 or greater");
         var arguments = resources?.Where(machine => machine != null).ToList() ?? throw new ArgumentNullException(nameof(resources));
         var manager = new PriorityAccessQueueManager<TResource>(maxPriority);
         return arguments.Count switch
@@ -86,7 +86,7 @@ public static class AccessQueueInjection
         if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
             throw new InvalidOperationException("Service already exists");
         if (maxSimultaneous < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, null);
+            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, "Must be 1 or greater");
         if (resourceFabric == null)
             throw new ArgumentNullException(nameof(resourceFabric));
         var manager = new AccessQueueManager<TResource>();
@@ -109,7 +109,7 @@ public static class AccessQueueInjection
                           .AddHostedService(provider => new TaskWorker<TResource, object?>(provider, manager, new SingleOneTimeProcessor<TResource, object?>(resourceFabric)))
                 : services.AddSingleton<IAccessQueue<TResource>>(manager)
                           .AddHostedService(provider => new TaskWorker<TResource, object?>(provider, manager, new MultipleOneTimeProcessor<TResource, object?>(resourceFabric, maxSimultaneous))),
-            _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, null)
+            _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, "Incorrect enum value")
         };
     }
 
@@ -119,9 +119,9 @@ public static class AccessQueueInjection
         if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
             throw new InvalidOperationException("Service already exists");
         if (maxPriority < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, null);
+            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, "Must be 0 or greater");
         if (maxSimultaneous < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, null);
+            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, "Must be 1 or greater");
         if (resourceFabric == null)
             throw new ArgumentNullException(nameof(resourceFabric));
         var manager = new PriorityAccessQueueManager<TResource>(maxPriority);
@@ -150,7 +150,7 @@ public static class AccessQueueInjection
                 : services.AddSingleton<IAccessQueue<TResource>>(manager)
                           .AddSingleton<IPriorityAccessQueue<TResource>>(manager)
                           .AddHostedService(provider => new TaskWorker<TResource, int>(provider, manager, new MultipleOneTimeProcessor<TResource, int>(resourceFabric, maxSimultaneous))),
-            _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, null)
+            _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, "Incorrect enum value")
         };
     }
 

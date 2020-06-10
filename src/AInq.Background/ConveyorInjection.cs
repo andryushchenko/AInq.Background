@@ -41,7 +41,7 @@ public static class ConveyorInjection
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
         if (maxPriority < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, null);
+            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, "Must be 0 or greater");
         var manager = new PriorityConveyorManager<TData, TResult>(maxPriority);
         return services.AddSingleton<IConveyor<TData, TResult>>(manager)
                        .AddSingleton<IPriorityConveyor<TData, TResult>>(manager)
@@ -68,7 +68,7 @@ public static class ConveyorInjection
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
         if (maxPriority < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, null);
+            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, "Must be 0 or greater");
         var arguments = conveyorMachines?.Where(machine => machine != null).ToList() ?? throw new ArgumentNullException(nameof(conveyorMachines));
         var manager = new PriorityConveyorManager<TData, TResult>(maxPriority);
         return arguments.Count switch
@@ -81,13 +81,12 @@ public static class ConveyorInjection
         };
     }
 
-    public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services, Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFabric,
-        ReuseStrategy strategy, int maxSimultaneous = 1)
+    public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services, Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFabric, ReuseStrategy strategy, int maxSimultaneous = 1)
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
         if (maxSimultaneous < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, null);
+            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, "Must be 1 or greater");
         if (conveyorMachineFabric == null)
             throw new ArgumentNullException(nameof(conveyorMachineFabric));
         var manager = new ConveyorManager<TData, TResult>();
@@ -110,20 +109,19 @@ public static class ConveyorInjection
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new SingleOneTimeProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachineFabric)))
                 : services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new MultipleOneTimeProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachineFabric, maxSimultaneous))),
-            _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, null)
+            _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, "Incorrect enum value")
         };
     }
 
-    public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services, int maxPriority,
-        Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFabric, ReuseStrategy strategy,
+    public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services, int maxPriority, Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFabric, ReuseStrategy strategy,
         int maxSimultaneous = 1)
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
         if (maxPriority < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, null);
+            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, "Must be 0 or greater");
         if (maxSimultaneous < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, null);
+            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, "Must be 1 or greater");
         if (conveyorMachineFabric == null)
             throw new ArgumentNullException(nameof(conveyorMachineFabric));
         var manager = new PriorityConveyorManager<TData, TResult>(maxPriority);
@@ -152,7 +150,7 @@ public static class ConveyorInjection
                 : services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddSingleton<IPriorityConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider, manager, new MultipleOneTimeProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachineFabric, maxSimultaneous))),
-            _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, null)
+            _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, "Incorrect enum value")
         };
     }
 

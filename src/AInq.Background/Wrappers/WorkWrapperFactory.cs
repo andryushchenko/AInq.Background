@@ -62,7 +62,7 @@ internal static class WorkWrapperFactory
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing queued work {0}", _work);
+                logger?.LogError(ex, "Error processing queued work {Work}", _work);
                 if (_attemptsRemain > 0)
                     return Task.FromResult(false);
                 _completion.TrySetException(ex);
@@ -108,7 +108,7 @@ internal static class WorkWrapperFactory
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing queued work {0}", _work);
+                logger?.LogError(ex, "Error processing queued work {Work}", _work);
                 if (_attemptsRemain > 0)
                     return Task.FromResult(false);
                 _completion.TrySetException(ex);
@@ -155,7 +155,7 @@ internal static class WorkWrapperFactory
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing queued work {0}", _work);
+                logger?.LogError(ex, "Error processing queued work {Work}", _work);
                 if (_attemptsRemain > 0)
                     return false;
                 _completion.TrySetException(ex);
@@ -201,7 +201,7 @@ internal static class WorkWrapperFactory
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing queued work {0}", _work);
+                logger?.LogError(ex, "Error processing queued work {Work}", _work);
                 if (_attemptsRemain > 0)
                     return false;
                 _completion.TrySetException(ex);
@@ -214,7 +214,7 @@ internal static class WorkWrapperFactory
     {
         var wrapper = new WorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
                 : attemptsCount,
             cancellation);
         return (wrapper, wrapper.WorkTask);
@@ -224,7 +224,7 @@ internal static class WorkWrapperFactory
     {
         var wrapper = new WorkWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
             attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
                 : attemptsCount,
             cancellation);
         return (wrapper, wrapper.WorkTask);
@@ -234,7 +234,7 @@ internal static class WorkWrapperFactory
     {
         var wrapper = new AsyncWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
                 : attemptsCount,
             cancellation);
         return (wrapper, wrapper.WorkTask);
@@ -244,7 +244,7 @@ internal static class WorkWrapperFactory
     {
         var wrapper = new AsyncWorkWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
             attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
                 : attemptsCount,
             cancellation);
         return (wrapper, wrapper.WorkTask);

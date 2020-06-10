@@ -54,11 +54,11 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                     await _reset.WaitAsync(cancellation);
                 continue;
             }
-            var machine = argument as IStoppable;
+            var stoppable = argument as IStoppable;
             var (task, metadata) = manager.GetTask();
             if (task == null)
             {
-                if (machine != null && machine.IsRunning)
+                if (stoppable != null && stoppable.IsRunning)
                     _active.Add(argument);
                 else _inactive.Add(argument);
                 _reset.Set();
@@ -68,12 +68,12 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                 {
                     try
                     {
-                        if (machine != null && !machine.IsRunning)
-                            await machine.StartMachineAsync(cancellation);
+                        if (stoppable != null && !stoppable.IsRunning)
+                            await stoppable.StartMachineAsync(cancellation);
                     }
                     catch (Exception ex)
                     {
-                        logger?.LogError(ex, "Error starting machine {0}", machine);
+                        logger?.LogError(ex, "Error starting stoppable argument {Argument}", stoppable);
                         manager.RevertTask(task, metadata);
                         _inactive.Add(argument);
                         _reset.Set();
@@ -89,7 +89,7 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                     }
                     finally
                     {
-                        if (machine != null && machine.IsRunning)
+                        if (stoppable != null && stoppable.IsRunning)
                             _active.Add(argument);
                         else _inactive.Add(argument);
                         _reset.Set();
@@ -105,15 +105,15 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                         var active = argument;
                         Task.Run(async () =>
                                 {
-                                    var machine = active as IStoppable;
+                                    var stoppable = active as IStoppable;
                                     try
                                     {
-                                        if (machine != null && machine.IsRunning)
-                                            await machine.StopMachineAsync(cancellation);
+                                        if (stoppable != null && stoppable.IsRunning)
+                                            await stoppable.StopMachineAsync(cancellation);
                                     }
                                     catch (Exception ex)
                                     {
-                                        logger?.LogError(ex, "Error stopping machine {0}", machine);
+                                        logger?.LogError(ex, "Error stopping stoppable argument {Argument}", stoppable);
                                     }
                                     finally
                                     {

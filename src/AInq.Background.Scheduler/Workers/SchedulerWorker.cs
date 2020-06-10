@@ -29,6 +29,9 @@ namespace AInq.Background.Workers
 
 internal sealed class SchedulerWorker : IHostedService, IDisposable
 {
+    internal static readonly TimeSpan MaxTimeout = TimeSpan.FromHours(1);
+    private static readonly TimeSpan Beforehand = TimeSpan.FromSeconds(5);
+
     private readonly IWorkSchedulerManager _scheduler;
     private readonly IServiceProvider _provider;
     private readonly ILogger<SchedulerWorker>? _logger;
@@ -38,6 +41,8 @@ internal sealed class SchedulerWorker : IHostedService, IDisposable
 
     public SchedulerWorker(IWorkSchedulerManager scheduler, IServiceProvider provider, TimeSpan? horizon = null)
     {
+        if (horizon.HasValue && (horizon.Value < TimeSpan.FromSeconds(1) || horizon > MaxTimeout))
+            throw new ArgumentOutOfRangeException(nameof(horizon), horizon, $"Must be from 00:00:01.000 to {MaxTimeout:g}");
         _scheduler = scheduler;
         _provider = provider;
         _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<SchedulerWorker>();
@@ -50,16 +55,18 @@ internal sealed class SchedulerWorker : IHostedService, IDisposable
         while (!cancellation.IsCancellationRequested)
             try
             {
-                var pending = _scheduler.GetUpcomingTasks(_horizon);
+                var pending = _scheduler.GetUpcomingTasks(_horizon + Beforehand);
                 foreach (var group in pending)
                 foreach (var work in group)
-                    ProcessWork(work, group.Key - DateTime.Now, cancellation.Token).Ignore();
-                var timeout = _scheduler.GetNextTaskTime()?.Subtract(_horizon).Subtract(DateTime.Now) ?? TimeSpan.MaxValue;
-                if (timeout < _horizon)
+                    ProcessWork(work, group.Key.ToLocalTime() - DateTime.Now, cancellation.Token).Ignore();
+                var timeout = _scheduler.GetNextTaskTime()?.ToLocalTime().Subtract(Beforehand).Subtract(DateTime.Now) ?? TimeSpan.MaxValue;
+                if (timeout < Beforehand)
                     continue;
-                if (timeout.TotalHours > 1)
-                    timeout = TimeSpan.FromHours(1);
-                await Task.WhenAny(Task.Delay(timeout, cancellation.Token), _scheduler.WaitForNewTaskAsync(cancellation.Token));
+                await Task.WhenAny(Task.Delay(timeout < MaxTimeout
+                            ? timeout
+                            : MaxTimeout,
+                        cancellation.Token),
+                    _scheduler.WaitForNewTaskAsync(cancellation.Token));
             }
             catch (OperationCanceledException)
             {

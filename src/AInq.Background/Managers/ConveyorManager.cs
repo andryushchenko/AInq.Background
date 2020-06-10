@@ -34,7 +34,7 @@ internal class ConveyorManager<TData, TResult> : IConveyor<TData, TResult>, ITas
         var element = new ConveyorDataWrapper<TData, TResult>(data,
             cancellation,
             attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
                 : attemptsCount);
         Queue.Enqueue(element);
         NewDataEvent.Set();

@@ -34,7 +34,7 @@ internal sealed class PriorityConveyorManager<TData, TResult> : ConveyorManager<
     internal PriorityConveyorManager(int maxPriority)
     {
         if (maxPriority < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, null);
+            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, "Must be 0 or greater");
         _maxPriority = maxPriority;
         _queues = new ConcurrentQueue<ITaskWrapper<IConveyorMachine<TData, TResult>>>[_maxPriority + 1];
         _queues[0] = Queue;
@@ -49,11 +49,11 @@ internal sealed class PriorityConveyorManager<TData, TResult> : ConveyorManager<
     Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, CancellationToken cancellation, int attemptsCount)
     {
         if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
+            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
         var element = new ConveyorDataWrapper<TData, TResult>(data,
             cancellation,
             attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
                 : attemptsCount);
         _queues[priority].Enqueue(element);
         NewDataEvent.Set();
@@ -76,7 +76,7 @@ internal sealed class PriorityConveyorManager<TData, TResult> : ConveyorManager<
     void ITaskManager<IConveyorMachine<TData, TResult>, int>.RevertTask(ITaskWrapper<IConveyorMachine<TData, TResult>> task, int metadata)
     {
         if (metadata < 0 || metadata > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(metadata), metadata, null);
+            throw new ArgumentOutOfRangeException(nameof(metadata), metadata, $"Must from 0 to {_maxPriority}");
         _queues[metadata].Enqueue(task);
         NewDataEvent.Set();
     }

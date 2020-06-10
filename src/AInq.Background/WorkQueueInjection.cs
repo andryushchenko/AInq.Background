@@ -31,7 +31,7 @@ public static class WorkQueueInjection
         if (services.Any(service => service.ImplementationType == typeof(IWorkQueue)))
             throw new InvalidOperationException("Service already exists");
         if (maxSimultaneous < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, null);
+            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, "Must be 1 or greater");
         var manager = new WorkQueueManager();
         services.AddSingleton<IWorkQueue>(manager);
         return maxSimultaneous == 1
@@ -44,9 +44,9 @@ public static class WorkQueueInjection
         if (services.Any(service => service.ImplementationType == typeof(IWorkQueue)))
             throw new InvalidOperationException("Service already exists");
         if (maxPriority < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, null);
+            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, "Must be 0 or greater");
         if (maxSimultaneous < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, null);
+            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, "Must be 1 or greater");
         var manager = new PriorityWorkQueueManager(maxPriority);
         services.AddSingleton<IWorkQueue>(manager)
                 .AddSingleton<IPriorityWorkQueue>(manager);

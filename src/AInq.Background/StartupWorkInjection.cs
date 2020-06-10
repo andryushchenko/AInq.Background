@@ -18,6 +18,7 @@ using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using static AInq.Background.WorkFactory;
@@ -54,18 +55,34 @@ public static class StartupWorkInjection
         => services.AddSingleton(CreateWorkWrapper(CreateWork((provider, token) => provider.GetService<TAsyncWork>()?.DoWorkAsync(provider, token) ?? Task.CompletedTask)).Work);
 
     public static IServiceCollection AddStartupQueuedWork(this IServiceCollection services, IWork work, int attemptsCount = 1)
-        => services.AddSingleton(CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork(work, attemptsCount: attemptsCount))).Work);
+    {
+        if (attemptsCount < 1)
+            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater");
+        return services.AddSingleton(CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork(work, attemptsCount: attemptsCount))).Work);
+    }
 
     public static IServiceCollection AddStartupQueuedWork<TWork>(this IServiceCollection services, int attemptsCount = 1)
         where TWork : IWork
-        => services.AddSingleton(CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork<TWork>(attemptsCount: attemptsCount))).Work);
+    {
+        if (attemptsCount < 1)
+            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater");
+        return services.AddSingleton(CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork<TWork>(attemptsCount: attemptsCount))).Work);
+    }
 
     public static IServiceCollection AddStartupQueuedAsyncWork(this IServiceCollection services, IAsyncWork work, int attemptsCount = 1)
-        => services.AddSingleton(CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork(work, attemptsCount: attemptsCount))).Work);
+    {
+        if (attemptsCount < 1)
+            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater");
+        return services.AddSingleton(CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork(work, attemptsCount: attemptsCount))).Work);
+    }
 
     public static IServiceCollection AddStartupQueuedAsyncWork<TAsyncWork>(this IServiceCollection services, int attemptsCount = 1)
         where TAsyncWork : IAsyncWork
-        => services.AddSingleton(CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork>(attemptsCount: attemptsCount))).Work);
+    {
+        if (attemptsCount < 1)
+            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater");
+        return services.AddSingleton(CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork>(attemptsCount: attemptsCount))).Work);
+    }
 }
 
 }

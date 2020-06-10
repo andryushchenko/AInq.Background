@@ -62,7 +62,7 @@ internal static class AccessWrapperFactory
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error accessing resource {1} with {0}", _access, typeof(TResource));
+                logger?.LogError(ex, "Error accessing resource {Type} with {Access}", typeof(TResource), _access);
                 if (_attemptsRemain > 0)
                     return Task.FromResult(false);
                 _completion.TrySetException(ex);
@@ -108,7 +108,7 @@ internal static class AccessWrapperFactory
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error accessing resource {1} with {0}", _access, typeof(TResource));
+                logger?.LogError(ex, "Error accessing resource {Type} with {Access}", typeof(TResource), _access);
                 if (_attemptsRemain > 0)
                     return Task.FromResult(false);
                 _completion.TrySetException(ex);
@@ -155,7 +155,7 @@ internal static class AccessWrapperFactory
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error accessing resource {1} with {0}", _access, typeof(TResource));
+                logger?.LogError(ex, "Error accessing resource {Type} with {Access}", typeof(TResource), _access);
                 if (_attemptsRemain > 0)
                     return false;
                 _completion.TrySetException(ex);
@@ -201,7 +201,7 @@ internal static class AccessWrapperFactory
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error accessing resource {1} with {0}", _access, typeof(TResource));
+                logger?.LogError(ex, "Error accessing resource {Type} with {Access}", typeof(TResource), _access);
                 if (_attemptsRemain > 0)
                     return false;
                 _completion.TrySetException(ex);
@@ -214,7 +214,7 @@ internal static class AccessWrapperFactory
     {
         var wrapper = new AccessWrapper<TResource>(access ?? throw new ArgumentNullException(nameof(access)),
             attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
                 : attemptsCount,
             cancellation);
         return (wrapper, wrapper.AccessTask);
@@ -224,7 +224,7 @@ internal static class AccessWrapperFactory
     {
         var wrapper = new AccessWrapper<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)),
             attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
                 : attemptsCount,
             cancellation);
         return (wrapper, wrapper.AccessTask);
@@ -234,7 +234,7 @@ internal static class AccessWrapperFactory
     {
         var wrapper = new AsyncAccessWrapper<TResource>(access ?? throw new ArgumentNullException(nameof(access)),
             attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
                 : attemptsCount,
             cancellation);
         return (wrapper, wrapper.AccessTask);
@@ -244,7 +244,7 @@ internal static class AccessWrapperFactory
     {
         var wrapper = new AsyncAccessWrapper<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)),
             attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, null)
+                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
                 : attemptsCount,
             cancellation);
         return (wrapper, wrapper.AccessTask);
