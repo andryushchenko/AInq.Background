@@ -78,7 +78,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddDelayedWork(IWork work, TimeSpan delay, CancellationToken cancellation)
     {
         _works.Add(CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -88,7 +88,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddDelayedWork<TResult>(IWork<TResult> work, TimeSpan delay, CancellationToken cancellation)
     {
         _works.Add(CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -98,7 +98,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddDelayedAsyncWork(IAsyncWork work, TimeSpan delay, CancellationToken cancellation)
     {
         _works.Add(CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -108,7 +108,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddDelayedAsyncWork<TResult>(IAsyncWork<TResult> work, TimeSpan delay, CancellationToken cancellation)
     {
         _works.Add(CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -118,7 +118,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddDelayedWork<TWork>(TimeSpan delay, CancellationToken cancellation)
     {
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -128,7 +128,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddDelayedWork<TWork, TResult>(TimeSpan delay, CancellationToken cancellation)
     {
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -138,7 +138,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddDelayedAsyncWork<TAsyncWork>(TimeSpan delay, CancellationToken cancellation)
     {
         _works.Add(CreateDelayedWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -148,7 +148,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddDelayedAsyncWork<TAsyncWork, TResult>(TimeSpan delay, CancellationToken cancellation)
     {
         _works.Add(CreateDelayedWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -160,7 +160,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         if (maxAttempt < 1)
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork(work, cancellation, maxAttempt).Ignore()),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -172,7 +172,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         if (maxAttempt < 1)
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork(work, cancellation, maxAttempt).Ignore()),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -184,7 +184,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         if (maxAttempt < 1)
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, maxAttempt).Ignore()),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -196,7 +196,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         if (maxAttempt < 1)
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, maxAttempt).Ignore()),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -208,7 +208,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         if (maxAttempt < 1)
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork<TWork>(cancellation, maxAttempt).Ignore()),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -220,7 +220,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         if (maxAttempt < 1)
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork<TWork, TResult>(cancellation, maxAttempt).Ignore()),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -232,7 +232,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         if (maxAttempt < 1)
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork>(cancellation, maxAttempt).Ignore()),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -244,7 +244,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         if (maxAttempt < 1)
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork, TResult>(cancellation, maxAttempt).Ignore()),
-            delay.Ticks < 0
+            delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
             cancellation));
@@ -255,7 +255,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     {
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
@@ -266,7 +266,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     {
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
@@ -277,7 +277,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     {
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
@@ -288,7 +288,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     {
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
@@ -299,7 +299,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     {
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
@@ -310,7 +310,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     {
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
@@ -321,7 +321,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     {
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
@@ -332,7 +332,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     {
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
@@ -345,7 +345,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork(work, cancellation, maxAttempt).Ignore()),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
@@ -358,7 +358,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork(work, cancellation, maxAttempt).Ignore()),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
@@ -371,7 +371,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, maxAttempt).Ignore()),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
@@ -384,7 +384,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, maxAttempt).Ignore()),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
@@ -397,7 +397,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork<TWork>(cancellation, maxAttempt).Ignore()),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
@@ -410,7 +410,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork<TWork, TResult>(cancellation, maxAttempt).Ignore()),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
@@ -423,7 +423,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork>(cancellation, maxAttempt).Ignore()),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
@@ -436,7 +436,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
             throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         time = time.ToLocalTime();
         _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork, TResult>(cancellation, maxAttempt).Ignore()),
-            time < DateTime.Now
+            time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
             cancellation));
