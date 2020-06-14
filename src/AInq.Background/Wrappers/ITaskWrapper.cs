@@ -24,6 +24,7 @@ namespace AInq.Background.Wrappers
 
 internal interface ITaskWrapper<in TArgument>
 {
+    bool IsCanceled { get; }
     Task<bool> ExecuteAsync(TArgument argument, IServiceProvider provider, ILogger? logger = null, CancellationToken cancellation = default);
 }
 

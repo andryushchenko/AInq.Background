@@ -47,9 +47,15 @@ internal class WorkQueueManager : IWorkQueue, ITaskManager<object?, object?>
             : Task.CompletedTask;
 
     (ITaskWrapper<object?>?, object?) ITaskManager<object?, object?>.GetTask()
-        => (Queue.TryDequeue(out var task)
-                ? task
-                : null, null);
+    {
+        while (true)
+        {
+            if (!Queue.TryDequeue(out var task))
+                return (null, null);
+            if (!task.IsCanceled)
+                return (task, null);
+        }
+    }
 
     void ITaskManager<object?, object?>.RevertTask(ITaskWrapper<object?> task, object? metadata)
         => Queue.Enqueue(task);

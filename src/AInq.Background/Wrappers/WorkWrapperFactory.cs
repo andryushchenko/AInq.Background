@@ -29,6 +29,7 @@ internal static class WorkWrapperFactory
         private readonly IWork _work;
         private readonly TaskCompletionSource<bool> _completion = new TaskCompletionSource<bool>();
         private readonly CancellationToken _innerCancellation;
+        private CancellationTokenRegistration _cancellationRegistration;
         private int _attemptsRemain;
 
         internal WorkWrapper(IWork work, int attemptsCount, CancellationToken innerCancellation)
@@ -36,15 +37,19 @@ internal static class WorkWrapperFactory
             _work = work;
             _innerCancellation = innerCancellation;
             _attemptsRemain = attemptsCount;
+            _cancellationRegistration = _innerCancellation.Register(() => _completion.TrySetCanceled(_innerCancellation), false);
         }
 
         internal Task WorkTask => _completion.Task;
+        bool ITaskWrapper<object?>.IsCanceled => _innerCancellation.IsCancellationRequested;
 
         Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
             {
                 _completion.TrySetException(new InvalidOperationException("No attempts left"));
+                _cancellationRegistration.Dispose();
+                _cancellationRegistration = default;
                 return Task.FromResult(true);
             }
             _attemptsRemain--;
@@ -70,6 +75,8 @@ internal static class WorkWrapperFactory
                     return Task.FromResult(false);
                 _completion.TrySetException(ex);
             }
+            _cancellationRegistration.Dispose();
+            _cancellationRegistration = default;
             return Task.FromResult(true);
         }
     }
@@ -79,6 +86,7 @@ internal static class WorkWrapperFactory
         private readonly IWork<TResult> _work;
         private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
         private readonly CancellationToken _innerCancellation;
+        private CancellationTokenRegistration _cancellationRegistration;
         private int _attemptsRemain;
 
         internal WorkWrapper(IWork<TResult> work, int attemptsCount, CancellationToken innerCancellation)
@@ -86,15 +94,19 @@ internal static class WorkWrapperFactory
             _work = work;
             _innerCancellation = innerCancellation;
             _attemptsRemain = attemptsCount;
+            _cancellationRegistration = _innerCancellation.Register(() => _completion.TrySetCanceled(_innerCancellation), false);
         }
 
         internal Task<TResult> WorkTask => _completion.Task;
+        bool ITaskWrapper<object?>.IsCanceled => _innerCancellation.IsCancellationRequested;
 
         Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
             {
                 _completion.TrySetException(new InvalidOperationException("No attempts left"));
+                _cancellationRegistration.Dispose();
+                _cancellationRegistration = default;
                 return Task.FromResult(true);
             }
             _attemptsRemain--;
@@ -119,6 +131,8 @@ internal static class WorkWrapperFactory
                     return Task.FromResult(false);
                 _completion.TrySetException(ex);
             }
+            _cancellationRegistration.Dispose();
+            _cancellationRegistration = default;
             return Task.FromResult(true);
         }
     }
@@ -128,6 +142,7 @@ internal static class WorkWrapperFactory
         private readonly IAsyncWork _work;
         private readonly TaskCompletionSource<bool> _completion = new TaskCompletionSource<bool>();
         private readonly CancellationToken _innerCancellation;
+        private CancellationTokenRegistration _cancellationRegistration;
         private int _attemptsRemain;
 
         internal AsyncWorkWrapper(IAsyncWork work, int attemptsCount, CancellationToken innerCancellation)
@@ -135,15 +150,19 @@ internal static class WorkWrapperFactory
             _work = work;
             _innerCancellation = innerCancellation;
             _attemptsRemain = attemptsCount;
+            _cancellationRegistration = _innerCancellation.Register(() => _completion.TrySetCanceled(_innerCancellation), false);
         }
 
         internal Task WorkTask => _completion.Task;
+        bool ITaskWrapper<object?>.IsCanceled => _innerCancellation.IsCancellationRequested;
 
         async Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
             {
                 _completion.TrySetException(new InvalidOperationException("No attempts left"));
+                _cancellationRegistration.Dispose();
+                _cancellationRegistration = default;
                 return true;
             }
             _attemptsRemain--;
@@ -169,6 +188,8 @@ internal static class WorkWrapperFactory
                     return false;
                 _completion.TrySetException(ex);
             }
+            _cancellationRegistration.Dispose();
+            _cancellationRegistration = default;
             return true;
         }
     }
@@ -178,6 +199,7 @@ internal static class WorkWrapperFactory
         private readonly IAsyncWork<TResult> _work;
         private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
         private readonly CancellationToken _innerCancellation;
+        private CancellationTokenRegistration _cancellationRegistration;
         private int _attemptsRemain;
 
         internal AsyncWorkWrapper(IAsyncWork<TResult> work, int attemptsCount, CancellationToken innerCancellation)
@@ -185,15 +207,19 @@ internal static class WorkWrapperFactory
             _work = work;
             _innerCancellation = innerCancellation;
             _attemptsRemain = attemptsCount;
+            _cancellationRegistration = _innerCancellation.Register(() => _completion.TrySetCanceled(_innerCancellation), false);
         }
 
         internal Task<TResult> WorkTask => _completion.Task;
+        bool ITaskWrapper<object?>.IsCanceled => _innerCancellation.IsCancellationRequested;
 
         async Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
             {
                 _completion.TrySetException(new InvalidOperationException("No attempts left"));
+                _cancellationRegistration.Dispose();
+                _cancellationRegistration = default;
                 return true;
             }
             _attemptsRemain--;
@@ -218,6 +244,8 @@ internal static class WorkWrapperFactory
                     return false;
                 _completion.TrySetException(ex);
             }
+            _cancellationRegistration.Dispose();
+            _cancellationRegistration = default;
             return true;
         }
     }

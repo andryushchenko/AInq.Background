@@ -17,6 +17,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,17 +37,26 @@ internal static class Program
                                .AddWorkQueue()
                                .AddStartupWork(WorkFactory.CreateWork(provider =>
                                {
-                                   var conveyor = provider.GetRequiredService<IConveyor<int, int>>();
-                                   for (var index = 1; index <= 20; index++)
-                                       conveyor.ProcessDataAsync(index);
-                                   provider.GetRequiredService<IWorkScheduler>()
-                                           .AddDelayedQueueWork(WorkFactory.CreateWork(serviceProvider =>
-                                               {
-                                                   var dataConveyor = serviceProvider.GetRequiredService<IConveyor<int, int>>();
-                                                   for (var index = 1; index <= 20; index++)
-                                                       dataConveyor.ProcessDataAsync(index);
-                                               }),
-                                               TimeSpan.FromMinutes(1));
+                                   for (var index = 1; index <= 10; index++)
+                                       provider.ProcessData<int, int>(index);
+                                   provider.AddDelayedQueueWork(WorkFactory.CreateWork(async serviceProvider =>
+                                       {
+                                           using var source = new CancellationTokenSource(TimeSpan.FromSeconds(6));
+                                           var tasks = Enumerable.Range(1, 10).Select(index => serviceProvider.ProcessData<int, int>(index, source.Token)).ToList();
+                                           try
+                                           {
+                                               await Task.WhenAll(tasks);
+                                           }
+                                           catch (Exception ex)
+                                           {
+                                               Console.WriteLine(ex);
+                                           }
+                                           foreach (var task in tasks)
+                                           {
+                                               Console.WriteLine($"{tasks.IndexOf(task) + 1}\t{(task.IsCompletedSuccessfully ? task.Result.ToString() : "Canceled")}");
+                                           }
+                                       }),
+                                       TimeSpan.FromSeconds(20));
                                }));
                    })
                    .Build();

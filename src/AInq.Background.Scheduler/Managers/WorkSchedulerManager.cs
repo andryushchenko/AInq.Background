@@ -531,7 +531,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddCronQueueWork<TWork>(string cronExpression, int attemptsCount, int priority, CancellationToken cancellation)
+    void IWorkScheduler.AddCronQueueWork<TWork>(string cronExpression, CancellationToken cancellation, int attemptsCount, int priority)
     {
         _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.EnqueueWork<TWork>(cancellation, attemptsCount, priority).Ignore()),
             cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),

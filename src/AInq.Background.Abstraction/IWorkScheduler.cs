@@ -112,7 +112,7 @@ public interface IWorkScheduler
     void AddCronAsyncQueueWork(IAsyncWork work, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0);
     void AddCronAsyncQueueWork<TResult>(IAsyncWork<TResult> work, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0);
 
-    void AddCronQueueWork<TWork>(string cronExpression, int attemptsCount = 1, int priority = 0, CancellationToken cancellation = default)
+    void AddCronQueueWork<TWork>(string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TWork : IWork;
 
     void AddCronQueueWork<TWork, TResult>(string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)

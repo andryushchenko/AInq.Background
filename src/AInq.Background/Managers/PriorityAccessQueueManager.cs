@@ -44,10 +44,14 @@ internal sealed class PriorityAccessQueueManager<TResource> : AccessQueueManager
 
     (ITaskWrapper<TResource>?, int) ITaskManager<TResource, int>.GetTask()
     {
-        var pendingQueue = _queues.FirstOrDefault(queue => !queue.IsEmpty);
-        return pendingQueue != null && pendingQueue.TryDequeue(out var task)
-            ? (task, _queues.IndexOf(pendingQueue))
-            : ((ITaskWrapper<TResource>?) null, -1);
+        while (true)
+        {
+            var pendingQueue = _queues.FirstOrDefault(queue => !queue.IsEmpty);
+            if (pendingQueue == null || !pendingQueue.TryDequeue(out var task))
+                return (null, -1);
+            if (!task.IsCanceled)
+                return (task, _queues.IndexOf(pendingQueue));
+        }
     }
 
     void ITaskManager<TResource, int>.RevertTask(ITaskWrapper<TResource> task, int metadata)
@@ -123,7 +127,9 @@ internal sealed class PriorityAccessQueueManager<TResource> : AccessQueueManager
 
     Task<TResult> IPriorityAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess, TResult>(int priority, CancellationToken cancellation, int attemptsCount)
     {
-        var (accessWrapper, task) = CreateAccessWrapper(CreateAsyncAccess<TResource, TResult>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)), FixAttempts(attemptsCount), cancellation);
+        var (accessWrapper, task) = CreateAccessWrapper(CreateAsyncAccess<TResource, TResult>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
+            FixAttempts(attemptsCount),
+            cancellation);
         _queues[FixPriority(priority)].Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;

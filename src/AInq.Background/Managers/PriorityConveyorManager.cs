@@ -59,10 +59,14 @@ internal sealed class PriorityConveyorManager<TData, TResult> : ConveyorManager<
 
     (ITaskWrapper<IConveyorMachine<TData, TResult>>?, int) ITaskManager<IConveyorMachine<TData, TResult>, int>.GetTask()
     {
-        var pendingQueue = _queues.FirstOrDefault(queue => !queue.IsEmpty);
-        return pendingQueue != null && pendingQueue.TryDequeue(out var task)
-            ? (task, _queues.IndexOf(pendingQueue))
-            : ((ITaskWrapper<IConveyorMachine<TData, TResult>>?) null, -1);
+        while (true)
+        {
+            var pendingQueue = _queues.FirstOrDefault(queue => !queue.IsEmpty);
+            if (pendingQueue == null || !pendingQueue.TryDequeue(out var task))
+                return (null, -1);
+            if (!task.IsCanceled)
+                return (task, _queues.IndexOf(pendingQueue));
+        }
     }
 
     void ITaskManager<IConveyorMachine<TData, TResult>, int>.RevertTask(ITaskWrapper<IConveyorMachine<TData, TResult>> task, int metadata)

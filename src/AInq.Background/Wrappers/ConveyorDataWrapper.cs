@@ -27,22 +27,27 @@ internal sealed class ConveyorDataWrapper<TData, TResult> : ITaskWrapper<IConvey
     private readonly TData _data;
     private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
     private readonly CancellationToken _innerCancellation;
+    private CancellationTokenRegistration _cancellationRegistration;
     private int _attemptsRemain;
-
-    internal Task<TResult> Result => _completion.Task;
 
     internal ConveyorDataWrapper(TData data, CancellationToken innerCancellation, int attemptsCount)
     {
         _data = data;
         _innerCancellation = innerCancellation;
         _attemptsRemain = Math.Max(1, attemptsCount);
+        _cancellationRegistration = _innerCancellation.Register(() => _completion.TrySetCanceled(_innerCancellation), false);
     }
+
+    internal Task<TResult> Result => _completion.Task;
+    bool ITaskWrapper<IConveyorMachine<TData, TResult>>.IsCanceled => _innerCancellation.IsCancellationRequested;
 
     async Task<bool> ITaskWrapper<IConveyorMachine<TData, TResult>>.ExecuteAsync(IConveyorMachine<TData, TResult> argument, IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
     {
         if (_attemptsRemain < 1)
         {
             _completion.TrySetException(new InvalidOperationException("No attempts left"));
+            _cancellationRegistration.Dispose();
+            _cancellationRegistration = default;
             return true;
         }
         if (argument == null)
@@ -74,6 +79,8 @@ internal sealed class ConveyorDataWrapper<TData, TResult> : ITaskWrapper<IConvey
                 return false;
             _completion.TrySetException(ex);
         }
+        _cancellationRegistration.Dispose();
+        _cancellationRegistration = default;
         return true;
     }
 }

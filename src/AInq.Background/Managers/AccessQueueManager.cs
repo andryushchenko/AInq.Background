@@ -47,9 +47,15 @@ internal class AccessQueueManager<TResource> : IAccessQueue<TResource>, ITaskMan
             : Task.CompletedTask;
 
     (ITaskWrapper<TResource>?, object?) ITaskManager<TResource, object?>.GetTask()
-        => (Queue.TryDequeue(out var task)
-                ? task
-                : null, null);
+    {
+        while (true)
+        {
+            if (!Queue.TryDequeue(out var task))
+                return (null, null);
+            if (!task.IsCanceled)
+                return (task, null);
+        }
+    }
 
     void ITaskManager<TResource, object?>.RevertTask(ITaskWrapper<TResource> task, object? metadata)
         => Queue.Enqueue(task);
@@ -112,7 +118,9 @@ internal class AccessQueueManager<TResource> : IAccessQueue<TResource>, ITaskMan
 
     Task<TResult> IAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess, TResult>(CancellationToken cancellation, int attemptsCount)
     {
-        var (accessWrapper, task) = CreateAccessWrapper(CreateAsyncAccess<TResource, TResult>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)), FixAttempts(attemptsCount), cancellation);
+        var (accessWrapper, task) = CreateAccessWrapper(CreateAsyncAccess<TResource, TResult>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
+            FixAttempts(attemptsCount),
+            cancellation);
         Queue.Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;

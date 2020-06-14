@@ -52,10 +52,16 @@ internal class ConveyorManager<TData, TResult> : IConveyor<TData, TResult>, ITas
             ? NewDataEvent.WaitAsync(cancellation)
             : Task.CompletedTask;
 
-    public (ITaskWrapper<IConveyorMachine<TData, TResult>>?, object?) GetTask()
-        => (Queue.TryDequeue(out var task)
-                ? task
-                : null, null);
+    (ITaskWrapper<IConveyorMachine<TData, TResult>>?, object?) ITaskManager<IConveyorMachine<TData, TResult>, object?>.GetTask()
+    {
+        while (true)
+        {
+            if (!Queue.TryDequeue(out var task))
+                return (null, null);
+            if (!task.IsCanceled)
+                return (task, null);
+        }
+    }
 
     void ITaskManager<IConveyorMachine<TData, TResult>, object?>.RevertTask(ITaskWrapper<IConveyorMachine<TData, TResult>> task, object? metadata)
         => Queue.Enqueue(task);

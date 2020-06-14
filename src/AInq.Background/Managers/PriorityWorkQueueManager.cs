@@ -44,10 +44,14 @@ internal sealed class PriorityWorkQueueManager : WorkQueueManager, IPriorityWork
 
     (ITaskWrapper<object?>?, int) ITaskManager<object?, int>.GetTask()
     {
-        var pendingQueue = _queues.FirstOrDefault(queue => !queue.IsEmpty);
-        return pendingQueue != null && pendingQueue.TryDequeue(out var task)
-            ? (task, _queues.IndexOf(pendingQueue))
-            : ((ITaskWrapper<object?>?) null, -1);
+        while (true)
+        {
+            var pendingQueue = _queues.FirstOrDefault(queue => !queue.IsEmpty);
+            if (pendingQueue == null || !pendingQueue.TryDequeue(out var task))
+                return (null, -1);
+            if (!task.IsCanceled)
+                return (task, _queues.IndexOf(pendingQueue));
+        }
     }
 
     void ITaskManager<object?, int>.RevertTask(ITaskWrapper<object?> task, int metadata)
