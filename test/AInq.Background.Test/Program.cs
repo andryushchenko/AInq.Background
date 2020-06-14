@@ -31,7 +31,7 @@ internal static class Program
                    .ConfigureServices((context, services) =>
                    {
                        services.AddTransient<TestMachine>()
-                               .AddConveyor<int, int, TestMachine>(ReuseStrategy.Reuse, 3)
+                               .AddConveyor<TestMachine, int, int>(ReuseStrategy.Reuse, 3)
                                .AddWorkScheduler()
                                .AddWorkQueue()
                                .AddStartupWork(WorkFactory.CreateWork(provider =>

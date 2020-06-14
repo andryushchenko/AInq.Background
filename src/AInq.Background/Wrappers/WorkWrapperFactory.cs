@@ -43,7 +43,10 @@ internal static class WorkWrapperFactory
         Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
+            {
+                _completion.TrySetException(new InvalidOperationException("No attempts left"));
                 return Task.FromResult(true);
+            }
             _attemptsRemain--;
             try
             {
@@ -90,7 +93,10 @@ internal static class WorkWrapperFactory
         Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
+            {
+                _completion.TrySetException(new InvalidOperationException("No attempts left"));
                 return Task.FromResult(true);
+            }
             _attemptsRemain--;
             try
             {
@@ -136,7 +142,10 @@ internal static class WorkWrapperFactory
         async Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
+            {
+                _completion.TrySetException(new InvalidOperationException("No attempts left"));
                 return true;
+            }
             _attemptsRemain--;
             using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
             try
@@ -183,7 +192,10 @@ internal static class WorkWrapperFactory
         async Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
+            {
+                _completion.TrySetException(new InvalidOperationException("No attempts left"));
                 return true;
+            }
             _attemptsRemain--;
             using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
             try
@@ -212,41 +224,25 @@ internal static class WorkWrapperFactory
 
     public static (ITaskWrapper<object?> Work, Task Task) CreateWorkWrapper(IWork work, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        var wrapper = new WorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
+        var wrapper = new WorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), Math.Max(1, attemptsCount), cancellation);
         return (wrapper, wrapper.WorkTask);
     }
 
     public static (ITaskWrapper<object?> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IWork<TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        var wrapper = new WorkWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
+        var wrapper = new WorkWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)), Math.Max(1, attemptsCount), cancellation);
         return (wrapper, wrapper.WorkTask);
     }
 
     public static (ITaskWrapper<object?> Work, Task Task) CreateWorkWrapper(IAsyncWork work, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        var wrapper = new AsyncWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
+        var wrapper = new AsyncWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), Math.Max(1, attemptsCount), cancellation);
         return (wrapper, wrapper.WorkTask);
     }
 
     public static (ITaskWrapper<object?> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IAsyncWork<TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        var wrapper = new AsyncWorkWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
+        var wrapper = new AsyncWorkWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)), Math.Max(1, attemptsCount), cancellation);
         return (wrapper, wrapper.WorkTask);
     }
 }

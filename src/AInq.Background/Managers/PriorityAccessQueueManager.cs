@@ -52,17 +52,13 @@ internal sealed class PriorityAccessQueueManager<TResource> : AccessQueueManager
 
     void ITaskManager<TResource, int>.RevertTask(ITaskWrapper<TResource> task, int metadata)
     {
-        if (metadata < 0 || metadata > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(metadata), metadata, $"Must from 0 to {_maxPriority}");
-        _queues[metadata].Enqueue(task);
+        _queues[FixPriority(metadata)].Enqueue(task);
         NewAccessEvent.Set();
     }
 
-    internal PriorityAccessQueueManager(int maxPriority)
+    internal PriorityAccessQueueManager(int maxPriority = 100, int maxAttempts = int.MaxValue) : base(maxAttempts)
     {
-        if (maxPriority < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, "Must be 0 or greater");
-        _maxPriority = maxPriority;
+        _maxPriority = Math.Min(100, Math.Max(1, maxPriority));
         _queues = new ConcurrentQueue<ITaskWrapper<TResource>>[_maxPriority + 1];
         _queues[0] = Queue;
         for (var index = 1; index <= _maxPriority; index++)
@@ -71,27 +67,15 @@ internal sealed class PriorityAccessQueueManager<TResource> : AccessQueueManager
 
     Task IPriorityAccessQueue<TResource>.EnqueueAccess(IAccess<TResource> access, int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
-        _queues[priority].Enqueue(accessWrapper);
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
+        _queues[FixPriority(priority)].Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
     }
 
     Task IPriorityAccessQueue<TResource>.EnqueueAccess<TAccess>(int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
+        var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)), FixAttempts(attemptsCount), cancellation);
         _queues[priority].Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
@@ -99,87 +83,54 @@ internal sealed class PriorityAccessQueueManager<TResource> : AccessQueueManager
 
     Task<TResult> IPriorityAccessQueue<TResource>.EnqueueAccess<TResult>(IAccess<TResource, TResult> access, int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
-        _queues[priority].Enqueue(accessWrapper);
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
+        _queues[FixPriority(priority)].Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
     }
 
     Task<TResult> IPriorityAccessQueue<TResource>.EnqueueAccess<TAccess, TResult>(int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource, TResult>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
-        _queues[priority].Enqueue(accessWrapper);
+        var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource, TResult>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)), FixAttempts(attemptsCount), cancellation);
+        _queues[FixPriority(priority)].Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
     }
 
     Task IPriorityAccessQueue<TResource>.EnqueueAsyncAccess(IAsyncAccess<TResource> access, int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
-        _queues[priority].Enqueue(accessWrapper);
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
+        _queues[FixPriority(priority)].Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
     }
 
     Task IPriorityAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess>(int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
-        _queues[priority].Enqueue(accessWrapper);
+        var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)), FixAttempts(attemptsCount), cancellation);
+        _queues[FixPriority(priority)].Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
     }
 
     Task<TResult> IPriorityAccessQueue<TResource>.EnqueueAsyncAccess<TResult>(IAsyncAccess<TResource, TResult> access, int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
-        _queues[priority].Enqueue(accessWrapper);
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
+        _queues[FixPriority(priority)].Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
     }
 
     Task<TResult> IPriorityAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess, TResult>(int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource, TResult>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
-        _queues[priority].Enqueue(accessWrapper);
+        var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource, TResult>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)), FixAttempts(attemptsCount), cancellation);
+        _queues[FixPriority(priority)].Enqueue(accessWrapper);
         NewAccessEvent.Set();
         return task;
     }
+
+    private int FixPriority(int priority)
+        => Math.Min(_maxPriority, Math.Max(0, priority));
 }
 
 }

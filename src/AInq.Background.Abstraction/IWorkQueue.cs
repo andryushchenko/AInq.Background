@@ -22,6 +22,7 @@ namespace AInq.Background
 
 public interface IWorkQueue
 {
+    int MaxAttempts { get; }
     Task EnqueueWork(IWork work, CancellationToken cancellation = default, int attemptsCount = 1);
 
     Task EnqueueWork<TWork>(CancellationToken cancellation = default, int attemptsCount = 1)

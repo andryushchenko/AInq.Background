@@ -27,84 +27,79 @@ namespace AInq.Background
 
 public static class ConveyorInjection
 {
-    public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services, IConveyorMachine<TData, TResult> conveyorMachine)
+    public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services, IConveyorMachine<TData, TResult> conveyorMachine, int maxAttempts = int.MaxValue)
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
-        var manager = new ConveyorManager<TData, TResult>();
+        var manager = new ConveyorManager<TData, TResult>(maxAttempts);
         return services.AddSingleton<IConveyor<TData, TResult>>(manager)
                        .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new SingleStaticProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachine)));
     }
 
-    public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services, int maxPriority, IConveyorMachine<TData, TResult> conveyorMachine)
+    public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services, IConveyorMachine<TData, TResult> conveyorMachine, int maxPriority = 100, int maxAttempts = int.MaxValue)
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
-        if (maxPriority < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, "Must be 0 or greater");
-        var manager = new PriorityConveyorManager<TData, TResult>(maxPriority);
+        var manager = new PriorityConveyorManager<TData, TResult>(maxPriority, maxAttempts);
         return services.AddSingleton<IConveyor<TData, TResult>>(manager)
                        .AddSingleton<IPriorityConveyor<TData, TResult>>(manager)
                        .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider, manager, new SingleStaticProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachine)));
     }
 
-    public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services, IEnumerable<IConveyorMachine<TData, TResult>> conveyorMachines)
+    public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services, IEnumerable<IConveyorMachine<TData, TResult>> conveyorMachines, int maxAttempts = int.MaxValue)
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
         var arguments = conveyorMachines?.Where(machine => machine != null).ToList() ?? throw new ArgumentNullException(nameof(conveyorMachines));
-        var manager = new ConveyorManager<TData, TResult>();
+        var manager = new ConveyorManager<TData, TResult>(maxAttempts);
         return arguments.Count switch
         {
             0 => throw new ArgumentOutOfRangeException(nameof(conveyorMachines), conveyorMachines, "Empty collection"),
-            1 => services.AddConveyor(arguments.First()),
+            1 => services.AddConveyor(arguments.First(), maxAttempts),
             _ => services.AddSingleton<IConveyor<TData, TResult>>(manager)
                          .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new MultipleStaticProcessor<IConveyorMachine<TData, TResult>, object?>(arguments)))
         };
     }
 
-    public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services, int maxPriority, IEnumerable<IConveyorMachine<TData, TResult>> conveyorMachines)
+    public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services, IEnumerable<IConveyorMachine<TData, TResult>> conveyorMachines, int maxPriority = 100, int maxAttempts = int.MaxValue)
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
-        if (maxPriority < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, "Must be 0 or greater");
         var arguments = conveyorMachines?.Where(machine => machine != null).ToList() ?? throw new ArgumentNullException(nameof(conveyorMachines));
-        var manager = new PriorityConveyorManager<TData, TResult>(maxPriority);
+        var manager = new PriorityConveyorManager<TData, TResult>(maxPriority, maxAttempts);
         return arguments.Count switch
         {
             0 => throw new ArgumentOutOfRangeException(nameof(conveyorMachines), conveyorMachines, "Empty collection"),
-            1 => services.AddPriorityConveyor(maxPriority, arguments.First()),
+            1 => services.AddPriorityConveyor(arguments.First(), maxPriority, maxAttempts),
             _ => services.AddSingleton<IConveyor<TData, TResult>>(manager)
                          .AddSingleton<IPriorityConveyor<TData, TResult>>(manager)
                          .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider, manager, new MultipleStaticProcessor<IConveyorMachine<TData, TResult>, int>(arguments)))
         };
     }
 
-    public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services, Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFabric, ReuseStrategy strategy, int maxSimultaneous = 1)
+    public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services, Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFabric, ReuseStrategy strategy, int maxSimultaneous = 1,
+        int maxAttempts = int.MaxValue)
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
-        if (maxSimultaneous < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, "Must be 1 or greater");
         if (conveyorMachineFabric == null)
             throw new ArgumentNullException(nameof(conveyorMachineFabric));
-        var manager = new ConveyorManager<TData, TResult>();
+        var manager = new ConveyorManager<TData, TResult>(maxAttempts);
         return strategy switch
         {
-            ReuseStrategy.Static => maxSimultaneous == 1
+            ReuseStrategy.Static => maxSimultaneous <= 1
                 ? services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new SingleStaticProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachineFabric.Invoke(provider))))
                 : services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider,
                               manager,
                               new MultipleStaticProcessor<IConveyorMachine<TData, TResult>, object?>(Enumerable.Repeat(0, maxSimultaneous).Select(_ => conveyorMachineFabric.Invoke(provider))))),
-            ReuseStrategy.Reuse => maxSimultaneous == 1
+            ReuseStrategy.Reuse => maxSimultaneous <= 1
                 ? services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new SingleReusableProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachineFabric)))
                 : services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new MultipleReusableProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachineFabric, maxSimultaneous))),
-            ReuseStrategy.OneTime => maxSimultaneous == 1
+            ReuseStrategy.OneTime => maxSimultaneous <= 1
                 ? services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new SingleOneTimeProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachineFabric)))
                 : services.AddSingleton<IConveyor<TData, TResult>>(manager)
@@ -113,21 +108,17 @@ public static class ConveyorInjection
         };
     }
 
-    public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services, int maxPriority, Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFabric, ReuseStrategy strategy,
-        int maxSimultaneous = 1)
+    public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services, Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFabric, ReuseStrategy strategy,
+        int maxSimultaneous = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
-        if (maxPriority < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, "Must be 0 or greater");
-        if (maxSimultaneous < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, "Must be 1 or greater");
         if (conveyorMachineFabric == null)
             throw new ArgumentNullException(nameof(conveyorMachineFabric));
-        var manager = new PriorityConveyorManager<TData, TResult>(maxPriority);
+        var manager = new PriorityConveyorManager<TData, TResult>(maxPriority, maxAttempts);
         return strategy switch
         {
-            ReuseStrategy.Static => maxSimultaneous == 1
+            ReuseStrategy.Static => maxSimultaneous <= 1
                 ? services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddSingleton<IPriorityConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider, manager, new SingleStaticProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachineFabric.Invoke(provider))))
@@ -136,14 +127,14 @@ public static class ConveyorInjection
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider,
                               manager,
                               new MultipleStaticProcessor<IConveyorMachine<TData, TResult>, int>(Enumerable.Repeat(0, maxSimultaneous).Select(_ => conveyorMachineFabric.Invoke(provider))))),
-            ReuseStrategy.Reuse => maxSimultaneous == 1
+            ReuseStrategy.Reuse => maxSimultaneous <= 1
                 ? services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddSingleton<IPriorityConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider, manager, new SingleReusableProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachineFabric)))
                 : services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddSingleton<IPriorityConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider, manager, new MultipleReusableProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachineFabric, maxSimultaneous))),
-            ReuseStrategy.OneTime => maxSimultaneous == 1
+            ReuseStrategy.OneTime => maxSimultaneous <= 1
                 ? services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddSingleton<IPriorityConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider, manager, new SingleOneTimeProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachineFabric)))
@@ -154,13 +145,13 @@ public static class ConveyorInjection
         };
     }
 
-    public static IServiceCollection AddConveyor<TData, TResult, TConveyorMachine>(this IServiceCollection services, ReuseStrategy strategy, int maxSimultaneous = 1)
+    public static IServiceCollection AddConveyor<TConveyorMachine, TData, TResult>(this IServiceCollection services, ReuseStrategy strategy, int maxSimultaneous = 1, int maxAttempts = int.MaxValue)
         where TConveyorMachine : IConveyorMachine<TData, TResult>
-        => services.AddConveyor(provider => provider.GetRequiredService<TConveyorMachine>(), strategy, maxSimultaneous);
+        => services.AddConveyor(provider => provider.GetRequiredService<TConveyorMachine>(), strategy, maxSimultaneous, maxAttempts);
 
-    public static IServiceCollection AddPriorityConveyor<TData, TResult, TConveyorMachine>(this IServiceCollection services, int maxPriority, ReuseStrategy strategy, int maxSimultaneous = 1)
+    public static IServiceCollection AddPriorityConveyor<TConveyorMachine, TData, TResult>(this IServiceCollection services, ReuseStrategy strategy, int maxSimultaneous = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TConveyorMachine : IConveyorMachine<TData, TResult>
-        => services.AddPriorityConveyor(maxPriority, provider => provider.GetRequiredService<TConveyorMachine>(), strategy, maxSimultaneous);
+        => services.AddPriorityConveyor(provider => provider.GetRequiredService<TConveyorMachine>(), strategy, maxSimultaneous, maxPriority, maxAttempts);
 }
 
 }

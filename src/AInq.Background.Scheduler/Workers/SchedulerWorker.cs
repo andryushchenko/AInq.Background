@@ -29,7 +29,9 @@ namespace AInq.Background.Workers
 
 internal sealed class SchedulerWorker : IHostedService, IDisposable
 {
-    internal static readonly TimeSpan MaxTimeout = TimeSpan.FromHours(1);
+    private static readonly TimeSpan DefaultHorizon = TimeSpan.FromSeconds(10);
+    private static readonly TimeSpan MinHorizon = TimeSpan.FromSeconds(1);
+    private static readonly TimeSpan MaxTimeout = TimeSpan.FromHours(1);
     private static readonly TimeSpan Beforehand = TimeSpan.FromSeconds(5);
 
     private readonly IWorkSchedulerManager _scheduler;
@@ -41,12 +43,14 @@ internal sealed class SchedulerWorker : IHostedService, IDisposable
 
     public SchedulerWorker(IWorkSchedulerManager scheduler, IServiceProvider provider, TimeSpan? horizon = null)
     {
-        if (horizon.HasValue && (horizon.Value < TimeSpan.FromSeconds(1) || horizon > MaxTimeout))
-            throw new ArgumentOutOfRangeException(nameof(horizon), horizon, $"Must be from 00:00:01.000 to {MaxTimeout:g}");
+        if (horizon.HasValue && horizon < MinHorizon)
+            horizon = MinHorizon;
+        if (horizon.HasValue && horizon > MaxTimeout)
+            horizon = MaxTimeout;
         _scheduler = scheduler;
         _provider = provider;
         _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<SchedulerWorker>();
-        _horizon = horizon ?? TimeSpan.FromSeconds(10);
+        _horizon = horizon ?? DefaultHorizon;
     }
 
     private async Task Worker(CancellationToken abort)

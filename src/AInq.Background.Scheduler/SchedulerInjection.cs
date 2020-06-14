@@ -27,8 +27,6 @@ public static class SchedulerInjection
 {
     public static IServiceCollection AddWorkScheduler(this IServiceCollection services, TimeSpan? horizon = null)
     {
-        if (horizon.HasValue && (horizon.Value < TimeSpan.FromSeconds(1) || horizon > SchedulerWorker.MaxTimeout))
-            throw new ArgumentOutOfRangeException(nameof(horizon), horizon, $"Must be from 00:00:01.000 to {SchedulerWorker.MaxTimeout:g}");
         if (services.Any(service => service.ImplementationType == typeof(IWorkScheduler)))
             throw new InvalidOperationException("Service already exists");
         var scheduler = new WorkSchedulerManager();

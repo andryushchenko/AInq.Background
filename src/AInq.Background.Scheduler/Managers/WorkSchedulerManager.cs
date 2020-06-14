@@ -137,7 +137,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
 
     void IWorkScheduler.AddDelayedAsyncWork<TAsyncWork>(TimeSpan delay, CancellationToken cancellation)
     {
-        _works.Add(CreateDelayedWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
+        _works.Add(CreateDelayedWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
             delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
@@ -147,7 +147,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
 
     void IWorkScheduler.AddDelayedAsyncWork<TAsyncWork, TResult>(TimeSpan delay, CancellationToken cancellation)
     {
-        _works.Add(CreateDelayedWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
+        _works.Add(CreateDelayedWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
             delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
@@ -155,11 +155,11 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddDelayedQueueWork(IWork work, TimeSpan delay, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddDelayedQueueWork(IWork work, TimeSpan delay, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork(work, cancellation, maxAttempt).Ignore()),
+        if (work == null)
+            throw new ArgumentNullException(nameof(work));
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueWork(work, cancellation, attemptsCount, priority).Ignore()),
             delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
@@ -167,11 +167,11 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddDelayedQueueWork<TResult>(IWork<TResult> work, TimeSpan delay, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddDelayedQueueWork<TResult>(IWork<TResult> work, TimeSpan delay, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork(work, cancellation, maxAttempt).Ignore()),
+        if (work == null)
+            throw new ArgumentNullException(nameof(work));
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueWork(work, cancellation, attemptsCount, priority).Ignore()),
             delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
@@ -179,11 +179,11 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddDelayedAsyncQueueWork(IAsyncWork work, TimeSpan delay, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddDelayedAsyncQueueWork(IAsyncWork work, TimeSpan delay, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, maxAttempt).Ignore()),
+        if (work == null)
+            throw new ArgumentNullException(nameof(work));
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueAsyncWork(work, cancellation, attemptsCount, priority).Ignore()),
             delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
@@ -191,11 +191,11 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddDelayedAsyncQueueWork<TResult>(IAsyncWork<TResult> work, TimeSpan delay, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddDelayedAsyncQueueWork<TResult>(IAsyncWork<TResult> work, TimeSpan delay, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, maxAttempt).Ignore()),
+        if (work == null)
+            throw new ArgumentNullException(nameof(work));
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueAsyncWork(work, cancellation, attemptsCount, priority).Ignore()),
             delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
@@ -203,11 +203,9 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddDelayedQueueWork<TWork>(TimeSpan delay, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddDelayedQueueWork<TWork>(TimeSpan delay, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork<TWork>(cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueWork<TWork>(cancellation, attemptsCount, priority).Ignore()),
             delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
@@ -215,11 +213,9 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddDelayedQueueWork<TWork, TResult>(TimeSpan delay, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddDelayedQueueWork<TWork, TResult>(TimeSpan delay, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork<TWork, TResult>(cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueWork<TWork, TResult>(cancellation, attemptsCount, priority).Ignore()),
             delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
@@ -227,11 +223,9 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddDelayedAsyncQueueWork<TAsyncWork>(TimeSpan delay, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddDelayedAsyncQueueWork<TAsyncWork>(TimeSpan delay, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork>(cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueAsyncWork<TAsyncWork>(cancellation, attemptsCount, priority).Ignore()),
             delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
@@ -239,11 +233,9 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddDelayedAsyncQueueWork<TAsyncWork, TResult>(TimeSpan delay, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddDelayedAsyncQueueWork<TAsyncWork, TResult>(TimeSpan delay, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork, TResult>(cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueAsyncWork<TAsyncWork, TResult>(cancellation, attemptsCount, priority).Ignore()),
             delay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
                 : delay,
@@ -320,7 +312,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddScheduledAsyncWork<TAsyncWork>(DateTime time, CancellationToken cancellation)
     {
         time = time.ToLocalTime();
-        _works.Add(CreateDelayedWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
+        _works.Add(CreateDelayedWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
             time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
@@ -331,7 +323,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddScheduledAsyncWork<TAsyncWork, TResult>(DateTime time, CancellationToken cancellation)
     {
         time = time.ToLocalTime();
-        _works.Add(CreateDelayedWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
+        _works.Add(CreateDelayedWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
             time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
@@ -339,12 +331,12 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddScheduledQueueWork(IWork work, DateTime time, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddScheduledQueueWork(IWork work, DateTime time, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
+        if (work == null)
+            throw new ArgumentNullException(nameof(work));
         time = time.ToLocalTime();
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork(work, cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueWork(work, cancellation, attemptsCount, priority).Ignore()),
             time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
@@ -352,12 +344,12 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddScheduledQueueWork<TResult>(IWork<TResult> work, DateTime time, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddScheduledQueueWork<TResult>(IWork<TResult> work, DateTime time, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
+        if (work == null)
+            throw new ArgumentNullException(nameof(work));
         time = time.ToLocalTime();
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork(work, cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueWork(work, cancellation, attemptsCount, priority).Ignore()),
             time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
@@ -365,12 +357,12 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddScheduledAsyncQueueWork(IAsyncWork work, DateTime time, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddScheduledAsyncQueueWork(IAsyncWork work, DateTime time, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
+        if (work == null)
+            throw new ArgumentNullException(nameof(work));
         time = time.ToLocalTime();
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueAsyncWork(work, cancellation, attemptsCount, priority).Ignore()),
             time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
@@ -378,12 +370,12 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddScheduledAsyncQueueWork<TResult>(IAsyncWork<TResult> work, DateTime time, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddScheduledAsyncQueueWork<TResult>(IAsyncWork<TResult> work, DateTime time, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
+        if (work == null)
+            throw new ArgumentNullException(nameof(work));
         time = time.ToLocalTime();
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueAsyncWork(work, cancellation, attemptsCount, priority).Ignore()),
             time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
@@ -391,12 +383,10 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddScheduledQueueWork<TWork>(DateTime time, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddScheduledQueueWork<TWork>(DateTime time, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         time = time.ToLocalTime();
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork<TWork>(cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueWork<TWork>(cancellation, attemptsCount, priority).Ignore()),
             time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
@@ -404,12 +394,10 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddScheduledQueueWork<TWork, TResult>(DateTime time, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddScheduledQueueWork<TWork, TResult>(DateTime time, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         time = time.ToLocalTime();
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork<TWork, TResult>(cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueWork<TWork, TResult>(cancellation, attemptsCount, priority).Ignore()),
             time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
@@ -417,12 +405,10 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddScheduledAsyncQueueWork<TAsyncWork>(DateTime time, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddScheduledAsyncQueueWork<TAsyncWork>(DateTime time, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         time = time.ToLocalTime();
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork>(cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueAsyncWork<TAsyncWork>(cancellation, attemptsCount, priority).Ignore()),
             time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
@@ -430,12 +416,10 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddScheduledAsyncQueueWork<TAsyncWork, TResult>(DateTime time, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddScheduledAsyncQueueWork<TAsyncWork, TResult>(DateTime time, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
         time = time.ToLocalTime();
-        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork, TResult>(cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateDelayedWorkWrapper(CreateWork(provider => provider.EnqueueAsyncWork<TAsyncWork, TResult>(cancellation, attemptsCount, priority).Ignore()),
             time <= DateTime.Now
                 ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
                 : time,
@@ -493,7 +477,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
 
     void IWorkScheduler.AddCronAsyncWork<TAsyncWork>(string cronExpression, CancellationToken cancellation)
     {
-        _works.Add(CreateCronWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
+        _works.Add(CreateCronWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
             cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
@@ -501,87 +485,79 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
 
     void IWorkScheduler.AddCronAsyncWork<TAsyncWork, TResult>(string cronExpression, CancellationToken cancellation)
     {
-        _works.Add(CreateCronWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
+        _works.Add(CreateCronWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
             cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddCronQueueWork(IWork work, string cronExpression, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddCronQueueWork(IWork work, string cronExpression, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork(work, cancellation, maxAttempt).Ignore()),
+        if (work == null)
+            throw new ArgumentNullException(nameof(work));
+        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.EnqueueWork(work, cancellation, attemptsCount, priority).Ignore()),
             cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddCronQueueWork<TResult>(IWork<TResult> work, string cronExpression, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddCronQueueWork<TResult>(IWork<TResult> work, string cronExpression, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork(work, cancellation, maxAttempt).Ignore()),
+        if (work == null)
+            throw new ArgumentNullException(nameof(work));
+        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.EnqueueWork(work, cancellation, attemptsCount, priority).Ignore()),
             cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddCronAsyncQueueWork(IAsyncWork work, string cronExpression, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddCronAsyncQueueWork(IAsyncWork work, string cronExpression, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, maxAttempt).Ignore()),
+        if (work == null)
+            throw new ArgumentNullException(nameof(work));
+        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.EnqueueAsyncWork(work, cancellation, attemptsCount, priority).Ignore()),
             cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddCronAsyncQueueWork<TResult>(IAsyncWork<TResult> work, string cronExpression, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddCronAsyncQueueWork<TResult>(IAsyncWork<TResult> work, string cronExpression, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, maxAttempt).Ignore()),
+        if (work == null)
+            throw new ArgumentNullException(nameof(work));
+        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.EnqueueAsyncWork(work, cancellation, attemptsCount, priority).Ignore()),
             cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddCronQueueWork<TWork>(string cronExpression, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddCronQueueWork<TWork>(string cronExpression, int attemptsCount, int priority, CancellationToken cancellation)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork<TWork>(cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.EnqueueWork<TWork>(cancellation, attemptsCount, priority).Ignore()),
             cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddCronQueueWork<TWork, TResult>(string cronExpression, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddCronQueueWork<TWork, TResult>(string cronExpression, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueWork<TWork, TResult>(cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.EnqueueWork<TWork, TResult>(cancellation, attemptsCount, priority).Ignore()),
             cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddCronAsyncQueueWork<TAsyncWork>(string cronExpression, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddCronAsyncQueueWork<TAsyncWork>(string cronExpression, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork>(cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.EnqueueAsyncWork<TAsyncWork>(cancellation, attemptsCount, priority).Ignore()),
             cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
 
-    void IWorkScheduler.AddCronAsyncQueueWork<TAsyncWork, TResult>(string cronExpression, int maxAttempt, CancellationToken cancellation)
+    void IWorkScheduler.AddCronAsyncQueueWork<TAsyncWork, TResult>(string cronExpression, CancellationToken cancellation, int attemptsCount, int priority)
     {
-        if (maxAttempt < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxAttempt), maxAttempt, "Must be 1 or greater");
-        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork, TResult>(cancellation, maxAttempt).Ignore()),
+        _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.EnqueueAsyncWork<TAsyncWork, TResult>(cancellation, attemptsCount, priority).Ignore()),
             cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();

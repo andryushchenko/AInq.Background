@@ -22,6 +22,7 @@ namespace AInq.Background
 
 public interface IAccessQueue<out TResource>
 {
+    int MaxAttempts { get; }
     Task EnqueueAccess(IAccess<TResource> access, CancellationToken cancellation = default, int attemptsCount = 1);
 
     Task EnqueueAccess<TAccess>(CancellationToken cancellation = default, int attemptsCount = 1)

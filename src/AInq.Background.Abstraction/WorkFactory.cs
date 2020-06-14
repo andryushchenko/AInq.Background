@@ -93,10 +93,10 @@ public static class WorkFactory
             ? new AsyncWork<TResult>((provider, token) => work.Invoke(token))
             : throw new ArgumentNullException(nameof(work));
 
-    public static IAsyncWork CreateWork(Func<IServiceProvider, CancellationToken, Task> work)
+    public static IAsyncWork CreateAsyncWork(Func<IServiceProvider, CancellationToken, Task> work)
         => new AsyncWork(work ?? throw new ArgumentNullException(nameof(work)));
 
-    public static IAsyncWork<TResult> CreateWork<TResult>(Func<IServiceProvider, CancellationToken, Task<TResult>> work)
+    public static IAsyncWork<TResult> CreateAsyncWork<TResult>(Func<IServiceProvider, CancellationToken, Task<TResult>> work)
         => new AsyncWork<TResult>(work ?? throw new ArgumentNullException(nameof(work)));
 }
 

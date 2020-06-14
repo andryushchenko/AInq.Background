@@ -39,21 +39,21 @@ public interface IWorkScheduler
     void AddDelayedAsyncWork<TAsyncWork, TResult>(TimeSpan delay, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork<TResult>;
 
-    void AddDelayedQueueWork(IWork work, TimeSpan delay, int maxAttempt = 1, CancellationToken cancellation = default);
-    void AddDelayedQueueWork<TResult>(IWork<TResult> work, TimeSpan delay, int maxAttempt = 1, CancellationToken cancellation = default);
-    void AddDelayedAsyncQueueWork(IAsyncWork work, TimeSpan delay, int maxAttempt = 1, CancellationToken cancellation = default);
-    void AddDelayedAsyncQueueWork<TResult>(IAsyncWork<TResult> work, TimeSpan delay, int maxAttempt = 1, CancellationToken cancellation = default);
+    void AddDelayedQueueWork(IWork work, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0);
+    void AddDelayedQueueWork<TResult>(IWork<TResult> work, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0);
+    void AddDelayedAsyncQueueWork(IAsyncWork work, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0);
+    void AddDelayedAsyncQueueWork<TResult>(IAsyncWork<TResult> work, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0);
 
-    void AddDelayedQueueWork<TWork>(TimeSpan delay, int maxAttempt = 1, CancellationToken cancellation = default)
+    void AddDelayedQueueWork<TWork>(TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TWork : IWork;
 
-    void AddDelayedQueueWork<TWork, TResult>(TimeSpan delay, int maxAttempt = 1, CancellationToken cancellation = default)
+    void AddDelayedQueueWork<TWork, TResult>(TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TWork : IWork<TResult>;
 
-    void AddDelayedAsyncQueueWork<TAsyncWork>(TimeSpan delay, int maxAttempt = 1, CancellationToken cancellation = default)
+    void AddDelayedAsyncQueueWork<TAsyncWork>(TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork;
 
-    void AddDelayedAsyncQueueWork<TAsyncWork, TResult>(TimeSpan delay, int maxAttempt = 1, CancellationToken cancellation = default)
+    void AddDelayedAsyncQueueWork<TAsyncWork, TResult>(TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork<TResult>;
 
     void AddScheduledWork(IWork work, DateTime time, CancellationToken cancellation = default);
@@ -73,21 +73,21 @@ public interface IWorkScheduler
     void AddScheduledAsyncWork<TAsyncWork, TResult>(DateTime time, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork<TResult>;
 
-    void AddScheduledQueueWork(IWork work, DateTime time, int maxAttempt = 1, CancellationToken cancellation = default);
-    void AddScheduledQueueWork<TResult>(IWork<TResult> work, DateTime time, int maxAttempt = 1, CancellationToken cancellation = default);
-    void AddScheduledAsyncQueueWork(IAsyncWork work, DateTime time, int maxAttempt = 1, CancellationToken cancellation = default);
-    void AddScheduledAsyncQueueWork<TResult>(IAsyncWork<TResult> work, DateTime time, int maxAttempt = 1, CancellationToken cancellation = default);
+    void AddScheduledQueueWork(IWork work, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0);
+    void AddScheduledQueueWork<TResult>(IWork<TResult> work, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0);
+    void AddScheduledAsyncQueueWork(IAsyncWork work, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0);
+    void AddScheduledAsyncQueueWork<TResult>(IAsyncWork<TResult> work, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0);
 
-    void AddScheduledQueueWork<TWork>(DateTime time, int maxAttempt = 1, CancellationToken cancellation = default)
+    void AddScheduledQueueWork<TWork>(DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TWork : IWork;
 
-    void AddScheduledQueueWork<TWork, TResult>(DateTime time, int maxAttempt = 1, CancellationToken cancellation = default)
+    void AddScheduledQueueWork<TWork, TResult>(DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TWork : IWork<TResult>;
 
-    void AddScheduledAsyncQueueWork<TAsyncWork>(DateTime time, int maxAttempt = 1, CancellationToken cancellation = default)
+    void AddScheduledAsyncQueueWork<TAsyncWork>(DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork;
 
-    void AddScheduledAsyncQueueWork<TAsyncWork, TResult>(DateTime time, int maxAttempt = 1, CancellationToken cancellation = default)
+    void AddScheduledAsyncQueueWork<TAsyncWork, TResult>(DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork<TResult>;
 
     void AddCronWork(IWork work, string cronExpression, CancellationToken cancellation = default);
@@ -107,21 +107,21 @@ public interface IWorkScheduler
     void AddCronAsyncWork<TAsyncWork, TResult>(string cronExpression, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork<TResult>;
 
-    void AddCronQueueWork(IWork work, string cronExpression, int maxAttempt = 1, CancellationToken cancellation = default);
-    void AddCronQueueWork<TResult>(IWork<TResult> work, string cronExpression, int maxAttempt = 1, CancellationToken cancellation = default);
-    void AddCronAsyncQueueWork(IAsyncWork work, string cronExpression, int maxAttempt = 1, CancellationToken cancellation = default);
-    void AddCronAsyncQueueWork<TResult>(IAsyncWork<TResult> work, string cronExpression, int maxAttempt = 1, CancellationToken cancellation = default);
+    void AddCronQueueWork(IWork work, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0);
+    void AddCronQueueWork<TResult>(IWork<TResult> work, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0);
+    void AddCronAsyncQueueWork(IAsyncWork work, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0);
+    void AddCronAsyncQueueWork<TResult>(IAsyncWork<TResult> work, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0);
 
-    void AddCronQueueWork<TWork>(string cronExpression, int maxAttempt = 1, CancellationToken cancellation = default)
+    void AddCronQueueWork<TWork>(string cronExpression, int attemptsCount = 1, int priority = 0, CancellationToken cancellation = default)
         where TWork : IWork;
 
-    void AddCronQueueWork<TWork, TResult>(string cronExpression, int maxAttempt = 1, CancellationToken cancellation = default)
+    void AddCronQueueWork<TWork, TResult>(string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TWork : IWork<TResult>;
 
-    void AddCronAsyncQueueWork<TAsyncWork>(string cronExpression, int maxAttempt = 1, CancellationToken cancellation = default)
+    void AddCronAsyncQueueWork<TAsyncWork>(string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork;
 
-    void AddCronAsyncQueueWork<TAsyncWork, TResult>(string cronExpression, int maxAttempt = 1, CancellationToken cancellation = default)
+    void AddCronAsyncQueueWork<TAsyncWork, TResult>(string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork<TResult>;
 }
 

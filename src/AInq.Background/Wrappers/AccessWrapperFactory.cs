@@ -43,7 +43,10 @@ internal static class AccessWrapperFactory
         Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
+            {
+                _completion.TrySetException(new InvalidOperationException("No attempts left"));
                 return Task.FromResult(true);
+            }
             _attemptsRemain--;
             try
             {
@@ -90,7 +93,10 @@ internal static class AccessWrapperFactory
         Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
+            {
+                _completion.TrySetException(new InvalidOperationException("No attempts left"));
                 return Task.FromResult(true);
+            }
             _attemptsRemain--;
             try
             {
@@ -136,7 +142,10 @@ internal static class AccessWrapperFactory
         async Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
+            {
+                _completion.TrySetException(new InvalidOperationException("No attempts left"));
                 return true;
+            }
             _attemptsRemain--;
             using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
             try
@@ -183,7 +192,10 @@ internal static class AccessWrapperFactory
         async Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
+            {
+                _completion.TrySetException(new InvalidOperationException("No attempts left"));
                 return true;
+            }
             _attemptsRemain--;
             using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
             try
@@ -212,41 +224,25 @@ internal static class AccessWrapperFactory
 
     public static (ITaskWrapper<TResource> Access, Task Task) CreateAccessWrapper<TResource>(IAccess<TResource> access, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        var wrapper = new AccessWrapper<TResource>(access ?? throw new ArgumentNullException(nameof(access)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
+        var wrapper = new AccessWrapper<TResource>(access ?? throw new ArgumentNullException(nameof(access)), Math.Max(1, attemptsCount), cancellation);
         return (wrapper, wrapper.AccessTask);
     }
 
     public static (ITaskWrapper<TResource> Access, Task<TResult> Task) CreateAccessWrapper<TResource, TResult>(IAccess<TResource, TResult> access, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        var wrapper = new AccessWrapper<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
+        var wrapper = new AccessWrapper<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)), Math.Max(1, attemptsCount), cancellation);
         return (wrapper, wrapper.AccessTask);
     }
 
     public static (ITaskWrapper<TResource> Access, Task Task) CreateAccessWrapper<TResource>(IAsyncAccess<TResource> access, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        var wrapper = new AsyncAccessWrapper<TResource>(access ?? throw new ArgumentNullException(nameof(access)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
+        var wrapper = new AsyncAccessWrapper<TResource>(access ?? throw new ArgumentNullException(nameof(access)), Math.Max(1, attemptsCount), cancellation);
         return (wrapper, wrapper.AccessTask);
     }
 
     public static (ITaskWrapper<TResource> Access, Task<TResult> Task) CreateAccessWrapper<TResource, TResult>(IAsyncAccess<TResource, TResult> access, int attemptsCount = 1, CancellationToken cancellation = default)
     {
-        var wrapper = new AsyncAccessWrapper<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
+        var wrapper = new AsyncAccessWrapper<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)), Math.Max(1, attemptsCount), cancellation);
         return (wrapper, wrapper.AccessTask);
     }
 }

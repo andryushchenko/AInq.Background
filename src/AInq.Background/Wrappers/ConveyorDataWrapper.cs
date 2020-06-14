@@ -33,17 +33,18 @@ internal sealed class ConveyorDataWrapper<TData, TResult> : ITaskWrapper<IConvey
 
     internal ConveyorDataWrapper(TData data, CancellationToken innerCancellation, int attemptsCount)
     {
-        if (attemptsCount < 1)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater");
         _data = data;
         _innerCancellation = innerCancellation;
-        _attemptsRemain = attemptsCount;
+        _attemptsRemain = Math.Max(1, attemptsCount);
     }
 
     async Task<bool> ITaskWrapper<IConveyorMachine<TData, TResult>>.ExecuteAsync(IConveyorMachine<TData, TResult> argument, IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
     {
         if (_attemptsRemain < 1)
+        {
+            _completion.TrySetException(new InvalidOperationException("No attempts left"));
             return true;
+        }
         if (argument == null)
             return false;
         _attemptsRemain--;

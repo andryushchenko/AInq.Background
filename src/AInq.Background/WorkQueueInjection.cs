@@ -26,31 +26,25 @@ namespace AInq.Background
 
 public static class WorkQueueInjection
 {
-    public static IServiceCollection AddWorkQueue(this IServiceCollection services, int maxSimultaneous = 1)
+    public static IServiceCollection AddWorkQueue(this IServiceCollection services, int maxSimultaneous = 1, int maxAttempts = int.MaxValue)
     {
         if (services.Any(service => service.ImplementationType == typeof(IWorkQueue)))
             throw new InvalidOperationException("Service already exists");
-        if (maxSimultaneous < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, "Must be 1 or greater");
-        var manager = new WorkQueueManager();
+        var manager = new WorkQueueManager(maxAttempts);
         services.AddSingleton<IWorkQueue>(manager);
-        return maxSimultaneous == 1
+        return maxSimultaneous <= 1
             ? services.AddHostedService(provider => new TaskWorker<object?, object?>(provider, manager, new SingleNullProcessor<object?>()))
             : services.AddHostedService(provider => new TaskWorker<object?, object?>(provider, manager, new MultipleNullProcessor<object?>(maxSimultaneous)));
     }
 
-    public static IServiceCollection AddPriorityWorkQueue(this IServiceCollection services, int maxPriority, int maxSimultaneous = 1)
+    public static IServiceCollection AddPriorityWorkQueue(this IServiceCollection services, int maxPriority = 100, int maxSimultaneous = 1, int maxAttempts = int.MaxValue)
     {
         if (services.Any(service => service.ImplementationType == typeof(IWorkQueue)))
             throw new InvalidOperationException("Service already exists");
-        if (maxPriority < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, "Must be 0 or greater");
-        if (maxSimultaneous < 1)
-            throw new ArgumentOutOfRangeException(nameof(maxSimultaneous), maxSimultaneous, "Must be 1 or greater");
-        var manager = new PriorityWorkQueueManager(maxPriority);
+        var manager = new PriorityWorkQueueManager(maxPriority, maxAttempts);
         services.AddSingleton<IWorkQueue>(manager)
                 .AddSingleton<IPriorityWorkQueue>(manager);
-        return maxSimultaneous == 1
+        return maxSimultaneous <= 1
             ? services.AddHostedService(provider => new TaskWorker<object?, int>(provider, manager, new SingleNullProcessor<int>()))
             : services.AddHostedService(provider => new TaskWorker<object?, int>(provider, manager, new MultipleNullProcessor<int>(maxSimultaneous)));
     }

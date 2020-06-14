@@ -31,11 +31,9 @@ internal sealed class PriorityConveyorManager<TData, TResult> : ConveyorManager<
 
     private readonly IList<ConcurrentQueue<ITaskWrapper<IConveyorMachine<TData, TResult>>>> _queues;
 
-    internal PriorityConveyorManager(int maxPriority)
+    internal PriorityConveyorManager(int maxPriority = 100, int maxAttempts = int.MaxValue) : base(maxAttempts)
     {
-        if (maxPriority < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, "Must be 0 or greater");
-        _maxPriority = maxPriority;
+        _maxPriority = Math.Min(100, Math.Max(1, maxPriority));
         _queues = new ConcurrentQueue<ITaskWrapper<IConveyorMachine<TData, TResult>>>[_maxPriority + 1];
         _queues[0] = Queue;
         for (var index = 1; index <= _maxPriority; index++)
@@ -48,14 +46,8 @@ internal sealed class PriorityConveyorManager<TData, TResult> : ConveyorManager<
 
     Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var element = new ConveyorDataWrapper<TData, TResult>(data,
-            cancellation,
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount);
-        _queues[priority].Enqueue(element);
+        var element = new ConveyorDataWrapper<TData, TResult>(data, cancellation, FixAttempts(attemptsCount));
+        _queues[FixPriority(priority)].Enqueue(element);
         NewDataEvent.Set();
         return element.Result;
     }
@@ -75,11 +67,12 @@ internal sealed class PriorityConveyorManager<TData, TResult> : ConveyorManager<
 
     void ITaskManager<IConveyorMachine<TData, TResult>, int>.RevertTask(ITaskWrapper<IConveyorMachine<TData, TResult>> task, int metadata)
     {
-        if (metadata < 0 || metadata > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(metadata), metadata, $"Must from 0 to {_maxPriority}");
-        _queues[metadata].Enqueue(task);
+        _queues[FixPriority(metadata)].Enqueue(task);
         NewDataEvent.Set();
     }
+
+    private int FixPriority(int priority)
+        => Math.Min(_maxPriority, Math.Max(0, priority));
 }
 
 }

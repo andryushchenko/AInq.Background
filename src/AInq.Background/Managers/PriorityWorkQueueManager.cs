@@ -52,17 +52,13 @@ internal sealed class PriorityWorkQueueManager : WorkQueueManager, IPriorityWork
 
     void ITaskManager<object?, int>.RevertTask(ITaskWrapper<object?> task, int metadata)
     {
-        if (metadata < 0 || metadata > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(metadata), metadata, $"Must from 0 to {_maxPriority}");
-        _queues[metadata].Enqueue(task);
+        _queues[FixPriority(metadata)].Enqueue(task);
         NewWorkEvent.Set();
     }
 
-    internal PriorityWorkQueueManager(int maxPriority)
+    internal PriorityWorkQueueManager(int maxPriority = 100, int maxAttempts = int.MaxValue) : base(maxAttempts)
     {
-        if (maxPriority < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxPriority), maxPriority, "Must be 0 or greater");
-        _maxPriority = maxPriority;
+        _maxPriority = Math.Min(100, Math.Max(1, maxPriority));
         _queues = new ConcurrentQueue<ITaskWrapper<object?>>[_maxPriority + 1];
         _queues[0] = Queue;
         for (var index = 1; index <= _maxPriority; index++)
@@ -71,115 +67,70 @@ internal sealed class PriorityWorkQueueManager : WorkQueueManager, IPriorityWork
 
     Task IPriorityWorkQueue.EnqueueWork(IWork work, int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
-        _queues[priority].Enqueue(workWrapper);
+        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
+        _queues[FixPriority(priority)].Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;
     }
 
     Task IPriorityWorkQueue.EnqueueWork<TWork>(int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
-        _queues[priority].Enqueue(workWrapper);
+        var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), FixAttempts(attemptsCount), cancellation);
+        _queues[FixPriority(priority)].Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;
     }
 
     Task<TResult> IPriorityWorkQueue.EnqueueWork<TResult>(IWork<TResult> work, int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
-        _queues[priority].Enqueue(workWrapper);
+        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
+        _queues[FixPriority(priority)].Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;
     }
 
     Task<TResult> IPriorityWorkQueue.EnqueueWork<TWork, TResult>(int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
-        _queues[priority].Enqueue(workWrapper);
+        var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), FixAttempts(attemptsCount), cancellation);
+        _queues[FixPriority(priority)].Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;
     }
 
     Task IPriorityWorkQueue.EnqueueAsyncWork(IAsyncWork work, int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
-        _queues[priority].Enqueue(workWrapper);
+        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
+        _queues[FixPriority(priority)].Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;
     }
 
     Task IPriorityWorkQueue.EnqueueAsyncWork<TWork>(int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (workWrapper, task) = CreateWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
-        _queues[priority].Enqueue(workWrapper);
+        var (workWrapper, task) = CreateWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), FixAttempts(attemptsCount), cancellation);
+        _queues[FixPriority(priority)].Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;
     }
 
     Task<TResult> IPriorityWorkQueue.EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
-        _queues[priority].Enqueue(workWrapper);
+        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
+        _queues[FixPriority(priority)].Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;
     }
 
     Task<TResult> IPriorityWorkQueue.EnqueueAsyncWork<TWork, TResult>(int priority, CancellationToken cancellation, int attemptsCount)
     {
-        if (priority < 0 || priority > _maxPriority)
-            throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, $"Must from 0 to {_maxPriority}");
-        var (workWrapper, task) = CreateWorkWrapper(CreateWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)),
-            attemptsCount < 1
-                ? throw new ArgumentOutOfRangeException(nameof(attemptsCount), attemptsCount, "Must be 1 or greater")
-                : attemptsCount,
-            cancellation);
-        _queues[priority].Enqueue(workWrapper);
+        var (workWrapper, task) = CreateWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), FixAttempts(attemptsCount), cancellation);
+        _queues[FixPriority(priority)].Enqueue(workWrapper);
         NewWorkEvent.Set();
         return task;
     }
+
+    private int FixPriority(int priority)
+        => Math.Min(_maxPriority, Math.Max(0, priority));
 }
 
 }

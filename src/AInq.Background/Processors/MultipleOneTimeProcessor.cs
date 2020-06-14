@@ -33,9 +33,7 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
     internal MultipleOneTimeProcessor(Func<IServiceProvider, TArgument> argumentFabric, int maxSimultaneousTasks)
     {
         _argumentFabric = argumentFabric ?? throw new ArgumentNullException(nameof(argumentFabric));
-        _semaphore = new SemaphoreSlim(maxSimultaneousTasks < 1
-            ? throw new ArgumentOutOfRangeException(nameof(maxSimultaneousTasks), maxSimultaneousTasks, "Must be 1 or greater")
-            : maxSimultaneousTasks);
+        _semaphore = new SemaphoreSlim(Math.Max(1, maxSimultaneousTasks));
     }
 
     async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger? logger, CancellationToken cancellation)

@@ -22,6 +22,7 @@ namespace AInq.Background
 
 public interface IConveyor<in TData, TResult>
 {
+    int MaxAttempts { get; }
     Task<TResult> ProcessDataAsync(TData data, CancellationToken cancellation = default, int attemptsCount = 1);
 }
 
