@@ -83,20 +83,20 @@ public static class AccessFactory
     public static IAccess<TResource, TResult> CreateAccess<TResource, TResult>(Func<TResource, IServiceProvider, TResult> access)
         => new Access<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)));
 
-    public static IAsyncAccess<TResource> CreateAccess<TResource>(Func<TResource, CancellationToken, Task> access)
+    public static IAsyncAccess<TResource> CreateAsyncAccess<TResource>(Func<TResource, CancellationToken, Task> access)
         => access != null
             ? new AsyncAccess<TResource>((resource, provider, token) => access.Invoke(resource, token))
             : throw new ArgumentNullException(nameof(access));
 
-    public static IAsyncAccess<TResource, TResult> CreateAccess<TResource, TResult>(Func<TResource, CancellationToken, Task<TResult>> access)
+    public static IAsyncAccess<TResource, TResult> CreateAsyncAccess<TResource, TResult>(Func<TResource, CancellationToken, Task<TResult>> access)
         => access != null
             ? new AsyncAccess<TResource, TResult>((resource, provider, token) => access.Invoke(resource, token))
             : throw new ArgumentNullException(nameof(access));
 
-    public static IAsyncAccess<TResource> CreateAccess<TResource>(Func<TResource, IServiceProvider, CancellationToken, Task> access)
+    public static IAsyncAccess<TResource> CreateAsyncAccess<TResource>(Func<TResource, IServiceProvider, CancellationToken, Task> access)
         => new AsyncAccess<TResource>(access ?? throw new ArgumentNullException(nameof(access)));
 
-    public static IAsyncAccess<TResource, TResult> CreateAccess<TResource, TResult>(Func<TResource, IServiceProvider, CancellationToken, Task<TResult>> access)
+    public static IAsyncAccess<TResource, TResult> CreateAsyncAccess<TResource, TResult>(Func<TResource, IServiceProvider, CancellationToken, Task<TResult>> access)
         => new AsyncAccess<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)));
 }
 

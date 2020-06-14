@@ -83,12 +83,12 @@ public static class WorkFactory
     public static IWork<TResult> CreateWork<TResult>(Func<IServiceProvider, TResult> work)
         => new Work<TResult>(work ?? throw new ArgumentNullException(nameof(work)));
 
-    public static IAsyncWork CreateWork(Func<CancellationToken, Task> work)
+    public static IAsyncWork CreateAsyncWork(Func<CancellationToken, Task> work)
         => work != null
             ? new AsyncWork((provider, token) => work.Invoke(token))
             : throw new ArgumentNullException(nameof(work));
 
-    public static IAsyncWork<TResult> CreateWork<TResult>(Func<CancellationToken, Task<TResult>> work)
+    public static IAsyncWork<TResult> CreateAsyncWork<TResult>(Func<CancellationToken, Task<TResult>> work)
         => work != null
             ? new AsyncWork<TResult>((provider, token) => work.Invoke(token))
             : throw new ArgumentNullException(nameof(work));
