@@ -16,6 +16,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading;
@@ -29,6 +30,11 @@ internal static class Program
     private static async Task Main()
     {
         var host = new HostBuilder()
+                   .ConfigureLogging(logging =>
+                   {
+                       logging.ClearProviders();
+                       logging.AddDebug();
+                   })
                    .ConfigureServices((context, services) =>
                    {
                        services.AddTransient<TestMachine>()
@@ -39,7 +45,7 @@ internal static class Program
                                {
                                    for (var index = 1; index <= 10; index++)
                                        provider.ProcessData<int, int>(index);
-                                   provider.AddDelayedQueueWork(WorkFactory.CreateWork(async serviceProvider =>
+                                   provider.AddDelayedAsyncQueueWork(WorkFactory.CreateAsyncWork(async (serviceProvider, cancel) =>
                                        {
                                            using var source = new CancellationTokenSource(TimeSpan.FromSeconds(6));
                                            var tasks = Enumerable.Range(1, 10).Select(index => serviceProvider.ProcessData<int, int>(index, source.Token)).ToList();
@@ -57,6 +63,23 @@ internal static class Program
                                            }
                                        }),
                                        TimeSpan.FromSeconds(20));
+                                   provider.AddDelayedAsyncWork(WorkFactory.CreateAsyncWork(async (serviceProvider, cancel) =>
+                                       {
+                                           using var source = new CancellationTokenSource(TimeSpan.FromSeconds(3));
+                                           Console.WriteLine($"Start\t{DateTime.Now:T}");
+                                           _ = serviceProvider.EnqueueAsyncWork(WorkFactory.CreateAsyncWork(token => Task.Delay(TimeSpan.FromSeconds(8), token)), cancel);
+                                           var test = serviceProvider.EnqueueWork(WorkFactory.CreateWork(_ => $"Test\t{DateTime.Now:T}"), cancel);
+                                           try
+                                           {
+                                               await serviceProvider.EnqueueWork(WorkFactory.CreateWork(_ => true), source.Token);
+                                           }
+                                           catch (Exception)
+                                           {
+                                               Console.WriteLine($"Cancel\t{DateTime.Now:T}");
+                                           }
+                                           Console.WriteLine(await test);
+                                       }),
+                                       TimeSpan.FromSeconds(30));
                                }));
                    })
                    .Build();
