@@ -4,5 +4,16 @@
         <name>AInq.Background.Scheduler</name>
     </assembly>
     <members>
+        <member name="T:AInq.Background.WorkSchedulerInjection">
+            <summary>
+            Work Scheduler dependency injection
+            </summary>
+        </member>
+        <member name="M:AInq.Background.WorkSchedulerInjection.AddWorkScheduler(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Nullable{System.TimeSpan})">
+            <summary> Adds <see cref="T:AInq.Background.IWorkScheduler"/> service </summary>
+            <param name="services"> Service collection</param>
+            <param name="horizon"> Time horizon to look for upcoming tasks </param>
+            <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
+        </member>
     </members>
 </doc>

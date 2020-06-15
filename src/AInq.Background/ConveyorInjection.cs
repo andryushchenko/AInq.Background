@@ -1,18 +1,16 @@
-﻿/*
- * Copyright 2020 Anton Andryushchenko
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+﻿// Copyright 2020 Anton Andryushchenko
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 using AInq.Background.Managers;
 using AInq.Background.Processors;
@@ -20,32 +18,66 @@ using AInq.Background.Workers;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace AInq.Background
 {
 
+/// <summary>
+/// Background data processing Conveyor dependency injection
+/// </summary>
 public static class ConveyorInjection
 {
+    /// <summary> Add <see cref="IConveyor{TData, TResult}"/> service with single static conveyor machine </summary>
+    /// <param name="services"> Service collection </param>
+    /// <param name="conveyorMachine"> Conveyor machine instance </param>
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+    /// <typeparam name="TData"> Input data type </typeparam>
+    /// <typeparam name="TResult"> Processing result type </typeparam>
+    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyorMachine"/> is NULL </exception>
     public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services, IConveyorMachine<TData, TResult> conveyorMachine, int maxAttempts = int.MaxValue)
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
+        if (conveyorMachine == null)
+            throw new ArgumentNullException(nameof(conveyorMachine));
         var manager = new ConveyorManager<TData, TResult>(maxAttempts);
         return services.AddSingleton<IConveyor<TData, TResult>>(manager)
                        .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new SingleStaticProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachine)));
     }
 
+    /// <summary> Add <see cref="IPriorityConveyor{TData, TResult}"/> and <see cref="IConveyor{TData, TResult}"/> services with single static conveyor machine </summary>
+    /// <param name="services"> Service collection </param>
+    /// <param name="conveyorMachine"> Conveyor machine instance </param>
+    /// <param name="maxPriority"> Max allowed operation priority </param>
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+    /// <typeparam name="TData"> Input data type </typeparam>
+    /// <typeparam name="TResult"> Processing result type </typeparam>
+    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyorMachine"/> is NULL </exception>
     public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services, IConveyorMachine<TData, TResult> conveyorMachine, int maxPriority = 100, int maxAttempts = int.MaxValue)
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
+        if (conveyorMachine == null)
+            throw new ArgumentNullException(nameof(conveyorMachine));
         var manager = new PriorityConveyorManager<TData, TResult>(maxPriority, maxAttempts);
         return services.AddSingleton<IConveyor<TData, TResult>>(manager)
                        .AddSingleton<IPriorityConveyor<TData, TResult>>(manager)
                        .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider, manager, new SingleStaticProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachine)));
     }
 
+    /// <summary> Add <see cref="IConveyor{TData, TResult}"/> service with static conveyor machines </summary>
+    /// <param name="services"> Service collection </param>
+    /// <param name="conveyorMachines"> Conveyor machines collection </param>
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+    /// <typeparam name="TData"> Input data type </typeparam>
+    /// <typeparam name="TResult"> Processing result type </typeparam>
+    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyorMachines"/> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="conveyorMachines"/> collection is empty </exception>
     public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services, IEnumerable<IConveyorMachine<TData, TResult>> conveyorMachines, int maxAttempts = int.MaxValue)
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
@@ -61,6 +93,16 @@ public static class ConveyorInjection
         };
     }
 
+    /// <summary> Add <see cref="IPriorityConveyor{TData, TResult}"/> and <see cref="IConveyor{TData, TResult}"/> services with static conveyor machines </summary>
+    /// <param name="services"> Service collection </param>
+    /// <param name="conveyorMachines"> Conveyor machines collection </param>
+    /// <param name="maxPriority"> Max allowed operation priority </param>
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+    /// <typeparam name="TData"> Input data type </typeparam>
+    /// <typeparam name="TResult"> Processing result type </typeparam>
+    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyorMachines"/> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="conveyorMachines"/> collection is empty </exception>
     public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services, IEnumerable<IConveyorMachine<TData, TResult>> conveyorMachines, int maxPriority = 100, int maxAttempts = int.MaxValue)
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
@@ -77,7 +119,18 @@ public static class ConveyorInjection
         };
     }
 
-    public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services, Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFabric, ReuseStrategy strategy, int maxSimultaneous = 1,
+    /// <summary> Add <see cref="IConveyor{TData, TResult}"/> service with given conveyor machines reuse strategy </summary>
+    /// <param name="services"> Service collection </param>
+    /// <param name="conveyorMachineFabric"> Conveyor machine fabric function </param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy"/></param>
+    /// <param name="maxParallelMachines"> Max allowed parallel conveyor machines </param>
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+    /// <typeparam name="TData"> Input data type </typeparam>
+    /// <typeparam name="TResult"> Processing result type </typeparam>
+    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyorMachineFabric"/> is NULL </exception>
+    /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy"/> has incorrect value </exception>
+    public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services, Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFabric, ReuseStrategy strategy, int maxParallelMachines = 1,
         int maxAttempts = int.MaxValue)
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
@@ -87,29 +140,43 @@ public static class ConveyorInjection
         var manager = new ConveyorManager<TData, TResult>(maxAttempts);
         return strategy switch
         {
-            ReuseStrategy.Static => maxSimultaneous <= 1
+            ReuseStrategy.Static => maxParallelMachines <= 1
                 ? services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new SingleStaticProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachineFabric.Invoke(provider))))
                 : services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider,
                               manager,
-                              new MultipleStaticProcessor<IConveyorMachine<TData, TResult>, object?>(Enumerable.Repeat(0, maxSimultaneous).Select(_ => conveyorMachineFabric.Invoke(provider))))),
-            ReuseStrategy.Reuse => maxSimultaneous <= 1
+                              new MultipleStaticProcessor<IConveyorMachine<TData, TResult>, object?>(Enumerable.Repeat(0, maxParallelMachines).Select(_ => conveyorMachineFabric.Invoke(provider))))),
+            ReuseStrategy.Reuse => maxParallelMachines <= 1
                 ? services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new SingleReusableProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachineFabric)))
                 : services.AddSingleton<IConveyor<TData, TResult>>(manager)
-                          .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new MultipleReusableProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachineFabric, maxSimultaneous))),
-            ReuseStrategy.OneTime => maxSimultaneous <= 1
+                          .AddHostedService(provider
+                              => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new MultipleReusableProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachineFabric, maxParallelMachines))),
+            ReuseStrategy.OneTime => maxParallelMachines <= 1
                 ? services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new SingleOneTimeProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachineFabric)))
                 : services.AddSingleton<IConveyor<TData, TResult>>(manager)
-                          .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new MultipleOneTimeProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachineFabric, maxSimultaneous))),
-            _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, "Incorrect enum value")
+                          .AddHostedService(
+                              provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider, manager, new MultipleOneTimeProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachineFabric, maxParallelMachines))),
+            _ => throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy))
         };
     }
 
+    /// <summary> Add <see cref="IPriorityConveyor{TData, TResult}"/> and <see cref="IConveyor{TData, TResult}"/> services with given conveyor machines reuse strategy </summary>
+    /// <param name="services"> Service collection </param>
+    /// <param name="conveyorMachineFabric"> Conveyor machine fabric function </param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy"/></param>
+    /// <param name="maxParallelMachines"> Max allowed parallel conveyor machines </param>
+    /// <param name="maxPriority"> Max allowed operation priority </param>
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+    /// <typeparam name="TData"> Input data type </typeparam>
+    /// <typeparam name="TResult"> Processing result type </typeparam>
+    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyorMachineFabric"/> is NULL </exception>
+    /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy"/> has incorrect value </exception>
     public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services, Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFabric, ReuseStrategy strategy,
-        int maxSimultaneous = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
+        int maxParallelMachines = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
@@ -118,7 +185,7 @@ public static class ConveyorInjection
         var manager = new PriorityConveyorManager<TData, TResult>(maxPriority, maxAttempts);
         return strategy switch
         {
-            ReuseStrategy.Static => maxSimultaneous <= 1
+            ReuseStrategy.Static => maxParallelMachines <= 1
                 ? services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddSingleton<IPriorityConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider, manager, new SingleStaticProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachineFabric.Invoke(provider))))
@@ -126,32 +193,53 @@ public static class ConveyorInjection
                           .AddSingleton<IPriorityConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider,
                               manager,
-                              new MultipleStaticProcessor<IConveyorMachine<TData, TResult>, int>(Enumerable.Repeat(0, maxSimultaneous).Select(_ => conveyorMachineFabric.Invoke(provider))))),
-            ReuseStrategy.Reuse => maxSimultaneous <= 1
+                              new MultipleStaticProcessor<IConveyorMachine<TData, TResult>, int>(Enumerable.Repeat(0, maxParallelMachines).Select(_ => conveyorMachineFabric.Invoke(provider))))),
+            ReuseStrategy.Reuse => maxParallelMachines <= 1
                 ? services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddSingleton<IPriorityConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider, manager, new SingleReusableProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachineFabric)))
                 : services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddSingleton<IPriorityConveyor<TData, TResult>>(manager)
-                          .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider, manager, new MultipleReusableProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachineFabric, maxSimultaneous))),
-            ReuseStrategy.OneTime => maxSimultaneous <= 1
+                          .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider, manager, new MultipleReusableProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachineFabric, maxParallelMachines))),
+            ReuseStrategy.OneTime => maxParallelMachines <= 1
                 ? services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddSingleton<IPriorityConveyor<TData, TResult>>(manager)
                           .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider, manager, new SingleOneTimeProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachineFabric)))
                 : services.AddSingleton<IConveyor<TData, TResult>>(manager)
                           .AddSingleton<IPriorityConveyor<TData, TResult>>(manager)
-                          .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider, manager, new MultipleOneTimeProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachineFabric, maxSimultaneous))),
-            _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, "Incorrect enum value")
+                          .AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider, manager, new MultipleOneTimeProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachineFabric, maxParallelMachines))),
+            _ => throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy))
         };
     }
 
-    public static IServiceCollection AddConveyor<TConveyorMachine, TData, TResult>(this IServiceCollection services, ReuseStrategy strategy, int maxSimultaneous = 1, int maxAttempts = int.MaxValue)
+    /// <summary> Add <see cref="IConveyor{TData, TResult}"/> service with given conveyor machines reuse strategy </summary>
+    /// <param name="services"> Service collection </param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy"/></param>
+    /// <param name="maxParallelMachines"> Max allowed parallel conveyor machines </param>
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+    /// <typeparam name="TData"> Input data type </typeparam>
+    /// <typeparam name="TResult"> Processing result type </typeparam>
+    /// <typeparam name="TConveyorMachine"> Conveyor machine type </typeparam>
+    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+    /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy"/> has incorrect value </exception>
+    public static IServiceCollection AddConveyor<TData, TResult, TConveyorMachine>(this IServiceCollection services, ReuseStrategy strategy, int maxParallelMachines = 1, int maxAttempts = int.MaxValue)
         where TConveyorMachine : IConveyorMachine<TData, TResult>
-        => services.AddConveyor(provider => provider.GetRequiredService<TConveyorMachine>(), strategy, maxSimultaneous, maxAttempts);
+        => services.AddConveyor(provider => provider.GetRequiredService<TConveyorMachine>(), strategy, maxParallelMachines, maxAttempts);
 
-    public static IServiceCollection AddPriorityConveyor<TConveyorMachine, TData, TResult>(this IServiceCollection services, ReuseStrategy strategy, int maxSimultaneous = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
+    /// <summary> Add <see cref="IPriorityConveyor{TData, TResult}"/> and <see cref="IConveyor{TData, TResult}"/> services with given conveyor machines reuse strategy </summary>
+    /// <param name="services"> Service collection </param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy"/></param>
+    /// <param name="maxParallelMachines"> Max allowed parallel conveyor machines </param>
+    /// <param name="maxPriority"> Max allowed operation priority </param>
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+    /// <typeparam name="TData"> Input data type </typeparam>
+    /// <typeparam name="TResult"> Processing result type </typeparam>
+    /// <typeparam name="TConveyorMachine"> Conveyor machine type </typeparam>
+    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+    /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy"/> has incorrect value </exception>
+    public static IServiceCollection AddPriorityConveyor<TData, TResult, TConveyorMachine>(this IServiceCollection services, ReuseStrategy strategy, int maxParallelMachines = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TConveyorMachine : IConveyorMachine<TData, TResult>
-        => services.AddPriorityConveyor(provider => provider.GetRequiredService<TConveyorMachine>(), strategy, maxSimultaneous, maxPriority, maxAttempts);
+        => services.AddPriorityConveyor(provider => provider.GetRequiredService<TConveyorMachine>(), strategy, maxParallelMachines, maxPriority, maxAttempts);
 }
 
 }

@@ -1,18 +1,16 @@
-﻿/*
- * Copyright 2020 Anton Andryushchenko
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+﻿// Copyright 2020 Anton Andryushchenko
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 using AInq.Background.Managers;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,10 +33,10 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
     private readonly int _maxArgumentCount;
     private int _currentArgumentCount;
 
-    internal MultipleReusableProcessor(Func<IServiceProvider, TArgument> argumentFabric, int maxSimultaneousTasks)
+    internal MultipleReusableProcessor(Func<IServiceProvider, TArgument> argumentFabric, int maxArgumentsCount)
     {
         _argumentFabric = argumentFabric ?? throw new ArgumentNullException(nameof(argumentFabric));
-        _maxArgumentCount = Math.Max(1, maxSimultaneousTasks);
+        _maxArgumentCount = Math.Max(1, maxArgumentsCount);
     }
 
     async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
@@ -77,15 +75,15 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
             }
             currentTasks.AddLast(Task.Run(async () =>
                 {
-                    var stoppable = argument as IStoppable;
+                    var activatable = argument as IActivatable;
                     try
                     {
-                        if (stoppable != null && !stoppable.IsRunning)
-                            await stoppable.StartMachineAsync(cancellation);
+                        if (activatable != null && !activatable.IsActive)
+                            await activatable.ActivateAsync(cancellation);
                     }
                     catch (Exception ex)
                     {
-                        logger?.LogError(ex, "Error starting stoppable argument {Argument}", stoppable);
+                        logger?.LogError(ex, "Error starting stoppable argument {Argument}", activatable);
                         manager.RevertTask(task, metadata);
                         Interlocked.Decrement(ref _currentArgumentCount);
                         _reset.Set();
@@ -110,22 +108,22 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
         Task.WhenAll(currentTasks)
             .ContinueWith(task =>
                 {
-                    while (!_reusable.IsEmpty && _reusable.TryTake(out var argument))
+                    while (!_reusable.IsEmpty && _reusable.TryTake(out var result))
                     {
-                        var active = argument;
+                        var argument = result;
                         Interlocked.Decrement(ref _currentArgumentCount);
                         _reset.Set();
                         _ = Task.Run(async () =>
                             {
-                                var stoppable = active as IStoppable;
+                                var activatable = argument as IActivatable;
                                 try
                                 {
-                                    if (stoppable != null && stoppable.IsRunning)
-                                        await stoppable.StopMachineAsync(cancellation);
+                                    if (activatable != null && activatable.IsActive)
+                                        await activatable.DeactivateAsync(cancellation);
                                 }
                                 catch (Exception ex)
                                 {
-                                    logger?.LogError(ex, "Error stopping stoppable argument {Argument}", stoppable);
+                                    logger?.LogError(ex, "Error stopping stoppable argument {Argument}", activatable);
                                 }
                             },
                             cancellation);
