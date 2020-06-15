@@ -5,17 +5,24 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Product>AInq</Product>
+    <Product>AInq.Background</Product>
     <Authors>Anton Andryushchenko</Authors>
     <RepositoryUrl>https://github.com/andryushchenko/AInq.Support.Background</RepositoryUrl>
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Support.Background</PackageProjectUrl>
-    <Version>2.0.1</Version>
+    <Version>2.1.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>AInq.Background</RootNamespace>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>Background;Scheduler;Cron;AInq</PackageTags>
+    <Description>Background work utilities for .NET Core apps based on Hosted services
+
+Background work scheduler with cron</Description>
+    <PackageReleaseNotes>[ADD] BREAKING CHANGE Support prioritization for queued scheduled works
+[ADD] Documentation
+[FIX] Minor bugfix</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
