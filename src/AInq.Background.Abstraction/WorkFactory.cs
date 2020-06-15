@@ -52,7 +52,7 @@ public static class WorkFactory
             => _work = work ?? throw new ArgumentNullException(nameof(work));
 
         async Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => await _work.Invoke(serviceProvider, cancellation);
+            => await _work.Invoke(serviceProvider, cancellation).ConfigureAwait(false);
     }
 
     private class AsyncWork<TResult> : IAsyncWork<TResult>
@@ -63,7 +63,7 @@ public static class WorkFactory
             => _work = work ?? throw new ArgumentNullException(nameof(work));
 
         async Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => await _work.Invoke(serviceProvider, cancellation);
+            => await _work.Invoke(serviceProvider, cancellation).ConfigureAwait(false);
     }
 
     /// <summary> Creates <see cref="IWork"/> instance from <see cref="Action"/> </summary>

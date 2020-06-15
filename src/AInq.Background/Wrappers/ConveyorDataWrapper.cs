@@ -55,7 +55,7 @@ internal sealed class ConveyorDataWrapper<TData, TResult> : ITaskWrapper<IConvey
         try
         {
             aggregateCancellation.Token.ThrowIfCancellationRequested();
-            _completion.TrySetResult(await argument.ProcessDataAsync(_data, provider, aggregateCancellation.Token));
+            _completion.TrySetResult(await argument.ProcessDataAsync(_data, provider, aggregateCancellation.Token).ConfigureAwait(false));
         }
         catch (ArgumentException ex)
         {

@@ -63,7 +63,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                 else
                 {
                     if (_reusable.IsEmpty)
-                        await _reset.WaitAsync(cancellation);
+                        await _reset.WaitAsync(cancellation).ConfigureAwait(false);
                     continue;
                 }
             }
@@ -79,7 +79,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                     try
                     {
                         if (activatable != null && !activatable.IsActive)
-                            await activatable.ActivateAsync(cancellation);
+                            await activatable.ActivateAsync(cancellation).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -89,12 +89,12 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                         _reset.Set();
                         return;
                     }
-                    if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation))
+                    if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation).ConfigureAwait(false))
                         manager.RevertTask(task, metadata);
                     try
                     {
                         if (manager.HasTask && argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
-                            await Task.Delay(throttling.Timeout, cancellation);
+                            await Task.Delay(throttling.Timeout, cancellation).ConfigureAwait(false);
                     }
                     finally
                     {
@@ -119,7 +119,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                                 try
                                 {
                                     if (activatable != null && activatable.IsActive)
-                                        await activatable.DeactivateAsync(cancellation);
+                                        await activatable.DeactivateAsync(cancellation).ConfigureAwait(false);
                                 }
                                 catch (Exception ex)
                                 {

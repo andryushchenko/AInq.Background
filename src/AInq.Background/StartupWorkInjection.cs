@@ -39,7 +39,7 @@ public static class StartupWorkInjection
         foreach (var work in scope.ServiceProvider.GetServices<ITaskWrapper<object?>>())
         {
             using var workScope = scope.ServiceProvider.CreateScope();
-            await work.ExecuteAsync(null, workScope.ServiceProvider, logger, cancellation);
+            await work.ExecuteAsync(null, workScope.ServiceProvider, logger, cancellation).ConfigureAwait(false);
         }
     }
 

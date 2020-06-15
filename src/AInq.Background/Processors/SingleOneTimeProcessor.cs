@@ -15,10 +15,10 @@
 using AInq.Background.Managers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Nito.AsyncEx;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Nito.AsyncEx;
 
 namespace AInq.Background.Processors
 {
@@ -55,7 +55,7 @@ internal sealed class SingleOneTimeProcessor<TArgument, TMetadata> : ITaskProces
             try
             {
                 if (activatable != null && !activatable.IsActive)
-                    await activatable.ActivateAsync(cancellation);
+                    await activatable.ActivateAsync(cancellation).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -63,14 +63,14 @@ internal sealed class SingleOneTimeProcessor<TArgument, TMetadata> : ITaskProces
                 manager.RevertTask(task, metadata);
                 continue;
             }
-            if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation))
+            if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation).ConfigureAwait(false))
                 manager.RevertTask(task, metadata);
             Task.Run(async () =>
                     {
                         try
                         {
                             if (activatable != null && activatable.IsActive)
-                                await activatable.DeactivateAsync(cancellation);
+                                await activatable.DeactivateAsync(cancellation).ConfigureAwait(false);
                         }
                         catch (Exception ex)
                         {

@@ -51,9 +51,9 @@ internal sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDispos
                 while (_manager.HasTask)
                 {
                     using var scope = _provider.CreateScope();
-                    await _processor.ProcessPendingTasksAsync(_manager, scope.ServiceProvider, _logger, cancellation.Token);
+                    await _processor.ProcessPendingTasksAsync(_manager, scope.ServiceProvider, _logger, cancellation.Token).ConfigureAwait(false);
                 }
-                await _manager.WaitForTaskAsync(cancellation.Token);
+                await _manager.WaitForTaskAsync(cancellation.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -76,7 +76,7 @@ internal sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDispos
     {
         _shutdown.Cancel();
         if (_worker != null)
-            await _worker.WaitAsync(cancel);
+            await _worker.WaitAsync(cancel).ConfigureAwait(false);
     }
 
     void IDisposable.Dispose()

@@ -39,7 +39,7 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
         try
         {
             if (activatable != null && !activatable.IsActive)
-                await activatable.ActivateAsync(cancellation);
+                await activatable.ActivateAsync(cancellation).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -52,12 +52,12 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
             if (task == null)
                 continue;
             using var taskScope = provider.CreateScope();
-            if (!await task.ExecuteAsync(_argument, taskScope.ServiceProvider, logger, cancellation))
+            if (!await task.ExecuteAsync(_argument, taskScope.ServiceProvider, logger, cancellation).ConfigureAwait(false))
                 manager.RevertTask(task, metadata);
             try
             {
                 if (manager.HasTask && _argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
-                    await Task.Delay(throttling.Timeout, cancellation);
+                    await Task.Delay(throttling.Timeout, cancellation).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -67,7 +67,7 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
         try
         {
             if (activatable != null && activatable.IsActive)
-                await activatable.DeactivateAsync(cancellation);
+                await activatable.DeactivateAsync(cancellation).ConfigureAwait(false);
         }
         catch (Exception ex)
         {

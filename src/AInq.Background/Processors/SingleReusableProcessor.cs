@@ -15,10 +15,10 @@
 using AInq.Background.Managers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Nito.AsyncEx;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Nito.AsyncEx;
 
 namespace AInq.Background.Processors
 {
@@ -50,7 +50,7 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
         try
         {
             if (activatable != null && !activatable.IsActive)
-                await activatable.ActivateAsync(cancellation);
+                await activatable.ActivateAsync(cancellation).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -63,12 +63,12 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
             if (task == null)
                 continue;
             using var taskScope = provider.CreateScope();
-            if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation))
+            if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation).ConfigureAwait(false))
                 manager.RevertTask(task, metadata);
             try
             {
                 if (manager.HasTask && argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
-                    await Task.Delay(throttling.Timeout, cancellation);
+                    await Task.Delay(throttling.Timeout, cancellation).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -80,7 +80,7 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
                     try
                     {
                         if (activatable != null && activatable.IsActive)
-                            await activatable.DeactivateAsync(cancellation);
+                            await activatable.DeactivateAsync(cancellation).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {

@@ -15,10 +15,10 @@
 using AInq.Background.Managers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Nito.AsyncEx;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Nito.AsyncEx;
 
 namespace AInq.Background.Processors
 {
@@ -41,7 +41,7 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
             var (task, metadata) = manager.GetTask();
             if (task == null)
                 continue;
-            await _semaphore.WaitAsync(cancellation);
+            await _semaphore.WaitAsync(cancellation).ConfigureAwait(false);
             Task.Run(async () =>
                     {
                         using var taskScope = provider.CreateScope();
@@ -61,7 +61,7 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
                         try
                         {
                             if (activatable != null && !activatable.IsActive)
-                                await activatable.ActivateAsync(cancellation);
+                                await activatable.ActivateAsync(cancellation).ConfigureAwait(false);
                         }
                         catch (Exception ex)
                         {
@@ -70,12 +70,12 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
                             _semaphore.Release();
                             return;
                         }
-                        if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation))
+                        if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation).ConfigureAwait(false))
                             manager.RevertTask(task, metadata);
                         try
                         {
                             if (activatable != null && activatable.IsActive)
-                                await activatable.DeactivateAsync(cancellation);
+                                await activatable.DeactivateAsync(cancellation).ConfigureAwait(false);
                         }
                         catch (Exception ex)
                         {

@@ -49,7 +49,7 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
             if (!_active.TryTake(out var argument) && !_inactive.TryTake(out argument))
             {
                 if (_active.IsEmpty && _inactive.IsEmpty)
-                    await _reset.WaitAsync(cancellation);
+                    await _reset.WaitAsync(cancellation).ConfigureAwait(false);
                 continue;
             }
             var activatable = argument as IActivatable;
@@ -67,7 +67,7 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                     try
                     {
                         if (activatable != null && !activatable.IsActive)
-                            await activatable.ActivateAsync(cancellation);
+                            await activatable.ActivateAsync(cancellation).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -78,12 +78,12 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                         return;
                     }
                     using var taskScope = provider.CreateScope();
-                    if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation))
+                    if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation).ConfigureAwait(false))
                         manager.RevertTask(task, metadata);
                     try
                     {
                         if (manager.HasTask && argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
-                            await Task.Delay(throttling.Timeout, cancellation);
+                            await Task.Delay(throttling.Timeout, cancellation).ConfigureAwait(false);
                     }
                     finally
                     {
@@ -107,7 +107,7 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                                     try
                                     {
                                         if (activatable != null && activatable.IsActive)
-                                            await activatable.DeactivateAsync(cancellation);
+                                            await activatable.DeactivateAsync(cancellation).ConfigureAwait(false);
                                     }
                                     catch (Exception ex)
                                     {

@@ -52,7 +52,7 @@ public static class AccessFactory
             => _access = access ?? throw new ArgumentNullException(nameof(access));
 
         async Task IAsyncAccess<TResource>.AccessAsync(TResource resource, IServiceProvider serviceProvider, CancellationToken cancellation)
-            => await _access.Invoke(resource, serviceProvider, cancellation);
+            => await _access.Invoke(resource, serviceProvider, cancellation).ConfigureAwait(false);
     }
 
     private class AsyncAccess<TResource, TResult> : IAsyncAccess<TResource, TResult>
@@ -63,7 +63,7 @@ public static class AccessFactory
             => _access = access ?? throw new ArgumentNullException(nameof(access));
 
         async Task<TResult> IAsyncAccess<TResource, TResult>.AccessAsync(TResource resource, IServiceProvider serviceProvider, CancellationToken cancellation)
-            => await _access.Invoke(resource, serviceProvider, cancellation);
+            => await _access.Invoke(resource, serviceProvider, cancellation).ConfigureAwait(false);
     }
 
     /// <summary> Creates <see cref="IAccess{TResource}"/> instance from <see cref="Action{TResource}"/> </summary>

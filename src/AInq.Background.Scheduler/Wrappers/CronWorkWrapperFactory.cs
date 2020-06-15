@@ -128,7 +128,7 @@ internal static class CronWorkWrapperFactory
             try
             {
                 aggregateCancellation.Token.ThrowIfCancellationRequested();
-                await _work.DoWorkAsync(provider, aggregateCancellation.Token);
+                await _work.DoWorkAsync(provider, aggregateCancellation.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -168,7 +168,7 @@ internal static class CronWorkWrapperFactory
             try
             {
                 aggregateCancellation.Token.ThrowIfCancellationRequested();
-                await _work.DoWorkAsync(provider, aggregateCancellation.Token);
+                await _work.DoWorkAsync(provider, aggregateCancellation.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {

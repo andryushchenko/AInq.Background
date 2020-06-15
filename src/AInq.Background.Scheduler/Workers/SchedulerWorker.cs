@@ -65,10 +65,11 @@ internal sealed class SchedulerWorker : IHostedService, IDisposable
                 if (timeout < Beforehand)
                     continue;
                 await Task.WhenAny(Task.Delay(timeout < MaxTimeout
-                            ? timeout
-                            : MaxTimeout,
-                        cancellation.Token),
-                    _scheduler.WaitForNewTaskAsync(cancellation.Token));
+                                      ? timeout
+                                      : MaxTimeout,
+                                  cancellation.Token),
+                              _scheduler.WaitForNewTaskAsync(cancellation.Token))
+                          .ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -87,7 +88,7 @@ internal sealed class SchedulerWorker : IHostedService, IDisposable
         try
         {
             if (delay > TimeSpan.Zero)
-                await Task.Delay(delay, cancellation);
+                await Task.Delay(delay, cancellation).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {
@@ -97,7 +98,7 @@ internal sealed class SchedulerWorker : IHostedService, IDisposable
         if (work.IsCanceled)
             return;
         using var scope = _provider.CreateScope();
-        if (await work.ExecuteAsync(scope.ServiceProvider, _logger, cancellation))
+        if (await work.ExecuteAsync(scope.ServiceProvider, _logger, cancellation).ConfigureAwait(false))
             _scheduler.RevertWork(work);
     }
 
@@ -112,7 +113,7 @@ internal sealed class SchedulerWorker : IHostedService, IDisposable
     {
         _shutdown.Cancel();
         if (_worker != null)
-            await _worker.WaitAsync(cancel);
+            await _worker.WaitAsync(cancel).ConfigureAwait(false);
     }
 
     void IDisposable.Dispose()

@@ -168,7 +168,7 @@ internal static class WorkWrapperFactory
             try
             {
                 aggregateCancellation.Token.ThrowIfCancellationRequested();
-                await _work.DoWorkAsync(provider, aggregateCancellation.Token);
+                await _work.DoWorkAsync(provider, aggregateCancellation.Token).ConfigureAwait(false);
                 _completion.TrySetResult(true);
             }
             catch (OperationCanceledException ex)
@@ -225,7 +225,7 @@ internal static class WorkWrapperFactory
             try
             {
                 aggregateCancellation.Token.ThrowIfCancellationRequested();
-                _completion.TrySetResult(await _work.DoWorkAsync(provider, aggregateCancellation.Token));
+                _completion.TrySetResult(await _work.DoWorkAsync(provider, aggregateCancellation.Token).ConfigureAwait(false));
             }
             catch (OperationCanceledException ex)
             {
