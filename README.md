@@ -1,6 +1,6 @@
 # AInq.Background
 
-[![netstandard 2.0](https://img.shields.io/badge/netstandard-2.0-brightgreen.svg)](https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/andryushchenko/AInq.Background)](https://github.com/andryushchenko/AInq.Background/releases) [![netstandard 2.0](https://img.shields.io/badge/netstandard-2.0-blue.svg)](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) [![GitHub](https://img.shields.io/github/license/andryushchenko/AInq.Background)](LICENSE)
 
 ## What is it?
 
@@ -13,7 +13,7 @@ Background work utilities for .NET Core apps based on Hosted services. Originall
 - **Startup work** utility
 
 ## Packages description
-#### [![NuGet version](https://badge.fury.io/nu/AInq.Background.Abstraction.svg)](https://badge.fury.io/nu/AInq.Background.Abstraction) AInq.Background.Abstraction
+#### [![Nuget](https://img.shields.io/nuget/v/AInq.Background.Abstraction)](https://www.nuget.org/packages/AInq.Background.Abstraction/) AInq.Background.Abstraction
 
 Abstraction library with no additional dependencies.
 
@@ -30,7 +30,7 @@ Abstraction library with no additional dependencies.
     - `IConveyor<TData, TResult>` and `IPriorityConveyor<TData, TResult>`for background data processing conveyor
     - `IWorkScheduler` for work scheduler with `WorkSchedulerHelper`
 
-#### [![NuGet version](https://badge.fury.io/nu/AInq.Background.svg)](https://badge.fury.io/nu/AInq.Background) AInq.Background
+#### [![Nuget](https://img.shields.io/nuget/v/AInq.Background)](https://www.nuget.org/packages/AInq.Background/) AInq.Background
 
 Queues and conveyor implementations.
 
@@ -50,7 +50,7 @@ Queues and conveyor implementations.
     - Supports interaction with background work queue
     - Use `StartupWorkInjection` to register and run works
 
-#### [![NuGet version](https://badge.fury.io/nu/AInq.Background.Scheduler.svg)](https://badge.fury.io/nu/AInq.Background.Scheduler) AInq.Background.Scheduler
+#### [![Nuget](https://img.shields.io/nuget/v/AInq.Background.Scheduler)](https://www.nuget.org/packages/AInq.Background.Scheduler/) AInq.Background.Scheduler
 
 Work scheduler implementation.
 
