@@ -27,7 +27,7 @@ Abstraction library with no additional dependencies.
 - Service interfaces and helpers
     - `IWorkQueue` and `IPriorityWorkQueue` for background task queue with `WorkQueueHelper`
     - `IAccessQueue<TResource>` and `IPriorityAccessQueue<TResource>` for shared resource access queue with `AccessQueueHelper`
-    - `IConveyor<TData, TResult>` and `IConveyor<TData, TResult>`for background data processing conveyor
+    - `IConveyor<TData, TResult>` and `IPriorityConveyor<TData, TResult>`for background data processing conveyor
     - `IWorkScheduler` for work scheduler with `WorkSchedulerHelper`
 
 #### [![NuGet version](https://badge.fury.io/nu/AInq.Background.svg)](https://badge.fury.io/nu/AInq.Background) AInq.Background
@@ -37,24 +37,26 @@ Queues and conveyor implementations.
 - Background work queue
     - Optional support for configurable parallelism
     - Optional support for prioritizing
+    - Use `WorkQueueInjection` to configure
 - Shared resource access queue
     - Support single or many resource instances with different lifetime
     - Optional support for prioritizing
+    - Use `AccessQueueInjection` to configure
 - Background data processing conveyor
     - Support single or many conveyor machines with different lifetime
     - Optional support for prioritizing
+    - Use `ConveyorInjection` to configure
 - Startup work utility for running some work *before* host start
-
-Use `ConveyorInjection`, `WorkQueueInjection`, `AccessQueueInjection` and `StartupWorkInjection` to configure services
+    - Supports interaction with background work queue
+    - Use `StartupWorkInjection` to register and run works
 
 #### [![NuGet version](https://badge.fury.io/nu/AInq.Background.Scheduler.svg)](https://badge.fury.io/nu/AInq.Background.Scheduler) AInq.Background.Scheduler
 
 Work scheduler implementation.
 
 - Supports delayed, time-scheduled, and cron-scheduled work
-- Support interaction with background work queue
-
-Use `WorkSchedulerInjection` to configure service
+- Supports interaction with background work queue
+- Use `WorkSchedulerInjection` to configure service
 
 **NOTE:** [Cronos](https://github.com/HangfireIO/Cronos) is used for parsing Cron expressions - follow documentation for supported options.
 
