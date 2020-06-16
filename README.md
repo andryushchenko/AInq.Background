@@ -47,18 +47,18 @@ Queues and conveyor implementations.
     - Optional support for prioritizing
     - Use `ConveyorInjection` to configure
 - Startup work utility for running some work *before* host start
-    - Supports interaction with background work queue
+    - Support interaction with background work queue
     - Use `StartupWorkInjection` to register and run works
 
 #### [![Nuget](https://img.shields.io/nuget/v/AInq.Background.Scheduler)](https://www.nuget.org/packages/AInq.Background.Scheduler/) AInq.Background.Scheduler
 
 Work scheduler implementation.
 
-- Supports delayed, time-scheduled, and cron-scheduled work
-- Supports interaction with background work queue
+- Support delayed, time-scheduled, and cron-scheduled work
+- Support interaction with background work queue
 - Use `WorkSchedulerInjection` to configure service
 
-**NOTE:** [Cronos](https://github.com/HangfireIO/Cronos) is used for parsing Cron expressions - follow documentation for supported options.
+**NOTE:** [Cronos](https://github.com/HangfireIO/Cronos) is used for parsing Cron expressions - follow documentation for supported options. Format with seconds is supported.
 
 ## Documentation
 
