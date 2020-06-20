@@ -28,7 +28,7 @@ Abstraction library with no additional dependencies.
     - `IWorkQueue` and `IPriorityWorkQueue` for background task queue with `WorkQueueHelper`
     - `IAccessQueue<TResource>` and `IPriorityAccessQueue<TResource>` for shared resource access queue with `AccessQueueHelper`
     - `IConveyor<TData, TResult>` and `IPriorityConveyor<TData, TResult>`for background data processing conveyor
-    - `IWorkScheduler` for work scheduler with `WorkSchedulerHelper`
+    - `IWorkScheduler` for work scheduler with `WorkSchedulerHelper` and `WorkSchedulerQueueHelper` extension for interaction with Work Queue
 
 #### [![Nuget](https://img.shields.io/nuget/v/AInq.Background)](https://www.nuget.org/packages/AInq.Background/) AInq.Background
 
@@ -37,15 +37,15 @@ Queues and conveyor implementations.
 - Background work queue
     - Optional support for configurable parallelism
     - Optional support for prioritizing
-    - Use `WorkQueueInjection` to configure
+    - Use `WorkQueueInjection` to regiter service or create for internal usage
 - Shared resource access queue
     - Support single or many resource instances with different lifetime
     - Optional support for prioritizing
-    - Use `AccessQueueInjection` to configure
+    - Use `AccessQueueInjection` to regiter service or create for internal usage
 - Background data processing conveyor
     - Support single or many conveyor machines with different lifetime
     - Optional support for prioritizing
-    - Use `ConveyorInjection` to configure
+    - Use `ConveyorInjection` to regiter service or create for internal usage
 - Startup work utility for running some work *before* host start
     - Supports interaction with background work queue
     - Use `StartupWorkInjection` to register and run works
@@ -55,8 +55,7 @@ Queues and conveyor implementations.
 Work scheduler implementation.
 
 - Supports delayed, time-scheduled, and cron-scheduled work
-- Supports interaction with background work queue
-- Use `WorkSchedulerInjection` to configure service
+- Use `WorkSchedulerInjection` to regiter service or create for internal usage
 
 **NOTE:** [Cronos](https://github.com/HangfireIO/Cronos) is used for parsing Cron expressions - follow documentation for supported options.
 
