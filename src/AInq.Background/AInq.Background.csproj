@@ -11,7 +11,7 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Support.Background</PackageProjectUrl>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -19,11 +19,7 @@
     <Description>Background work utilities for .NET Core apps based on Hosted services
 
 Background work queue, Shared resource access queue, Background data processing conveyor</Description>
-    <PackageReleaseNotes>[ADD] BREAKING CHANGE Support prioritization for startup works
-[ADD] Documentation
-[IMP] Fixing pririty and attempts count arguments instead of Exceptions
-[FIX] Processing tasks canceled before execution
-[FIX] Minor bugfix</PackageReleaseNotes>
+    <PackageReleaseNotes>[ADD] Option to create Work Queue, Access Queue and Conveyor for internal usage without service registration</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

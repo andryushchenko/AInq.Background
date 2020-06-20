@@ -21,7 +21,7 @@ namespace AInq.Background
 public interface IWork
 {
     /// <summary> Work action </summary>
-    /// <param name="serviceProvider"> Service provider for current context </param>
+    /// <param name="serviceProvider"> Service provider instance </param>
     void DoWork(IServiceProvider serviceProvider);
 }
 

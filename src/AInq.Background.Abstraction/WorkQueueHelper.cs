@@ -23,7 +23,7 @@ namespace AInq.Background
 public static class WorkQueueHelper
 {
     /// <summary> Enqueue background work into registered queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -44,7 +44,7 @@ public static class WorkQueueHelper
     }
 
     /// <summary> Enqueue background work into registered queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Work priority </param>
@@ -65,7 +65,7 @@ public static class WorkQueueHelper
     }
 
     /// <summary> Enqueue background work into registered queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -87,7 +87,7 @@ public static class WorkQueueHelper
     }
 
     /// <summary> Enqueue background work into registered queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Work priority </param>
@@ -109,7 +109,7 @@ public static class WorkQueueHelper
     }
 
     /// <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -130,7 +130,7 @@ public static class WorkQueueHelper
     }
 
     /// <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Work priority </param>
@@ -151,7 +151,7 @@ public static class WorkQueueHelper
     }
 
     /// <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -173,7 +173,7 @@ public static class WorkQueueHelper
     }
 
     /// <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Work priority </param>

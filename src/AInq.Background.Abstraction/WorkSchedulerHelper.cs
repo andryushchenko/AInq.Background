@@ -22,7 +22,7 @@ namespace AInq.Background
 public static class WorkSchedulerHelper
 {
     /// <summary> Add delayed work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -35,7 +35,7 @@ public static class WorkSchedulerHelper
             .AddDelayedWork(work, delay, cancellation);
 
     /// <summary> Add delayed work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -49,7 +49,7 @@ public static class WorkSchedulerHelper
             .AddDelayedWork(work, delay, cancellation);
 
     /// <summary> Add delayed asynchronous work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -62,7 +62,7 @@ public static class WorkSchedulerHelper
             .AddDelayedAsyncWork(work, delay, cancellation);
 
     /// <summary> Add delayed asynchronous work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -76,7 +76,7 @@ public static class WorkSchedulerHelper
             .AddDelayedAsyncWork(work, delay, cancellation);
 
     /// <summary> Add delayed work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TWork"> Work type </typeparam>
@@ -89,7 +89,7 @@ public static class WorkSchedulerHelper
             .AddDelayedWork<TWork>(delay, cancellation);
 
     /// <summary> Add delayed work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TWork"> Work type </typeparam>
@@ -103,7 +103,7 @@ public static class WorkSchedulerHelper
             .AddDelayedWork<TWork, TResult>(delay, cancellation);
 
     /// <summary> Add delayed asynchronous work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
@@ -116,7 +116,7 @@ public static class WorkSchedulerHelper
             .AddDelayedAsyncWork<TAsyncWork>(delay, cancellation);
 
     /// <summary> Add delayed work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
@@ -131,7 +131,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add delayed queued work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -140,14 +140,14 @@ public static class WorkSchedulerHelper
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> isn't greater then 00:00:00 </exception>
-    /// <seealso cref="IWorkScheduler.AddDelayedQueueWork(IWork, TimeSpan, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddDelayedQueueWork(IWorkScheduler, IWork, TimeSpan, CancellationToken, int, int)"/>
     public static void AddDelayedQueueWork(this IServiceProvider provider, IWork work, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
             .AddDelayedQueueWork(work, delay, cancellation, attemptsCount, priority);
 
     /// <summary> Add delayed queued work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -157,14 +157,14 @@ public static class WorkSchedulerHelper
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> isn't greater then 00:00:00 </exception>
-    /// <seealso cref="IWorkScheduler.AddDelayedQueueWork{TResult}(IWork{TResult}, TimeSpan, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddDelayedQueueWork{TResult}(IWorkScheduler, IWork{TResult}, TimeSpan, CancellationToken, int, int)"/>
     public static void AddDelayedQueueWork<TResult>(this IServiceProvider provider, IWork<TResult> work, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
             .AddDelayedQueueWork(work, delay, cancellation, attemptsCount, priority);
 
     /// <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -173,14 +173,14 @@ public static class WorkSchedulerHelper
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> isn't greater then 00:00:00 </exception>
-    /// <seealso cref="IWorkScheduler.AddDelayedAsyncQueueWork(IAsyncWork, TimeSpan, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddDelayedAsyncQueueWork(IWorkScheduler, IAsyncWork, TimeSpan, CancellationToken, int, int)"/>
     public static void AddDelayedAsyncQueueWork(this IServiceProvider provider, IAsyncWork work, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
             .AddDelayedAsyncQueueWork(work, delay, cancellation, attemptsCount, priority);
 
     /// <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -190,14 +190,14 @@ public static class WorkSchedulerHelper
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> isn't greater then 00:00:00 </exception>
-    /// <seealso cref="IWorkScheduler.AddDelayedAsyncQueueWork{TResult}(IAsyncWork{TResult}, TimeSpan, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddDelayedAsyncQueueWork{TResult}(IWorkScheduler, IAsyncWork{TResult}, TimeSpan, CancellationToken, int, int)"/>
     public static void AddDelayedAsyncQueueWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
             .AddDelayedAsyncQueueWork(work, delay, cancellation, attemptsCount, priority);
 
     /// <summary> Add delayed queued work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -205,7 +205,7 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> isn't greater then 00:00:00 </exception>
-    /// <seealso cref="IWorkScheduler.AddDelayedQueueWork{TWork}(TimeSpan, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddDelayedQueueWork{TWork}(IWorkScheduler, TimeSpan, CancellationToken, int, int)"/>
     public static void AddDelayedQueueWork<TWork>(this IServiceProvider provider, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TWork : IWork
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
@@ -213,7 +213,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add delayed queued work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -222,7 +222,7 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> isn't greater then 00:00:00 </exception>
-    /// <seealso cref="IWorkScheduler.AddDelayedQueueWork{TWork, TResult}(TimeSpan, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddDelayedQueueWork{TWork, TResult}(IWorkScheduler, TimeSpan, CancellationToken, int, int)"/>
     public static void AddDelayedQueueWork<TWork, TResult>(this IServiceProvider provider, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TWork : IWork<TResult>
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
@@ -230,7 +230,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -238,7 +238,7 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> isn't greater then 00:00:00 </exception>
-    /// <seealso cref="IWorkScheduler.AddDelayedAsyncQueueWork{TAsyncWork}(TimeSpan, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddDelayedAsyncQueueWork{TAsyncWork}(IWorkScheduler, TimeSpan, CancellationToken, int, int)"/>
     public static void AddDelayedAsyncQueueWork<TAsyncWork>(this IServiceProvider provider, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
@@ -246,7 +246,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="delay"> Work execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -255,14 +255,14 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> isn't greater then 00:00:00 </exception>
-    /// <seealso cref="IWorkScheduler.AddDelayedAsyncQueueWork{TAsyncWork, TResult}(TimeSpan, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddDelayedAsyncQueueWork{TAsyncWork, TResult}(IWorkScheduler, TimeSpan, CancellationToken, int, int)"/>
     public static void AddDelayedAsyncQueueWork<TAsyncWork, TResult>(this IServiceProvider provider, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork<TResult>
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
             .AddDelayedAsyncQueueWork<TAsyncWork, TResult>(delay, cancellation, attemptsCount, priority);
 
     /// <summary> Add scheduled work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -275,7 +275,7 @@ public static class WorkSchedulerHelper
             .AddScheduledWork(work, time, cancellation);
 
     /// <summary> Add scheduled work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -289,7 +289,7 @@ public static class WorkSchedulerHelper
             .AddScheduledWork(work, time, cancellation);
 
     /// <summary> Add scheduled asynchronous work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -302,7 +302,7 @@ public static class WorkSchedulerHelper
             .AddScheduledAsyncWork(work, time, cancellation);
 
     /// <summary> Add scheduled asynchronous work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -316,7 +316,7 @@ public static class WorkSchedulerHelper
             .AddScheduledAsyncWork(work, time, cancellation);
 
     /// <summary> Add scheduled work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TWork"> Work type </typeparam>
@@ -329,7 +329,7 @@ public static class WorkSchedulerHelper
             .AddScheduledWork<TWork>(time, cancellation);
 
     /// <summary> Add scheduled work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TWork"> Work type </typeparam>
@@ -343,7 +343,7 @@ public static class WorkSchedulerHelper
             .AddScheduledWork<TWork, TResult>(time, cancellation);
 
     /// <summary> Add scheduled asynchronous work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
@@ -356,7 +356,7 @@ public static class WorkSchedulerHelper
             .AddScheduledAsyncWork<TAsyncWork>(time, cancellation);
 
     /// <summary> Add scheduled asynchronous work to scheduler </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
@@ -371,7 +371,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add scheduled queued work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -380,14 +380,14 @@ public static class WorkSchedulerHelper
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> isn't greater then current time </exception>
-    /// <seealso cref="IWorkScheduler.AddScheduledQueueWork(IWork, DateTime, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddScheduledQueueWork(IWorkScheduler, IWork, DateTime, CancellationToken, int, int)"/>
     public static void AddScheduledQueueWork(this IServiceProvider provider, IWork work, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
             .AddScheduledQueueWork(work, time, cancellation, attemptsCount, priority);
 
     /// <summary> Add scheduled queued work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -397,14 +397,14 @@ public static class WorkSchedulerHelper
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> isn't greater then current time </exception>
-    /// <seealso cref="IWorkScheduler.AddScheduledQueueWork{TResult}(IWork{TResult}, DateTime, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddScheduledQueueWork{TResult}(IWorkScheduler, IWork{TResult}, DateTime, CancellationToken, int, int)"/>
     public static void AddScheduledQueueWork<TResult>(this IServiceProvider provider, IWork<TResult> work, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
             .AddScheduledQueueWork(work, time, cancellation, attemptsCount, priority);
 
     /// <summary> Add scheduled queued asynchronous work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -413,14 +413,14 @@ public static class WorkSchedulerHelper
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> isn't greater then current time </exception>
-    /// <seealso cref="IWorkScheduler.AddScheduledAsyncQueueWork(IAsyncWork, DateTime, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddScheduledAsyncQueueWork(IWorkScheduler, IAsyncWork, DateTime, CancellationToken, int, int)"/>
     public static void AddScheduledAsyncQueueWork(this IServiceProvider provider, IAsyncWork work, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
             .AddScheduledAsyncQueueWork(work, time, cancellation, attemptsCount, priority);
 
     /// <summary> Add scheduled queued asynchronous work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -430,14 +430,14 @@ public static class WorkSchedulerHelper
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> isn't greater then current time </exception>
-    /// <seealso cref="IWorkScheduler.AddScheduledAsyncQueueWork{TResult}(IAsyncWork{TResult}, DateTime, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddScheduledAsyncQueueWork{TResult}(IWorkScheduler, IAsyncWork{TResult}, DateTime, CancellationToken, int, int)"/>
     public static void AddScheduledAsyncQueueWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
             .AddScheduledAsyncQueueWork(work, time, cancellation, attemptsCount, priority);
 
     /// <summary> Add scheduled queued work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -445,7 +445,7 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> isn't greater then current time </exception>
-    /// <seealso cref="IWorkScheduler.AddScheduledQueueWork{TWork}(DateTime, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddScheduledQueueWork{TWork}(IWorkScheduler, DateTime, CancellationToken, int, int)"/>
     public static void AddScheduledQueueWork<TWork>(this IServiceProvider provider, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TWork : IWork
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
@@ -453,7 +453,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add scheduled queued work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -462,7 +462,7 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> isn't greater then current time </exception>
-    /// <seealso cref="IWorkScheduler.AddScheduledQueueWork{TWork, TResult}(DateTime, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddScheduledQueueWork{TWork, TResult}(IWorkScheduler, DateTime, CancellationToken, int, int)"/>
     public static void AddScheduledQueueWork<TWork, TResult>(this IServiceProvider provider, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TWork : IWork<TResult>
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
@@ -470,7 +470,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add scheduled queued asynchronous work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -478,7 +478,7 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> isn't greater then current time </exception>
-    /// <seealso cref="IWorkScheduler.AddScheduledAsyncQueueWork{TAsyncWork}(DateTime, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddScheduledAsyncQueueWork{TAsyncWork}(IWorkScheduler, DateTime, CancellationToken, int, int)"/>
     public static void AddScheduledAsyncQueueWork<TAsyncWork>(this IServiceProvider provider, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
@@ -486,7 +486,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add scheduled queued asynchronous work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -495,7 +495,7 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> isn't greater then current time </exception>
-    /// <seealso cref="IWorkScheduler.AddScheduledAsyncQueueWork{TAsyncWork, TResult}(DateTime, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddScheduledAsyncQueueWork{TAsyncWork, TResult}(IWorkScheduler, DateTime, CancellationToken, int, int)"/>
     public static void AddScheduledAsyncQueueWork<TAsyncWork, TResult>(this IServiceProvider provider, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork<TResult>
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
@@ -503,7 +503,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add CRON-scheduled work to scheduler </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -517,7 +517,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add CRON-scheduled work to scheduler </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -532,7 +532,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add CRON-scheduled asynchronous work to scheduler </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -546,7 +546,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add CRON-scheduled asynchronous work to scheduler </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -561,7 +561,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add CRON-scheduled work to scheduler </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TWork"> Work type </typeparam>
@@ -575,7 +575,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add CRON-scheduled work to scheduler </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TWork"> Work type </typeparam>
@@ -590,7 +590,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add CRON-scheduled asynchronous work to scheduler </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
@@ -604,7 +604,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add CRON-scheduled asynchronous work to scheduler </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
@@ -619,7 +619,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -628,14 +628,14 @@ public static class WorkSchedulerHelper
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression"/> has incorrect syntax </exception>
-    /// <seealso cref="IWorkScheduler.AddCronQueueWork(IWork, string, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddCronQueueWork(IWorkScheduler, IWork, string, CancellationToken, int, int)"/>
     public static void AddCronQueueWork(this IServiceProvider provider, IWork work, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
             .AddCronQueueWork(work, cronExpression, cancellation, attemptsCount, priority);
 
     /// <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -645,14 +645,14 @@ public static class WorkSchedulerHelper
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression"/> has incorrect syntax </exception>
-    /// <seealso cref="IWorkScheduler.AddCronQueueWork{TResult}(IWork{TResult}, string, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddCronQueueWork{TResult}(IWorkScheduler, IWork{TResult}, string, CancellationToken, int, int)"/>
     public static void AddCronQueueWork<TResult>(this IServiceProvider provider, IWork<TResult> work, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
             .AddCronQueueWork(work, cronExpression, cancellation, attemptsCount, priority);
 
     /// <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -661,14 +661,14 @@ public static class WorkSchedulerHelper
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression"/> has incorrect syntax </exception>
-    /// <seealso cref="IWorkScheduler.AddCronAsyncQueueWork(IAsyncWork, string, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddCronAsyncQueueWork(IWorkScheduler, IAsyncWork, string, CancellationToken, int, int)"/>
     public static void AddCronAsyncQueueWork(this IServiceProvider provider, IAsyncWork work, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
             .AddCronAsyncQueueWork(work, cronExpression, cancellation, attemptsCount, priority);
 
     /// <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -678,14 +678,14 @@ public static class WorkSchedulerHelper
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression"/> has incorrect syntax </exception>
-    /// <seealso cref="IWorkScheduler.AddCronAsyncQueueWork{TResult}(IAsyncWork{TResult}, string, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddCronAsyncQueueWork{TResult}(IWorkScheduler, IAsyncWork{TResult}, string, CancellationToken, int, int)"/>
     public static void AddCronAsyncQueueWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
             .AddCronAsyncQueueWork(work, cronExpression, cancellation, attemptsCount, priority);
 
     /// <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -693,7 +693,7 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression"/> has incorrect syntax </exception>
-    /// <seealso cref="IWorkScheduler.AddCronQueueWork{TWork}(string, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddCronQueueWork{TWork}(IWorkScheduler, string, CancellationToken, int, int)"/>
     public static void AddCronQueueWork<TWork>(this IServiceProvider provider, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TWork : IWork
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
@@ -701,7 +701,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -710,7 +710,7 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression"/> has incorrect syntax </exception>
-    /// <seealso cref="IWorkScheduler.AddCronQueueWork{TWork, TResult}(string, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddCronQueueWork{TWork, TResult}(IWorkScheduler, string, CancellationToken, int, int)"/>
     public static void AddCronQueueWork<TWork, TResult>(this IServiceProvider provider, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TWork : IWork<TResult>
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
@@ -718,7 +718,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -726,7 +726,7 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression"/> has incorrect syntax </exception>
-    /// <seealso cref="IWorkScheduler.AddCronAsyncQueueWork{TAsyncWork}(string, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddCronAsyncQueueWork{TAsyncWork}(IWorkScheduler, string, CancellationToken, int, int)"/>
     public static void AddCronAsyncQueueWork<TAsyncWork>(this IServiceProvider provider, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))
@@ -734,7 +734,7 @@ public static class WorkSchedulerHelper
 
     /// <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority"/> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue"/> or <see cref="IWorkQueue"/> service should be registered on host to run queued work </remarks>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -743,7 +743,7 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression"/> has incorrect syntax </exception>
-    /// <seealso cref="IWorkScheduler.AddCronAsyncQueueWork{TAsyncWork, TResult}(string, CancellationToken, int, int)"/>
+    /// <seealso cref="WorkSchedulerQueueHelper.AddCronAsyncQueueWork{TAsyncWork, TResult}(IWorkScheduler, string, CancellationToken, int, int)"/>
     public static void AddCronAsyncQueueWork<TAsyncWork, TResult>(this IServiceProvider provider, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork<TResult>
         => (provider.GetService(typeof(IWorkScheduler)) as IWorkScheduler ?? throw new InvalidOperationException("No Work Scheduler service found"))

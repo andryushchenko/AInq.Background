@@ -22,11 +22,22 @@ using System.Linq;
 namespace AInq.Background
 {
 
-/// <summary>
-/// Background Work Queue dependency injection
-/// </summary>
+/// <summary> Background Work Queue dependency injection </summary>
 public static class WorkQueueInjection
 {
+    /// <summary> Create <see cref="IWorkQueue"/> without service registration </summary>
+    /// <param name="services"> Service collection </param>
+    /// <param name="maxParallelWorks"> Max parallel works allowed </param>
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+    public static IWorkQueue CreateWorkQueue(this IServiceCollection services, int maxParallelWorks = 1, int maxAttempts = int.MaxValue)
+    {
+        var manager = new WorkQueueManager(maxAttempts);
+        if (maxParallelWorks <= 1)
+            services.AddHostedService(provider => new TaskWorker<object?, object?>(provider, manager, new SingleNullProcessor<object?>()));
+        else services.AddHostedService(provider => new TaskWorker<object?, object?>(provider, manager, new MultipleNullProcessor<object?>(maxParallelWorks)));
+        return manager;
+    }
+
     /// <summary> Add <see cref="IWorkQueue"/> service </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="maxParallelWorks"> Max parallel works allowed </param>
@@ -36,11 +47,21 @@ public static class WorkQueueInjection
     {
         if (services.Any(service => service.ImplementationType == typeof(IWorkQueue)))
             throw new InvalidOperationException("Service already exists");
-        var manager = new WorkQueueManager(maxAttempts);
-        services.AddSingleton<IWorkQueue>(manager);
-        return maxParallelWorks <= 1
-            ? services.AddHostedService(provider => new TaskWorker<object?, object?>(provider, manager, new SingleNullProcessor<object?>()))
-            : services.AddHostedService(provider => new TaskWorker<object?, object?>(provider, manager, new MultipleNullProcessor<object?>(maxParallelWorks)));
+        return services.AddSingleton(services.CreateWorkQueue(maxParallelWorks, maxAttempts));
+    }
+
+    /// <summary> Create <see cref="IPriorityWorkQueue"/> without service registration </summary>
+    /// <param name="services"> Service collection </param>
+    /// <param name="maxPriority"> Max allowed work priority </param>
+    /// <param name="maxParallelWorks"> Max allowed parallel works </param>
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+    public static IPriorityWorkQueue CreatePriorityWorkQueue(this IServiceCollection services, int maxPriority = 100, int maxParallelWorks = 1, int maxAttempts = int.MaxValue)
+    {
+        var manager = new PriorityWorkQueueManager(maxPriority, maxAttempts);
+        if (maxParallelWorks <= 1)
+            services.AddHostedService(provider => new TaskWorker<object?, int>(provider, manager, new SingleNullProcessor<int>()));
+        else services.AddHostedService(provider => new TaskWorker<object?, int>(provider, manager, new MultipleNullProcessor<int>(maxParallelWorks)));
+        return manager;
     }
 
     /// <summary> Add <see cref="IPriorityWorkQueue"/> and <see cref="IWorkQueue"/> services </summary>
@@ -53,12 +74,8 @@ public static class WorkQueueInjection
     {
         if (services.Any(service => service.ImplementationType == typeof(IWorkQueue)))
             throw new InvalidOperationException("Service already exists");
-        var manager = new PriorityWorkQueueManager(maxPriority, maxAttempts);
-        services.AddSingleton<IWorkQueue>(manager)
-                .AddSingleton<IPriorityWorkQueue>(manager);
-        return maxParallelWorks <= 1
-            ? services.AddHostedService(provider => new TaskWorker<object?, int>(provider, manager, new SingleNullProcessor<int>()))
-            : services.AddHostedService(provider => new TaskWorker<object?, int>(provider, manager, new MultipleNullProcessor<int>(maxParallelWorks)));
+        var queue = services.CreatePriorityWorkQueue(maxPriority, maxParallelWorks, maxAttempts);
+        return services.AddSingleton<IWorkQueue>(queue).AddSingleton(queue);
     }
 }
 

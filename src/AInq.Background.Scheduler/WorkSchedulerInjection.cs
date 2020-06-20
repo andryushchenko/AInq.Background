@@ -21,12 +21,20 @@ using System.Linq;
 namespace AInq.Background
 {
 
-/// <summary>
-/// Work Scheduler dependency injection
-/// </summary>
+/// <summary> Work Scheduler dependency injection </summary>
 public static class WorkSchedulerInjection
 {
-    /// <summary> Adds <see cref="IWorkScheduler"/> service </summary>
+    /// <summary> Create <see cref="IWorkScheduler"/> without service registration </summary>
+    /// <param name="services"> Service collection</param>
+    /// <param name="horizon"> Time horizon to look for upcoming tasks </param>
+    public static IWorkScheduler CreateWorkScheduler(this IServiceCollection services, TimeSpan? horizon = null)
+    {
+        var scheduler = new WorkSchedulerManager();
+        services.AddHostedService(provider => new SchedulerWorker(scheduler, provider, horizon));
+        return scheduler;
+    }
+
+    /// <summary> Add <see cref="IWorkScheduler"/> service </summary>
     /// <param name="services"> Service collection</param>
     /// <param name="horizon"> Time horizon to look for upcoming tasks </param>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
@@ -34,9 +42,7 @@ public static class WorkSchedulerInjection
     {
         if (services.Any(service => service.ImplementationType == typeof(IWorkScheduler)))
             throw new InvalidOperationException("Service already exists");
-        var scheduler = new WorkSchedulerManager();
-        return services.AddSingleton<IWorkScheduler>(scheduler)
-                       .AddHostedService(provider => new SchedulerWorker(scheduler, provider, horizon));
+        return services.AddSingleton(services.CreateWorkScheduler(horizon));
     }
 }
 

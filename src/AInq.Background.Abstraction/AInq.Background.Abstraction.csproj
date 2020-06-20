@@ -11,7 +11,7 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Support.Background</PackageProjectUrl>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>AInq.Background</RootNamespace>
@@ -20,10 +20,8 @@
     <Description>Background work utilities for .NET Core apps based on Hosted services
 
 Basis interfaces and helpers</Description>
-    <PackageReleaseNotes>[ADD] BREAKING CHANGE Support prioritization for queued scheduled works
-[ADD] Documentation
-[ADD] Helper classes for queues, conveyor and scheduler
-[UPD] BREAKING CHANGE More verbose methods and interfaces naming</PackageReleaseNotes>
+    <PackageReleaseNotes>[IMP] Migrate Work Scheduler queue interaction methods to extension class
+[FIX] Minor documentation fix</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

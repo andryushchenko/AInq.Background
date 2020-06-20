@@ -23,7 +23,7 @@ namespace AInq.Background
 public interface IAsyncWork
 {
     /// <summary> Asynchronous work action </summary>
-    /// <param name="serviceProvider"> Service provider for current context </param>
+    /// <param name="serviceProvider"> Service provider instance </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <returns> Work completion task </returns>
     Task DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation = default);

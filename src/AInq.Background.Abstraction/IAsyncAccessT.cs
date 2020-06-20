@@ -26,7 +26,7 @@ public interface IAsyncAccess<in TResource, TResult>
 {
     /// <summary> Asynchronous access action </summary>
     /// <param name="resource"> Shared resource instance </param>
-    /// <param name="serviceProvider"> Service provider for current context </param>
+    /// <param name="serviceProvider"> Service provider instance </param>
     /// <param name="cancellation"> Access action cancellation token </param>
     /// <returns> Access action result task </returns>
     Task<TResult> AccessAsync(TResource resource, IServiceProvider serviceProvider, CancellationToken cancellation = default);

@@ -23,7 +23,7 @@ namespace AInq.Background
 public static class ConveyorHelper
 {
     /// <summary> Processes data using registered conveyor with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="data"> Data to process </param>
     /// <param name="cancellation"> Processing cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
