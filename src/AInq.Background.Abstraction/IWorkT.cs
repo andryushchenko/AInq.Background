@@ -22,7 +22,7 @@ namespace AInq.Background
 public interface IWork<out TResult>
 {
     /// <summary> Work action </summary>
-    /// <param name="serviceProvider"> Service provider for current context </param>
+    /// <param name="serviceProvider"> Service provider instance </param>
     /// <returns> Work result </returns>
     TResult DoWork(IServiceProvider serviceProvider);
 }

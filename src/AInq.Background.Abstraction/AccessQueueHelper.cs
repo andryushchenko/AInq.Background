@@ -23,7 +23,7 @@ namespace AInq.Background
 public static class AccessQueueHelper
 {
     /// <summary> Enqueue access action into registered access queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="access"> Access action instance </param>
     /// <param name="cancellation"> Access action cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -45,7 +45,7 @@ public static class AccessQueueHelper
     }
 
     /// <summary> Enqueue access action into registered access queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cancellation"> Access action cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access action priority </param>
@@ -67,7 +67,7 @@ public static class AccessQueueHelper
     }
 
     /// <summary> Enqueue access action into registered access queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="access"> Access action instance </param>
     /// <param name="cancellation"> Access action cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -90,7 +90,7 @@ public static class AccessQueueHelper
     }
 
     /// <summary> Enqueue access action into registered access queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cancellation"> Access action cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access action priority </param>
@@ -113,7 +113,7 @@ public static class AccessQueueHelper
     }
 
     /// <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="access"> Access action instance </param>
     /// <param name="cancellation"> Access action cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -135,7 +135,7 @@ public static class AccessQueueHelper
     }
 
     /// <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cancellation"> Access action cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access action priority </param>
@@ -157,7 +157,7 @@ public static class AccessQueueHelper
     }
 
     /// <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="access"> Access action instance </param>
     /// <param name="cancellation"> Access action cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -180,7 +180,7 @@ public static class AccessQueueHelper
     }
 
     /// <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority"/> (if supported) </summary>
-    /// <param name="provider"> Service provider for current context </param>
+    /// <param name="provider"> Service provider instance </param>
     /// <param name="cancellation"> Access action cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access action priority </param>

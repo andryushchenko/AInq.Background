@@ -23,7 +23,7 @@ public interface IAccess<in TResource>
 {
     /// <summary> Access action </summary>
     /// <param name="resource"> Shared resource instance </param>
-    /// <param name="serviceProvider"> Service provider for current context </param>
+    /// <param name="serviceProvider"> Service provider instance </param>
     void Access(TResource resource, IServiceProvider serviceProvider);
 }
 
