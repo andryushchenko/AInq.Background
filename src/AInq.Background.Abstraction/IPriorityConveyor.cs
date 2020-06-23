@@ -26,7 +26,7 @@ public interface IPriorityConveyor<in TData, TResult> : IConveyor<TData, TResult
     /// <summary> Max allowed operation priority </summary>
     int MaxPriority { get; }
 
-    /// <summary> Processes data asynchronously in queue with given <paramref name="priority"/> </summary>
+    /// <summary> Process data asynchronously in queue with given <paramref name="priority"/> </summary>
     /// <param name="data"> Data to process </param>
     /// <param name="priority"> Operation priority </param>
     /// <param name="cancellation"> Processing cancellation token </param>

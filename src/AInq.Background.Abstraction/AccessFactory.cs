@@ -66,7 +66,7 @@ public static class AccessFactory
             => await _access.Invoke(resource, serviceProvider, cancellation).ConfigureAwait(false);
     }
 
-    /// <summary> Creates <see cref="IAccess{TResource}"/> instance from <see cref="Action{TResource}"/> </summary>
+    /// <summary> Create <see cref="IAccess{TResource}"/> instance from <see cref="Action{TResource}"/> </summary>
     /// <param name="access"> Access action </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> <see cref="IAccess{TResource}"/> instance for given action </returns>
@@ -76,7 +76,7 @@ public static class AccessFactory
             ? new Access<TResource>((resource, provider) => access.Invoke(resource))
             : throw new ArgumentNullException(nameof(access));
 
-    /// <summary> Creates <see cref="IAccess{TResource, TResult}"/> instance from <see cref="Func{TResource, TResult}"/> </summary>
+    /// <summary> Create <see cref="IAccess{TResource, TResult}"/> instance from <see cref="Func{TResource, TResult}"/> </summary>
     /// <param name="access"> Access function </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
@@ -87,7 +87,7 @@ public static class AccessFactory
             ? new Access<TResource, TResult>((resource, provider) => access.Invoke(resource))
             : throw new ArgumentNullException(nameof(access));
 
-    /// <summary> Creates <see cref="IAccess{TResource}"/> instance from <see cref="Action{TResource, IServiceProvider}"/> </summary>
+    /// <summary> Create <see cref="IAccess{TResource}"/> instance from <see cref="Action{TResource, IServiceProvider}"/> </summary>
     /// <param name="access"> Access action </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> <see cref="IAccess{TResource}"/> instance for given action </returns>
@@ -95,7 +95,7 @@ public static class AccessFactory
     public static IAccess<TResource> CreateAccess<TResource>(Action<TResource, IServiceProvider> access)
         => new Access<TResource>(access ?? throw new ArgumentNullException(nameof(access)));
 
-    /// <summary> Creates <see cref="IAccess{TResource, TResult}"/> instance from <see cref="Func{TResource, IServiceProvider, TResult}"/> </summary>
+    /// <summary> Create <see cref="IAccess{TResource, TResult}"/> instance from <see cref="Func{TResource, IServiceProvider, TResult}"/> </summary>
     /// <param name="access"> Access function </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
@@ -104,7 +104,7 @@ public static class AccessFactory
     public static IAccess<TResource, TResult> CreateAccess<TResource, TResult>(Func<TResource, IServiceProvider, TResult> access)
         => new Access<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)));
 
-    /// <summary> Creates <see cref="IAsyncAccess{TResource}"/> instance from <see cref="Func{TResource, CancellationToken, Task}"/> </summary>
+    /// <summary> Create <see cref="IAsyncAccess{TResource}"/> instance from <see cref="Func{TResource, CancellationToken, Task}"/> </summary>
     /// <param name="access"> Access action </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> <see cref="IAsyncAccess{TResource}"/> instance for given action </returns>
@@ -114,7 +114,7 @@ public static class AccessFactory
             ? new AsyncAccess<TResource>((resource, provider, token) => access.Invoke(resource, token))
             : throw new ArgumentNullException(nameof(access));
 
-    /// <summary> Creates <see cref="IAsyncAccess{TResource, TResult}"/> instance from <see cref="Func{TResource,  CancellationToken, TResult}"/> </summary>
+    /// <summary> Create <see cref="IAsyncAccess{TResource, TResult}"/> instance from <see cref="Func{TResource,  CancellationToken, TResult}"/> </summary>
     /// <param name="access"> Access function </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
@@ -125,7 +125,7 @@ public static class AccessFactory
             ? new AsyncAccess<TResource, TResult>((resource, provider, token) => access.Invoke(resource, token))
             : throw new ArgumentNullException(nameof(access));
 
-    /// <summary> Creates <see cref="IAsyncAccess{TResource}"/> instance from <see cref="Func{TResource, IServiceProvider, CancellationToken, Task}"/> </summary>
+    /// <summary> Create <see cref="IAsyncAccess{TResource}"/> instance from <see cref="Func{TResource, IServiceProvider, CancellationToken, Task}"/> </summary>
     /// <param name="access"> Access action </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> <see cref="IAsyncAccess{TResource}"/> instance for given action </returns>
@@ -133,7 +133,7 @@ public static class AccessFactory
     public static IAsyncAccess<TResource> CreateAsyncAccess<TResource>(Func<TResource, IServiceProvider, CancellationToken, Task> access)
         => new AsyncAccess<TResource>(access ?? throw new ArgumentNullException(nameof(access)));
 
-    /// <summary> Creates <see cref="IAsyncAccess{TResource, TResult}"/> instance from <see cref="Func{TResource,  CancellationToken, IServiceProvider, TResult}"/> </summary>
+    /// <summary> Create <see cref="IAsyncAccess{TResource, TResult}"/> instance from <see cref="Func{TResource,  CancellationToken, IServiceProvider, TResult}"/> </summary>
     /// <param name="access"> Access function </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>

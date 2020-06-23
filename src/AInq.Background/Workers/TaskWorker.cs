@@ -34,7 +34,7 @@ internal sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDispos
     private readonly ILogger<TaskWorker<TArgument, TMetadata>>? _logger;
     private Task? _worker;
 
-    internal TaskWorker(IServiceProvider provider, ITaskManager<TArgument, TMetadata> manager, ITaskProcessor<TArgument, TMetadata> processor)
+    public TaskWorker(IServiceProvider provider, ITaskManager<TArgument, TMetadata> manager, ITaskProcessor<TArgument, TMetadata> processor)
     {
         _provider = provider;
         _manager = manager;

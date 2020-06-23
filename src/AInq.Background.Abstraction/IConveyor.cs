@@ -26,7 +26,7 @@ public interface IConveyor<in TData, TResult>
     /// <summary> Max allowed retry on fail attempts </summary>
     int MaxAttempts { get; }
 
-    /// <summary> Processes data asynchronously in queue </summary>
+    /// <summary> Process data asynchronously in queue </summary>
     /// <param name="data"> Data to process </param>
     /// <param name="cancellation"> Processing cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>

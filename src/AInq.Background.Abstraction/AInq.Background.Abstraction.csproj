@@ -17,9 +17,8 @@
     <RootNamespace>AInq.Background</RootNamespace>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Background;Queue;Conveyor;Scheduler;Cron;AInq</PackageTags>
-    <Description>Background work utilities for .NET Core apps based on Hosted services
-
-Basis interfaces and helpers</Description>
+    <Description>Background work utilities for .NET Core apps based on Hosted services.
+Basis interfaces and helpers.</Description>
     <PackageReleaseNotes>[IMP] Migrate Work Scheduler queue interaction methods to extension class
 [FIX] Minor documentation fix</PackageReleaseNotes>
   </PropertyGroup>

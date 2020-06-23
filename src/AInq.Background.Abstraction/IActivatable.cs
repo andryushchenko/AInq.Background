@@ -25,12 +25,12 @@ public interface IActivatable
     /// <summary> Shows if object is active now </summary>
     bool IsActive { get; }
 
-    /// <summary> Activates object asynchronously </summary>
+    /// <summary> Activate object asynchronously </summary>
     /// <param name="cancellation"> Activation cancellation token </param>
     /// <returns> Activation completion task </returns>
     Task ActivateAsync(CancellationToken cancellation = default);
 
-    /// <summary> Deactivates object asynchronously  </summary>
+    /// <summary> Deactivate object asynchronously  </summary>
     /// <param name="cancellation"> Deactivation cancellation token </param>
     /// <returns> Deactivation completion task </returns>
     Task DeactivateAsync(CancellationToken cancellation = default);

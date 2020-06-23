@@ -12,12 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static AInq.Background.WorkFactory;
@@ -26,113 +22,132 @@ using static AInq.Background.Wrappers.WorkWrapperFactory;
 namespace AInq.Background.Managers
 {
 
-internal sealed class PriorityWorkQueueManager : WorkQueueManager, IPriorityWorkQueue, ITaskManager<object?, int>
+internal sealed class PriorityWorkQueueManager : PriorityTaskManager<object?>, IPriorityWorkQueue
 {
-    private readonly int _maxPriority;
-    private readonly IList<ConcurrentQueue<ITaskWrapper<object?>>> _queues;
+    private readonly int _maxAttempts;
 
-    int IPriorityWorkQueue.MaxPriority => _maxPriority;
+    int IWorkQueue.MaxAttempts => _maxAttempts;
+    int IPriorityWorkQueue.MaxPriority => MaxPriority;
 
-    bool ITaskManager<object?, int>.HasTask => _queues.Any(queue => !queue.IsEmpty);
+    private int FixAttempts(int attemptsCount)
+        => Math.Min(_maxAttempts, Math.Max(1, attemptsCount));
 
-    Task ITaskManager<object?, int>.WaitForTaskAsync(CancellationToken cancellation)
-        => _queues.Any(queue => !queue.IsEmpty)
-            ? Task.CompletedTask
-            : NewWorkEvent.WaitAsync(cancellation);
-
-    (ITaskWrapper<object?>?, int) ITaskManager<object?, int>.GetTask()
+    public PriorityWorkQueueManager(int maxPriority = 100, int maxAttempts = int.MaxValue) : base(maxPriority)
     {
-        while (true)
-        {
-            var pendingQueue = _queues.FirstOrDefault(queue => !queue.IsEmpty);
-            if (pendingQueue == null || !pendingQueue.TryDequeue(out var task))
-                return (null, -1);
-            if (!task.IsCanceled)
-                return (task, _queues.IndexOf(pendingQueue));
-        }
+        _maxAttempts = Math.Max(maxAttempts, 1);
     }
 
-    void ITaskManager<object?, int>.RevertTask(ITaskWrapper<object?> task, int metadata)
+    Task IWorkQueue.EnqueueWork(IWork work, CancellationToken cancellation, int attemptsCount)
     {
-        _queues[FixPriority(metadata)].Enqueue(task);
-        NewWorkEvent.Set();
+        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
+        AddTask(workWrapper, 0);
+        return task;
     }
 
-    internal PriorityWorkQueueManager(int maxPriority = 100, int maxAttempts = int.MaxValue) : base(maxAttempts)
+    Task IWorkQueue.EnqueueWork<TWork>(CancellationToken cancellation, int attemptsCount)
     {
-        _maxPriority = Math.Min(100, Math.Max(1, maxPriority));
-        _queues = new ConcurrentQueue<ITaskWrapper<object?>>[_maxPriority + 1];
-        _queues[0] = Queue;
-        for (var index = 1; index <= _maxPriority; index++)
-            _queues[index] = new ConcurrentQueue<ITaskWrapper<object?>>();
+        var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), FixAttempts(attemptsCount), cancellation);
+        AddTask(workWrapper, 0);
+        return task;
+    }
+
+    Task<TResult> IWorkQueue.EnqueueWork<TResult>(IWork<TResult> work, CancellationToken cancellation, int attemptsCount)
+    {
+        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
+        AddTask(workWrapper, 0);
+        return task;
+    }
+
+    Task<TResult> IWorkQueue.EnqueueWork<TWork, TResult>(CancellationToken cancellation, int attemptsCount)
+    {
+        var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), FixAttempts(attemptsCount), cancellation);
+        AddTask(workWrapper, 0);
+        return task;
+    }
+
+    Task IWorkQueue.EnqueueAsyncWork(IAsyncWork work, CancellationToken cancellation, int attemptsCount)
+    {
+        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
+        AddTask(workWrapper, 0);
+        return task;
+    }
+
+    Task IWorkQueue.EnqueueAsyncWork<TWork>(CancellationToken cancellation, int attemptsCount)
+    {
+        var (workWrapper, task) = CreateWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), FixAttempts(attemptsCount), cancellation);
+        AddTask(workWrapper, 0);
+        return task;
+    }
+
+    Task<TResult> IWorkQueue.EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, CancellationToken cancellation, int attemptsCount)
+    {
+        var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
+        AddTask(workWrapper, 0);
+        return task;
+    }
+
+    Task<TResult> IWorkQueue.EnqueueAsyncWork<TWork, TResult>(CancellationToken cancellation, int attemptsCount)
+    {
+        var (workWrapper, task) = CreateWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), FixAttempts(attemptsCount), cancellation);
+        AddTask(workWrapper, 0);
+        return task;
     }
 
     Task IPriorityWorkQueue.EnqueueWork(IWork work, int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
-        _queues[FixPriority(priority)].Enqueue(workWrapper);
-        NewWorkEvent.Set();
+        AddTask(workWrapper, priority);
         return task;
     }
 
     Task IPriorityWorkQueue.EnqueueWork<TWork>(int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), FixAttempts(attemptsCount), cancellation);
-        _queues[FixPriority(priority)].Enqueue(workWrapper);
-        NewWorkEvent.Set();
+        AddTask(workWrapper, priority);
         return task;
     }
 
     Task<TResult> IPriorityWorkQueue.EnqueueWork<TResult>(IWork<TResult> work, int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
-        _queues[FixPriority(priority)].Enqueue(workWrapper);
-        NewWorkEvent.Set();
+        AddTask(workWrapper, priority);
         return task;
     }
 
     Task<TResult> IPriorityWorkQueue.EnqueueWork<TWork, TResult>(int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), FixAttempts(attemptsCount), cancellation);
-        _queues[FixPriority(priority)].Enqueue(workWrapper);
-        NewWorkEvent.Set();
+        AddTask(workWrapper, priority);
         return task;
     }
 
     Task IPriorityWorkQueue.EnqueueAsyncWork(IAsyncWork work, int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
-        _queues[FixPriority(priority)].Enqueue(workWrapper);
-        NewWorkEvent.Set();
+        AddTask(workWrapper, priority);
         return task;
     }
 
     Task IPriorityWorkQueue.EnqueueAsyncWork<TWork>(int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (workWrapper, task) = CreateWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), FixAttempts(attemptsCount), cancellation);
-        _queues[FixPriority(priority)].Enqueue(workWrapper);
-        NewWorkEvent.Set();
+        AddTask(workWrapper, priority);
         return task;
     }
 
     Task<TResult> IPriorityWorkQueue.EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
-        _queues[FixPriority(priority)].Enqueue(workWrapper);
-        NewWorkEvent.Set();
+        AddTask(workWrapper, priority);
         return task;
     }
 
     Task<TResult> IPriorityWorkQueue.EnqueueAsyncWork<TWork, TResult>(int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (workWrapper, task) = CreateWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), FixAttempts(attemptsCount), cancellation);
-        _queues[FixPriority(priority)].Enqueue(workWrapper);
-        NewWorkEvent.Set();
+        AddTask(workWrapper, priority);
         return task;
     }
-
-    private int FixPriority(int priority)
-        => Math.Min(_maxPriority, Math.Max(0, priority));
 }
 
 }

@@ -45,10 +45,10 @@ internal sealed class SchedulerWorker : IHostedService, IDisposable
             horizon = MinHorizon;
         if (horizon.HasValue && horizon > MaxTimeout)
             horizon = MaxTimeout;
+        _horizon = horizon ?? DefaultHorizon;
         _scheduler = scheduler;
         _provider = provider;
         _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<SchedulerWorker>();
-        _horizon = horizon ?? DefaultHorizon;
     }
 
     private async Task Worker(CancellationToken abort)

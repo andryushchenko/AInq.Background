@@ -22,7 +22,7 @@ namespace AInq.Background
 /// <summary> Helper class for <see cref="IConveyor{TData,TResult}"/> and <see cref="IPriorityConveyor{TData,TResult}"/> </summary>
 public static class ConveyorHelper
 {
-    /// <summary> Processes data using registered conveyor with giver <paramref name="priority"/> (if supported) </summary>
+    /// <summary> Process data using registered conveyor with giver <paramref name="priority"/> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="data"> Data to process </param>
     /// <param name="cancellation"> Processing cancellation token </param>

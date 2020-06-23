@@ -24,7 +24,7 @@ namespace AInq.Background
 /// <typeparam name="TResult"> Processing result type </typeparam>
 public interface IConveyorMachine<in TData, TResult>
 {
-    /// <summary> Processes data asynchronously </summary>
+    /// <summary> Process data asynchronously </summary>
     /// <param name="data"> Data to process </param>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="cancellation"> Processing cancellation token </param>

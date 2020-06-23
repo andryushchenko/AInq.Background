@@ -36,7 +36,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     Task IWorkSchedulerManager.WaitForNewTaskAsync(CancellationToken cancellation)
         => _newWorkEvent.WaitAsync(cancellation);
 
-    public DateTime? GetNextTaskTime()
+    DateTime? IWorkSchedulerManager.GetNextTaskTime()
     {
         var works = Interlocked.Exchange(ref _works, new ConcurrentBag<IScheduledTaskWrapper>());
         DateTime? next = null;
@@ -50,7 +50,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         return next;
     }
 
-    public ILookup<DateTime, IScheduledTaskWrapper> GetUpcomingTasks(TimeSpan horizon)
+    ILookup<DateTime, IScheduledTaskWrapper> IWorkSchedulerManager.GetUpcomingTasks(TimeSpan horizon)
     {
         var works = Interlocked.Exchange(ref _works, new ConcurrentBag<IScheduledTaskWrapper>());
         var upcoming = new LinkedList<IScheduledTaskWrapper>();

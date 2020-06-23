@@ -12,12 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static AInq.Background.AccessFactory;
@@ -26,100 +22,125 @@ using static AInq.Background.Wrappers.AccessWrapperFactory;
 namespace AInq.Background.Managers
 {
 
-internal sealed class PriorityAccessQueueManager<TResource> : AccessQueueManager<TResource>, IPriorityAccessQueue<TResource>, ITaskManager<TResource, int>
+internal sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<TResource>, IPriorityAccessQueue<TResource>
 {
-    private readonly int _maxPriority;
-    private readonly IList<ConcurrentQueue<ITaskWrapper<TResource>>> _queues;
+    private readonly int _maxAttempts;
 
-    int IPriorityAccessQueue<TResource>.MaxPriority => _maxPriority;
+    private int FixAttempts(int attemptsCount)
+        => Math.Min(_maxAttempts, Math.Max(1, attemptsCount));
 
-    bool ITaskManager<TResource, int>.HasTask => _queues.Any(queue => !queue.IsEmpty);
+    int IPriorityAccessQueue<TResource>.MaxPriority => MaxPriority;
+    int IAccessQueue<TResource>.MaxAttempts => _maxAttempts;
 
-    Task ITaskManager<TResource, int>.WaitForTaskAsync(CancellationToken cancellation)
-        => _queues.Any(queue => !queue.IsEmpty)
-            ? Task.CompletedTask
-            : NewAccessEvent.WaitAsync(cancellation);
-
-    (ITaskWrapper<TResource>?, int) ITaskManager<TResource, int>.GetTask()
+    public PriorityAccessQueueManager(int maxPriority = 100, int maxAttempts = int.MaxValue) : base(maxPriority)
     {
-        while (true)
-        {
-            var pendingQueue = _queues.FirstOrDefault(queue => !queue.IsEmpty);
-            if (pendingQueue == null || !pendingQueue.TryDequeue(out var task))
-                return (null, -1);
-            if (!task.IsCanceled)
-                return (task, _queues.IndexOf(pendingQueue));
-        }
+        _maxAttempts = Math.Max(maxAttempts, 1);
     }
 
-    void ITaskManager<TResource, int>.RevertTask(ITaskWrapper<TResource> task, int metadata)
+    Task IAccessQueue<TResource>.EnqueueAccess(IAccess<TResource> access, CancellationToken cancellation, int attemptsCount)
     {
-        _queues[FixPriority(metadata)].Enqueue(task);
-        NewAccessEvent.Set();
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
+        AddTask(accessWrapper, 0);
+        return task;
     }
 
-    internal PriorityAccessQueueManager(int maxPriority = 100, int maxAttempts = int.MaxValue) : base(maxAttempts)
+    Task IAccessQueue<TResource>.EnqueueAccess<TAccess>(CancellationToken cancellation, int attemptsCount)
     {
-        _maxPriority = Math.Min(100, Math.Max(1, maxPriority));
-        _queues = new ConcurrentQueue<ITaskWrapper<TResource>>[_maxPriority + 1];
-        _queues[0] = Queue;
-        for (var index = 1; index <= _maxPriority; index++)
-            _queues[index] = new ConcurrentQueue<ITaskWrapper<TResource>>();
+        var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)), FixAttempts(attemptsCount), cancellation);
+        AddTask(accessWrapper, 0);
+        return task;
+    }
+
+    Task<TResult> IAccessQueue<TResource>.EnqueueAccess<TResult>(IAccess<TResource, TResult> access, CancellationToken cancellation, int attemptsCount)
+    {
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
+        AddTask(accessWrapper, 0);
+        return task;
+    }
+
+    Task<TResult> IAccessQueue<TResource>.EnqueueAccess<TAccess, TResult>(CancellationToken cancellation, int attemptsCount)
+    {
+        var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource, TResult>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)), FixAttempts(attemptsCount), cancellation);
+        AddTask(accessWrapper, 0);
+        return task;
+    }
+
+    Task IAccessQueue<TResource>.EnqueueAsyncAccess(IAsyncAccess<TResource> access, CancellationToken cancellation, int attemptsCount)
+    {
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
+        AddTask(accessWrapper, 0);
+        return task;
+    }
+
+    Task IAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess>(CancellationToken cancellation, int attemptsCount)
+    {
+        var (accessWrapper, task) = CreateAccessWrapper(CreateAsyncAccess<TResource>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)), FixAttempts(attemptsCount), cancellation);
+        AddTask(accessWrapper, 0);
+        return task;
+    }
+
+    Task<TResult> IAccessQueue<TResource>.EnqueueAsyncAccess<TResult>(IAsyncAccess<TResource, TResult> access, CancellationToken cancellation, int attemptsCount)
+    {
+        var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
+        AddTask(accessWrapper, 0);
+        return task;
+    }
+
+    Task<TResult> IAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess, TResult>(CancellationToken cancellation, int attemptsCount)
+    {
+        var (accessWrapper, task) = CreateAccessWrapper(CreateAsyncAccess<TResource, TResult>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
+            FixAttempts(attemptsCount),
+            cancellation);
+        AddTask(accessWrapper, 0);
+        return task;
     }
 
     Task IPriorityAccessQueue<TResource>.EnqueueAccess(IAccess<TResource> access, int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
-        _queues[FixPriority(priority)].Enqueue(accessWrapper);
-        NewAccessEvent.Set();
+        AddTask(accessWrapper, priority);
         return task;
     }
 
     Task IPriorityAccessQueue<TResource>.EnqueueAccess<TAccess>(int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)), FixAttempts(attemptsCount), cancellation);
-        _queues[priority].Enqueue(accessWrapper);
-        NewAccessEvent.Set();
+        AddTask(accessWrapper, priority);
         return task;
     }
 
     Task<TResult> IPriorityAccessQueue<TResource>.EnqueueAccess<TResult>(IAccess<TResource, TResult> access, int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
-        _queues[FixPriority(priority)].Enqueue(accessWrapper);
-        NewAccessEvent.Set();
+        AddTask(accessWrapper, priority);
         return task;
     }
 
     Task<TResult> IPriorityAccessQueue<TResource>.EnqueueAccess<TAccess, TResult>(int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (accessWrapper, task) = CreateAccessWrapper(CreateAccess<TResource, TResult>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)), FixAttempts(attemptsCount), cancellation);
-        _queues[FixPriority(priority)].Enqueue(accessWrapper);
-        NewAccessEvent.Set();
+        AddTask(accessWrapper, priority);
         return task;
     }
 
     Task IPriorityAccessQueue<TResource>.EnqueueAsyncAccess(IAsyncAccess<TResource> access, int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
-        _queues[FixPriority(priority)].Enqueue(accessWrapper);
-        NewAccessEvent.Set();
+        AddTask(accessWrapper, priority);
         return task;
     }
 
     Task IPriorityAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess>(int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (accessWrapper, task) = CreateAccessWrapper(CreateAsyncAccess<TResource>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)), FixAttempts(attemptsCount), cancellation);
-        _queues[FixPriority(priority)].Enqueue(accessWrapper);
-        NewAccessEvent.Set();
+        AddTask(accessWrapper, priority);
         return task;
     }
 
     Task<TResult> IPriorityAccessQueue<TResource>.EnqueueAsyncAccess<TResult>(IAsyncAccess<TResource, TResult> access, int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (accessWrapper, task) = CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
-        _queues[FixPriority(priority)].Enqueue(accessWrapper);
-        NewAccessEvent.Set();
+        AddTask(accessWrapper, priority);
         return task;
     }
 
@@ -128,13 +149,9 @@ internal sealed class PriorityAccessQueueManager<TResource> : AccessQueueManager
         var (accessWrapper, task) = CreateAccessWrapper(CreateAsyncAccess<TResource, TResult>((resource, provider, token) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
             FixAttempts(attemptsCount),
             cancellation);
-        _queues[FixPriority(priority)].Enqueue(accessWrapper);
-        NewAccessEvent.Set();
+        AddTask(accessWrapper, priority);
         return task;
     }
-
-    private int FixPriority(int priority)
-        => Math.Min(_maxPriority, Math.Max(0, priority));
 }
 
 }

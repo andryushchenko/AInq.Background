@@ -16,9 +16,8 @@
     <Nullable>enable</Nullable>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Background;Queue;Conveyor;AInq</PackageTags>
-    <Description>Background work utilities for .NET Core apps based on Hosted services
-
-Background work queue, Shared resource access queue, Background data processing conveyor</Description>
+    <Description>Background work utilities for .NET Core apps based on Hosted services.
+Background work queue, shared resource access queue, background data processing conveyor.</Description>
     <PackageReleaseNotes>[ADD] Option to create Work Queue, Access Queue and Conveyor for internal usage without service registration</PackageReleaseNotes>
   </PropertyGroup>
 

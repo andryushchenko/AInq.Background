@@ -8,14 +8,14 @@
             <summary> Factory class for creating <see cref="T:AInq.Background.IAccess`1"/> and <see cref="T:AInq.Background.IAsyncAccess`1"/> from delegates </summary>
         </member>
         <member name="M:AInq.Background.AccessFactory.CreateAccess``1(System.Action{``0})">
-            <summary> Creates <see cref="T:AInq.Background.IAccess`1"/> instance from <see cref="T:System.Action`1"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IAccess`1"/> instance from <see cref="T:System.Action`1"/> </summary>
             <param name="access"> Access action </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <returns> <see cref="T:AInq.Background.IAccess`1"/> instance for given action </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="access"/> is NULL </exception>
         </member>
         <member name="M:AInq.Background.AccessFactory.CreateAccess``2(System.Func{``0,``1})">
-            <summary> Creates <see cref="T:AInq.Background.IAccess`2"/> instance from <see cref="T:System.Func`2"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IAccess`2"/> instance from <see cref="T:System.Func`2"/> </summary>
             <param name="access"> Access function </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TResult"> Access result type </typeparam>
@@ -23,14 +23,14 @@
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="access"/> is NULL </exception>
         </member>
         <member name="M:AInq.Background.AccessFactory.CreateAccess``1(System.Action{``0,System.IServiceProvider})">
-            <summary> Creates <see cref="T:AInq.Background.IAccess`1"/> instance from <see cref="T:System.Action`2"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IAccess`1"/> instance from <see cref="T:System.Action`2"/> </summary>
             <param name="access"> Access action </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <returns> <see cref="T:AInq.Background.IAccess`1"/> instance for given action </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="access"/> is NULL </exception>
         </member>
         <member name="M:AInq.Background.AccessFactory.CreateAccess``2(System.Func{``0,System.IServiceProvider,``1})">
-            <summary> Creates <see cref="T:AInq.Background.IAccess`2"/> instance from <see cref="T:System.Func`3"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IAccess`2"/> instance from <see cref="T:System.Func`3"/> </summary>
             <param name="access"> Access function </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TResult"> Access result type </typeparam>
@@ -38,14 +38,14 @@
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="access"/> is NULL </exception>
         </member>
         <member name="M:AInq.Background.AccessFactory.CreateAsyncAccess``1(System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
-            <summary> Creates <see cref="T:AInq.Background.IAsyncAccess`1"/> instance from <see cref="T:System.Func`3"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IAsyncAccess`1"/> instance from <see cref="T:System.Func`3"/> </summary>
             <param name="access"> Access action </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <returns> <see cref="T:AInq.Background.IAsyncAccess`1"/> instance for given action </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="access"/> is NULL </exception>
         </member>
         <member name="M:AInq.Background.AccessFactory.CreateAsyncAccess``2(System.Func{``0,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}})">
-            <summary> Creates <see cref="T:AInq.Background.IAsyncAccess`2"/> instance from <see cref="T:System.Func`3"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IAsyncAccess`2"/> instance from <see cref="T:System.Func`3"/> </summary>
             <param name="access"> Access function </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TResult"> Access result type </typeparam>
@@ -53,14 +53,14 @@
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="access"/> is NULL </exception>
         </member>
         <member name="M:AInq.Background.AccessFactory.CreateAsyncAccess``1(System.Func{``0,System.IServiceProvider,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
-            <summary> Creates <see cref="T:AInq.Background.IAsyncAccess`1"/> instance from <see cref="T:System.Func`4"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IAsyncAccess`1"/> instance from <see cref="T:System.Func`4"/> </summary>
             <param name="access"> Access action </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <returns> <see cref="T:AInq.Background.IAsyncAccess`1"/> instance for given action </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="access"/> is NULL </exception>
         </member>
         <member name="M:AInq.Background.AccessFactory.CreateAsyncAccess``2(System.Func{``0,System.IServiceProvider,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}})">
-            <summary> Creates <see cref="T:AInq.Background.IAsyncAccess`2"/> instance from <see cref="T:System.Func`4"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IAsyncAccess`2"/> instance from <see cref="T:System.Func`4"/> </summary>
             <param name="access"> Access function </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TResult"> Access result type </typeparam>
@@ -178,7 +178,7 @@
             <summary> Helper class for <see cref="T:AInq.Background.IConveyor`2"/> and <see cref="T:AInq.Background.IPriorityConveyor`2"/> </summary>
         </member>
         <member name="M:AInq.Background.ConveyorHelper.ProcessDataAsync``2(System.IServiceProvider,``0,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Processes data using registered conveyor with giver <paramref name="priority"/> (if supported) </summary>
+            <summary> Process data using registered conveyor with giver <paramref name="priority"/> (if supported) </summary>
             <param name="provider"> Service provider instance </param>
             <param name="data"> Data to process </param>
             <param name="cancellation"> Processing cancellation token </param>
@@ -289,12 +289,12 @@
             <summary> Shows if object is active now </summary>
         </member>
         <member name="M:AInq.Background.IActivatable.ActivateAsync(System.Threading.CancellationToken)">
-            <summary> Activates object asynchronously </summary>
+            <summary> Activate object asynchronously </summary>
             <param name="cancellation"> Activation cancellation token </param>
             <returns> Activation completion task </returns>
         </member>
         <member name="M:AInq.Background.IActivatable.DeactivateAsync(System.Threading.CancellationToken)">
-            <summary> Deactivates object asynchronously  </summary>
+            <summary> Deactivate object asynchronously  </summary>
             <param name="cancellation"> Deactivation cancellation token </param>
             <returns> Deactivation completion task </returns>
         </member>
@@ -349,7 +349,7 @@
             <summary> Max allowed retry on fail attempts </summary>
         </member>
         <member name="M:AInq.Background.IConveyor`2.ProcessDataAsync(`0,System.Threading.CancellationToken,System.Int32)">
-            <summary> Processes data asynchronously in queue </summary>
+            <summary> Process data asynchronously in queue </summary>
             <param name="data"> Data to process </param>
             <param name="cancellation"> Processing cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -361,7 +361,7 @@
             <typeparam name="TResult"> Processing result type </typeparam>
         </member>
         <member name="M:AInq.Background.IConveyorMachine`2.ProcessDataAsync(`0,System.IServiceProvider,System.Threading.CancellationToken)">
-            <summary> Processes data asynchronously </summary>
+            <summary> Process data asynchronously </summary>
             <param name="data"> Data to process </param>
             <param name="provider"> Service provider instance </param>
             <param name="cancellation"> Processing cancellation token </param>
@@ -455,7 +455,7 @@
             <summary> Max allowed operation priority </summary>
         </member>
         <member name="M:AInq.Background.IPriorityConveyor`2.ProcessDataAsync(`0,System.Int32,System.Threading.CancellationToken,System.Int32)">
-            <summary> Processes data asynchronously in queue with given <paramref name="priority"/> </summary>
+            <summary> Process data asynchronously in queue with given <paramref name="priority"/> </summary>
             <param name="data"> Data to process </param>
             <param name="priority"> Operation priority </param>
             <param name="cancellation"> Processing cancellation token </param>
@@ -832,52 +832,52 @@
             <summary> Factory class for creating <see cref="T:AInq.Background.IWork"/> and <see cref="T:AInq.Background.IAsyncWork"/> from delegates </summary>
         </member>
         <member name="M:AInq.Background.WorkFactory.CreateWork(System.Action)">
-            <summary> Creates <see cref="T:AInq.Background.IWork"/> instance from <see cref="T:System.Action"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IWork"/> instance from <see cref="T:System.Action"/> </summary>
             <param name="work"> Work action </param>
             <returns> <see cref="T:AInq.Background.IWork"/> instance for given action </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="work"/> is NULL </exception>
         </member>
         <member name="M:AInq.Background.WorkFactory.CreateWork``1(System.Func{``0})">
-            <summary> Creates <see cref="T:AInq.Background.IWork`1"/> instance from <see cref="T:System.Func`1"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IWork`1"/> instance from <see cref="T:System.Func`1"/> </summary>
             <param name="work"> Work function </param>
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> <see cref="T:AInq.Background.IWork`1"/> instance for given function </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="work"/> is NULL </exception>
         </member>
         <member name="M:AInq.Background.WorkFactory.CreateWork(System.Action{System.IServiceProvider})">
-            <summary> Creates <see cref="T:AInq.Background.IWork"/> instance from <see cref="T:System.Action`1"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IWork"/> instance from <see cref="T:System.Action`1"/> </summary>
             <param name="work"> Work action </param>
             <returns> <see cref="T:AInq.Background.IWork"/> instance for given action </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="work"/> is NULL </exception>
         </member>
         <member name="M:AInq.Background.WorkFactory.CreateWork``1(System.Func{System.IServiceProvider,``0})">
-            <summary> Creates <see cref="T:AInq.Background.IWork`1"/> instance from <see cref="T:System.Func`2"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IWork`1"/> instance from <see cref="T:System.Func`2"/> </summary>
             <param name="work"> Work function </param>
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> <see cref="T:AInq.Background.IWork`1"/> instance for given function </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="work"/> is NULL </exception>
         </member>
         <member name="M:AInq.Background.WorkFactory.CreateAsyncWork(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task})">
-            <summary> Creates <see cref="T:AInq.Background.IAsyncWork"/> instance from <see cref="T:System.Func`2"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IAsyncWork"/> instance from <see cref="T:System.Func`2"/> </summary>
             <param name="work"> Work action </param>
             <returns> <see cref="T:AInq.Background.IAsyncWork"/> instance for given action </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="work"/> is NULL </exception>
         </member>
         <member name="M:AInq.Background.WorkFactory.CreateAsyncWork``1(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}})">
-            <summary> Creates <see cref="T:AInq.Background.IAsyncWork`1"/> instance from <see cref="T:System.Func`2"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IAsyncWork`1"/> instance from <see cref="T:System.Func`2"/> </summary>
             <param name="work"> Work function </param>
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> <see cref="T:AInq.Background.IAsyncWork`1"/> instance for given function </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="work"/> is NULL </exception>
         </member>
         <member name="M:AInq.Background.WorkFactory.CreateAsyncWork(System.Func{System.IServiceProvider,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
-            <summary> Creates <see cref="T:AInq.Background.IAsyncWork"/> instance from <see cref="T:System.Func`3"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IAsyncWork"/> instance from <see cref="T:System.Func`3"/> </summary>
             <param name="work"> Work action </param>
             <returns> <see cref="T:AInq.Background.IAsyncWork"/> instance for given action </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="work"/> is NULL </exception>
         </member>
         <member name="M:AInq.Background.WorkFactory.CreateAsyncWork``1(System.Func{System.IServiceProvider,System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}})">
-            <summary> Creates <see cref="T:AInq.Background.IAsyncWork`1"/> instance from <see cref="T:System.Func`3"/> </summary>
+            <summary> Create <see cref="T:AInq.Background.IAsyncWork`1"/> instance from <see cref="T:System.Func`3"/> </summary>
             <param name="work"> Work function </param>
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> <see cref="T:AInq.Background.IAsyncWork`1"/> instance for given function </returns>

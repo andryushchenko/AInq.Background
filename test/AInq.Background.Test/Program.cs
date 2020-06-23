@@ -36,13 +36,13 @@ internal static class Program
                    .ConfigureServices((context, services) =>
                    {
                        services.AddTransient<TestMachine>()
-                               .AddConveyor<int, int, TestMachine>(ReuseStrategy.Reuse, 3)
+                               .AddPriorityConveyor<int, int, TestMachine>(ReuseStrategy.Reuse, 3)
                                .AddWorkScheduler()
                                .AddWorkQueue()
                                .AddStartupWork(WorkFactory.CreateWork(provider =>
                                {
                                    for (var index = 1; index <= 10; index++)
-                                       provider.ProcessDataAsync<int, int>(index);
+                                       provider.ProcessDataAsync<int, int>(index, priority: 50 - index);
                                    provider.AddDelayedAsyncQueueWork(WorkFactory.CreateAsyncWork(async (serviceProvider, cancel) =>
                                        {
                                            using var source = new CancellationTokenSource(TimeSpan.FromSeconds(6));
