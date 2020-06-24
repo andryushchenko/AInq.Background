@@ -28,11 +28,10 @@ internal sealed class MultipleNullProcessor<TMetadata> : ITaskProcessor<object?,
     private readonly SemaphoreSlim _semaphore;
 
     internal MultipleNullProcessor(int maxParallelTasks)
-    {
-        _semaphore = new SemaphoreSlim(Math.Max(1, maxParallelTasks));
-    }
+        => _semaphore = new SemaphoreSlim(Math.Max(1, maxParallelTasks));
 
-    async Task ITaskProcessor<object?, TMetadata>.ProcessPendingTasksAsync(ITaskManager<object?, TMetadata> manager, IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
+    async Task ITaskProcessor<object?, TMetadata>.ProcessPendingTasksAsync(ITaskManager<object?, TMetadata> manager, IServiceProvider provider,
+        ILogger? logger, CancellationToken cancellation)
     {
         while (manager.HasTask && !cancellation.IsCancellationRequested)
         {

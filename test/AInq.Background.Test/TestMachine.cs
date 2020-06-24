@@ -15,6 +15,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AInq.Background.Tasks;
 
 namespace AInq.Background.Test
 {

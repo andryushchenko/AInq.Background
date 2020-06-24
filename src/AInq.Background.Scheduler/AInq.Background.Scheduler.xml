@@ -8,12 +8,12 @@
             <summary> Work Scheduler dependency injection </summary>
         </member>
         <member name="M:AInq.Background.WorkSchedulerInjection.CreateWorkScheduler(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Nullable{System.TimeSpan})">
-            <summary> Create <see cref="T:AInq.Background.IWorkScheduler"/> without service registration </summary>
+            <summary> Create <see cref="T:AInq.Background.Services.IWorkScheduler" /> without service registration </summary>
             <param name="services"> Service collection</param>
             <param name="horizon"> Time horizon to look for upcoming tasks </param>
         </member>
         <member name="M:AInq.Background.WorkSchedulerInjection.AddWorkScheduler(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Nullable{System.TimeSpan})">
-            <summary> Add <see cref="T:AInq.Background.IWorkScheduler"/> service </summary>
+            <summary> Add <see cref="T:AInq.Background.Services.IWorkScheduler" /> service </summary>
             <param name="services"> Service collection</param>
             <param name="horizon"> Time horizon to look for upcoming tasks </param>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>

@@ -16,19 +16,23 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Background
+namespace AInq.Background.Tasks
 {
 
-/// <summary> Interface for asynchronous access to shared resource of type <typeparamref name="TResource"/> without result </summary>
+/// <summary>
+///     Interface for asynchronous access to shared resource of type <typeparamref name="TResource" /> with result of type
+///     <typeparamref name="TResult" />
+/// </summary>
 /// <typeparam name="TResource"> Shared resource type </typeparam>
-public interface IAsyncAccess<in TResource>
+/// <typeparam name="TResult"> Access action result type </typeparam>
+public interface IAsyncAccess<in TResource, TResult>
 {
     /// <summary> Asynchronous access action </summary>
     /// <param name="resource"> Shared resource instance </param>
     /// <param name="serviceProvider"> Service provider instance </param>
     /// <param name="cancellation"> Access action cancellation token </param>
-    /// <returns> Access action completion task </returns>
-    Task AccessAsync(TResource resource, IServiceProvider serviceProvider, CancellationToken cancellation = default);
+    /// <returns> Access action result task </returns>
+    Task<TResult> AccessAsync(TResource resource, IServiceProvider serviceProvider, CancellationToken cancellation = default);
 }
 
 }

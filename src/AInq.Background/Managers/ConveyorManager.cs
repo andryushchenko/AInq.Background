@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Services;
+using AInq.Background.Tasks;
 using AInq.Background.Wrappers;
 using System;
 using System.Threading;
@@ -24,13 +26,8 @@ internal sealed class ConveyorManager<TData, TResult> : TaskManager<IConveyorMac
 {
     private readonly int _maxAttempts;
 
-    private int FixAttempts(int attemptsCount)
-        => Math.Min(_maxAttempts, Math.Max(1, attemptsCount));
-
     public ConveyorManager(int maxAttempts = int.MaxValue)
-    {
-        _maxAttempts = Math.Max(maxAttempts, 1);
-    }
+        => _maxAttempts = Math.Max(maxAttempts, 1);
 
     int IConveyor<TData, TResult>.MaxAttempts => _maxAttempts;
 
@@ -40,6 +37,9 @@ internal sealed class ConveyorManager<TData, TResult> : TaskManager<IConveyorMac
         AddTask(dataWrapper);
         return dataWrapper.Result;
     }
+
+    private int FixAttempts(int attemptsCount)
+        => Math.Min(_maxAttempts, Math.Max(1, attemptsCount));
 }
 
 }

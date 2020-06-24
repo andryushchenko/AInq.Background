@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using AInq.Background.Managers;
+using AInq.Background.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
@@ -34,7 +35,8 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
         _semaphore = new SemaphoreSlim(Math.Max(1, maxParallelTasks));
     }
 
-    async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
+    async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,
+        ILogger? logger, CancellationToken cancellation)
     {
         while (manager.HasTask && !cancellation.IsCancellationRequested)
         {

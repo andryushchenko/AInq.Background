@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Tasks;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -22,11 +23,11 @@ namespace AInq.Background.Wrappers
 
 internal sealed class ConveyorDataWrapper<TData, TResult> : ITaskWrapper<IConveyorMachine<TData, TResult>>
 {
-    private readonly TData _data;
     private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
+    private readonly TData _data;
     private readonly CancellationToken _innerCancellation;
-    private CancellationTokenRegistration _cancellationRegistration;
     private int _attemptsRemain;
+    private CancellationTokenRegistration _cancellationRegistration;
 
     internal ConveyorDataWrapper(TData data, CancellationToken innerCancellation, int attemptsCount)
     {
@@ -39,7 +40,8 @@ internal sealed class ConveyorDataWrapper<TData, TResult> : ITaskWrapper<IConvey
     internal Task<TResult> Result => _completion.Task;
     bool ITaskWrapper<IConveyorMachine<TData, TResult>>.IsCanceled => _innerCancellation.IsCancellationRequested;
 
-    async Task<bool> ITaskWrapper<IConveyorMachine<TData, TResult>>.ExecuteAsync(IConveyorMachine<TData, TResult> argument, IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
+    async Task<bool> ITaskWrapper<IConveyorMachine<TData, TResult>>.ExecuteAsync(IConveyorMachine<TData, TResult> argument, IServiceProvider provider,
+        ILogger? logger, CancellationToken cancellation)
     {
         if (_attemptsRemain < 1)
         {

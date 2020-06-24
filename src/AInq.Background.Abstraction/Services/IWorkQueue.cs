@@ -12,93 +12,86 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Tasks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Background
+namespace AInq.Background.Services
 {
 
-/// <summary> Interface for background work queue with prioritization </summary>
-public interface IPriorityWorkQueue : IWorkQueue
+/// <summary> Interface for background work queue </summary>
+public interface IWorkQueue
 {
-    /// <summary> Max allowed work priority </summary>
-    int MaxPriority { get; }
+    /// <summary> Max allowed retry on fail attempts </summary>
+    int MaxAttempts { get; }
 
-    /// <summary> Enqueue background work with given <paramref name="priority"/> </summary>
+    /// <summary> Enqueue background work </summary>
     /// <param name="work"> Work instance </param>
-    /// <param name="priority"> Work priority </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <returns> Work completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
-    Task EnqueueWork(IWork work, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    Task EnqueueWork(IWork work, CancellationToken cancellation = default, int attemptsCount = 1);
 
-    /// <summary> Enqueue background work with given <paramref name="priority"/> </summary>
-    /// <param name="priority"> Work priority </param>
+    /// <summary> Enqueue background work </summary>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <returns> Work completion task </returns>
-    Task EnqueueWork<TWork>(int priority, CancellationToken cancellation = default, int attemptsCount = 1)
+    Task EnqueueWork<TWork>(CancellationToken cancellation = default, int attemptsCount = 1)
         where TWork : IWork;
 
-    /// <summary> Enqueue background work with given <paramref name="priority"/> </summary>
+    /// <summary> Enqueue background work </summary>
     /// <param name="work"> Work instance </param>
-    /// <param name="priority"> Work priority </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
-    Task<TResult> EnqueueWork<TResult>(IWork<TResult> work, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    Task<TResult> EnqueueWork<TResult>(IWork<TResult> work, CancellationToken cancellation = default, int attemptsCount = 1);
 
-    /// <summary> Enqueue background work with given <paramref name="priority"/> </summary>
-    /// <param name="priority"> Work priority </param>
+    /// <summary> Enqueue background work </summary>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
-    Task<TResult> EnqueueWork<TWork, TResult>(int priority, CancellationToken cancellation = default, int attemptsCount = 1)
+    Task<TResult> EnqueueWork<TWork, TResult>(CancellationToken cancellation = default, int attemptsCount = 1)
         where TWork : IWork<TResult>;
 
-    /// <summary> Enqueue asynchronous background work with given <paramref name="priority"/> </summary>
+    /// <summary> Enqueue asynchronous background work </summary>
     /// <param name="work"> Work instance </param>
-    /// <param name="priority"> Work priority </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <returns> Work completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
-    Task EnqueueAsyncWork(IAsyncWork work, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    Task EnqueueAsyncWork(IAsyncWork work, CancellationToken cancellation = default, int attemptsCount = 1);
 
-    /// <summary> Enqueue asynchronous background work with given <paramref name="priority"/> </summary>
-    /// <param name="priority"> Work priority </param>
+    /// <summary> Enqueue asynchronous background work </summary>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <returns> Work completion task </returns>
-    Task EnqueueAsyncWork<TAsyncWork>(int priority, CancellationToken cancellation = default, int attemptsCount = 1)
+    Task EnqueueAsyncWork<TAsyncWork>(CancellationToken cancellation = default, int attemptsCount = 1)
         where TAsyncWork : IAsyncWork;
 
-    /// <summary> Enqueue asynchronous background work with given <paramref name="priority"/> </summary>
+    /// <summary> Enqueue asynchronous background work </summary>
     /// <param name="work"> Work instance </param>
-    /// <param name="priority"> Work priority </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
-    Task<TResult> EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    Task<TResult> EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, CancellationToken cancellation = default, int attemptsCount = 1);
 
-    /// <summary> Enqueue asynchronous background work with given <paramref name="priority"/> </summary>
-    /// <param name="priority"> Work priority </param>
+    /// <summary> Enqueue asynchronous background work </summary>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
-    Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(int priority, CancellationToken cancellation = default, int attemptsCount = 1)
+    Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(CancellationToken cancellation = default, int attemptsCount = 1)
         where TAsyncWork : IAsyncWork<TResult>;
 }
 

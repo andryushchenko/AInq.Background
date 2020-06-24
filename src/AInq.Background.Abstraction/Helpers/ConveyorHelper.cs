@@ -12,17 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Services;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Background
+namespace AInq.Background.Helpers
 {
 
-/// <summary> Helper class for <see cref="IConveyor{TData,TResult}"/> and <see cref="IPriorityConveyor{TData,TResult}"/> </summary>
+/// <summary> Helper class for <see cref="IConveyor{TData,TResult}" /> and <see cref="IPriorityConveyor{TData,TResult}" /> </summary>
 public static class ConveyorHelper
 {
-    /// <summary> Process data using registered conveyor with giver <paramref name="priority"/> (if supported) </summary>
+    /// <summary> Process data using registered conveyor with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="data"> Data to process </param>
     /// <param name="cancellation"> Processing cancellation token </param>
@@ -31,9 +32,13 @@ public static class ConveyorHelper
     /// <typeparam name="TData"> Input data type </typeparam>
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task </returns>
-    /// <exception cref="InvalidOperationException"> Thrown if no conveyor for given <typeparamref name="TData"/> and <typeparamref name="TResult"/> is registered </exception>
-    /// <seealso cref="IPriorityConveyor{TData,TResult}.ProcessDataAsync(TData, int, CancellationToken, int)"/>
-    public static Task<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, TData data, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown if no conveyor for given <typeparamref name="TData" /> and <typeparamref name="TResult" /> is
+    ///     registered
+    /// </exception>
+    /// <seealso cref="IPriorityConveyor{TData,TResult}.ProcessDataAsync(TData, int, CancellationToken, int)" />
+    public static Task<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, TData data, CancellationToken cancellation = default,
+        int attemptsCount = 1, int priority = 0)
     {
         var service = provider.GetService(typeof(IPriorityConveyor<TData, TResult>)) ?? provider.GetService(typeof(IConveyor<TData, TResult>));
         return service switch

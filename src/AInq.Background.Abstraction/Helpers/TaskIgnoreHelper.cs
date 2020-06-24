@@ -14,7 +14,7 @@
 
 using System.Threading.Tasks;
 
-namespace AInq.Background
+namespace AInq.Background.Helpers
 {
 
 internal static class TaskIgnoreHelper

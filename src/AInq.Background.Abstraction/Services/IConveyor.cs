@@ -15,7 +15,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Background
+namespace AInq.Background.Services
 {
 
 /// <summary> Interface for background data processing conveyor </summary>

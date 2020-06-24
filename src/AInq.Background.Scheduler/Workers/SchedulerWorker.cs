@@ -32,11 +32,12 @@ internal sealed class SchedulerWorker : IHostedService, IDisposable
     private static readonly TimeSpan MaxTimeout = TimeSpan.FromHours(1);
     private static readonly TimeSpan Beforehand = TimeSpan.FromSeconds(5);
 
-    private readonly IWorkSchedulerManager _scheduler;
-    private readonly IServiceProvider _provider;
-    private readonly ILogger<SchedulerWorker>? _logger;
     private readonly TimeSpan _horizon;
+    private readonly ILogger<SchedulerWorker>? _logger;
+    private readonly IServiceProvider _provider;
+    private readonly IWorkSchedulerManager _scheduler;
     private readonly CancellationTokenSource _shutdown = new CancellationTokenSource();
+
     private Task? _worker;
 
     public SchedulerWorker(IWorkSchedulerManager scheduler, IServiceProvider provider, TimeSpan? horizon = null)
@@ -49,6 +50,27 @@ internal sealed class SchedulerWorker : IHostedService, IDisposable
         _scheduler = scheduler;
         _provider = provider;
         _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<SchedulerWorker>();
+    }
+
+    void IDisposable.Dispose()
+    {
+        _shutdown.Dispose();
+        if (_worker != null && (_worker.IsCompleted || _worker.IsFaulted || _worker.IsCanceled))
+            _worker.Dispose();
+    }
+
+    Task IHostedService.StartAsync(CancellationToken cancel)
+    {
+        cancel.ThrowIfCancellationRequested();
+        _worker = Worker(cancel);
+        return Task.CompletedTask;
+    }
+
+    async Task IHostedService.StopAsync(CancellationToken cancel)
+    {
+        _shutdown.Cancel();
+        if (_worker != null)
+            await _worker.WaitAsync(cancel).ConfigureAwait(false);
     }
 
     private async Task Worker(CancellationToken abort)
@@ -100,27 +122,6 @@ internal sealed class SchedulerWorker : IHostedService, IDisposable
         using var scope = _provider.CreateScope();
         if (await work.ExecuteAsync(scope.ServiceProvider, _logger, cancellation).ConfigureAwait(false))
             _scheduler.RevertWork(work);
-    }
-
-    Task IHostedService.StartAsync(CancellationToken cancel)
-    {
-        cancel.ThrowIfCancellationRequested();
-        _worker = Worker(cancel);
-        return Task.CompletedTask;
-    }
-
-    async Task IHostedService.StopAsync(CancellationToken cancel)
-    {
-        _shutdown.Cancel();
-        if (_worker != null)
-            await _worker.WaitAsync(cancel).ConfigureAwait(false);
-    }
-
-    void IDisposable.Dispose()
-    {
-        _shutdown.Dispose();
-        if (_worker != null && (_worker.IsCompleted || _worker.IsFaulted || _worker.IsCanceled))
-            _worker.Dispose();
     }
 }
 

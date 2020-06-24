@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Tasks;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -22,13 +23,41 @@ namespace AInq.Background.Wrappers
 
 internal static class WorkWrapperFactory
 {
+    public static (ITaskWrapper<object?> Work, Task Task) CreateWorkWrapper(IWork work, int attemptsCount = 1,
+        CancellationToken cancellation = default)
+    {
+        var wrapper = new WorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), Math.Max(1, attemptsCount), cancellation);
+        return (wrapper, wrapper.WorkTask);
+    }
+
+    public static (ITaskWrapper<object?> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IWork<TResult> work, int attemptsCount = 1,
+        CancellationToken cancellation = default)
+    {
+        var wrapper = new WorkWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)), Math.Max(1, attemptsCount), cancellation);
+        return (wrapper, wrapper.WorkTask);
+    }
+
+    public static (ITaskWrapper<object?> Work, Task Task) CreateWorkWrapper(IAsyncWork work, int attemptsCount = 1,
+        CancellationToken cancellation = default)
+    {
+        var wrapper = new AsyncWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), Math.Max(1, attemptsCount), cancellation);
+        return (wrapper, wrapper.WorkTask);
+    }
+
+    public static (ITaskWrapper<object?> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IAsyncWork<TResult> work, int attemptsCount = 1,
+        CancellationToken cancellation = default)
+    {
+        var wrapper = new AsyncWorkWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)), Math.Max(1, attemptsCount), cancellation);
+        return (wrapper, wrapper.WorkTask);
+    }
+
     private class WorkWrapper : ITaskWrapper<object?>
     {
-        private readonly IWork _work;
         private readonly TaskCompletionSource<bool> _completion = new TaskCompletionSource<bool>();
         private readonly CancellationToken _innerCancellation;
-        private CancellationTokenRegistration _cancellationRegistration;
+        private readonly IWork _work;
         private int _attemptsRemain;
+        private CancellationTokenRegistration _cancellationRegistration;
 
         internal WorkWrapper(IWork work, int attemptsCount, CancellationToken innerCancellation)
         {
@@ -41,7 +70,8 @@ internal static class WorkWrapperFactory
         internal Task WorkTask => _completion.Task;
         bool ITaskWrapper<object?>.IsCanceled => _innerCancellation.IsCancellationRequested;
 
-        Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
+        Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger,
+            CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
             {
@@ -81,11 +111,11 @@ internal static class WorkWrapperFactory
 
     private class WorkWrapper<TResult> : ITaskWrapper<object?>
     {
-        private readonly IWork<TResult> _work;
         private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
         private readonly CancellationToken _innerCancellation;
-        private CancellationTokenRegistration _cancellationRegistration;
+        private readonly IWork<TResult> _work;
         private int _attemptsRemain;
+        private CancellationTokenRegistration _cancellationRegistration;
 
         internal WorkWrapper(IWork<TResult> work, int attemptsCount, CancellationToken innerCancellation)
         {
@@ -98,7 +128,8 @@ internal static class WorkWrapperFactory
         internal Task<TResult> WorkTask => _completion.Task;
         bool ITaskWrapper<object?>.IsCanceled => _innerCancellation.IsCancellationRequested;
 
-        Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
+        Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger,
+            CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
             {
@@ -137,11 +168,11 @@ internal static class WorkWrapperFactory
 
     private class AsyncWorkWrapper : ITaskWrapper<object?>
     {
-        private readonly IAsyncWork _work;
         private readonly TaskCompletionSource<bool> _completion = new TaskCompletionSource<bool>();
         private readonly CancellationToken _innerCancellation;
-        private CancellationTokenRegistration _cancellationRegistration;
+        private readonly IAsyncWork _work;
         private int _attemptsRemain;
+        private CancellationTokenRegistration _cancellationRegistration;
 
         internal AsyncWorkWrapper(IAsyncWork work, int attemptsCount, CancellationToken innerCancellation)
         {
@@ -154,7 +185,8 @@ internal static class WorkWrapperFactory
         internal Task WorkTask => _completion.Task;
         bool ITaskWrapper<object?>.IsCanceled => _innerCancellation.IsCancellationRequested;
 
-        async Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
+        async Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger,
+            CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
             {
@@ -194,11 +226,11 @@ internal static class WorkWrapperFactory
 
     private class AsyncWorkWrapper<TResult> : ITaskWrapper<object?>
     {
-        private readonly IAsyncWork<TResult> _work;
         private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
         private readonly CancellationToken _innerCancellation;
-        private CancellationTokenRegistration _cancellationRegistration;
+        private readonly IAsyncWork<TResult> _work;
         private int _attemptsRemain;
+        private CancellationTokenRegistration _cancellationRegistration;
 
         internal AsyncWorkWrapper(IAsyncWork<TResult> work, int attemptsCount, CancellationToken innerCancellation)
         {
@@ -211,7 +243,8 @@ internal static class WorkWrapperFactory
         internal Task<TResult> WorkTask => _completion.Task;
         bool ITaskWrapper<object?>.IsCanceled => _innerCancellation.IsCancellationRequested;
 
-        async Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
+        async Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger,
+            CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
             {
@@ -246,30 +279,6 @@ internal static class WorkWrapperFactory
             _cancellationRegistration = default;
             return true;
         }
-    }
-
-    public static (ITaskWrapper<object?> Work, Task Task) CreateWorkWrapper(IWork work, int attemptsCount = 1, CancellationToken cancellation = default)
-    {
-        var wrapper = new WorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), Math.Max(1, attemptsCount), cancellation);
-        return (wrapper, wrapper.WorkTask);
-    }
-
-    public static (ITaskWrapper<object?> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IWork<TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
-    {
-        var wrapper = new WorkWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)), Math.Max(1, attemptsCount), cancellation);
-        return (wrapper, wrapper.WorkTask);
-    }
-
-    public static (ITaskWrapper<object?> Work, Task Task) CreateWorkWrapper(IAsyncWork work, int attemptsCount = 1, CancellationToken cancellation = default)
-    {
-        var wrapper = new AsyncWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), Math.Max(1, attemptsCount), cancellation);
-        return (wrapper, wrapper.WorkTask);
-    }
-
-    public static (ITaskWrapper<object?> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IAsyncWork<TResult> work, int attemptsCount = 1, CancellationToken cancellation = default)
-    {
-        var wrapper = new AsyncWorkWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)), Math.Max(1, attemptsCount), cancellation);
-        return (wrapper, wrapper.WorkTask);
     }
 }
 

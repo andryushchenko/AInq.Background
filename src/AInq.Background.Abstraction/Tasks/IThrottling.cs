@@ -12,21 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Services;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background
+namespace AInq.Background.Tasks
 {
 
-/// <summary> Interface for asynchronous work without result </summary>
-public interface IAsyncWork
+/// <summary> Interface for objects need to have timeout before reuse </summary>
+/// <remarks> Used in <see cref="IConveyor{TData,TResult}" /> and <see cref="IAccessQueue{TResource}" /></remarks>
+public interface IThrottling
 {
-    /// <summary> Asynchronous work action </summary>
-    /// <param name="serviceProvider"> Service provider instance </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <returns> Work completion task </returns>
-    Task DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation = default);
+    /// <summary> Timeout duration </summary>
+    TimeSpan Timeout { get; }
 }
 
 }

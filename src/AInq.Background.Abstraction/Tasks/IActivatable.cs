@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Services;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Background
+namespace AInq.Background.Tasks
 {
 
 /// <summary> Interface for object which need to be activated/deactivated before/after usage </summary>
-/// <remarks> Used in <see cref="IConveyor{TData,TResult}"/> and <see cref="IAccessQueue{TResource}"/></remarks>
+/// <remarks> Used in <see cref="IConveyor{TData,TResult}" /> and <see cref="IAccessQueue{TResource}" /></remarks>
 public interface IActivatable
 {
     /// <summary> Shows if object is active now </summary>

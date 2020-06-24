@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using AInq.Background.Managers;
+using AInq.Background.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -27,11 +28,10 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
     private readonly TArgument _argument;
 
     internal SingleStaticProcessor(TArgument argument)
-    {
-        _argument = argument;
-    }
+        => _argument = argument;
 
-    async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
+    async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,
+        ILogger? logger, CancellationToken cancellation)
     {
         if (!manager.HasTask)
             return;

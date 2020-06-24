@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Services;
+using AInq.Background.Tasks;
 using AInq.Background.Wrappers;
 using System;
 using System.Threading;
@@ -20,17 +22,13 @@ using System.Threading.Tasks;
 namespace AInq.Background.Managers
 {
 
-internal sealed class PriorityConveyorManager<TData, TResult> : PriorityTaskManager<IConveyorMachine<TData, TResult>>, IPriorityConveyor<TData, TResult>
+internal sealed class PriorityConveyorManager<TData, TResult> : PriorityTaskManager<IConveyorMachine<TData, TResult>>,
+                                                                IPriorityConveyor<TData, TResult>
 {
     private readonly int _maxAttempts;
 
-    private int FixAttempts(int attemptsCount)
-        => Math.Min(_maxAttempts, Math.Max(1, attemptsCount));
-
     public PriorityConveyorManager(int maxPriority = 100, int maxAttempts = int.MaxValue) : base(maxPriority)
-    {
-        _maxAttempts = Math.Max(maxAttempts, 1);
-    }
+        => _maxAttempts = Math.Max(maxAttempts, 1);
 
     int IPriorityConveyor<TData, TResult>.MaxPriority => MaxPriority;
 
@@ -49,6 +47,9 @@ internal sealed class PriorityConveyorManager<TData, TResult> : PriorityTaskMana
         AddTask(dataWrapper, 0);
         return dataWrapper.Result;
     }
+
+    private int FixAttempts(int attemptsCount)
+        => Math.Min(_maxAttempts, Math.Max(1, attemptsCount));
 }
 
 }

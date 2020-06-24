@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Services;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Background
+namespace AInq.Background.Tasks
 {
 
-/// <summary> Interface for data processing machine for <see cref="IConveyor{TData, TResult}"/> </summary>
+/// <summary> Interface for data processing machine for <see cref="IConveyor{TData,TResult}" /> </summary>
 /// <typeparam name="TData"> Input data type </typeparam>
 /// <typeparam name="TResult"> Processing result type </typeparam>
 public interface IConveyorMachine<in TData, TResult>

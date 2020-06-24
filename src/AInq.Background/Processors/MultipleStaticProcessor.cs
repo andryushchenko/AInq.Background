@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using AInq.Background.Managers;
+using AInq.Background.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
@@ -27,8 +28,8 @@ namespace AInq.Background.Processors
 
 internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
 {
-    private readonly ConcurrentBag<TArgument> _inactive;
     private readonly ConcurrentBag<TArgument> _active;
+    private readonly ConcurrentBag<TArgument> _inactive;
     private readonly AsyncAutoResetEvent _reset = new AsyncAutoResetEvent(false);
 
     internal MultipleStaticProcessor(IEnumerable<TArgument> arguments)
@@ -41,7 +42,8 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
             : _inactive;
     }
 
-    async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
+    async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,
+        ILogger? logger, CancellationToken cancellation)
     {
         var currentTasks = new LinkedList<Task>();
         while (manager.HasTask && !cancellation.IsCancellationRequested)

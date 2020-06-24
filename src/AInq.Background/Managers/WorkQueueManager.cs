@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Services;
+using AInq.Background.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using static AInq.Background.WorkFactory;
+using static AInq.Background.Tasks.WorkFactory;
 using static AInq.Background.Wrappers.WorkWrapperFactory;
 
 namespace AInq.Background.Managers
@@ -27,9 +29,7 @@ internal sealed class WorkQueueManager : TaskManager<object?>, IWorkQueue
     private readonly int _maxAttempts;
 
     public WorkQueueManager(int maxAttempts = int.MaxValue)
-    {
-        _maxAttempts = Math.Max(maxAttempts, 1);
-    }
+        => _maxAttempts = Math.Max(maxAttempts, 1);
 
     int IWorkQueue.MaxAttempts => _maxAttempts;
 
@@ -42,7 +42,9 @@ internal sealed class WorkQueueManager : TaskManager<object?>, IWorkQueue
 
     Task IWorkQueue.EnqueueWork<TWork>(CancellationToken cancellation, int attemptsCount)
     {
-        var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), FixAttempts(attemptsCount), cancellation);
+        var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
+            FixAttempts(attemptsCount),
+            cancellation);
         AddTask(workWrapper);
         return task;
     }
@@ -56,7 +58,9 @@ internal sealed class WorkQueueManager : TaskManager<object?>, IWorkQueue
 
     Task<TResult> IWorkQueue.EnqueueWork<TWork, TResult>(CancellationToken cancellation, int attemptsCount)
     {
-        var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)), FixAttempts(attemptsCount), cancellation);
+        var (workWrapper, task) = CreateWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
+            FixAttempts(attemptsCount),
+            cancellation);
         AddTask(workWrapper);
         return task;
     }
@@ -70,7 +74,10 @@ internal sealed class WorkQueueManager : TaskManager<object?>, IWorkQueue
 
     Task IWorkQueue.EnqueueAsyncWork<TWork>(CancellationToken cancellation, int attemptsCount)
     {
-        var (workWrapper, task) = CreateWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), FixAttempts(attemptsCount), cancellation);
+        var (workWrapper, task) =
+            CreateWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)),
+                FixAttempts(attemptsCount),
+                cancellation);
         AddTask(workWrapper);
         return task;
     }
@@ -84,7 +91,10 @@ internal sealed class WorkQueueManager : TaskManager<object?>, IWorkQueue
 
     Task<TResult> IWorkQueue.EnqueueAsyncWork<TWork, TResult>(CancellationToken cancellation, int attemptsCount)
     {
-        var (workWrapper, task) = CreateWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)), FixAttempts(attemptsCount), cancellation);
+        var (workWrapper, task) =
+            CreateWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TWork>().DoWorkAsync(provider, token)),
+                FixAttempts(attemptsCount),
+                cancellation);
         AddTask(workWrapper);
         return task;
     }

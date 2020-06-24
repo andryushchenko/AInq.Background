@@ -14,17 +14,17 @@
 
 using System;
 
-namespace AInq.Background
+namespace AInq.Background.Tasks
 {
 
-/// <summary> Interface for synchronous access to shared resource of type <typeparamref name="TResource"/> without result </summary>
-/// <typeparam name="TResource"> Shared resource type </typeparam>
-public interface IAccess<in TResource>
+/// <summary> Interface for synchronous work with result of type <typeparamref name="TResult" /> </summary>
+/// <typeparam name="TResult"> Work result type </typeparam>
+public interface IWork<out TResult>
 {
-    /// <summary> Access action </summary>
-    /// <param name="resource"> Shared resource instance </param>
+    /// <summary> Work action </summary>
     /// <param name="serviceProvider"> Service provider instance </param>
-    void Access(TResource resource, IServiceProvider serviceProvider);
+    /// <returns> Work result </returns>
+    TResult DoWork(IServiceProvider serviceProvider);
 }
 
 }
