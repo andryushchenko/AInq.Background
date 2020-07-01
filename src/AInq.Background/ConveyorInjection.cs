@@ -208,9 +208,9 @@ public static class ConveyorInjection
         var manager = new ConveyorManager<TData, TResult>(maxAttempts);
         services.AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider,
             manager,
-            ProcessorFactory.CreateProcessor<IConveyorMachine<TData, TResult>, object?>(provider,
-                conveyorMachineFactory,
+            ProcessorFactory.CreateProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachineFactory,
                 strategy,
+                provider,
                 maxParallelMachines)));
         return manager;
     }
@@ -260,9 +260,9 @@ public static class ConveyorInjection
         var manager = new PriorityConveyorManager<TData, TResult>(maxPriority, maxAttempts);
         services.AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider,
             manager,
-            ProcessorFactory.CreateProcessor<IConveyorMachine<TData, TResult>, int>(provider,
-                conveyorMachineFactory,
+            ProcessorFactory.CreateProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachineFactory,
                 strategy,
+                provider,
                 maxParallelMachines)));
         return manager;
     }

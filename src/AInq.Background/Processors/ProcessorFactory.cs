@@ -41,8 +41,8 @@ internal static class ProcessorFactory
         };
     }
 
-    public static ITaskProcessor<TArgument, TMetadata> CreateProcessor<TArgument, TMetadata>(IServiceProvider provider,
-        Func<IServiceProvider, TArgument> argumentFactory, ReuseStrategy strategy, int maxArgumentsCount = 1)
+    public static ITaskProcessor<TArgument, TMetadata> CreateProcessor<TArgument, TMetadata>(Func<IServiceProvider, TArgument> argumentFactory,
+        ReuseStrategy strategy, IServiceProvider? provider = null, int maxArgumentsCount = 1)
     {
         if (argumentFactory == null)
             throw new ArgumentNullException(nameof(argumentFactory));
@@ -52,7 +52,7 @@ internal static class ProcessorFactory
         {
             ReuseStrategy.Static => CreateProcessor<TArgument, TMetadata>(Enumerable
                                                                           .Repeat(0, maxArgumentsCount)
-                                                                          .Select(_ => argumentFactory.Invoke(provider))),
+                                                                          .Select(_ => argumentFactory.Invoke(provider!))),
             ReuseStrategy.Reuse => maxArgumentsCount <= 1
                 ? new SingleReusableProcessor<TArgument, TMetadata>(argumentFactory) as ITaskProcessor<TArgument, TMetadata>
                 : new MultipleReusableProcessor<TArgument, TMetadata>(argumentFactory, maxArgumentsCount),

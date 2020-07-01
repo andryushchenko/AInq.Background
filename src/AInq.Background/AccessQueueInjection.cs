@@ -186,7 +186,7 @@ public static class AccessQueueInjection
         var manager = new AccessQueueManager<TResource>(maxAttempts);
         services.AddHostedService(provider => new TaskWorker<TResource, object?>(provider,
             manager,
-            ProcessorFactory.CreateProcessor<TResource, object?>(provider, resourceFactory, strategy, maxResourceInstances)));
+            ProcessorFactory.CreateProcessor<TResource, object?>(resourceFactory, strategy, provider, maxResourceInstances)));
         return manager;
     }
 
@@ -232,7 +232,7 @@ public static class AccessQueueInjection
         var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);
         services.AddHostedService(provider => new TaskWorker<TResource, int>(provider,
             manager,
-            ProcessorFactory.CreateProcessor<TResource, int>(provider, resourceFactory, strategy, maxResourceInstances)));
+            ProcessorFactory.CreateProcessor<TResource, int>(resourceFactory, strategy, provider, maxResourceInstances)));
         return manager;
     }
 
