@@ -22,10 +22,14 @@ using static AInq.Background.Wrappers.ConveyorDataWrapperFactory;
 namespace AInq.Background.Managers
 {
 
-internal sealed class ConveyorManager<TData, TResult> : TaskManager<IConveyorMachine<TData, TResult>>, IConveyor<TData, TResult>
+/// <summary> Background data conveyor manager </summary>
+/// <typeparam name="TData"> Input data type </typeparam>
+/// <typeparam name="TResult"> Processing result type </typeparam>
+public sealed class ConveyorManager<TData, TResult> : TaskManager<IConveyorMachine<TData, TResult>>, IConveyor<TData, TResult>
 {
     private readonly int _maxAttempts;
 
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     public ConveyorManager(int maxAttempts = int.MaxValue)
         => _maxAttempts = Math.Max(maxAttempts, 1);
 

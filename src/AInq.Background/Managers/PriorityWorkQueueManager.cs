@@ -24,10 +24,13 @@ using static AInq.Background.Wrappers.WorkWrapperFactory;
 namespace AInq.Background.Managers
 {
 
-internal sealed class PriorityWorkQueueManager : PriorityTaskManager<object?>, IPriorityWorkQueue
+/// <summary> Background work queue manager with numeric prioritization </summary>
+public sealed class PriorityWorkQueueManager : PriorityTaskManager<object?>, IPriorityWorkQueue
 {
     private readonly int _maxAttempts;
 
+    /// <param name="maxPriority"> Max allowed work priority </param>
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     public PriorityWorkQueueManager(int maxPriority = 100, int maxAttempts = int.MaxValue) : base(maxPriority)
         => _maxAttempts = Math.Max(maxAttempts, 1);
 

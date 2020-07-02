@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Helpers;
 using AInq.Background.Services;
 using AInq.Background.Tasks;
 using AInq.Background.Wrappers;
@@ -30,7 +31,8 @@ using static AInq.Background.Wrappers.DelayedWorkWrapperFactory;
 namespace AInq.Background.Managers
 {
 
-internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
+/// <summary> Work scheduler manager </summary>
+public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
 {
     private readonly AsyncAutoResetEvent _newWorkEvent = new AsyncAutoResetEvent(false);
     private ConcurrentBag<IScheduledTaskWrapper> _works = new ConcurrentBag<IScheduledTaskWrapper>();
@@ -210,7 +212,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddCronWork(IWork work, string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
+            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
@@ -218,7 +220,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddCronWork<TResult>(IWork<TResult> work, string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
+            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
@@ -226,7 +228,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddCronAsyncWork(IAsyncWork work, string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
+            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
@@ -234,7 +236,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddCronAsyncWork<TResult>(IAsyncWork<TResult> work, string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
+            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
@@ -242,7 +244,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddCronWork<TWork>(string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
+            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
@@ -250,7 +252,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddCronWork<TWork, TResult>(string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
+            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
@@ -258,7 +260,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddCronAsyncWork<TAsyncWork>(string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
-            cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
+            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
@@ -266,7 +268,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
     void IWorkScheduler.AddCronAsyncWork<TAsyncWork, TResult>(string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
-            cronExpression?.ParseCron() ?? throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression)),
+            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation));
         _newWorkEvent.Set();
     }
@@ -303,7 +305,7 @@ internal sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManag
         return upcoming.ToLookup(work => work.NextScheduledTime ?? DateTime.Now);
     }
 
-    void IWorkSchedulerManager.RevertWork(IScheduledTaskWrapper task)
+    void IWorkSchedulerManager.RevertTask(IScheduledTaskWrapper task)
     {
         if (task.IsCanceled || !task.NextScheduledTime.HasValue)
             return;

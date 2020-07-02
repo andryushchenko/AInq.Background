@@ -25,7 +25,10 @@ using System.Threading.Tasks;
 namespace AInq.Background.Workers
 {
 
-internal sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposable
+/// <summary> Background task worker service </summary>
+/// <typeparam name="TArgument"> Task argument type </typeparam>
+/// <typeparam name="TMetadata"> Task metadata type </typeparam>
+public sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposable
 {
     private readonly ILogger<TaskWorker<TArgument, TMetadata>>? _logger;
     private readonly ITaskManager<TArgument, TMetadata> _manager;
@@ -34,6 +37,9 @@ internal sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDispos
     private readonly CancellationTokenSource _shutdown = new CancellationTokenSource();
     private Task? _worker;
 
+    /// <param name="provider"> Service provider instance </param>
+    /// <param name="manager"> Task manager instance </param>
+    /// <param name="processor"> Task processor instance </param>
     public TaskWorker(IServiceProvider provider, ITaskManager<TArgument, TMetadata> manager, ITaskProcessor<TArgument, TMetadata> processor)
     {
         _provider = provider;

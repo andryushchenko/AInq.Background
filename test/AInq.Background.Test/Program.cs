@@ -43,6 +43,7 @@ internal static class Program
                                .AddWorkQueue()
                                .AddStartupWork(WorkFactory.CreateWork(provider =>
                                {
+                                   provider.AddCronWork(WorkFactory.CreateWork(()=>Console.WriteLine($"{DateTime.Now:T}\tCRON test")), "0/10 * * * * *");
                                    for (var index = 1; index <= 10; index++)
                                        provider.ProcessDataAsync<int, int>(index, priority: 50 - index);
                                    provider.AddDelayedAsyncQueueWork(WorkFactory.CreateAsyncWork(async (serviceProvider, cancel) =>

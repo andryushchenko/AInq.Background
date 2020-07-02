@@ -22,46 +22,56 @@ using System.Threading.Tasks;
 namespace AInq.Background.Wrappers
 {
 
-internal static class CronWorkWrapperFactory
+/// <summary> Factory class for creating <see cref="IScheduledTaskWrapper" /> for CRON scheduled work </summary>
+public static class CronWorkWrapperFactory
 {
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="cron"> Cron expression </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
+    /// <returns> Scheduled task wrapper </returns>
     public static IScheduledTaskWrapper CreateCronWorkWrapper(IWork work, CronExpression cron, CancellationToken cancellation = default)
         => new CronTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             cron ?? throw new ArgumentNullException(nameof(cron)),
             cancellation);
 
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="cron"> Cron expression </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <typeparam name="TResult"> Work result type </typeparam>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
+    /// <returns> Scheduled task wrapper </returns>
     public static IScheduledTaskWrapper CreateCronWorkWrapper<TResult>(IWork<TResult> work, CronExpression cron,
         CancellationToken cancellation = default)
         => new CronTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
             cron ?? throw new ArgumentNullException(nameof(cron)),
             cancellation);
 
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="cron"> Cron expression </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
+    /// <returns> Scheduled task wrapper </returns>
     public static IScheduledTaskWrapper CreateCronWorkWrapper(IAsyncWork work, CronExpression cron, CancellationToken cancellation = default)
         => new CronAsyncTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             cron ?? throw new ArgumentNullException(nameof(cron)),
             cancellation);
 
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="cron"> Cron expression </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <typeparam name="TResult"> Work result type </typeparam>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
+    /// <returns> Scheduled task wrapper </returns>
     public static IScheduledTaskWrapper CreateCronWorkWrapper<TResult>(IAsyncWork<TResult> work, CronExpression cron,
         CancellationToken cancellation = default)
         => new CronAsyncTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
             cron ?? throw new ArgumentNullException(nameof(cron)),
             cancellation);
-
-    internal static CronExpression? ParseCron(this string cronExpression)
-    {
-        try
-        {
-            return cronExpression.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries).Length switch
-            {
-                5 => CronExpression.Parse(cronExpression, CronFormat.Standard),
-                6 => CronExpression.Parse(cronExpression, CronFormat.IncludeSeconds),
-                _ => null
-            };
-        }
-        catch (Exception)
-        {
-            return null;
-        }
-    }
 
     private class CronTaskWrapper : IScheduledTaskWrapper
     {

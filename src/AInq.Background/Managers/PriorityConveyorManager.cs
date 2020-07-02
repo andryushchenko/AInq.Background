@@ -22,11 +22,16 @@ using static AInq.Background.Wrappers.ConveyorDataWrapperFactory;
 namespace AInq.Background.Managers
 {
 
-internal sealed class PriorityConveyorManager<TData, TResult> : PriorityTaskManager<IConveyorMachine<TData, TResult>>,
+/// <summary> Background data conveyor manager with numeric prioritization </summary>
+/// <typeparam name="TData"> Input data type </typeparam>
+/// <typeparam name="TResult"> Processing result type </typeparam>
+public sealed class PriorityConveyorManager<TData, TResult> : PriorityTaskManager<IConveyorMachine<TData, TResult>>,
                                                                 IPriorityConveyor<TData, TResult>
 {
     private readonly int _maxAttempts;
 
+    /// <param name="maxPriority"> Max allowed work priority </param>
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     public PriorityConveyorManager(int maxPriority = 100, int maxAttempts = int.MaxValue) : base(maxPriority)
         => _maxAttempts = Math.Max(maxAttempts, 1);
 

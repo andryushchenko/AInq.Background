@@ -392,6 +392,21 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
             <exception cref="T:System.ComponentModel.InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
         </member>
+        <member name="T:AInq.Background.Managers.AccessQueueManager`1">
+            <summary> Background access queue manager </summary>
+            <typeparam name="TResource"> Shared resource type </typeparam>
+        </member>
+        <member name="M:AInq.Background.Managers.AccessQueueManager`1.#ctor(System.Int32)">
+            <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        </member>
+        <member name="T:AInq.Background.Managers.ConveyorManager`2">
+            <summary> Background data conveyor manager </summary>
+            <typeparam name="TData"> Input data type </typeparam>
+            <typeparam name="TResult"> Processing result type </typeparam>
+        </member>
+        <member name="M:AInq.Background.Managers.ConveyorManager`2.#ctor(System.Int32)">
+            <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        </member>
         <member name="T:AInq.Background.Managers.ITaskManager`2">
             <summary> Interface for background task manager </summary>
             <typeparam name="TArgument"> Task argument type </typeparam>
@@ -415,6 +430,23 @@
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="task" /> or <paramref name="metadata" /> is NULL</exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="metadata" /> has incorrect value </exception>
         </member>
+        <member name="T:AInq.Background.Managers.PriorityAccessQueueManager`1">
+            <summary> Background access queue manager with numeric prioritization </summary>
+            <typeparam name="TResource"> Shared resource type </typeparam>
+        </member>
+        <member name="M:AInq.Background.Managers.PriorityAccessQueueManager`1.#ctor(System.Int32,System.Int32)">
+            <param name="maxPriority"> Max allowed work priority </param>
+            <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        </member>
+        <member name="T:AInq.Background.Managers.PriorityConveyorManager`2">
+            <summary> Background data conveyor manager with numeric prioritization </summary>
+            <typeparam name="TData"> Input data type </typeparam>
+            <typeparam name="TResult"> Processing result type </typeparam>
+        </member>
+        <member name="M:AInq.Background.Managers.PriorityConveyorManager`2.#ctor(System.Int32,System.Int32)">
+            <param name="maxPriority"> Max allowed work priority </param>
+            <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        </member>
         <member name="T:AInq.Background.Managers.PriorityTaskManager`1">
             <summary> Basic task manager with numeric prioritization </summary>
             <typeparam name="TArgument"> Task argument type </typeparam>
@@ -431,6 +463,13 @@
             <param name="priority"> Task priority </param>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="task" /> is NULL </exception>
         </member>
+        <member name="T:AInq.Background.Managers.PriorityWorkQueueManager">
+            <summary> Background work queue manager with numeric prioritization </summary>
+        </member>
+        <member name="M:AInq.Background.Managers.PriorityWorkQueueManager.#ctor(System.Int32,System.Int32)">
+            <param name="maxPriority"> Max allowed work priority </param>
+            <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        </member>
         <member name="T:AInq.Background.Managers.TaskManager`1">
             <summary> Basic task manager with single queue </summary>
             <typeparam name="TArgument"> Task argument type </typeparam>
@@ -439,6 +478,63 @@
             <summary> Add task to queue </summary>
             <param name="task"> Task instance </param>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="task" /> is NULL </exception>
+        </member>
+        <member name="T:AInq.Background.Managers.WorkQueueManager">
+            <summary> Background work queue manager </summary>
+        </member>
+        <member name="M:AInq.Background.Managers.WorkQueueManager.#ctor(System.Int32)">
+            <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        </member>
+        <member name="T:AInq.Background.Processors.ITaskProcessor`2">
+            <summary> Interface for task processor </summary>
+            <typeparam name="TArgument"> Task argument type </typeparam>
+            <typeparam name="TMetadata"> Task metadata type </typeparam>
+        </member>
+        <member name="M:AInq.Background.Processors.ITaskProcessor`2.ProcessPendingTasksAsync(AInq.Background.Managers.ITaskManager{`0,`1},System.IServiceProvider,Microsoft.Extensions.Logging.ILogger,System.Threading.CancellationToken)">
+            <summary> Process pending tasks form given <paramref name="manager"/> </summary>
+            <param name="manager"> Task manager instance </param>
+            <param name="provider"> Service provider instance </param>
+            <param name="logger"> Logger instance </param>
+            <param name="cancellation"> Cancellation token </param>
+            <returns></returns>
+        </member>
+        <member name="T:AInq.Background.Processors.ProcessorFactory">
+            <summary> Task processor factory class </summary>
+        </member>
+        <member name="M:AInq.Background.Processors.ProcessorFactory.CreateNullProcessor``1(System.Int32)">
+            <summary> Create NULL-argument task processor (used in background work queue) </summary>
+            <param name="maxParallelTasks"> Max allowed parallel tasks </param>
+            <typeparam name="TMetadata"> Task metadata type </typeparam>
+            <returns> Task processor instance </returns>
+        </member>
+        <member name="M:AInq.Background.Processors.ProcessorFactory.CreateProcessor``2(``0)">
+            <summary> Create task processor with single static argument </summary>
+            <param name="argument"> Task argument </param>
+            <typeparam name="TArgument"> Task argument type </typeparam>
+            <typeparam name="TMetadata"> Task metadata type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="argument"/> is NULL </exception>
+            <returns> Task processor instance </returns>
+        </member>
+        <member name="M:AInq.Background.Processors.ProcessorFactory.CreateProcessor``2(System.Collections.Generic.IEnumerable{``0})">
+            <summary> Create task processor with static arguments </summary>
+            <param name="arguments"> Task arguments collection </param>
+            <typeparam name="TArgument"> Task argument type </typeparam>
+            <typeparam name="TMetadata"> Task metadata type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="arguments"/> is NULL </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="arguments"/> is empty collection </exception>
+            <returns> Task processor instance </returns>
+        </member>
+        <member name="M:AInq.Background.Processors.ProcessorFactory.CreateProcessor``2(System.Func{System.IServiceProvider,``0},AInq.Background.ReuseStrategy,System.IServiceProvider,System.Int32)">
+            <summary> Create task processor with given argument reuse strategy </summary>
+            <param name="argumentFactory"> Argument factory </param>
+            <param name="strategy"> Argument reuse strategy </param>
+            <param name="provider"> Service provider instance (used only for <see cref="F:AInq.Background.ReuseStrategy.Static"/> strategy) </param>
+            <param name="maxArgumentsCount"> Max allowed argument instances </param>
+            <typeparam name="TArgument"> Task argument type </typeparam>
+            <typeparam name="TMetadata"> Task metadata type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="argumentFactory"/> or <paramref name="provider"/> (if used) is NULL </exception>
+            <exception cref="T:System.ComponentModel.InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+            <returns> Task processor instance </returns>
         </member>
         <member name="T:AInq.Background.ReuseStrategy">
             <summary> Reuse strategy for Shared Resources and Conveyor Machines </summary>
@@ -571,6 +667,16 @@
             <param name="priority"> Work priority </param>
             <typeparam name="TAsyncWork"> Work type </typeparam>
             <typeparam name="TResult"> Work result type </typeparam>
+        </member>
+        <member name="T:AInq.Background.Workers.TaskWorker`2">
+            <summary> Background task worker service </summary>
+            <typeparam name="TArgument"> Task argument type </typeparam>
+            <typeparam name="TMetadata"> Task metadata type </typeparam>
+        </member>
+        <member name="M:AInq.Background.Workers.TaskWorker`2.#ctor(System.IServiceProvider,AInq.Background.Managers.ITaskManager{`0,`1},AInq.Background.Processors.ITaskProcessor{`0,`1})">
+            <param name="provider"> Service provider instance </param>
+            <param name="manager"> Task manager instance </param>
+            <param name="processor"> Task processor instance </param>
         </member>
         <member name="T:AInq.Background.WorkQueueInjection">
             <summary> Background Work Queue dependency injection </summary>

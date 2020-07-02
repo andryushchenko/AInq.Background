@@ -24,10 +24,13 @@ using static AInq.Background.Wrappers.AccessWrapperFactory;
 namespace AInq.Background.Managers
 {
 
-internal sealed class AccessQueueManager<TResource> : TaskManager<TResource>, IAccessQueue<TResource>
+/// <summary> Background access queue manager </summary>
+/// <typeparam name="TResource"> Shared resource type </typeparam>
+public sealed class AccessQueueManager<TResource> : TaskManager<TResource>, IAccessQueue<TResource>
 {
     private readonly int _maxAttempts;
 
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     public AccessQueueManager(int maxAttempts = int.MaxValue)
         => _maxAttempts = Math.Max(maxAttempts, 1);
 
@@ -81,12 +84,11 @@ internal sealed class AccessQueueManager<TResource> : TaskManager<TResource>, IA
 
     Task IAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess>(CancellationToken cancellation, int attemptsCount)
     {
-        var (accessWrapper, task) =
-            CreateAccessWrapper(
-                CreateAsyncAccess<TResource>((resource, provider, token)
-                    => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
-                FixAttempts(attemptsCount),
-                cancellation);
+        var (accessWrapper, task) = CreateAccessWrapper(
+            CreateAsyncAccess<TResource>((resource, provider, token)
+                => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
+            FixAttempts(attemptsCount),
+            cancellation);
         AddTask(accessWrapper);
         return task;
     }
@@ -102,11 +104,11 @@ internal sealed class AccessQueueManager<TResource> : TaskManager<TResource>, IA
 
     Task<TResult> IAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess, TResult>(CancellationToken cancellation, int attemptsCount)
     {
-        var (accessWrapper, task) = CreateAccessWrapper(
-            CreateAsyncAccess<TResource, TResult>((resource, provider, token)
-                => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
-            FixAttempts(attemptsCount),
-            cancellation);
+        var (accessWrapper, task) =
+            CreateAccessWrapper(CreateAsyncAccess<TResource, TResult>((resource, provider, token)
+                    => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
+                FixAttempts(attemptsCount),
+                cancellation);
         AddTask(accessWrapper);
         return task;
     }

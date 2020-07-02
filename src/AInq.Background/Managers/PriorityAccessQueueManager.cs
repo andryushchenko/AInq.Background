@@ -24,10 +24,14 @@ using static AInq.Background.Wrappers.AccessWrapperFactory;
 namespace AInq.Background.Managers
 {
 
-internal sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<TResource>, IPriorityAccessQueue<TResource>
+/// <summary> Background access queue manager with numeric prioritization </summary>
+/// <typeparam name="TResource"> Shared resource type </typeparam>
+public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<TResource>, IPriorityAccessQueue<TResource>
 {
     private readonly int _maxAttempts;
 
+    /// <param name="maxPriority"> Max allowed work priority </param>
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     public PriorityAccessQueueManager(int maxPriority = 100, int maxAttempts = int.MaxValue) : base(maxPriority)
         => _maxAttempts = Math.Max(maxAttempts, 1);
 

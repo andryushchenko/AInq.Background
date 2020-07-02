@@ -24,10 +24,12 @@ using static AInq.Background.Wrappers.WorkWrapperFactory;
 namespace AInq.Background.Managers
 {
 
-internal sealed class WorkQueueManager : TaskManager<object?>, IWorkQueue
+/// <summary> Background work queue manager </summary>
+public sealed class WorkQueueManager : TaskManager<object?>, IWorkQueue
 {
     private readonly int _maxAttempts;
 
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     public WorkQueueManager(int maxAttempts = int.MaxValue)
         => _maxAttempts = Math.Max(maxAttempts, 1);
 
