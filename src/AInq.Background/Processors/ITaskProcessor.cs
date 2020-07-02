@@ -26,7 +26,7 @@ namespace AInq.Background.Processors
 /// <typeparam name="TMetadata"> Task metadata type </typeparam>
 public interface ITaskProcessor<TArgument, TMetadata>
 {
-    /// <summary> Process pending tasks form given <paramref name="manager"/> </summary>
+    /// <summary> Process pending tasks form given <paramref name="manager" /> </summary>
     /// <param name="manager"> Task manager instance </param>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="logger"> Logger instance </param>

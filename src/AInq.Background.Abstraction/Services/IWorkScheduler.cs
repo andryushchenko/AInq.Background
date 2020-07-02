@@ -162,7 +162,7 @@ public interface IWorkScheduler
     /// <param name="work"> Work instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     void AddCronWork(IWork work, string cronExpression, CancellationToken cancellation = default);
 
@@ -171,7 +171,7 @@ public interface IWorkScheduler
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     void AddCronWork<TResult>(IWork<TResult> work, string cronExpression, CancellationToken cancellation = default);
 
@@ -179,7 +179,7 @@ public interface IWorkScheduler
     /// <param name="work"> Work instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     void AddCronAsyncWork(IAsyncWork work, string cronExpression, CancellationToken cancellation = default);
 
@@ -188,7 +188,7 @@ public interface IWorkScheduler
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     void AddCronAsyncWork<TResult>(IAsyncWork<TResult> work, string cronExpression, CancellationToken cancellation = default);
 
@@ -196,7 +196,7 @@ public interface IWorkScheduler
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TWork"> Work type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     void AddCronWork<TWork>(string cronExpression, CancellationToken cancellation = default)
         where TWork : IWork;
@@ -206,7 +206,7 @@ public interface IWorkScheduler
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     void AddCronWork<TWork, TResult>(string cronExpression, CancellationToken cancellation = default)
         where TWork : IWork<TResult>;
@@ -215,7 +215,7 @@ public interface IWorkScheduler
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     void AddCronAsyncWork<TAsyncWork>(string cronExpression, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork;
@@ -225,7 +225,7 @@ public interface IWorkScheduler
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     void AddCronAsyncWork<TAsyncWork, TResult>(string cronExpression, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork<TResult>;

@@ -84,8 +84,7 @@ public sealed class AccessQueueManager<TResource> : TaskManager<TResource>, IAcc
 
     Task IAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess>(CancellationToken cancellation, int attemptsCount)
     {
-        var (accessWrapper, task) = CreateAccessWrapper(
-            CreateAsyncAccess<TResource>((resource, provider, token)
+        var (accessWrapper, task) = CreateAccessWrapper(CreateAsyncAccess<TResource>((resource, provider, token)
                 => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
             FixAttempts(attemptsCount),
             cancellation);

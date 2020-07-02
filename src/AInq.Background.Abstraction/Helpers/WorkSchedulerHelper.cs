@@ -534,7 +534,7 @@ public static class WorkSchedulerHelper
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="IWorkScheduler.AddCronWork(IWork, string, CancellationToken)" />
     public static void AddCronWork(this IServiceProvider provider, IWork work, string cronExpression, CancellationToken cancellation = default)
@@ -549,7 +549,7 @@ public static class WorkSchedulerHelper
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="IWorkScheduler.AddCronWork{TResult}(IWork{TResult}, string, CancellationToken)" />
     public static void AddCronWork<TResult>(this IServiceProvider provider, IWork<TResult> work, string cronExpression,
@@ -564,7 +564,7 @@ public static class WorkSchedulerHelper
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="IWorkScheduler.AddCronAsyncWork(IAsyncWork, string, CancellationToken)" />
     public static void AddCronAsyncWork(this IServiceProvider provider, IAsyncWork work, string cronExpression,
@@ -580,7 +580,7 @@ public static class WorkSchedulerHelper
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="IWorkScheduler.AddCronAsyncWork{TResult}(IAsyncWork{TResult}, string, CancellationToken)" />
     public static void AddCronAsyncWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work, string cronExpression,
@@ -595,7 +595,7 @@ public static class WorkSchedulerHelper
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="IWorkScheduler.AddCronWork{TWork}(string, CancellationToken)" />
     public static void AddCronWork<TWork>(this IServiceProvider provider, string cronExpression, CancellationToken cancellation = default)
@@ -611,7 +611,7 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="IWorkScheduler.AddCronWork{TWork, TResult}(string, CancellationToken)" />
     public static void AddCronWork<TWork, TResult>(this IServiceProvider provider, string cronExpression, CancellationToken cancellation = default)
@@ -626,7 +626,7 @@ public static class WorkSchedulerHelper
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="IWorkScheduler.AddCronAsyncWork{TAsyncWork}(string, CancellationToken)" />
     public static void AddCronAsyncWork<TAsyncWork>(this IServiceProvider provider, string cronExpression, CancellationToken cancellation = default)
@@ -642,7 +642,7 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="IWorkScheduler.AddCronAsyncWork{TAsyncWork, TResult}(string, CancellationToken)" />
     public static void AddCronAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, string cronExpression,
@@ -660,7 +660,7 @@ public static class WorkSchedulerHelper
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Work priority </param>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="WorkSchedulerQueueExtension.AddCronQueueWork(IWorkScheduler, IWork, string, CancellationToken, int, int)" />
     public static void AddCronQueueWork(this IServiceProvider provider, IWork work, string cronExpression, CancellationToken cancellation = default,
@@ -678,7 +678,7 @@ public static class WorkSchedulerHelper
     /// <param name="priority"> Work priority </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="WorkSchedulerQueueExtension.AddCronQueueWork{TResult}(IWorkScheduler, IWork{TResult}, string, CancellationToken, int, int)" />
     public static void AddCronQueueWork<TResult>(this IServiceProvider provider, IWork<TResult> work, string cronExpression,
@@ -695,7 +695,7 @@ public static class WorkSchedulerHelper
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Work priority </param>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="WorkSchedulerQueueExtension.AddCronAsyncQueueWork(IWorkScheduler, IAsyncWork, string, CancellationToken, int, int)" />
     public static void AddCronAsyncQueueWork(this IServiceProvider provider, IAsyncWork work, string cronExpression,
@@ -713,7 +713,7 @@ public static class WorkSchedulerHelper
     /// <param name="priority"> Work priority </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="WorkSchedulerQueueExtension.AddCronAsyncQueueWork{TResult}(IWorkScheduler, IAsyncWork{TResult}, string, CancellationToken, int, int)" />
     public static void AddCronAsyncQueueWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work, string cronExpression,
@@ -730,7 +730,7 @@ public static class WorkSchedulerHelper
     /// <param name="priority"> Work priority </param>
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="WorkSchedulerQueueExtension.AddCronQueueWork{TWork}(IWorkScheduler, string, CancellationToken, int, int)" />
     public static void AddCronQueueWork<TWork>(this IServiceProvider provider, string cronExpression, CancellationToken cancellation = default,
@@ -749,7 +749,7 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="WorkSchedulerQueueExtension.AddCronQueueWork{TWork, TResult}(IWorkScheduler, string, CancellationToken, int, int)" />
     public static void AddCronQueueWork<TWork, TResult>(this IServiceProvider provider, string cronExpression,
@@ -767,7 +767,7 @@ public static class WorkSchedulerHelper
     /// <param name="priority"> Work priority </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="WorkSchedulerQueueExtension.AddCronAsyncQueueWork{TAsyncWork}(IWorkScheduler, string, CancellationToken, int, int)" />
     public static void AddCronAsyncQueueWork<TAsyncWork>(this IServiceProvider provider, string cronExpression,
@@ -786,7 +786,7 @@ public static class WorkSchedulerHelper
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="WorkSchedulerQueueExtension.AddCronAsyncQueueWork{TAsyncWork, TResult}(IWorkScheduler, string, CancellationToken, int, int)" />
     public static void AddCronAsyncQueueWork<TAsyncWork, TResult>(this IServiceProvider provider, string cronExpression,

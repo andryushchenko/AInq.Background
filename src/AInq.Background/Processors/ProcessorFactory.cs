@@ -36,7 +36,7 @@ public static class ProcessorFactory
     /// <param name="argument"> Task argument </param>
     /// <typeparam name="TArgument"> Task argument type </typeparam>
     /// <typeparam name="TMetadata"> Task metadata type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="argument"/> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="argument" /> is NULL </exception>
     /// <returns> Task processor instance </returns>
     public static ITaskProcessor<TArgument, TMetadata> CreateProcessor<TArgument, TMetadata>(TArgument argument)
         => new SingleStaticProcessor<TArgument, TMetadata>(argument ?? throw new ArgumentNullException(nameof(argument)));
@@ -45,8 +45,8 @@ public static class ProcessorFactory
     /// <param name="arguments"> Task arguments collection </param>
     /// <typeparam name="TArgument"> Task argument type </typeparam>
     /// <typeparam name="TMetadata"> Task metadata type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="arguments"/> is NULL </exception>
-    /// <exception cref="ArgumentException"> Thrown if <paramref name="arguments"/> is empty collection </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="arguments" /> is NULL </exception>
+    /// <exception cref="ArgumentException"> Thrown if <paramref name="arguments" /> is empty collection </exception>
     /// <returns> Task processor instance </returns>
     public static ITaskProcessor<TArgument, TMetadata> CreateProcessor<TArgument, TMetadata>(IEnumerable<TArgument> arguments)
     {
@@ -62,11 +62,11 @@ public static class ProcessorFactory
     /// <summary> Create task processor with given argument reuse strategy </summary>
     /// <param name="argumentFactory"> Argument factory </param>
     /// <param name="strategy"> Argument reuse strategy </param>
-    /// <param name="provider"> Service provider instance (used only for <see cref="ReuseStrategy.Static"/> strategy) </param>
+    /// <param name="provider"> Service provider instance (used only for <see cref="ReuseStrategy.Static" /> strategy) </param>
     /// <param name="maxArgumentsCount"> Max allowed argument instances </param>
     /// <typeparam name="TArgument"> Task argument type </typeparam>
     /// <typeparam name="TMetadata"> Task metadata type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="argumentFactory"/> or <paramref name="provider"/> (if used) is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="argumentFactory" /> or <paramref name="provider" /> (if used) is NULL </exception>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
     /// <returns> Task processor instance </returns>
     public static ITaskProcessor<TArgument, TMetadata> CreateProcessor<TArgument, TMetadata>(Func<IServiceProvider, TArgument> argumentFactory,
