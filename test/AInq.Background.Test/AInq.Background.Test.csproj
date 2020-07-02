@@ -4,14 +4,15 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>Anton Andryushchenko</Authors>
-    <Product>AInq</Product>
+    <Product>AInq.Background</Product>
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Support.Background</PackageProjectUrl>
     <RepositoryUrl>https://github.com/andryushchenko/AInq.Support.Background</RepositoryUrl>
-    <Version>2.1.0</Version>
+    <Version>2.3.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
+    <Description>Simple test app</Description>
   </PropertyGroup>
 
   <ItemGroup>

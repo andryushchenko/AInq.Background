@@ -28,7 +28,7 @@ Abstraction library with no additional dependencies.
     - `IWorkQueue` and `IPriorityWorkQueue` for background task queue with `WorkQueueHelper`
     - `IAccessQueue<TResource>` and `IPriorityAccessQueue<TResource>` for shared resource access queue with `AccessQueueHelper`
     - `IConveyor<TData, TResult>` and `IPriorityConveyor<TData, TResult>`for background data processing conveyor
-    - `IWorkScheduler` for work scheduler with `WorkSchedulerHelper` and `WorkSchedulerQueueHelper` extension for interaction with Work Queue
+    - `IWorkScheduler` for work scheduler with `WorkSchedulerQueueExtension` and `WorkSchedulerHelper` extension for interaction with Work Queue
 
 #### [![Nuget](https://img.shields.io/nuget/v/AInq.Background)](https://www.nuget.org/packages/AInq.Background/) AInq.Background
 
@@ -50,11 +50,15 @@ Queues and conveyor implementations.
     - Support interaction with background work queue
     - Use `StartupWorkInjection` to register and run works
 
+You can extend functionality by implementing custom `ITaskWrapper`, `ITaskManager` or `ITaskProcessor` and combine with existing ones to create more service variants. 
+
 #### [![Nuget](https://img.shields.io/nuget/v/AInq.Background.Scheduler)](https://www.nuget.org/packages/AInq.Background.Scheduler/) AInq.Background.Scheduler
 
 Work scheduler implementation.
 - Support delayed, time-scheduled, and cron-scheduled work
 - Use `WorkSchedulerInjection` to regiter service or create for internal usage
+
+You can extend functionality by implementing custom `IScheduledTaskWrapper` or `IWorkSchedulerManager` and combine with existing ones to create more service variants. 
 
 **NOTE:** [Cronos](https://github.com/HangfireIO/Cronos) is used for parsing Cron expressions - follow documentation for supported options. Format with seconds is supported.
 
