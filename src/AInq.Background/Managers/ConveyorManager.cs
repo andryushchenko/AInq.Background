@@ -12,59 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Wrappers;
-using Nito.AsyncEx;
+using AInq.Background.Services;
+using AInq.Background.Tasks;
 using System;
-using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using static AInq.Background.Wrappers.ConveyorDataWrapperFactory;
 
 namespace AInq.Background.Managers
 {
 
-internal class ConveyorManager<TData, TResult> : IConveyor<TData, TResult>, ITaskManager<IConveyorMachine<TData, TResult>, object?>
+/// <summary> Background data conveyor manager </summary>
+/// <typeparam name="TData"> Input data type </typeparam>
+/// <typeparam name="TResult"> Processing result type </typeparam>
+public sealed class ConveyorManager<TData, TResult> : TaskManager<IConveyorMachine<TData, TResult>>, IConveyor<TData, TResult>
 {
-    protected readonly AsyncAutoResetEvent NewDataEvent = new AsyncAutoResetEvent(false);
-    protected readonly ConcurrentQueue<ITaskWrapper<IConveyorMachine<TData, TResult>>> Queue = new ConcurrentQueue<ITaskWrapper<IConveyorMachine<TData, TResult>>>();
     private readonly int _maxAttempts;
 
-    internal ConveyorManager(int maxAttempts = int.MaxValue)
-    {
-        _maxAttempts = Math.Max(maxAttempts, 1);
-    }
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+    public ConveyorManager(int maxAttempts = int.MaxValue)
+        => _maxAttempts = Math.Max(maxAttempts, 1);
 
     int IConveyor<TData, TResult>.MaxAttempts => _maxAttempts;
 
     Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
     {
-        var element = new ConveyorDataWrapper<TData, TResult>(data, cancellation, FixAttempts(attemptsCount));
-        Queue.Enqueue(element);
-        NewDataEvent.Set();
-        return element.Result;
+        var (wrapper, result) = CreateConveyorDataWrapper<TData, TResult>(data, FixAttempts(attemptsCount), cancellation);
+        AddTask(wrapper);
+        return result;
     }
 
-    bool ITaskManager<IConveyorMachine<TData, TResult>, object?>.HasTask => !Queue.IsEmpty;
-
-    Task ITaskManager<IConveyorMachine<TData, TResult>, object?>.WaitForTaskAsync(CancellationToken cancellation)
-        => Queue.IsEmpty
-            ? NewDataEvent.WaitAsync(cancellation)
-            : Task.CompletedTask;
-
-    (ITaskWrapper<IConveyorMachine<TData, TResult>>?, object?) ITaskManager<IConveyorMachine<TData, TResult>, object?>.GetTask()
-    {
-        while (true)
-        {
-            if (!Queue.TryDequeue(out var task))
-                return (null, null);
-            if (!task.IsCanceled)
-                return (task, null);
-        }
-    }
-
-    void ITaskManager<IConveyorMachine<TData, TResult>, object?>.RevertTask(ITaskWrapper<IConveyorMachine<TData, TResult>> task, object? metadata)
-        => Queue.Enqueue(task);
-
-    protected int FixAttempts(int attemptsCount)
+    private int FixAttempts(int attemptsCount)
         => Math.Min(_maxAttempts, Math.Max(1, attemptsCount));
 }
 

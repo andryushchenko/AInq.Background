@@ -13,18 +13,34 @@
 // limitations under the License.
 
 using AInq.Background.Wrappers;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace AInq.Background.Managers
 {
 
-internal interface ITaskManager<TArgument, TMetadata>
+/// <summary> Interface for background task manager </summary>
+/// <typeparam name="TArgument"> Task argument type </typeparam>
+/// <typeparam name="TMetadata"> Task metadata type </typeparam>
+public interface ITaskManager<TArgument, TMetadata>
 {
+    /// <summary> Check if manager has pending tasks </summary>
     bool HasTask { get; }
 
+    /// <summary> Asynchronously wait wor pending tasks </summary>
+    /// <param name="cancellation"> Wait cancellation token </param>
     Task WaitForTaskAsync(CancellationToken cancellation = default);
+
+    /// <summary> Get first pending task </summary>
+    /// <returns> Task wrapper and task metadata </returns>
     (ITaskWrapper<TArgument>?, TMetadata) GetTask();
+
+    /// <summary> Revert uncompleted task to manager </summary>
+    /// <param name="task"> Task instance </param>
+    /// <param name="metadata"> Task metadata </param>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="task" /> or <paramref name="metadata" /> is NULL</exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="metadata" /> has incorrect value </exception>
     void RevertTask(ITaskWrapper<TArgument> task, TMetadata metadata);
 }
 

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Tasks;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -20,12 +21,145 @@ using System.Threading.Tasks;
 namespace AInq.Background.Wrappers
 {
 
-internal static class DelayedWorkWrapperFactory
+/// <summary> Factory class for creating <see cref="IScheduledTaskWrapper"/> for once scheduled work </summary>
+public static class DelayedWorkWrapperFactory
 {
+    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> scheduled to <paramref name="time"/> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="time"> Scheduled time </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> is less or equal to current time </exception>
+    /// <returns> Scheduled task wrapper </returns>
+    public static IScheduledTaskWrapper CreateDelayedWorkWrapper(IWork work, DateTime time, CancellationToken cancellation = default)
+    {
+        time = time.ToLocalTime();
+        return new DelayedTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+            time <= DateTime.Now
+                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
+                : time,
+            cancellation);
+    }
+
+    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> delayed in <paramref name="delay"/> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="delay"> Execution delay </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> is less or equal to 00:00:00.000 </exception>
+    /// <returns> Scheduled task wrapper </returns>
+    public static IScheduledTaskWrapper CreateDelayedWorkWrapper(IWork work, TimeSpan delay, CancellationToken cancellation = default)
+        => new DelayedTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+            DateTime.Now.Add(delay <= TimeSpan.Zero
+                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
+                : delay),
+            cancellation);
+
+    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> scheduled to <paramref name="time"/> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="time"> Scheduled time </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <typeparam name="TResult"> Work result type </typeparam>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> is less or equal to current time </exception>
+    /// <returns> Scheduled task wrapper </returns>
+    public static IScheduledTaskWrapper CreateDelayedWorkWrapper<TResult>(IWork<TResult> work, DateTime time,
+        CancellationToken cancellation = default)
+    {
+        time = time.ToLocalTime();
+        return new DelayedTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
+            time <= DateTime.Now
+                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
+                : time,
+            cancellation);
+    }
+
+    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> delayed in <paramref name="delay"/> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="delay"> Execution delay </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <typeparam name="TResult"> Work result type </typeparam>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> is less or equal to 00:00:00.000 </exception>
+    /// <returns> Scheduled task wrapper </returns>
+    public static IScheduledTaskWrapper CreateDelayedWorkWrapper<TResult>(IWork<TResult> work, TimeSpan delay,
+        CancellationToken cancellation = default)
+        => new DelayedTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
+            DateTime.Now.Add(delay <= TimeSpan.Zero
+                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
+                : delay),
+            cancellation);
+
+    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> scheduled to <paramref name="time"/> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="time"> Scheduled time </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> is less or equal to current time </exception>
+    /// <returns> Scheduled task wrapper </returns>
+    public static IScheduledTaskWrapper CreateDelayedWorkWrapper(IAsyncWork work, DateTime time, CancellationToken cancellation = default)
+    {
+        time = time.ToLocalTime();
+        return new DelayedAsyncTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+            time <= DateTime.Now
+                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
+                : time,
+            cancellation);
+    }
+
+    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> delayed in <paramref name="delay"/> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="delay"> Execution delay </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> is less or equal to 00:00:00.000 </exception>
+    /// <returns> Scheduled task wrapper </returns>
+    public static IScheduledTaskWrapper CreateDelayedWorkWrapper(IAsyncWork work, TimeSpan delay, CancellationToken cancellation = default)
+        => new DelayedAsyncTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+            DateTime.Now.Add(delay <= TimeSpan.Zero
+                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
+                : delay),
+            cancellation);
+
+    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> scheduled to <paramref name="time"/> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="time"> Scheduled time </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <typeparam name="TResult"> Work result type </typeparam>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> is less or equal to current time </exception>
+    /// <returns> Scheduled task wrapper </returns>
+    public static IScheduledTaskWrapper CreateDelayedWorkWrapper<TResult>(IAsyncWork<TResult> work, DateTime time,
+        CancellationToken cancellation = default)
+    {
+        time = time.ToLocalTime();
+        return new DelayedAsyncTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
+            time <= DateTime.Now
+                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
+                : time,
+            cancellation);
+    }
+
+    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> delayed in <paramref name="delay"/> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="delay"> Execution delay </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <typeparam name="TResult"> Work result type </typeparam>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> is less or equal to 00:00:00.000 </exception>
+    /// <returns> Scheduled task wrapper </returns>
+    public static IScheduledTaskWrapper CreateDelayedWorkWrapper<TResult>(IAsyncWork<TResult> work, TimeSpan delay,
+        CancellationToken cancellation = default)
+        => new DelayedAsyncTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
+            DateTime.Now.Add(delay <= TimeSpan.Zero
+                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
+                : delay),
+            cancellation);
+
     private class DelayedTaskWrapper : IScheduledTaskWrapper
     {
-        private readonly IWork _work;
         private readonly CancellationToken _innerCancellation;
+        private readonly IWork _work;
         private DateTime? _nextScheduledTime;
 
         internal DelayedTaskWrapper(IWork work, DateTime time, CancellationToken innerCancellation)
@@ -52,12 +186,12 @@ internal static class DelayedWorkWrapperFactory
             catch (OperationCanceledException)
             {
                 if (outerCancellation.IsCancellationRequested)
-                    logger?.LogError("Scheduled task {0} canceled by runtime", _work);
+                    logger?.LogError("Scheduled work {Work} canceled by runtime", _work);
                 return Task.FromResult(true);
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing scheduled task {0}", _work);
+                logger?.LogError(ex, "Error processing scheduled work {Work}", _work);
             }
             _nextScheduledTime = null;
             return Task.FromResult(false);
@@ -66,8 +200,8 @@ internal static class DelayedWorkWrapperFactory
 
     private class DelayedTaskWrapper<TResult> : IScheduledTaskWrapper
     {
-        private readonly IWork<TResult> _work;
         private readonly CancellationToken _innerCancellation;
+        private readonly IWork<TResult> _work;
         private DateTime? _nextScheduledTime;
 
         internal DelayedTaskWrapper(IWork<TResult> work, DateTime time, CancellationToken innerCancellation)
@@ -94,12 +228,12 @@ internal static class DelayedWorkWrapperFactory
             catch (OperationCanceledException)
             {
                 if (outerCancellation.IsCancellationRequested)
-                    logger?.LogError("Scheduled task {0} canceled by runtime", _work);
+                    logger?.LogError("Scheduled work {Work} canceled by runtime", _work);
                 return Task.FromResult(true);
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing scheduled task {0}", _work);
+                logger?.LogError(ex, "Error processing scheduled work {Work}", _work);
             }
             _nextScheduledTime = null;
             return Task.FromResult(false);
@@ -108,8 +242,8 @@ internal static class DelayedWorkWrapperFactory
 
     private class DelayedAsyncTaskWrapper : IScheduledTaskWrapper
     {
-        private readonly IAsyncWork _work;
         private readonly CancellationToken _innerCancellation;
+        private readonly IAsyncWork _work;
         private DateTime? _nextScheduledTime;
 
         internal DelayedAsyncTaskWrapper(IAsyncWork work, DateTime time, CancellationToken innerCancellation)
@@ -136,12 +270,12 @@ internal static class DelayedWorkWrapperFactory
             catch (OperationCanceledException)
             {
                 if (outerCancellation.IsCancellationRequested)
-                    logger?.LogError("Scheduled task {0} canceled by runtime", _work);
+                    logger?.LogError("Scheduled work {Work} canceled by runtime", _work);
                 return true;
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing scheduled task {0}", _work);
+                logger?.LogError(ex, "Error processing scheduled work {Work}", _work);
             }
             _nextScheduledTime = null;
             return false;
@@ -150,8 +284,8 @@ internal static class DelayedWorkWrapperFactory
 
     private class DelayedAsyncTaskWrapper<TResult> : IScheduledTaskWrapper
     {
-        private readonly IAsyncWork<TResult> _work;
         private readonly CancellationToken _innerCancellation;
+        private readonly IAsyncWork<TResult> _work;
         private DateTime? _nextScheduledTime;
 
         internal DelayedAsyncTaskWrapper(IAsyncWork<TResult> work, DateTime time, CancellationToken innerCancellation)
@@ -178,85 +312,17 @@ internal static class DelayedWorkWrapperFactory
             catch (OperationCanceledException)
             {
                 if (outerCancellation.IsCancellationRequested)
-                    logger?.LogError("Scheduled task {0} canceled by runtime", _work);
+                    logger?.LogError("Scheduled work {Work} canceled by runtime", _work);
                 return true;
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing scheduled task {0}", _work);
+                logger?.LogError(ex, "Error processing scheduled work {Work}", _work);
             }
             _nextScheduledTime = null;
             return false;
         }
     }
-
-    public static IScheduledTaskWrapper CreateDelayedWorkWrapper(IWork work, DateTime time, CancellationToken cancellation = default)
-    {
-        time = time.ToLocalTime();
-        return new DelayedTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            time <= DateTime.Now
-                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
-                : time,
-            cancellation);
-    }
-
-    public static IScheduledTaskWrapper CreateDelayedWorkWrapper(IWork work, TimeSpan delay, CancellationToken cancellation = default)
-        => new DelayedTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            DateTime.Now.Add(delay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
-                : delay),
-            cancellation);
-
-    public static IScheduledTaskWrapper CreateDelayedWorkWrapper<TResult>(IWork<TResult> work, DateTime time, CancellationToken cancellation = default)
-    {
-        time = time.ToLocalTime();
-        return new DelayedTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
-            time <= DateTime.Now
-                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
-                : time,
-            cancellation);
-    }
-
-    public static IScheduledTaskWrapper CreateDelayedWorkWrapper<TResult>(IWork<TResult> work, TimeSpan delay, CancellationToken cancellation = default)
-        => new DelayedTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
-            DateTime.Now.Add(delay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
-                : delay),
-            cancellation);
-
-    public static IScheduledTaskWrapper CreateDelayedWorkWrapper(IAsyncWork work, DateTime time, CancellationToken cancellation = default)
-    {
-        time = time.ToLocalTime();
-        return new DelayedAsyncTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            time <= DateTime.Now
-                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
-                : time,
-            cancellation);
-    }
-
-    public static IScheduledTaskWrapper CreateDelayedWorkWrapper(IAsyncWork work, TimeSpan delay, CancellationToken cancellation = default)
-        => new DelayedAsyncTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            DateTime.Now.Add(delay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
-                : delay),
-            cancellation);
-
-    public static IScheduledTaskWrapper CreateDelayedWorkWrapper<TResult>(IAsyncWork<TResult> work, DateTime time, CancellationToken cancellation = default)
-    {
-        time = time.ToLocalTime();
-        return new DelayedAsyncTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
-            time <= DateTime.Now
-                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
-                : time,
-            cancellation);
-    }
-
-    public static IScheduledTaskWrapper CreateDelayedWorkWrapper<TResult>(IAsyncWork<TResult> work, TimeSpan delay, CancellationToken cancellation = default)
-        => new DelayedAsyncTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
-            DateTime.Now.Add(delay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
-                : delay),
-            cancellation);
 }
 
 }

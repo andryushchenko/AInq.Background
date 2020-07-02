@@ -12,24 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Background
+namespace AInq.Background.Services
 {
 
-/// <summary> Interface for data processing machine for <see cref="IConveyor{TData, TResult}"/> </summary>
+/// <summary> Interface for background data processing conveyor with prioritization </summary>
 /// <typeparam name="TData"> Input data type </typeparam>
 /// <typeparam name="TResult"> Processing result type </typeparam>
-public interface IConveyorMachine<in TData, TResult>
+public interface IPriorityConveyor<in TData, TResult> : IConveyor<TData, TResult>
 {
-    /// <summary> Processes data asynchronously </summary>
+    /// <summary> Max allowed operation priority </summary>
+    int MaxPriority { get; }
+
+    /// <summary> Process data asynchronously in queue with given <paramref name="priority" /> </summary>
     /// <param name="data"> Data to process </param>
-    /// <param name="provider"> Service provider instance </param>
+    /// <param name="priority"> Operation priority </param>
     /// <param name="cancellation"> Processing cancellation token </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <returns> Processing result task </returns>
-    Task<TResult> ProcessDataAsync(TData data, IServiceProvider provider, CancellationToken cancellation = default);
+    Task<TResult> ProcessDataAsync(TData data, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
 }
 
 }

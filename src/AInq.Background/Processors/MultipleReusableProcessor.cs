@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using AInq.Background.Managers;
+using AInq.Background.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
@@ -28,9 +29,9 @@ namespace AInq.Background.Processors
 internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
 {
     private readonly Func<IServiceProvider, TArgument> _argumentFabric;
+    private readonly int _maxArgumentCount;
     private readonly AsyncAutoResetEvent _reset = new AsyncAutoResetEvent(false);
     private readonly ConcurrentBag<TArgument> _reusable = new ConcurrentBag<TArgument>();
-    private readonly int _maxArgumentCount;
     private int _currentArgumentCount;
 
     internal MultipleReusableProcessor(Func<IServiceProvider, TArgument> argumentFabric, int maxArgumentsCount)
@@ -39,7 +40,8 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
         _maxArgumentCount = Math.Max(1, maxArgumentsCount);
     }
 
-    async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
+    async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,
+        ILogger? logger, CancellationToken cancellation)
     {
         var currentTasks = new LinkedList<Task>();
         while (manager.HasTask && !cancellation.IsCancellationRequested)

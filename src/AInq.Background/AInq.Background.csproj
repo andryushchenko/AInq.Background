@@ -11,15 +11,16 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Support.Background</PackageProjectUrl>
-    <Version>2.2.0</Version>
+    <Version>2.3.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Background;Queue;Conveyor;AInq</PackageTags>
-    <Description>Background work utilities for .NET Core apps based on Hosted services
-
-Background work queue, Shared resource access queue, Background data processing conveyor</Description>
-    <PackageReleaseNotes>[ADD] Option to create Work Queue, Access Queue and Conveyor for internal usage without service registration</PackageReleaseNotes>
+    <Description>Background work utilities for .NET Core apps based on Hosted services.
+Background work queue, shared resource access queue, background data processing conveyor.</Description>
+    <PackageReleaseNotes>[ADD] Public component classes with documentation
+[IMP] Components structure improvement
+[FIX] Minor bug fix</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

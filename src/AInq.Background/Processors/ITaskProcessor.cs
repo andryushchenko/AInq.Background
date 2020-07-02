@@ -21,9 +21,19 @@ using System.Threading.Tasks;
 namespace AInq.Background.Processors
 {
 
-internal interface ITaskProcessor<TArgument, TMetadata>
+/// <summary> Interface for task processor </summary>
+/// <typeparam name="TArgument"> Task argument type </typeparam>
+/// <typeparam name="TMetadata"> Task metadata type </typeparam>
+public interface ITaskProcessor<TArgument, TMetadata>
 {
-    Task ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger? logger = null, CancellationToken cancellation = default);
+    /// <summary> Process pending tasks form given <paramref name="manager"/> </summary>
+    /// <param name="manager"> Task manager instance </param>
+    /// <param name="provider"> Service provider instance </param>
+    /// <param name="logger"> Logger instance </param>
+    /// <param name="cancellation"> Cancellation token </param>
+    /// <returns></returns>
+    Task ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger? logger = null,
+        CancellationToken cancellation = default);
 }
 
 }

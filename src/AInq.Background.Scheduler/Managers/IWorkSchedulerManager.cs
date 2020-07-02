@@ -21,12 +21,26 @@ using System.Threading.Tasks;
 namespace AInq.Background.Managers
 {
 
-internal interface IWorkSchedulerManager
+/// <summary> Interface for background work scheduler manager </summary>
+public interface IWorkSchedulerManager
 {
+    /// <summary> Asynchronously wait for new scheduled task </summary>
+    /// <param name="cancellation"> Wait cancellation token </param>
     Task WaitForNewTaskAsync(CancellationToken cancellation);
+
+    /// <summary> Get next scheduled task execution time </summary>
+    /// <returns> Time or NULL if no tasks </returns>
     DateTime? GetNextTaskTime();
+
+    /// <summary> Get upcoming scheduled tasks within given <paramref name="horizon" /> </summary>
+    /// <param name="horizon"> Upcoming task search horizon </param>
+    /// <returns> Task wrappers collection grouped by time </returns>
     ILookup<DateTime, IScheduledTaskWrapper> GetUpcomingTasks(TimeSpan horizon);
-    void RevertWork(IScheduledTaskWrapper task);
+
+    /// <summary> Revert task to scheduler </summary>
+    /// <param name="task"> Task instance </param>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="task" /> is NULL </exception>
+    void RevertTask(IScheduledTaskWrapper task);
 }
 
 }

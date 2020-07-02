@@ -14,15 +14,15 @@
 
 using System;
 
-namespace AInq.Background
+namespace AInq.Background.Tasks
 {
 
-/// <summary> Interface for objects need to have timeout before reuse </summary>
-/// <remarks> Used in <see cref="IConveyor{TData,TResult}"/> and <see cref="IAccessQueue{TResource}"/></remarks>
-public interface IThrottling
+/// <summary> Interface for synchronous work without result </summary>
+public interface IWork
 {
-    /// <summary> Timeout duration </summary>
-    TimeSpan Timeout { get; }
+    /// <summary> Work action </summary>
+    /// <param name="serviceProvider"> Service provider instance </param>
+    void DoWork(IServiceProvider serviceProvider);
 }
 
 }

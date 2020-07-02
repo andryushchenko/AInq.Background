@@ -20,11 +20,20 @@ using System.Threading.Tasks;
 namespace AInq.Background.Wrappers
 {
 
-internal interface IScheduledTaskWrapper
+/// <summary> Interface for scheduled background task wrapper </summary>
+public interface IScheduledTaskWrapper
 {
+    /// <summary> Next scheduled time </summary>
     DateTime? NextScheduledTime { get; }
+
+    /// <summary> Check if task is cancelled </summary>
     bool IsCanceled { get; }
 
+    /// <summary> Execute task asynchronously </summary>
+    /// <param name="provider"> Service provider instance </param>
+    /// <param name="logger"> Logger instance </param>
+    /// <param name="cancellation"> Cancellation token </param>
+    /// <returns> If task should be reverted to scheduler </returns>
     Task<bool> ExecuteAsync(IServiceProvider provider, ILogger? logger = null, CancellationToken cancellation = default);
 }
 

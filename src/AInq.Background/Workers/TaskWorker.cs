@@ -25,21 +25,48 @@ using System.Threading.Tasks;
 namespace AInq.Background.Workers
 {
 
-internal sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposable
+/// <summary> Background task worker service </summary>
+/// <typeparam name="TArgument"> Task argument type </typeparam>
+/// <typeparam name="TMetadata"> Task metadata type </typeparam>
+public sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposable
 {
-    private readonly IServiceProvider _provider;
+    private readonly ILogger<TaskWorker<TArgument, TMetadata>>? _logger;
     private readonly ITaskManager<TArgument, TMetadata> _manager;
     private readonly ITaskProcessor<TArgument, TMetadata> _processor;
+    private readonly IServiceProvider _provider;
     private readonly CancellationTokenSource _shutdown = new CancellationTokenSource();
-    private readonly ILogger<TaskWorker<TArgument, TMetadata>>? _logger;
     private Task? _worker;
 
-    internal TaskWorker(IServiceProvider provider, ITaskManager<TArgument, TMetadata> manager, ITaskProcessor<TArgument, TMetadata> processor)
+    /// <param name="provider"> Service provider instance </param>
+    /// <param name="manager"> Task manager instance </param>
+    /// <param name="processor"> Task processor instance </param>
+    public TaskWorker(IServiceProvider provider, ITaskManager<TArgument, TMetadata> manager, ITaskProcessor<TArgument, TMetadata> processor)
     {
         _provider = provider;
         _manager = manager;
         _processor = processor;
         _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<TaskWorker<TArgument, TMetadata>>();
+    }
+
+    void IDisposable.Dispose()
+    {
+        _shutdown.Dispose();
+        if (_worker != null && (_worker.IsCompleted || _worker.IsFaulted || _worker.IsCanceled))
+            _worker.Dispose();
+    }
+
+    Task IHostedService.StartAsync(CancellationToken cancel)
+    {
+        cancel.ThrowIfCancellationRequested();
+        _worker = Worker(cancel);
+        return Task.CompletedTask;
+    }
+
+    async Task IHostedService.StopAsync(CancellationToken cancel)
+    {
+        _shutdown.Cancel();
+        if (_worker != null)
+            await _worker.WaitAsync(cancel).ConfigureAwait(false);
     }
 
     private async Task Worker(CancellationToken abort)
@@ -63,27 +90,6 @@ internal sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDispos
             {
                 _logger.LogError(ex, "Unhandled error in task processor {0}", _processor.GetType());
             }
-    }
-
-    Task IHostedService.StartAsync(CancellationToken cancel)
-    {
-        cancel.ThrowIfCancellationRequested();
-        _worker = Worker(cancel);
-        return Task.CompletedTask;
-    }
-
-    async Task IHostedService.StopAsync(CancellationToken cancel)
-    {
-        _shutdown.Cancel();
-        if (_worker != null)
-            await _worker.WaitAsync(cancel).ConfigureAwait(false);
-    }
-
-    void IDisposable.Dispose()
-    {
-        _shutdown.Dispose();
-        if (_worker != null && (_worker.IsCompleted || _worker.IsFaulted || _worker.IsCanceled))
-            _worker.Dispose();
     }
 }
 

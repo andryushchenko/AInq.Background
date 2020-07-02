@@ -13,18 +13,20 @@
 // limitations under the License.
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace AInq.Background
+namespace AInq.Background.Tasks
 {
 
-/// <summary> Interface for synchronous work with result of type <typeparamref name="TResult"/> </summary>
-/// <typeparam name="TResult"> Work result type </typeparam>
-public interface IWork<out TResult>
+/// <summary> Interface for asynchronous work without result </summary>
+public interface IAsyncWork
 {
-    /// <summary> Work action </summary>
+    /// <summary> Asynchronous work action </summary>
     /// <param name="serviceProvider"> Service provider instance </param>
-    /// <returns> Work result </returns>
-    TResult DoWork(IServiceProvider serviceProvider);
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <returns> Work completion task </returns>
+    Task DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation = default);
 }
 
 }

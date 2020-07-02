@@ -12,94 +12,88 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Tasks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Background
+namespace AInq.Background.Services
 {
 
-/// <summary> Interface for background shared resource access queue with prioritization </summary>
+/// <summary> Interface for background shared resource access queue </summary>
 /// <typeparam name="TResource"> Shared resource type</typeparam>
-public interface IPriorityAccessQueue<out TResource> : IAccessQueue<TResource>
+public interface IAccessQueue<out TResource>
 {
-    /// <summary> Max allowed access priority </summary>
-    int MaxPriority { get; }
+    /// <summary> Max allowed retry on fail attempts </summary>
+    int MaxAttempts { get; }
 
     /// <summary> Enqueue access action </summary>
     /// <param name="access"> Access action instance </param>
-    /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access"/> is NULL </exception>
-    Task EnqueueAccess(IAccess<TResource> access, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> is NULL </exception>
+    Task EnqueueAccess(IAccess<TResource> access, CancellationToken cancellation = default, int attemptsCount = 1);
 
     /// <summary> Enqueue access action </summary>
-    /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
-    Task EnqueueAccess<TAccess>(int priority, CancellationToken cancellation = default, int attemptsCount = 1)
+    Task EnqueueAccess<TAccess>(CancellationToken cancellation = default, int attemptsCount = 1)
         where TAccess : IAccess<TResource>;
 
     /// <summary> Enqueue access action </summary>
     /// <param name="access"> Access action instance </param>
-    /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access"/> is NULL </exception>
-    Task<TResult> EnqueueAccess<TResult>(IAccess<TResource, TResult> access, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> is NULL </exception>
+    Task<TResult> EnqueueAccess<TResult>(IAccess<TResource, TResult> access, CancellationToken cancellation = default, int attemptsCount = 1);
 
     /// <summary> Enqueue access action </summary>
-    /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
-    Task<TResult> EnqueueAccess<TAccess, TResult>(int priority, CancellationToken cancellation = default, int attemptsCount = 1)
+    Task<TResult> EnqueueAccess<TAccess, TResult>(CancellationToken cancellation = default, int attemptsCount = 1)
         where TAccess : IAccess<TResource, TResult>;
 
     /// <summary> Enqueue asynchronous access action </summary>
     /// <param name="access"> Access action instance </param>
-    /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access"/> is NULL </exception>
-    Task EnqueueAsyncAccess(IAsyncAccess<TResource> access, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> is NULL </exception>
+    Task EnqueueAsyncAccess(IAsyncAccess<TResource> access, CancellationToken cancellation = default, int attemptsCount = 1);
 
     /// <summary> Enqueue asynchronous access action </summary>
-    /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
-    Task EnqueueAsyncAccess<TAsyncAccess>(int priority, CancellationToken cancellation = default, int attemptsCount = 1)
+    Task EnqueueAsyncAccess<TAsyncAccess>(CancellationToken cancellation = default, int attemptsCount = 1)
         where TAsyncAccess : IAsyncAccess<TResource>;
 
     /// <summary> Enqueue asynchronous access action </summary>
     /// <param name="access"> Access action instance </param>
-    /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access"/> is NULL </exception>
-    Task<TResult> EnqueueAsyncAccess<TResult>(IAsyncAccess<TResource, TResult> access, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> is NULL </exception>
+    Task<TResult> EnqueueAsyncAccess<TResult>(IAsyncAccess<TResource, TResult> access, CancellationToken cancellation = default,
+        int attemptsCount = 1);
 
     /// <summary> Enqueue asynchronous access action </summary>
     /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="priority"> Access action priority </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
-    Task<TResult> EnqueueAsyncAccess<TAsyncAccess, TResult>(int priority, CancellationToken cancellation = default, int attemptsCount = 1)
+    Task<TResult> EnqueueAsyncAccess<TAsyncAccess, TResult>(CancellationToken cancellation = default, int attemptsCount = 1)
         where TAsyncAccess : IAsyncAccess<TResource, TResult>;
 }
 

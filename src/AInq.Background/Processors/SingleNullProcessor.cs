@@ -24,7 +24,8 @@ namespace AInq.Background.Processors
 
 internal sealed class SingleNullProcessor<TMetadata> : ITaskProcessor<object?, TMetadata>
 {
-    async Task ITaskProcessor<object?, TMetadata>.ProcessPendingTasksAsync(ITaskManager<object?, TMetadata> manager, IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
+    async Task ITaskProcessor<object?, TMetadata>.ProcessPendingTasksAsync(ITaskManager<object?, TMetadata> manager, IServiceProvider provider,
+        ILogger? logger, CancellationToken cancellation)
     {
         while (manager.HasTask && !cancellation.IsCancellationRequested)
         {

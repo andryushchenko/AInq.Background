@@ -20,9 +20,25 @@ using System.Threading.Tasks;
 namespace AInq.Background.Wrappers
 {
 
-internal interface ITaskWrapper<in TArgument>
+/// <summary> Interface for background task wrappers </summary>
+/// <typeparam name="TArgument"> Task argument type </typeparam>
+public interface ITaskWrapper<in TArgument>
 {
+    /// <summary> Check if task is cancelled </summary>
     bool IsCanceled { get; }
+
+    /// <summary> Check if task is completed </summary>
+    bool IsCompleted { get; }
+
+    /// <summary> Check if task is faulted </summary>
+    bool IsFaulted { get; }
+
+    /// <summary> Execute task asynchronously </summary>
+    /// <param name="argument"> Task argument </param>
+    /// <param name="provider"> Service provider instance </param>
+    /// <param name="logger"> Logger instance </param>
+    /// <param name="cancellation"> Cancellation token </param>
+    /// <returns> If task is completed or should be reverted to queue/conveyor </returns>
     Task<bool> ExecuteAsync(TArgument argument, IServiceProvider provider, ILogger? logger = null, CancellationToken cancellation = default);
 }
 

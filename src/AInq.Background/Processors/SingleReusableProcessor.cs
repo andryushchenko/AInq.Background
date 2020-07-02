@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using AInq.Background.Managers;
+using AInq.Background.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
@@ -28,11 +29,10 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
     private readonly Func<IServiceProvider, TArgument> _argumentFabric;
 
     internal SingleReusableProcessor(Func<IServiceProvider, TArgument> argumentFabric)
-    {
-        _argumentFabric = argumentFabric ?? throw new ArgumentNullException(nameof(argumentFabric));
-    }
+        => _argumentFabric = argumentFabric ?? throw new ArgumentNullException(nameof(argumentFabric));
 
-    async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
+    async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,
+        ILogger? logger, CancellationToken cancellation)
     {
         if (!manager.HasTask)
             return;

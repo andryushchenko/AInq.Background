@@ -12,13 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AInq.Background.Helpers;
+using AInq.Background.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace AInq.Background.Test
 {
@@ -36,13 +38,14 @@ internal static class Program
                    .ConfigureServices((context, services) =>
                    {
                        services.AddTransient<TestMachine>()
-                               .AddConveyor<int, int, TestMachine>(ReuseStrategy.Reuse, 3)
+                               .AddPriorityConveyor<int, int, TestMachine>(ReuseStrategy.Reuse, 3)
                                .AddWorkScheduler()
                                .AddWorkQueue()
                                .AddStartupWork(WorkFactory.CreateWork(provider =>
                                {
+                                   provider.AddCronWork(WorkFactory.CreateWork(()=>Console.WriteLine($"{DateTime.Now:T}\tCRON test")), "0/10 * * * * *");
                                    for (var index = 1; index <= 10; index++)
-                                       provider.ProcessDataAsync<int, int>(index);
+                                       provider.ProcessDataAsync<int, int>(index, priority: 50 - index);
                                    provider.AddDelayedAsyncQueueWork(WorkFactory.CreateAsyncWork(async (serviceProvider, cancel) =>
                                        {
                                            using var source = new CancellationTokenSource(TimeSpan.FromSeconds(6));

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Tasks;
 using Cronos;
 using Microsoft.Extensions.Logging;
 using System;
@@ -21,13 +22,62 @@ using System.Threading.Tasks;
 namespace AInq.Background.Wrappers
 {
 
-internal static class CronWorkWrapperFactory
+/// <summary> Factory class for creating <see cref="IScheduledTaskWrapper" /> for CRON scheduled work </summary>
+public static class CronWorkWrapperFactory
 {
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="cron"> Cron expression </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
+    /// <returns> Scheduled task wrapper </returns>
+    public static IScheduledTaskWrapper CreateCronWorkWrapper(IWork work, CronExpression cron, CancellationToken cancellation = default)
+        => new CronTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+            cron ?? throw new ArgumentNullException(nameof(cron)),
+            cancellation);
+
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="cron"> Cron expression </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <typeparam name="TResult"> Work result type </typeparam>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
+    /// <returns> Scheduled task wrapper </returns>
+    public static IScheduledTaskWrapper CreateCronWorkWrapper<TResult>(IWork<TResult> work, CronExpression cron,
+        CancellationToken cancellation = default)
+        => new CronTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
+            cron ?? throw new ArgumentNullException(nameof(cron)),
+            cancellation);
+
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="cron"> Cron expression </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
+    /// <returns> Scheduled task wrapper </returns>
+    public static IScheduledTaskWrapper CreateCronWorkWrapper(IAsyncWork work, CronExpression cron, CancellationToken cancellation = default)
+        => new CronAsyncTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+            cron ?? throw new ArgumentNullException(nameof(cron)),
+            cancellation);
+
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="cron"> Cron expression </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <typeparam name="TResult"> Work result type </typeparam>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
+    /// <returns> Scheduled task wrapper </returns>
+    public static IScheduledTaskWrapper CreateCronWorkWrapper<TResult>(IAsyncWork<TResult> work, CronExpression cron,
+        CancellationToken cancellation = default)
+        => new CronAsyncTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
+            cron ?? throw new ArgumentNullException(nameof(cron)),
+            cancellation);
+
     private class CronTaskWrapper : IScheduledTaskWrapper
     {
-        private readonly IWork _work;
-        private readonly CancellationToken _innerCancellation;
         private readonly CronExpression _cron;
+        private readonly CancellationToken _innerCancellation;
+        private readonly IWork _work;
 
         internal CronTaskWrapper(IWork work, CronExpression cron, CancellationToken innerCancellation)
         {
@@ -65,9 +115,9 @@ internal static class CronWorkWrapperFactory
 
     private class CronTaskWrapper<TResult> : IScheduledTaskWrapper
     {
-        private readonly IWork<TResult> _work;
-        private readonly CancellationToken _innerCancellation;
         private readonly CronExpression _cron;
+        private readonly CancellationToken _innerCancellation;
+        private readonly IWork<TResult> _work;
 
         internal CronTaskWrapper(IWork<TResult> work, CronExpression cron, CancellationToken innerCancellation)
         {
@@ -105,9 +155,9 @@ internal static class CronWorkWrapperFactory
 
     private class CronAsyncTaskWrapper : IScheduledTaskWrapper
     {
-        private readonly IAsyncWork _work;
-        private readonly CancellationToken _innerCancellation;
         private readonly CronExpression _cron;
+        private readonly CancellationToken _innerCancellation;
+        private readonly IAsyncWork _work;
 
         internal CronAsyncTaskWrapper(IAsyncWork work, CronExpression cron, CancellationToken innerCancellation)
         {
@@ -145,9 +195,9 @@ internal static class CronWorkWrapperFactory
 
     private class CronAsyncTaskWrapper<TResult> : IScheduledTaskWrapper
     {
-        private readonly IAsyncWork<TResult> _work;
-        private readonly CancellationToken _innerCancellation;
         private readonly CronExpression _cron;
+        private readonly CancellationToken _innerCancellation;
+        private readonly IAsyncWork<TResult> _work;
 
         internal CronAsyncTaskWrapper(IAsyncWork<TResult> work, CronExpression cron, CancellationToken innerCancellation)
         {
@@ -180,35 +230,6 @@ internal static class CronWorkWrapperFactory
                 logger?.LogError(ex, "Error processing scheduled task {0}", _work);
             }
             return _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue;
-        }
-    }
-
-    public static IScheduledTaskWrapper CreateCronWorkWrapper(IWork work, CronExpression cron, CancellationToken cancellation = default)
-        => new CronTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)), cron ?? throw new ArgumentNullException(nameof(cron)), cancellation);
-
-    public static IScheduledTaskWrapper CreateCronWorkWrapper<TResult>(IWork<TResult> work, CronExpression cron, CancellationToken cancellation = default)
-        => new CronTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)), cron ?? throw new ArgumentNullException(nameof(cron)), cancellation);
-
-    public static IScheduledTaskWrapper CreateCronWorkWrapper(IAsyncWork work, CronExpression cron, CancellationToken cancellation = default)
-        => new CronAsyncTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)), cron ?? throw new ArgumentNullException(nameof(cron)), cancellation);
-
-    public static IScheduledTaskWrapper CreateCronWorkWrapper<TResult>(IAsyncWork<TResult> work, CronExpression cron, CancellationToken cancellation = default)
-        => new CronAsyncTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)), cron ?? throw new ArgumentNullException(nameof(cron)), cancellation);
-
-    internal static CronExpression? ParseCron(this string cronExpression)
-    {
-        try
-        {
-            return cronExpression.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries).Length switch
-            {
-                5 => CronExpression.Parse(cronExpression, CronFormat.Standard),
-                6 => CronExpression.Parse(cronExpression, CronFormat.IncludeSeconds),
-                _ => null
-            };
-        }
-        catch (Exception)
-        {
-            return null;
         }
     }
 }

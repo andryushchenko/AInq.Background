@@ -14,6 +14,7 @@
 
 using AInq.Background.Managers;
 using AInq.Background.Processors;
+using AInq.Background.Services;
 using AInq.Background.Workers;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -25,20 +26,19 @@ namespace AInq.Background
 /// <summary> Background Work Queue dependency injection </summary>
 public static class WorkQueueInjection
 {
-    /// <summary> Create <see cref="IWorkQueue"/> without service registration </summary>
+    /// <summary> Create <see cref="IWorkQueue" /> without service registration </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="maxParallelWorks"> Max parallel works allowed </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     public static IWorkQueue CreateWorkQueue(this IServiceCollection services, int maxParallelWorks = 1, int maxAttempts = int.MaxValue)
     {
         var manager = new WorkQueueManager(maxAttempts);
-        if (maxParallelWorks <= 1)
-            services.AddHostedService(provider => new TaskWorker<object?, object?>(provider, manager, new SingleNullProcessor<object?>()));
-        else services.AddHostedService(provider => new TaskWorker<object?, object?>(provider, manager, new MultipleNullProcessor<object?>(maxParallelWorks)));
+        services.AddHostedService(provider
+            => new TaskWorker<object?, object?>(provider, manager, ProcessorFactory.CreateNullProcessor<object?>(maxParallelWorks)));
         return manager;
     }
 
-    /// <summary> Add <see cref="IWorkQueue"/> service </summary>
+    /// <summary> Add <see cref="IWorkQueue" /> service </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="maxParallelWorks"> Max parallel works allowed </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
@@ -50,27 +50,28 @@ public static class WorkQueueInjection
         return services.AddSingleton(services.CreateWorkQueue(maxParallelWorks, maxAttempts));
     }
 
-    /// <summary> Create <see cref="IPriorityWorkQueue"/> without service registration </summary>
+    /// <summary> Create <see cref="IPriorityWorkQueue" /> without service registration </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="maxPriority"> Max allowed work priority </param>
     /// <param name="maxParallelWorks"> Max allowed parallel works </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    public static IPriorityWorkQueue CreatePriorityWorkQueue(this IServiceCollection services, int maxPriority = 100, int maxParallelWorks = 1, int maxAttempts = int.MaxValue)
+    public static IPriorityWorkQueue CreatePriorityWorkQueue(this IServiceCollection services, int maxPriority = 100, int maxParallelWorks = 1,
+        int maxAttempts = int.MaxValue)
     {
         var manager = new PriorityWorkQueueManager(maxPriority, maxAttempts);
-        if (maxParallelWorks <= 1)
-            services.AddHostedService(provider => new TaskWorker<object?, int>(provider, manager, new SingleNullProcessor<int>()));
-        else services.AddHostedService(provider => new TaskWorker<object?, int>(provider, manager, new MultipleNullProcessor<int>(maxParallelWorks)));
+        services.AddHostedService(provider
+            => new TaskWorker<object?, int>(provider, manager, ProcessorFactory.CreateNullProcessor<int>(maxParallelWorks)));
         return manager;
     }
 
-    /// <summary> Add <see cref="IPriorityWorkQueue"/> and <see cref="IWorkQueue"/> services </summary>
+    /// <summary> Add <see cref="IPriorityWorkQueue" /> and <see cref="IWorkQueue" /> services </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="maxPriority"> Max allowed work priority </param>
     /// <param name="maxParallelWorks"> Max allowed parallel works </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
-    public static IServiceCollection AddPriorityWorkQueue(this IServiceCollection services, int maxPriority = 100, int maxParallelWorks = 1, int maxAttempts = int.MaxValue)
+    public static IServiceCollection AddPriorityWorkQueue(this IServiceCollection services, int maxPriority = 100, int maxParallelWorks = 1,
+        int maxAttempts = int.MaxValue)
     {
         if (services.Any(service => service.ImplementationType == typeof(IWorkQueue)))
             throw new InvalidOperationException("Service already exists");

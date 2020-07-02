@@ -12,69 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Wrappers;
+using AInq.Background.Services;
+using AInq.Background.Tasks;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using static AInq.Background.Wrappers.ConveyorDataWrapperFactory;
 
 namespace AInq.Background.Managers
 {
 
-internal sealed class PriorityConveyorManager<TData, TResult> : ConveyorManager<TData, TResult>, IPriorityConveyor<TData, TResult>, ITaskManager<IConveyorMachine<TData, TResult>, int>
+/// <summary> Background data conveyor manager with numeric prioritization </summary>
+/// <typeparam name="TData"> Input data type </typeparam>
+/// <typeparam name="TResult"> Processing result type </typeparam>
+public sealed class PriorityConveyorManager<TData, TResult> : PriorityTaskManager<IConveyorMachine<TData, TResult>>,
+                                                                IPriorityConveyor<TData, TResult>
 {
-    private readonly int _maxPriority;
+    private readonly int _maxAttempts;
 
-    private readonly IList<ConcurrentQueue<ITaskWrapper<IConveyorMachine<TData, TResult>>>> _queues;
+    /// <param name="maxPriority"> Max allowed work priority </param>
+    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+    public PriorityConveyorManager(int maxPriority = 100, int maxAttempts = int.MaxValue) : base(maxPriority)
+        => _maxAttempts = Math.Max(maxAttempts, 1);
 
-    internal PriorityConveyorManager(int maxPriority = 100, int maxAttempts = int.MaxValue) : base(maxAttempts)
-    {
-        _maxPriority = Math.Min(100, Math.Max(1, maxPriority));
-        _queues = new ConcurrentQueue<ITaskWrapper<IConveyorMachine<TData, TResult>>>[_maxPriority + 1];
-        _queues[0] = Queue;
-        for (var index = 1; index <= _maxPriority; index++)
-            _queues[index] = new ConcurrentQueue<ITaskWrapper<IConveyorMachine<TData, TResult>>>();
-    }
-
-    int IPriorityConveyor<TData, TResult>.MaxPriority => _maxPriority;
-
-    bool ITaskManager<IConveyorMachine<TData, TResult>, int>.HasTask => _queues.Any(queue => !queue.IsEmpty);
+    int IPriorityConveyor<TData, TResult>.MaxPriority => MaxPriority;
 
     Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, CancellationToken cancellation, int attemptsCount)
     {
-        var element = new ConveyorDataWrapper<TData, TResult>(data, cancellation, FixAttempts(attemptsCount));
-        _queues[FixPriority(priority)].Enqueue(element);
-        NewDataEvent.Set();
-        return element.Result;
+        var (wrapper, result) = CreateConveyorDataWrapper<TData, TResult>(data, FixAttempts(attemptsCount), cancellation);
+        AddTask(wrapper, priority);
+        return result;
     }
 
-    Task ITaskManager<IConveyorMachine<TData, TResult>, int>.WaitForTaskAsync(CancellationToken cancellation)
-        => _queues.Any(queue => !queue.IsEmpty)
-            ? Task.CompletedTask
-            : NewDataEvent.WaitAsync(cancellation);
+    int IConveyor<TData, TResult>.MaxAttempts => _maxAttempts;
 
-    (ITaskWrapper<IConveyorMachine<TData, TResult>>?, int) ITaskManager<IConveyorMachine<TData, TResult>, int>.GetTask()
+    Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
     {
-        while (true)
-        {
-            var pendingQueue = _queues.FirstOrDefault(queue => !queue.IsEmpty);
-            if (pendingQueue == null || !pendingQueue.TryDequeue(out var task))
-                return (null, -1);
-            if (!task.IsCanceled)
-                return (task, _queues.IndexOf(pendingQueue));
-        }
+        var (wrapper, result) = CreateConveyorDataWrapper<TData, TResult>(data, FixAttempts(attemptsCount), cancellation);
+        AddTask(wrapper, 0);
+        return result;
     }
 
-    void ITaskManager<IConveyorMachine<TData, TResult>, int>.RevertTask(ITaskWrapper<IConveyorMachine<TData, TResult>> task, int metadata)
-    {
-        _queues[FixPriority(metadata)].Enqueue(task);
-        NewDataEvent.Set();
-    }
-
-    private int FixPriority(int priority)
-        => Math.Min(_maxPriority, Math.Max(0, priority));
+    private int FixAttempts(int attemptsCount)
+        => Math.Min(_maxAttempts, Math.Max(1, attemptsCount));
 }
 
 }
