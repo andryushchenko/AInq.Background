@@ -33,9 +33,9 @@ internal sealed class ConveyorManager<TData, TResult> : TaskManager<IConveyorMac
 
     Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
     {
-        var dataWrapper = new ConveyorDataWrapper<TData, TResult>(data, cancellation, FixAttempts(attemptsCount));
-        AddTask(dataWrapper);
-        return dataWrapper.Result;
+        var (wrapper, result) = ConveyorDataWrapperFactory.CreateConveyorDataWrapper<TData, TResult>(data, FixAttempts(attemptsCount), cancellation);
+        AddTask(wrapper);
+        return result;
     }
 
     private int FixAttempts(int attemptsCount)

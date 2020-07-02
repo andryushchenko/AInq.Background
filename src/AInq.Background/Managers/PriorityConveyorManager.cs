@@ -34,18 +34,18 @@ internal sealed class PriorityConveyorManager<TData, TResult> : PriorityTaskMana
 
     Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, CancellationToken cancellation, int attemptsCount)
     {
-        var dataWrapper = new ConveyorDataWrapper<TData, TResult>(data, cancellation, FixAttempts(attemptsCount));
-        AddTask(dataWrapper, priority);
-        return dataWrapper.Result;
+        var (wrapper, result) = ConveyorDataWrapperFactory.CreateConveyorDataWrapper<TData, TResult>(data, FixAttempts(attemptsCount), cancellation);
+        AddTask(wrapper, priority);
+        return result;
     }
 
     int IConveyor<TData, TResult>.MaxAttempts => _maxAttempts;
 
     Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
     {
-        var dataWrapper = new ConveyorDataWrapper<TData, TResult>(data, cancellation, FixAttempts(attemptsCount));
-        AddTask(dataWrapper, 0);
-        return dataWrapper.Result;
+        var (wrapper, result) = ConveyorDataWrapperFactory.CreateConveyorDataWrapper<TData, TResult>(data, FixAttempts(attemptsCount), cancellation);
+        AddTask(wrapper, 0);
+        return result;
     }
 
     private int FixAttempts(int attemptsCount)
