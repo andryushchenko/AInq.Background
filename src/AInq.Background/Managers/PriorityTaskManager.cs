@@ -24,29 +24,33 @@ using System.Threading.Tasks;
 namespace AInq.Background.Managers
 {
 
-internal class PriorityTaskManager<TTaskArgument> : ITaskManager<TTaskArgument, int>
+/// <summary> Basic task manager with numeric prioritization </summary>
+/// <typeparam name="TArgument"> Task argument type </typeparam>
+public class PriorityTaskManager<TArgument> : ITaskManager<TArgument, int>
 {
     private readonly AsyncAutoResetEvent _newDataEvent = new AsyncAutoResetEvent(false);
-    private readonly IList<ConcurrentQueue<ITaskWrapper<TTaskArgument>>> _queues;
+    private readonly IList<ConcurrentQueue<ITaskWrapper<TArgument>>> _queues;
 
+    /// <param name="maxPriority"> Max allowed priority </param>
     protected PriorityTaskManager(int maxPriority = 100)
     {
         MaxPriority = Math.Min(100, Math.Max(1, maxPriority));
-        _queues = new ConcurrentQueue<ITaskWrapper<TTaskArgument>>[MaxPriority + 1];
+        _queues = new ConcurrentQueue<ITaskWrapper<TArgument>>[MaxPriority + 1];
         for (var index = 0; index <= MaxPriority; index++)
-            _queues[index] = new ConcurrentQueue<ITaskWrapper<TTaskArgument>>();
+            _queues[index] = new ConcurrentQueue<ITaskWrapper<TArgument>>();
     }
 
+    /// <summary> Max allowed priority </summary>
     protected int MaxPriority { get; }
 
-    bool ITaskManager<TTaskArgument, int>.HasTask => _queues.Any(queue => !queue.IsEmpty);
+    bool ITaskManager<TArgument, int>.HasTask => _queues.Any(queue => !queue.IsEmpty);
 
-    Task ITaskManager<TTaskArgument, int>.WaitForTaskAsync(CancellationToken cancellation)
+    Task ITaskManager<TArgument, int>.WaitForTaskAsync(CancellationToken cancellation)
         => _queues.Any(queue => !queue.IsEmpty)
             ? Task.CompletedTask
             : _newDataEvent.WaitAsync(cancellation);
 
-    (ITaskWrapper<TTaskArgument>?, int) ITaskManager<TTaskArgument, int>.GetTask()
+    (ITaskWrapper<TArgument>?, int) ITaskManager<TArgument, int>.GetTask()
     {
         while (true)
         {
@@ -58,15 +62,18 @@ internal class PriorityTaskManager<TTaskArgument> : ITaskManager<TTaskArgument, 
         }
     }
 
-    void ITaskManager<TTaskArgument, int>.RevertTask(ITaskWrapper<TTaskArgument> task, int metadata)
-    {
-        _queues[FixPriority(metadata)].Enqueue(task);
-        _newDataEvent.Set();
-    }
+    void ITaskManager<TArgument, int>.RevertTask(ITaskWrapper<TArgument> task, int metadata)
+        => AddTask(task, metadata);
 
-    protected void AddTask(ITaskWrapper<TTaskArgument> task, int priority)
+    /// <summary> Add task to queue </summary>
+    /// <param name="task"> Task instance </param>
+    /// <param name="priority"> Task priority </param>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="task" /> is NULL </exception>
+    protected void AddTask(ITaskWrapper<TArgument> task, int priority)
     {
-        _queues[FixPriority(priority)].Enqueue(task);
+        if (task.IsCanceled || task.IsCompleted || task.IsFaulted)
+            return;
+        _queues[FixPriority(priority)].Enqueue(task ?? throw new ArgumentNullException(nameof(task)));
         _newDataEvent.Set();
     }
 

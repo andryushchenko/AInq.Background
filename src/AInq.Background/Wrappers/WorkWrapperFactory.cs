@@ -21,8 +21,14 @@ using System.Threading.Tasks;
 namespace AInq.Background.Wrappers
 {
 
-internal static class WorkWrapperFactory
+/// <summary> Factory class for creating <see cref="ITaskWrapper{TArgument}" /> for background work queues </summary>
+public static class WorkWrapperFactory
 {
+    /// <summary> Create <see cref="ITaskWrapper{TArgument}" /> for given work </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <returns> Wrapper and work completion task </returns>
     public static (ITaskWrapper<object?> Work, Task Task) CreateWorkWrapper(IWork work, int attemptsCount = 1,
         CancellationToken cancellation = default)
     {
@@ -30,6 +36,12 @@ internal static class WorkWrapperFactory
         return (wrapper, wrapper.WorkTask);
     }
 
+    /// <summary> Create <see cref="ITaskWrapper{TArgument}" /> for given work </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <typeparam name="TResult"> Work result type </typeparam>
+    /// <returns> Wrapper and work result task </returns>
     public static (ITaskWrapper<object?> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IWork<TResult> work, int attemptsCount = 1,
         CancellationToken cancellation = default)
     {
@@ -37,6 +49,11 @@ internal static class WorkWrapperFactory
         return (wrapper, wrapper.WorkTask);
     }
 
+    /// <summary> Create <see cref="ITaskWrapper{TArgument}" /> for given asynchronous work </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <returns> Wrapper and work completion task </returns>
     public static (ITaskWrapper<object?> Work, Task Task) CreateWorkWrapper(IAsyncWork work, int attemptsCount = 1,
         CancellationToken cancellation = default)
     {
@@ -44,6 +61,12 @@ internal static class WorkWrapperFactory
         return (wrapper, wrapper.WorkTask);
     }
 
+    /// <summary> Create <see cref="ITaskWrapper{TArgument}" /> for given asynchronous work </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <typeparam name="TResult"> Work result type </typeparam>
+    /// <returns> Wrapper and work result task </returns>
     public static (ITaskWrapper<object?> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IAsyncWork<TResult> work, int attemptsCount = 1,
         CancellationToken cancellation = default)
     {
@@ -69,6 +92,8 @@ internal static class WorkWrapperFactory
 
         internal Task WorkTask => _completion.Task;
         bool ITaskWrapper<object?>.IsCanceled => _innerCancellation.IsCancellationRequested;
+        bool ITaskWrapper<object?>.IsCompleted => _completion.Task.IsCompleted;
+        bool ITaskWrapper<object?>.IsFaulted => _completion.Task.IsFaulted;
 
         Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger,
             CancellationToken outerCancellation)
@@ -127,6 +152,8 @@ internal static class WorkWrapperFactory
 
         internal Task<TResult> WorkTask => _completion.Task;
         bool ITaskWrapper<object?>.IsCanceled => _innerCancellation.IsCancellationRequested;
+        bool ITaskWrapper<object?>.IsCompleted => _completion.Task.IsCompleted;
+        bool ITaskWrapper<object?>.IsFaulted => _completion.Task.IsFaulted;
 
         Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger,
             CancellationToken outerCancellation)
@@ -184,6 +211,8 @@ internal static class WorkWrapperFactory
 
         internal Task WorkTask => _completion.Task;
         bool ITaskWrapper<object?>.IsCanceled => _innerCancellation.IsCancellationRequested;
+        bool ITaskWrapper<object?>.IsCompleted => _completion.Task.IsCompleted;
+        bool ITaskWrapper<object?>.IsFaulted => _completion.Task.IsFaulted;
 
         async Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger,
             CancellationToken outerCancellation)
@@ -242,6 +271,8 @@ internal static class WorkWrapperFactory
 
         internal Task<TResult> WorkTask => _completion.Task;
         bool ITaskWrapper<object?>.IsCanceled => _innerCancellation.IsCancellationRequested;
+        bool ITaskWrapper<object?>.IsCompleted => _completion.Task.IsCompleted;
+        bool ITaskWrapper<object?>.IsFaulted => _completion.Task.IsFaulted;
 
         async Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger,
             CancellationToken outerCancellation)

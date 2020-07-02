@@ -14,6 +14,7 @@
 
 using AInq.Background.Wrappers;
 using Nito.AsyncEx;
+using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,19 +22,21 @@ using System.Threading.Tasks;
 namespace AInq.Background.Managers
 {
 
-internal class TaskManager<TTaskArgument> : ITaskManager<TTaskArgument, object?>
+/// <summary> Basic task manager with single queue </summary>
+/// <typeparam name="TArgument"> Task argument type </typeparam>
+public class TaskManager<TArgument> : ITaskManager<TArgument, object?>
 {
     private readonly AsyncAutoResetEvent _newDataEvent = new AsyncAutoResetEvent(false);
-    private readonly ConcurrentQueue<ITaskWrapper<TTaskArgument>> _queue = new ConcurrentQueue<ITaskWrapper<TTaskArgument>>();
+    private readonly ConcurrentQueue<ITaskWrapper<TArgument>> _queue = new ConcurrentQueue<ITaskWrapper<TArgument>>();
 
-    bool ITaskManager<TTaskArgument, object?>.HasTask => !_queue.IsEmpty;
+    bool ITaskManager<TArgument, object?>.HasTask => !_queue.IsEmpty;
 
-    Task ITaskManager<TTaskArgument, object?>.WaitForTaskAsync(CancellationToken cancellation)
+    Task ITaskManager<TArgument, object?>.WaitForTaskAsync(CancellationToken cancellation)
         => _queue.IsEmpty
             ? _newDataEvent.WaitAsync(cancellation)
             : Task.CompletedTask;
 
-    (ITaskWrapper<TTaskArgument>?, object?) ITaskManager<TTaskArgument, object?>.GetTask()
+    (ITaskWrapper<TArgument>?, object?) ITaskManager<TArgument, object?>.GetTask()
     {
         while (true)
         {
@@ -44,12 +47,17 @@ internal class TaskManager<TTaskArgument> : ITaskManager<TTaskArgument, object?>
         }
     }
 
-    void ITaskManager<TTaskArgument, object?>.RevertTask(ITaskWrapper<TTaskArgument> task, object? metadata)
-        => _queue.Enqueue(task);
+    void ITaskManager<TArgument, object?>.RevertTask(ITaskWrapper<TArgument> task, object? metadata)
+        => AddTask(task);
 
-    protected void AddTask(ITaskWrapper<TTaskArgument> task)
+    /// <summary> Add task to queue </summary>
+    /// <param name="task"> Task instance </param>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="task" /> is NULL </exception>
+    protected void AddTask(ITaskWrapper<TArgument> task)
     {
-        _queue.Enqueue(task);
+        if (task.IsCanceled || task.IsCompleted || task.IsFaulted)
+            return;
+        _queue.Enqueue(task ?? throw new ArgumentNullException(nameof(task)));
         _newDataEvent.Set();
     }
 }

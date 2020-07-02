@@ -14,10 +14,10 @@
 
 using AInq.Background.Services;
 using AInq.Background.Tasks;
-using AInq.Background.Wrappers;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using static AInq.Background.Wrappers.ConveyorDataWrapperFactory;
 
 namespace AInq.Background.Managers
 {
@@ -33,7 +33,7 @@ internal sealed class ConveyorManager<TData, TResult> : TaskManager<IConveyorMac
 
     Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
     {
-        var (wrapper, result) = ConveyorDataWrapperFactory.CreateConveyorDataWrapper<TData, TResult>(data, FixAttempts(attemptsCount), cancellation);
+        var (wrapper, result) = CreateConveyorDataWrapper<TData, TResult>(data, FixAttempts(attemptsCount), cancellation);
         AddTask(wrapper);
         return result;
     }

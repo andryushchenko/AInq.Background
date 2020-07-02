@@ -21,8 +21,16 @@ using System.Threading.Tasks;
 namespace AInq.Background.Wrappers
 {
 
-internal static class ConveyorDataWrapperFactory
+/// <summary> Factory class for creating <see cref="ITaskWrapper{TArgument}" /> for background data conveyors </summary>
+public static class ConveyorDataWrapperFactory
 {
+    /// <summary> Create <see cref="ITaskWrapper{TArgument}" /> with given conveyor data </summary>
+    /// <param name="data"> Conveyor data </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Processing cancellation token </param>
+    /// <typeparam name="TData"> Conveyor input data type </typeparam>
+    /// <typeparam name="TResult"> Processing result type </typeparam>
+    /// <returns> Wrapper and processing result task </returns>
     public static (ITaskWrapper<IConveyorMachine<TData, TResult>>, Task<TResult>) CreateConveyorDataWrapper<TData, TResult>(TData data,
         int attemptsCount = 1,
         CancellationToken cancellation = default)
@@ -49,6 +57,8 @@ internal static class ConveyorDataWrapperFactory
 
         internal Task<TResult> Result => _completion.Task;
         bool ITaskWrapper<IConveyorMachine<TData, TResult>>.IsCanceled => _innerCancellation.IsCancellationRequested;
+        bool ITaskWrapper<IConveyorMachine<TData, TResult>>.IsCompleted => _completion.Task.IsCompleted;
+        bool ITaskWrapper<IConveyorMachine<TData, TResult>>.IsFaulted => _completion.Task.IsFaulted;
 
         async Task<bool> ITaskWrapper<IConveyorMachine<TData, TResult>>.ExecuteAsync(IConveyorMachine<TData, TResult> argument,
             IServiceProvider provider,

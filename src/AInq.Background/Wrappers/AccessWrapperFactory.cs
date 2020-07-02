@@ -21,8 +21,15 @@ using System.Threading.Tasks;
 namespace AInq.Background.Wrappers
 {
 
-internal static class AccessWrapperFactory
+/// <summary> Factory class for creating <see cref="ITaskWrapper{TArgument}" /> for background access queues </summary>
+public static class AccessWrapperFactory
 {
+    /// <summary> Create <see cref="ITaskWrapper{TArgument}" /> for given access action </summary>
+    /// <param name="access"> Access action instance </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
+    /// <returns> Wrapper and access action completion task </returns>
     public static (ITaskWrapper<TResource> Access, Task Task) CreateAccessWrapper<TResource>(IAccess<TResource> access, int attemptsCount = 1,
         CancellationToken cancellation = default)
     {
@@ -32,6 +39,13 @@ internal static class AccessWrapperFactory
         return (wrapper, wrapper.AccessTask);
     }
 
+    /// <summary> Create <see cref="ITaskWrapper{TArgument}" /> for given access action </summary>
+    /// <param name="access"> Access action instance </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
+    /// <typeparam name="TResult"> Access action result type </typeparam>
+    /// <returns> Wrapper and access action result task </returns>
     public static (ITaskWrapper<TResource> Access, Task<TResult> Task) CreateAccessWrapper<TResource, TResult>(IAccess<TResource, TResult> access,
         int attemptsCount = 1, CancellationToken cancellation = default)
     {
@@ -41,6 +55,12 @@ internal static class AccessWrapperFactory
         return (wrapper, wrapper.AccessTask);
     }
 
+    /// <summary> Create <see cref="ITaskWrapper{TArgument}" /> for given asynchronous access action </summary>
+    /// <param name="access"> Access action instance </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
+    /// <returns> Wrapper and access action completion task </returns>
     public static (ITaskWrapper<TResource> Access, Task Task) CreateAccessWrapper<TResource>(IAsyncAccess<TResource> access, int attemptsCount = 1,
         CancellationToken cancellation = default)
     {
@@ -50,6 +70,13 @@ internal static class AccessWrapperFactory
         return (wrapper, wrapper.AccessTask);
     }
 
+    /// <summary> Create <see cref="ITaskWrapper{TArgument}" /> for given asynchronous access action </summary>
+    /// <param name="access"> Access action instance </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
+    /// <typeparam name="TResult"> Access action result type </typeparam>
+    /// <returns> Wrapper and access action result task </returns>
     public static (ITaskWrapper<TResource> Access, Task<TResult> Task) CreateAccessWrapper<TResource, TResult>(
         IAsyncAccess<TResource, TResult> access, int attemptsCount = 1, CancellationToken cancellation = default)
     {
@@ -77,6 +104,8 @@ internal static class AccessWrapperFactory
 
         internal Task AccessTask => _completion.Task;
         bool ITaskWrapper<TResource>.IsCanceled => _innerCancellation.IsCancellationRequested;
+        bool ITaskWrapper<TResource>.IsCompleted => _completion.Task.IsCompleted;
+        bool ITaskWrapper<TResource>.IsFaulted => _completion.Task.IsFaulted;
 
         Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger? logger,
             CancellationToken outerCancellation)
@@ -135,6 +164,8 @@ internal static class AccessWrapperFactory
 
         internal Task<TResult> AccessTask => _completion.Task;
         bool ITaskWrapper<TResource>.IsCanceled => _innerCancellation.IsCancellationRequested;
+        bool ITaskWrapper<TResource>.IsCompleted => _completion.Task.IsCompleted;
+        bool ITaskWrapper<TResource>.IsFaulted => _completion.Task.IsFaulted;
 
         Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger? logger,
             CancellationToken outerCancellation)
@@ -192,6 +223,8 @@ internal static class AccessWrapperFactory
 
         internal Task AccessTask => _completion.Task;
         bool ITaskWrapper<TResource>.IsCanceled => _innerCancellation.IsCancellationRequested;
+        bool ITaskWrapper<TResource>.IsCompleted => _completion.Task.IsCompleted;
+        bool ITaskWrapper<TResource>.IsFaulted => _completion.Task.IsFaulted;
 
         async Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger? logger,
             CancellationToken outerCancellation)
@@ -250,6 +283,8 @@ internal static class AccessWrapperFactory
 
         internal Task<TResult> AccessTask => _completion.Task;
         bool ITaskWrapper<TResource>.IsCanceled => _innerCancellation.IsCancellationRequested;
+        bool ITaskWrapper<TResource>.IsCompleted => _completion.Task.IsCompleted;
+        bool ITaskWrapper<TResource>.IsFaulted => _completion.Task.IsFaulted;
 
         async Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger? logger,
             CancellationToken outerCancellation)

@@ -392,6 +392,54 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
             <exception cref="T:System.ComponentModel.InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
         </member>
+        <member name="T:AInq.Background.Managers.ITaskManager`2">
+            <summary> Interface for background task manager </summary>
+            <typeparam name="TArgument"> Task argument type </typeparam>
+            <typeparam name="TMetadata"> Task metadata type </typeparam>
+        </member>
+        <member name="P:AInq.Background.Managers.ITaskManager`2.HasTask">
+            <summary> Check if manager has pending tasks </summary>
+        </member>
+        <member name="M:AInq.Background.Managers.ITaskManager`2.WaitForTaskAsync(System.Threading.CancellationToken)">
+            <summary> Asynchronously wait wor pending tasks </summary>
+            <param name="cancellation"> Wait cancellation token </param>
+        </member>
+        <member name="M:AInq.Background.Managers.ITaskManager`2.GetTask">
+            <summary> Get first pending task </summary>
+            <returns> Task wrapper and task metadata </returns>
+        </member>
+        <member name="M:AInq.Background.Managers.ITaskManager`2.RevertTask(AInq.Background.Wrappers.ITaskWrapper{`0},`1)">
+            <summary> Revert uncompleted task to manager </summary>
+            <param name="task"> Task instance </param>
+            <param name="metadata"> Task metadata </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="task" /> or <paramref name="metadata" /> is NULL</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="metadata" /> has incorrect value </exception>
+        </member>
+        <member name="T:AInq.Background.Managers.PriorityTaskManager`1">
+            <summary> Basic task manager with numeric prioritization </summary>
+            <typeparam name="TArgument"> Task argument type </typeparam>
+        </member>
+        <member name="M:AInq.Background.Managers.PriorityTaskManager`1.#ctor(System.Int32)">
+            <param name="maxPriority"> Max allowed priority </param>
+        </member>
+        <member name="P:AInq.Background.Managers.PriorityTaskManager`1.MaxPriority">
+            <summary> Max allowed priority </summary>
+        </member>
+        <member name="M:AInq.Background.Managers.PriorityTaskManager`1.AddTask(AInq.Background.Wrappers.ITaskWrapper{`0},System.Int32)">
+            <summary> Add task to queue </summary>
+            <param name="task"> Task instance </param>
+            <param name="priority"> Task priority </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="task" /> is NULL </exception>
+        </member>
+        <member name="T:AInq.Background.Managers.TaskManager`1">
+            <summary> Basic task manager with single queue </summary>
+            <typeparam name="TArgument"> Task argument type </typeparam>
+        </member>
+        <member name="M:AInq.Background.Managers.TaskManager`1.AddTask(AInq.Background.Wrappers.ITaskWrapper{`0})">
+            <summary> Add task to queue </summary>
+            <param name="task"> Task instance </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="task" /> is NULL </exception>
+        </member>
         <member name="T:AInq.Background.ReuseStrategy">
             <summary> Reuse strategy for Shared Resources and Conveyor Machines </summary>
         </member>
@@ -554,6 +602,109 @@
             <param name="maxParallelWorks"> Max allowed parallel works </param>
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
+        </member>
+        <member name="T:AInq.Background.Wrappers.AccessWrapperFactory">
+            <summary> Factory class for creating <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for background access queues </summary>
+        </member>
+        <member name="M:AInq.Background.Wrappers.AccessWrapperFactory.CreateAccessWrapper``1(AInq.Background.Tasks.IAccess{``0},System.Int32,System.Threading.CancellationToken)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given access action </summary>
+            <param name="access"> Access action instance </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <typeparam name="TResource"> Shared resource type </typeparam>
+            <returns> Wrapper and access action completion task </returns>
+        </member>
+        <member name="M:AInq.Background.Wrappers.AccessWrapperFactory.CreateAccessWrapper``2(AInq.Background.Tasks.IAccess{``0,``1},System.Int32,System.Threading.CancellationToken)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given access action </summary>
+            <param name="access"> Access action instance </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <typeparam name="TResource"> Shared resource type </typeparam>
+            <typeparam name="TResult"> Access action result type </typeparam>
+            <returns> Wrapper and access action result task </returns>
+        </member>
+        <member name="M:AInq.Background.Wrappers.AccessWrapperFactory.CreateAccessWrapper``1(AInq.Background.Tasks.IAsyncAccess{``0},System.Int32,System.Threading.CancellationToken)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asynchronous access action </summary>
+            <param name="access"> Access action instance </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <typeparam name="TResource"> Shared resource type </typeparam>
+            <returns> Wrapper and access action completion task </returns>
+        </member>
+        <member name="M:AInq.Background.Wrappers.AccessWrapperFactory.CreateAccessWrapper``2(AInq.Background.Tasks.IAsyncAccess{``0,``1},System.Int32,System.Threading.CancellationToken)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asynchronous access action </summary>
+            <param name="access"> Access action instance </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <typeparam name="TResource"> Shared resource type </typeparam>
+            <typeparam name="TResult"> Access action result type </typeparam>
+            <returns> Wrapper and access action result task </returns>
+        </member>
+        <member name="T:AInq.Background.Wrappers.ConveyorDataWrapperFactory">
+            <summary> Factory class for creating <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for background data conveyors </summary>
+        </member>
+        <member name="M:AInq.Background.Wrappers.ConveyorDataWrapperFactory.CreateConveyorDataWrapper``2(``0,System.Int32,System.Threading.CancellationToken)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> with given conveyor data </summary>
+            <param name="data"> Conveyor data </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="cancellation"> Processing cancellation token </param>
+            <typeparam name="TData"> Conveyor input data type </typeparam>
+            <typeparam name="TResult"> Processing result type </typeparam>
+            <returns> Wrapper and processing result task </returns>
+        </member>
+        <member name="T:AInq.Background.Wrappers.ITaskWrapper`1">
+            <summary> Interface for background task wrappers </summary>
+            <typeparam name="TArgument"> Task argument type </typeparam>
+        </member>
+        <member name="P:AInq.Background.Wrappers.ITaskWrapper`1.IsCanceled">
+            <summary> Check if task is cancelled </summary>
+        </member>
+        <member name="P:AInq.Background.Wrappers.ITaskWrapper`1.IsCompleted">
+            <summary> Check if task is completed </summary>
+        </member>
+        <member name="P:AInq.Background.Wrappers.ITaskWrapper`1.IsFaulted">
+            <summary> Check if task is faulted </summary>
+        </member>
+        <member name="M:AInq.Background.Wrappers.ITaskWrapper`1.ExecuteAsync(`0,System.IServiceProvider,Microsoft.Extensions.Logging.ILogger,System.Threading.CancellationToken)">
+            <summary> Execute task asynchronously </summary>
+            <param name="argument"> Task argument </param>
+            <param name="provider"> Service provider instance </param>
+            <param name="logger"> Logger instance </param>
+            <param name="cancellation"> Cancellation token </param>
+            <returns> If task is completed or should be reverted to queue/conveyor </returns>
+        </member>
+        <member name="T:AInq.Background.Wrappers.WorkWrapperFactory">
+            <summary> Factory class for creating <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for background work queues </summary>
+        </member>
+        <member name="M:AInq.Background.Wrappers.WorkWrapperFactory.CreateWorkWrapper(AInq.Background.Tasks.IWork,System.Int32,System.Threading.CancellationToken)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given work </summary>
+            <param name="work"> Work instance </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <returns> Wrapper and work completion task </returns>
+        </member>
+        <member name="M:AInq.Background.Wrappers.WorkWrapperFactory.CreateWorkWrapper``1(AInq.Background.Tasks.IWork{``0},System.Int32,System.Threading.CancellationToken)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given work </summary>
+            <param name="work"> Work instance </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <returns> Wrapper and work result task </returns>
+        </member>
+        <member name="M:AInq.Background.Wrappers.WorkWrapperFactory.CreateWorkWrapper(AInq.Background.Tasks.IAsyncWork,System.Int32,System.Threading.CancellationToken)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asynchronous work </summary>
+            <param name="work"> Work instance </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <returns> Wrapper and work completion task </returns>
+        </member>
+        <member name="M:AInq.Background.Wrappers.WorkWrapperFactory.CreateWorkWrapper``1(AInq.Background.Tasks.IAsyncWork{``0},System.Int32,System.Threading.CancellationToken)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asynchronous work </summary>
+            <param name="work"> Work instance </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <returns> Wrapper and work result task </returns>
         </member>
     </members>
 </doc>
