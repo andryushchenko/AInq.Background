@@ -23,8 +23,8 @@ public static class CronHelper
 {
     /// <summary> Parse cron string with format auto detection </summary>
     /// <param name="cronExpression"> Cron string </param>
-    /// <returns> <see cref="CronExpression"/> instance </returns>
-    /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression"/> has incorrect syntax </exception>
+    /// <returns> <see cref="CronExpression" /> instance </returns>
+    /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     public static CronExpression ParseCron(this string cronExpression)
     {
         try

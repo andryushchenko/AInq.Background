@@ -12,32 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Tasks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AInq.Background.Tasks;
 
 namespace AInq.Background.Test
 {
 
 public class TestMachine : IConveyorMachine<int, int>, IActivatable
 {
-    private bool _isRunning;
     private readonly string _name;
+    private bool _isRunning;
 
     public TestMachine()
     {
         _name = DateTime.Now.Ticks.ToString("X");
         Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} created");
-    }
-
-    async Task<int> IConveyorMachine<int, int>.ProcessDataAsync(int data, IServiceProvider provider, CancellationToken cancellation)
-    {
-        Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} checking provider {provider}");
-        Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} processing {data}");
-        await Task.Delay(3000, cancellation);
-        Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} processed {data}");
-        return data;
     }
 
     bool IActivatable.IsActive => _isRunning;
@@ -56,6 +47,15 @@ public class TestMachine : IConveyorMachine<int, int>, IActivatable
         await Task.Delay(2000, cancellation);
         _isRunning = false;
         Console.WriteLine($"{DateTime.Now:T}\tMachine {_name} stopped");
+    }
+
+    async Task<int> IConveyorMachine<int, int>.ProcessDataAsync(int data, IServiceProvider provider, CancellationToken cancellation)
+    {
+        Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} checking provider {provider}");
+        Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} processing {data}");
+        await Task.Delay(3000, cancellation);
+        Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} processed {data}");
+        return data;
     }
 }
 

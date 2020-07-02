@@ -21,15 +21,15 @@ using System.Threading.Tasks;
 namespace AInq.Background.Wrappers
 {
 
-/// <summary> Factory class for creating <see cref="IScheduledTaskWrapper"/> for once scheduled work </summary>
+/// <summary> Factory class for creating <see cref="IScheduledTaskWrapper" /> for once scheduled work </summary>
 public static class DelayedWorkWrapperFactory
 {
-    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> scheduled to <paramref name="time"/> </summary>
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="time" /> </summary>
     /// <param name="work"> Work instance </param>
     /// <param name="time"> Scheduled time </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> is less or equal to current time </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Scheduled task wrapper </returns>
     public static IScheduledTaskWrapper CreateDelayedWorkWrapper(IWork work, DateTime time, CancellationToken cancellation = default)
     {
@@ -41,12 +41,12 @@ public static class DelayedWorkWrapperFactory
             cancellation);
     }
 
-    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> delayed in <paramref name="delay"/> </summary>
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> delayed in <paramref name="delay" /> </summary>
     /// <param name="work"> Work instance </param>
     /// <param name="delay"> Execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> is less or equal to 00:00:00.000 </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> is less or equal to 00:00:00.000 </exception>
     /// <returns> Scheduled task wrapper </returns>
     public static IScheduledTaskWrapper CreateDelayedWorkWrapper(IWork work, TimeSpan delay, CancellationToken cancellation = default)
         => new DelayedTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
@@ -55,13 +55,13 @@ public static class DelayedWorkWrapperFactory
                 : delay),
             cancellation);
 
-    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> scheduled to <paramref name="time"/> </summary>
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="time" /> </summary>
     /// <param name="work"> Work instance </param>
     /// <param name="time"> Scheduled time </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> is less or equal to current time </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Scheduled task wrapper </returns>
     public static IScheduledTaskWrapper CreateDelayedWorkWrapper<TResult>(IWork<TResult> work, DateTime time,
         CancellationToken cancellation = default)
@@ -74,13 +74,13 @@ public static class DelayedWorkWrapperFactory
             cancellation);
     }
 
-    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> delayed in <paramref name="delay"/> </summary>
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> delayed in <paramref name="delay" /> </summary>
     /// <param name="work"> Work instance </param>
     /// <param name="delay"> Execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> is less or equal to 00:00:00.000 </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> is less or equal to 00:00:00.000 </exception>
     /// <returns> Scheduled task wrapper </returns>
     public static IScheduledTaskWrapper CreateDelayedWorkWrapper<TResult>(IWork<TResult> work, TimeSpan delay,
         CancellationToken cancellation = default)
@@ -90,12 +90,12 @@ public static class DelayedWorkWrapperFactory
                 : delay),
             cancellation);
 
-    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> scheduled to <paramref name="time"/> </summary>
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="time" /> </summary>
     /// <param name="work"> Work instance </param>
     /// <param name="time"> Scheduled time </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> is less or equal to current time </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Scheduled task wrapper </returns>
     public static IScheduledTaskWrapper CreateDelayedWorkWrapper(IAsyncWork work, DateTime time, CancellationToken cancellation = default)
     {
@@ -107,12 +107,12 @@ public static class DelayedWorkWrapperFactory
             cancellation);
     }
 
-    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> delayed in <paramref name="delay"/> </summary>
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> delayed in <paramref name="delay" /> </summary>
     /// <param name="work"> Work instance </param>
     /// <param name="delay"> Execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> is less or equal to 00:00:00.000 </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> is less or equal to 00:00:00.000 </exception>
     /// <returns> Scheduled task wrapper </returns>
     public static IScheduledTaskWrapper CreateDelayedWorkWrapper(IAsyncWork work, TimeSpan delay, CancellationToken cancellation = default)
         => new DelayedAsyncTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
@@ -121,13 +121,13 @@ public static class DelayedWorkWrapperFactory
                 : delay),
             cancellation);
 
-    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> scheduled to <paramref name="time"/> </summary>
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="time" /> </summary>
     /// <param name="work"> Work instance </param>
     /// <param name="time"> Scheduled time </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time"/> is less or equal to current time </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Scheduled task wrapper </returns>
     public static IScheduledTaskWrapper CreateDelayedWorkWrapper<TResult>(IAsyncWork<TResult> work, DateTime time,
         CancellationToken cancellation = default)
@@ -140,13 +140,13 @@ public static class DelayedWorkWrapperFactory
             cancellation);
     }
 
-    /// <summary> Create <see cref="IScheduledTaskWrapper"/> for given <paramref name="work"/> delayed in <paramref name="delay"/> </summary>
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> delayed in <paramref name="delay" /> </summary>
     /// <param name="work"> Work instance </param>
     /// <param name="delay"> Execution delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work"/> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay"/> is less or equal to 00:00:00.000 </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> is less or equal to 00:00:00.000 </exception>
     /// <returns> Scheduled task wrapper </returns>
     public static IScheduledTaskWrapper CreateDelayedWorkWrapper<TResult>(IAsyncWork<TResult> work, TimeSpan delay,
         CancellationToken cancellation = default)

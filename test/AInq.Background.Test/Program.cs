@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using AInq.Background.Helpers;
 using AInq.Background.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AInq.Background.Test
 {
@@ -43,13 +43,17 @@ internal static class Program
                                .AddWorkQueue()
                                .AddStartupWork(WorkFactory.CreateWork(provider =>
                                {
-                                   provider.AddCronWork(WorkFactory.CreateWork(()=>Console.WriteLine($"{DateTime.Now:T}\tCRON test")), "0/10 * * * * *");
+                                   provider.AddCronWork(WorkFactory.CreateWork(() => Console.WriteLine($"{DateTime.Now:T}\tCRON test")),
+                                       "0/10 * * * * *");
                                    for (var index = 1; index <= 10; index++)
                                        provider.ProcessDataAsync<int, int>(index, priority: 50 - index);
                                    provider.AddDelayedAsyncQueueWork(WorkFactory.CreateAsyncWork(async (serviceProvider, cancel) =>
                                        {
                                            using var source = new CancellationTokenSource(TimeSpan.FromSeconds(6));
-                                           var tasks = Enumerable.Range(1, 10).Select(index => serviceProvider.ProcessDataAsync<int, int>(index, source.Token)).ToList();
+                                           var tasks = Enumerable
+                                                       .Range(1, 10)
+                                                       .Select(index => serviceProvider.ProcessDataAsync<int, int>(index, source.Token))
+                                                       .ToList();
                                            try
                                            {
                                                await Task.WhenAll(tasks);
@@ -59,16 +63,17 @@ internal static class Program
                                                Console.WriteLine(ex);
                                            }
                                            foreach (var task in tasks)
-                                           {
-                                               Console.WriteLine($"{tasks.IndexOf(task) + 1}\t{(task.IsCompletedSuccessfully ? task.Result.ToString() : "Canceled")}");
-                                           }
+                                               Console.WriteLine(
+                                                   $"{tasks.IndexOf(task) + 1}\t{(task.IsCompletedSuccessfully ? task.Result.ToString() : "Canceled")}");
                                        }),
                                        TimeSpan.FromSeconds(20));
                                    provider.AddDelayedAsyncWork(WorkFactory.CreateAsyncWork(async (serviceProvider, cancel) =>
                                        {
                                            using var source = new CancellationTokenSource(TimeSpan.FromSeconds(3));
                                            Console.WriteLine($"Start\t{DateTime.Now:T}");
-                                           _ = serviceProvider.EnqueueAsyncWork(WorkFactory.CreateAsyncWork(token => Task.Delay(TimeSpan.FromSeconds(8), token)), cancel);
+                                           _ = serviceProvider.EnqueueAsyncWork(
+                                               WorkFactory.CreateAsyncWork(token => Task.Delay(TimeSpan.FromSeconds(8), token)),
+                                               cancel);
                                            var test = serviceProvider.EnqueueWork(WorkFactory.CreateWork(_ => $"Test\t{DateTime.Now:T}"), cancel);
                                            try
                                            {

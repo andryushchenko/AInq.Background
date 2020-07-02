@@ -87,8 +87,7 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
     Task IAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess>(CancellationToken cancellation, int attemptsCount)
     {
         var (accessWrapper, task) =
-            CreateAccessWrapper(
-                CreateAsyncAccess<TResource>((resource, provider, token)
+            CreateAccessWrapper(CreateAsyncAccess<TResource>((resource, provider, token)
                     => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
                 FixAttempts(attemptsCount),
                 cancellation);
@@ -107,8 +106,7 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
 
     Task<TResult> IAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess, TResult>(CancellationToken cancellation, int attemptsCount)
     {
-        var (accessWrapper, task) = CreateAccessWrapper(
-            CreateAsyncAccess<TResource, TResult>((resource, provider, token)
+        var (accessWrapper, task) = CreateAccessWrapper(CreateAsyncAccess<TResource, TResult>((resource, provider, token)
                 => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
             FixAttempts(attemptsCount),
             cancellation);
@@ -166,8 +164,7 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
     Task IPriorityAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess>(int priority, CancellationToken cancellation, int attemptsCount)
     {
         var (accessWrapper, task) =
-            CreateAccessWrapper(
-                CreateAsyncAccess<TResource>((resource, provider, token)
+            CreateAccessWrapper(CreateAsyncAccess<TResource>((resource, provider, token)
                     => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
                 FixAttempts(attemptsCount),
                 cancellation);
@@ -187,8 +184,7 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
     Task<TResult> IPriorityAccessQueue<TResource>.EnqueueAsyncAccess<TAsyncAccess, TResult>(int priority, CancellationToken cancellation,
         int attemptsCount)
     {
-        var (accessWrapper, task) = CreateAccessWrapper(
-            CreateAsyncAccess<TResource, TResult>((resource, provider, token)
+        var (accessWrapper, task) = CreateAccessWrapper(CreateAsyncAccess<TResource, TResult>((resource, provider, token)
                 => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, token)),
             FixAttempts(attemptsCount),
             cancellation);

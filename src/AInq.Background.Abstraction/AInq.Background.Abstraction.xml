@@ -642,7 +642,7 @@
             <param name="cronExpression"> Work CRON-based execution schedule </param>
             <param name="cancellation"> Work cancellation token </param>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.IWorkScheduler.AddCronWork(AInq.Background.Tasks.IWork,System.String,System.Threading.CancellationToken)" />
         </member>
@@ -655,7 +655,7 @@
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TResult"> Work result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.IWorkScheduler.AddCronWork``1(AInq.Background.Tasks.IWork{``0},System.String,System.Threading.CancellationToken)" />
         </member>
@@ -667,7 +667,7 @@
             <param name="cronExpression"> Work CRON-based execution schedule </param>
             <param name="cancellation"> Work cancellation token </param>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.IWorkScheduler.AddCronAsyncWork(AInq.Background.Tasks.IAsyncWork,System.String,System.Threading.CancellationToken)" />
         </member>
@@ -680,7 +680,7 @@
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TResult"> Work result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.IWorkScheduler.AddCronAsyncWork``1(AInq.Background.Tasks.IAsyncWork{``0},System.String,System.Threading.CancellationToken)" />
         </member>
@@ -692,7 +692,7 @@
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TWork"> Work type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.IWorkScheduler.AddCronWork``1(System.String,System.Threading.CancellationToken)" />
         </member>
@@ -705,7 +705,7 @@
             <typeparam name="TWork"> Work type </typeparam>
             <typeparam name="TResult"> Work result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.IWorkScheduler.AddCronWork``2(System.String,System.Threading.CancellationToken)" />
         </member>
@@ -717,7 +717,7 @@
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TAsyncWork"> Work type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.IWorkScheduler.AddCronAsyncWork``1(System.String,System.Threading.CancellationToken)" />
         </member>
@@ -730,7 +730,7 @@
             <typeparam name="TAsyncWork"> Work type </typeparam>
             <typeparam name="TResult"> Work result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.IWorkScheduler.AddCronAsyncWork``2(System.String,System.Threading.CancellationToken)" />
         </member>
@@ -744,7 +744,7 @@
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="priority"> Work priority </param>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
@@ -759,7 +759,7 @@
             <param name="priority"> Work priority </param>
             <typeparam name="TResult"> Work result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
@@ -773,7 +773,7 @@
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="priority"> Work priority </param>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
@@ -788,7 +788,7 @@
             <param name="priority"> Work priority </param>
             <typeparam name="TResult"> Work result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
@@ -802,7 +802,7 @@
             <param name="priority"> Work priority </param>
             <typeparam name="TWork"> Work type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
@@ -817,7 +817,7 @@
             <typeparam name="TWork"> Work type </typeparam>
             <typeparam name="TResult"> Work result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
@@ -831,7 +831,7 @@
             <param name="priority"> Work priority </param>
             <typeparam name="TAsyncWork"> Work type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
@@ -846,7 +846,7 @@
             <typeparam name="TAsyncWork"> Work type </typeparam>
             <typeparam name="TResult"> Work result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
             <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
@@ -1315,7 +1315,7 @@
             <param name="work"> Work instance </param>
             <param name="cronExpression"> Work CRON-based execution schedule </param>
             <param name="cancellation"> Work cancellation token </param>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="M:AInq.Background.Services.IWorkScheduler.AddCronWork``1(AInq.Background.Tasks.IWork{``0},System.String,System.Threading.CancellationToken)">
@@ -1324,7 +1324,7 @@
             <param name="cronExpression"> Work CRON-based execution schedule </param>
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="M:AInq.Background.Services.IWorkScheduler.AddCronAsyncWork(AInq.Background.Tasks.IAsyncWork,System.String,System.Threading.CancellationToken)">
@@ -1332,7 +1332,7 @@
             <param name="work"> Work instance </param>
             <param name="cronExpression"> Work CRON-based execution schedule </param>
             <param name="cancellation"> Work cancellation token </param>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="M:AInq.Background.Services.IWorkScheduler.AddCronAsyncWork``1(AInq.Background.Tasks.IAsyncWork{``0},System.String,System.Threading.CancellationToken)">
@@ -1341,7 +1341,7 @@
             <param name="cronExpression"> Work CRON-based execution schedule </param>
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="M:AInq.Background.Services.IWorkScheduler.AddCronWork``1(System.String,System.Threading.CancellationToken)">
@@ -1349,7 +1349,7 @@
             <param name="cronExpression"> Work CRON-based execution schedule </param>
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TWork"> Work type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="M:AInq.Background.Services.IWorkScheduler.AddCronWork``2(System.String,System.Threading.CancellationToken)">
@@ -1358,7 +1358,7 @@
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TWork"> Work type </typeparam>
             <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="M:AInq.Background.Services.IWorkScheduler.AddCronAsyncWork``1(System.String,System.Threading.CancellationToken)">
@@ -1366,7 +1366,7 @@
             <param name="cronExpression"> Work CRON-based execution schedule </param>
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TAsyncWork"> Work type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="M:AInq.Background.Services.IWorkScheduler.AddCronAsyncWork``2(System.String,System.Threading.CancellationToken)">
@@ -1375,7 +1375,7 @@
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TAsyncWork"> Work type </typeparam>
             <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="T:AInq.Background.Services.WorkSchedulerQueueExtension">
@@ -1566,7 +1566,7 @@
             <param name="cancellation"> Work cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="priority"> Work priority </param>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
@@ -1578,7 +1578,7 @@
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="priority"> Work priority </param>
             <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
@@ -1589,7 +1589,7 @@
             <param name="cancellation"> Work cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="priority"> Work priority </param>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
@@ -1601,7 +1601,7 @@
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="priority"> Work priority </param>
             <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
@@ -1612,7 +1612,7 @@
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="priority"> Work priority </param>
             <typeparam name="TWork"> Work type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
@@ -1624,7 +1624,7 @@
             <param name="priority"> Work priority </param>
             <typeparam name="TWork"> Work type </typeparam>
             <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
@@ -1635,7 +1635,7 @@
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="priority"> Work priority </param>
             <typeparam name="TAsyncWork"> Work type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
@@ -1647,7 +1647,7 @@
             <param name="priority"> Work priority </param>
             <typeparam name="TAsyncWork"> Work type </typeparam>
             <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression"/> is NULL </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="T:AInq.Background.Tasks.AccessFactory">
