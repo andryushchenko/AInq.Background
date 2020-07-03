@@ -111,6 +111,30 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
             <seealso cref="M:AInq.Background.Services.IPriorityAccessQueue`1.EnqueueAsyncAccess``2(System.Int32,System.Threading.CancellationToken,System.Int32)" />
         </member>
+        <member name="T:AInq.Background.Helpers.ConveyorChain`3">
+            <summary> Chain of two conveyors </summary>
+            <typeparam name="TData"> Input data type </typeparam>
+            <typeparam name="TIntermediate"> Intermediate result type </typeparam>
+            <typeparam name="TResult"> Processing result type </typeparam>
+        </member>
+        <member name="M:AInq.Background.Helpers.ConveyorChain`3.#ctor(AInq.Background.Services.IConveyor{`0,`1},AInq.Background.Services.IConveyor{`1,`2})">
+            <param name="first"> First conveyor </param>
+            <param name="second"> Second conveyor </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="first" /> or <paramref name="second" /> is NULL </exception>
+        </member>
+        <member name="T:AInq.Background.Helpers.ConveyorChain`4">
+            <summary> Chain of three conveyors </summary>
+            <typeparam name="TData"> Input data type </typeparam>
+            <typeparam name="TFirstIntermediate"> Intermediate result type </typeparam>
+            <typeparam name="TSecondIntermediate"> Intermediate result type </typeparam>
+            <typeparam name="TResult"> Processing result type </typeparam>
+        </member>
+        <member name="M:AInq.Background.Helpers.ConveyorChain`4.#ctor(AInq.Background.Services.IConveyor{`0,`1},AInq.Background.Services.IConveyor{`1,`2},AInq.Background.Services.IConveyor{`2,`3})">
+            <param name="first"> First conveyor </param>
+            <param name="second"> Second conveyor </param>
+            <param name="third"> Third conveyor </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="first" />, <paramref name="second" /> or <paramref name="third" /> is NULL </exception>
+        </member>
         <member name="T:AInq.Background.Helpers.ConveyorHelper">
             <summary> Helper class for <see cref="T:AInq.Background.Services.IConveyor`2" /> and <see cref="T:AInq.Background.Services.IPriorityConveyor`2" /> </summary>
         </member>
@@ -129,6 +153,85 @@
                 registered
             </exception>
             <seealso cref="M:AInq.Background.Services.IPriorityConveyor`2.ProcessDataAsync(`0,System.Int32,System.Threading.CancellationToken,System.Int32)" />
+        </member>
+        <member name="T:AInq.Background.Helpers.PriorityConveyorChain`3">
+            <summary> Chain of two priority conveyors </summary>
+            <typeparam name="TData"> Input data type </typeparam>
+            <typeparam name="TIntermediate"> Intermediate result type </typeparam>
+            <typeparam name="TResult"> Processing result type </typeparam>
+        </member>
+        <member name="M:AInq.Background.Helpers.PriorityConveyorChain`3.#ctor(AInq.Background.Services.IPriorityConveyor{`0,`1},AInq.Background.Services.IPriorityConveyor{`1,`2})">
+            <param name="first"> First conveyor </param>
+            <param name="second"> Second conveyor </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="first" /> or <paramref name="second" /> is NULL </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.PriorityConveyorChain`3.#ctor(AInq.Background.Services.IConveyor{`0,`1},AInq.Background.Services.IPriorityConveyor{`1,`2})">
+            <param name="first"> First conveyor </param>
+            <param name="second"> Second conveyor </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="first" /> or <paramref name="second" /> is NULL </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.PriorityConveyorChain`3.#ctor(AInq.Background.Services.IPriorityConveyor{`0,`1},AInq.Background.Services.IConveyor{`1,`2})">
+            <param name="first"> First conveyor </param>
+            <param name="second"> Second conveyor </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="first" /> or <paramref name="second" /> is NULL </exception>
+        </member>
+        <member name="T:AInq.Background.Helpers.PriorityConveyorChain`4">
+            <summary> Chain of three priority conveyors </summary>
+            <typeparam name="TData"> Input data type </typeparam>
+            <typeparam name="TFirstIntermediate"> Intermediate result type </typeparam>
+            <typeparam name="TSecondIntermediate"> Intermediate result type </typeparam>
+            <typeparam name="TResult"> Processing result type </typeparam>
+        </member>
+        <member name="M:AInq.Background.Helpers.PriorityConveyorChain`4.#ctor(AInq.Background.Services.IPriorityConveyor{`0,`1},AInq.Background.Services.IPriorityConveyor{`1,`2},AInq.Background.Services.IPriorityConveyor{`2,`3})">
+            <param name="first"> First conveyor </param>
+            <param name="second"> Second conveyor </param>
+            <param name="third"> Third conveyor </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="first" />, <paramref name="second" /> or <paramref name="third" /> is NULL </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.PriorityConveyorChain`4.#ctor(AInq.Background.Services.IConveyor{`0,`1},AInq.Background.Services.IPriorityConveyor{`1,`2},AInq.Background.Services.IPriorityConveyor{`2,`3})">
+            <param name="first"> First conveyor </param>
+            <param name="second"> Second conveyor </param>
+            <param name="third"> Third conveyor </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="first" />, <paramref name="second" /> or <paramref name="third" /> is NULL </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.PriorityConveyorChain`4.#ctor(AInq.Background.Services.IPriorityConveyor{`0,`1},AInq.Background.Services.IConveyor{`1,`2},AInq.Background.Services.IPriorityConveyor{`2,`3})">
+            <param name="first"> First conveyor </param>
+            <param name="second"> Second conveyor </param>
+            <param name="third"> Third conveyor </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="first" />, <paramref name="second" /> or <paramref name="third" /> is NULL </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.PriorityConveyorChain`4.#ctor(AInq.Background.Services.IPriorityConveyor{`0,`1},AInq.Background.Services.IPriorityConveyor{`1,`2},AInq.Background.Services.IConveyor{`2,`3})">
+            <param name="first"> First conveyor </param>
+            <param name="second"> Second conveyor </param>
+            <param name="third"> Third conveyor </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="first" />, <paramref name="second" /> or <paramref name="third" /> is NULL </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.PriorityConveyorChain`4.#ctor(AInq.Background.Services.IConveyor{`0,`1},AInq.Background.Services.IConveyor{`1,`2},AInq.Background.Services.IPriorityConveyor{`2,`3})">
+            <param name="first"> First conveyor </param>
+            <param name="second"> Second conveyor </param>
+            <param name="third"> Third conveyor </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="first" />, <paramref name="second" /> or <paramref name="third" /> is NULL </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.PriorityConveyorChain`4.#ctor(AInq.Background.Services.IConveyor{`0,`1},AInq.Background.Services.IPriorityConveyor{`1,`2},AInq.Background.Services.IConveyor{`2,`3})">
+            <param name="first"> First conveyor </param>
+            <param name="second"> Second conveyor </param>
+            <param name="third"> Third conveyor </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="first" />, <paramref name="second" /> or <paramref name="third" /> is NULL </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.PriorityConveyorChain`4.#ctor(AInq.Background.Services.IPriorityConveyor{`0,`1},AInq.Background.Services.IConveyor{`1,`2},AInq.Background.Services.IConveyor{`2,`3})">
+            <param name="first"> First conveyor </param>
+            <param name="second"> Second conveyor </param>
+            <param name="third"> Third conveyor </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="first" />, <paramref name="second" /> or <paramref name="third" /> is NULL </exception>
+        </member>
+        <member name="T:AInq.Background.Helpers.PriorityConveyorEmulator`2">
+            <summary> Wrapper around <see cref="T:AInq.Background.Services.IConveyor`2" /> to emulate <see cref="T:AInq.Background.Services.IPriorityConveyor`2" /> </summary>
+            <typeparam name="TData"> Input data type </typeparam>
+            <typeparam name="TResult"> Processing result type </typeparam>
+        </member>
+        <member name="M:AInq.Background.Helpers.PriorityConveyorEmulator`2.#ctor(AInq.Background.Services.IConveyor{`0,`1})">
+            <param name="conveyor"> Conveyor instance </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="conveyor" /> is NULL </exception>
         </member>
         <member name="T:AInq.Background.Helpers.WorkQueueHelper">
             <summary> Helper class for <see cref="T:AInq.Background.Services.IWorkQueue" /> and <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> </summary>
@@ -332,7 +435,7 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddDelayedQueueWork``1(System.IServiceProvider,AInq.Background.Tasks.IWork{``0},System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add delayed queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -347,7 +450,7 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddDelayedAsyncQueueWork(System.IServiceProvider,AInq.Background.Tasks.IAsyncWork,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -361,7 +464,7 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddDelayedAsyncQueueWork``1(System.IServiceProvider,AInq.Background.Tasks.IAsyncWork{``0},System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -377,7 +480,7 @@
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
             <seealso
-                cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+                cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddDelayedQueueWork``1(System.IServiceProvider,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add delayed queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -390,7 +493,7 @@
             <typeparam name="TWork"> Work type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedQueueWork``1(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedQueueWork``1(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddDelayedQueueWork``2(System.IServiceProvider,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add delayed queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -404,7 +507,7 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedQueueWork``2(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedQueueWork``2(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddDelayedAsyncQueueWork``1(System.IServiceProvider,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -417,7 +520,7 @@
             <typeparam name="TAsyncWork"> Work type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddDelayedAsyncQueueWork``2(System.IServiceProvider,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -431,7 +534,7 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddScheduledWork(System.IServiceProvider,AInq.Background.Tasks.IWork,System.DateTime,System.Threading.CancellationToken)">
             <summary> Add scheduled work to scheduler </summary>
@@ -533,7 +636,7 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddScheduledQueueWork``1(System.IServiceProvider,AInq.Background.Tasks.IWork{``0},System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -548,7 +651,7 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddScheduledAsyncQueueWork(System.IServiceProvider,AInq.Background.Tasks.IAsyncWork,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -562,7 +665,7 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddScheduledAsyncQueueWork``1(System.IServiceProvider,AInq.Background.Tasks.IAsyncWork{``0},System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -578,7 +681,7 @@
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
             <seealso
-                cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+                cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddScheduledQueueWork``1(System.IServiceProvider,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -591,7 +694,7 @@
             <typeparam name="TWork"> Work type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledQueueWork``1(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledQueueWork``1(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddScheduledQueueWork``2(System.IServiceProvider,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -605,7 +708,7 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledQueueWork``2(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledQueueWork``2(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddScheduledAsyncQueueWork``1(System.IServiceProvider,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -618,7 +721,7 @@
             <typeparam name="TAsyncWork"> Work type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddScheduledAsyncQueueWork``2(System.IServiceProvider,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -632,7 +735,7 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddCronWork(System.IServiceProvider,AInq.Background.Tasks.IWork,System.String,System.Threading.CancellationToken)">
             <summary> Add CRON-scheduled work to scheduler </summary>
@@ -746,7 +849,7 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddCronQueueWork``1(System.IServiceProvider,AInq.Background.Tasks.IWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -761,7 +864,7 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddCronAsyncQueueWork(System.IServiceProvider,AInq.Background.Tasks.IAsyncWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -775,7 +878,7 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddCronAsyncQueueWork``1(System.IServiceProvider,AInq.Background.Tasks.IAsyncWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -790,7 +893,7 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddCronQueueWork``1(System.IServiceProvider,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -804,7 +907,7 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddCronQueueWork``2(System.IServiceProvider,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -819,7 +922,7 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddCronAsyncQueueWork``1(System.IServiceProvider,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -833,7 +936,7 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkSchedulerHelper.AddCronAsyncQueueWork``2(System.IServiceProvider,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -848,7 +951,279 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-            <seealso cref="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)" />
+        </member>
+        <member name="T:AInq.Background.Helpers.WorkSchedulerQueueExtension">
+            <summary> <see cref="T:AInq.Background.Services.IWorkScheduler" /> extensions to run scheduled work in background queue  </summary>
+            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add delayed queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="work"> Work instance </param>
+            <param name="delay"> Work execution delay </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add delayed queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="work"> Work instance </param>
+            <param name="delay"> Work execution delay </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="work"> Work instance </param>
+            <param name="delay"> Work execution delay </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="work"> Work instance </param>
+            <param name="delay"> Work execution delay </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedQueueWork``1(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add delayed queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="delay"> Work execution delay </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TWork"> Work type </typeparam>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedQueueWork``2(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add delayed queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="delay"> Work execution delay </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TWork"> Work type </typeparam>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="delay"> Work execution delay </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TAsyncWork"> Work type </typeparam>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="delay"> Work execution delay </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TAsyncWork"> Work type </typeparam>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="work"> Work instance </param>
+            <param name="time"> Work execution time </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="work"> Work instance </param>
+            <param name="time"> Work execution time </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add scheduled asynchronous queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="work"> Work instance </param>
+            <param name="time"> Work execution time </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add scheduled asynchronous queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="work"> Work instance </param>
+            <param name="time"> Work execution time </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledQueueWork``1(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="time"> Work execution time </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TWork"> Work type </typeparam>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledQueueWork``2(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="time"> Work execution time </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TWork"> Work type </typeparam>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="time"> Work execution time </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TAsyncWork"> Work type </typeparam>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="time"> Work execution time </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TAsyncWork"> Work type </typeparam>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="work"> Work instance </param>
+            <param name="cronExpression"> Work CRON-based execution schedule </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="work"> Work instance </param>
+            <param name="cronExpression"> Work CRON-based execution schedule </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="work"> Work instance </param>
+            <param name="cronExpression"> Work CRON-based execution schedule </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="work"> Work instance </param>
+            <param name="cronExpression"> Work CRON-based execution schedule </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="cronExpression"> Work CRON-based execution schedule </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TWork"> Work type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="cronExpression"> Work CRON-based execution schedule </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TWork"> Work type </typeparam>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="cronExpression"> Work CRON-based execution schedule </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TAsyncWork"> Work type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
+            <param name="scheduler"> Work scheduler instance </param>
+            <param name="cronExpression"> Work CRON-based execution schedule </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TAsyncWork"> Work type </typeparam>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
         </member>
         <member name="T:AInq.Background.Services.IAccessQueue`1">
             <summary> Interface for background shared resource access queue </summary>
@@ -1373,278 +1748,6 @@
             <summary> Add CRON-scheduled asynchronous work to scheduler </summary>
             <param name="cronExpression"> Work CRON-based execution schedule </param>
             <param name="cancellation"> Work cancellation token </param>
-            <typeparam name="TAsyncWork"> Work type </typeparam>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-        </member>
-        <member name="T:AInq.Background.Services.WorkSchedulerQueueExtension">
-            <summary> <see cref="T:AInq.Background.Services.IWorkScheduler" /> extensions to run scheduled work in background queue  </summary>
-            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add delayed queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="work"> Work instance </param>
-            <param name="delay"> Work execution delay </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add delayed queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="work"> Work instance </param>
-            <param name="delay"> Work execution delay </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="work"> Work instance </param>
-            <param name="delay"> Work execution delay </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="work"> Work instance </param>
-            <param name="delay"> Work execution delay </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedQueueWork``1(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add delayed queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="delay"> Work execution delay </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TWork"> Work type </typeparam>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedQueueWork``2(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add delayed queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="delay"> Work execution delay </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TWork"> Work type </typeparam>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="delay"> Work execution delay </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TAsyncWork"> Work type </typeparam>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddDelayedAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="delay"> Work execution delay </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TAsyncWork"> Work type </typeparam>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="work"> Work instance </param>
-            <param name="time"> Work execution time </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="work"> Work instance </param>
-            <param name="time"> Work execution time </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add scheduled asynchronous queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="work"> Work instance </param>
-            <param name="time"> Work execution time </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add scheduled asynchronous queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="work"> Work instance </param>
-            <param name="time"> Work execution time </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledQueueWork``1(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="time"> Work execution time </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TWork"> Work type </typeparam>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledQueueWork``2(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="time"> Work execution time </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TWork"> Work type </typeparam>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="time"> Work execution time </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TAsyncWork"> Work type </typeparam>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddScheduledAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.DateTime,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="time"> Work execution time </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TAsyncWork"> Work type </typeparam>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="work"> Work instance </param>
-            <param name="cronExpression"> Work CRON-based execution schedule </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="work"> Work instance </param>
-            <param name="cronExpression"> Work CRON-based execution schedule </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="work"> Work instance </param>
-            <param name="cronExpression"> Work CRON-based execution schedule </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="work"> Work instance </param>
-            <param name="cronExpression"> Work CRON-based execution schedule </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="cronExpression"> Work CRON-based execution schedule </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TWork"> Work type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="cronExpression"> Work CRON-based execution schedule </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TWork"> Work type </typeparam>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="cronExpression"> Work CRON-based execution schedule </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TAsyncWork"> Work type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-        </member>
-        <member name="M:AInq.Background.Services.WorkSchedulerQueueExtension.AddCronAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
-            <param name="scheduler"> Work scheduler instance </param>
-            <param name="cronExpression"> Work CRON-based execution schedule </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
             <typeparam name="TAsyncWork"> Work type </typeparam>
             <typeparam name="TResult"> Work result type </typeparam>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
