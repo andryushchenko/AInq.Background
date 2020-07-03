@@ -24,11 +24,16 @@ Abstraction library with no additional dependencies.
     - `AccessFactory` for creating simple access instances from delegates
     - `IConveyorMachine<TData, TResult>` for conveyor data processing machines
     - `IActivatable` and `IThrottling` for shared resources and conveyor machines with particular usage strategies
-- Service interfaces and helpers
-    - `IWorkQueue` and `IPriorityWorkQueue` for background task queue with `WorkQueueHelper`
-    - `IAccessQueue<TResource>` and `IPriorityAccessQueue<TResource>` for shared resource access queue with `AccessQueueHelper`
-    - `IConveyor<TData, TResult>` and `IPriorityConveyor<TData, TResult>`for background data processing conveyor
-    - `IWorkScheduler` for work scheduler with `WorkSchedulerQueueExtension` and `WorkSchedulerHelper` extension for interaction with Work Queue
+- Service interfaces
+    - `IWorkQueue` and `IPriorityWorkQueue` for background task queue
+    - `IAccessQueue<TResource>` and `IPriorityAccessQueue<TResource>` for shared resource access queue
+    - `IConveyor<TData, TResult>` and `IPriorityConveyor<TData, TResult>` for background data processing conveyor
+    - `IWorkScheduler` for work scheduler
+- Helpers
+    - `WorkQueueHelper`, `AccessQueueHelper`, `ConveyorHelper` and `WorkSchedulerHelper` for accessing services from service provider
+    - `WorkSchedulerQueueExtension` to enqueue scheduled tasks to current Work Queue
+    - `PriorityConveyorEmulator` for using `IConveyor<TData, TResult>` as `IPriorityConveyor<TData, TResult>`
+    - `ConveyorChain` and `PriorityConveyorChain` to combine chains of two or three conveyors
 
 #### [![Nuget](https://img.shields.io/nuget/v/AInq.Background)](https://www.nuget.org/packages/AInq.Background/) AInq.Background
 
