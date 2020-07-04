@@ -46,18 +46,16 @@ public class ConveyorChain<TData, TFirstIntermediate, TSecondIntermediate, TResu
     int IConveyor<TData, TResult>.MaxAttempts => Math.Max(_first.MaxAttempts, Math.Max(_second.MaxAttempts, _third.MaxAttempts));
 
     async Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
-        => await _third
-                 .ProcessDataAsync(await _second.ProcessDataAsync(await _first
-                                                                        .ProcessDataAsync(data,
-                                                                            cancellation,
-                                                                            Math.Min(_first.MaxAttempts, attemptsCount))
-                                                                        .ConfigureAwait(false),
-                                                    cancellation,
-                                                    Math.Min(_second.MaxAttempts, attemptsCount))
-                                                .ConfigureAwait(false),
-                     cancellation,
-                     Math.Min(_third.MaxAttempts, attemptsCount))
-                 .ConfigureAwait(false);
+        => await _third.ProcessDataAsync(await _second.ProcessDataAsync(await _first.ProcessDataAsync(data,
+                                                                                        cancellation,
+                                                                                        Math.Min(_first.MaxAttempts, attemptsCount))
+                                                                                    .ConfigureAwait(false),
+                                                          cancellation,
+                                                          Math.Min(_second.MaxAttempts, attemptsCount))
+                                                      .ConfigureAwait(false),
+                           cancellation,
+                           Math.Min(_third.MaxAttempts, attemptsCount))
+                       .ConfigureAwait(false);
 }
 
 }
