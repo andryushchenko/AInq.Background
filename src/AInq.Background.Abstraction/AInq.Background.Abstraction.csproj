@@ -11,15 +11,20 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Support.Background</PackageProjectUrl>
-    <Version>2.3.0</Version>
+    <Version>2.3.1</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>AInq.Background</RootNamespace>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Background;Queue;Conveyor;Scheduler;Cron;AInq</PackageTags>
-    <Description>Background work utilities for .NET Core apps based on Hosted services.
-Basis interfaces and helpers.</Description>
-    <PackageReleaseNotes>[IMP] Base interfaces refactoring</PackageReleaseNotes>
+    <Description>
+      Background work utilities for .NET Core apps based on Hosted services.
+      Basis interfaces and helpers.
+    </Description>
+    <PackageReleaseNotes>
+      [ADD] Conveyor chain classes
+      [ADD] Priority conveyor emulator
+    </PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

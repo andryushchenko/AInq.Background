@@ -500,6 +500,7 @@
         </member>
         <member name="T:AInq.Background.Processors.ProcessorFactory">
             <summary> Task processor factory class </summary>
+            <remarks> Returning processors are NOT thread-safe </remarks>
         </member>
         <member name="M:AInq.Background.Processors.ProcessorFactory.CreateNullProcessor``1(System.Int32)">
             <summary> Create NULL-argument task processor (used in background work queue) </summary>

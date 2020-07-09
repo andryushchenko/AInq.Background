@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Helpers;
+using AInq.Background.Services;
 using AInq.Background.Tasks;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using static AInq.Background.Tasks.WorkFactory;
 
-namespace AInq.Background.Services
+namespace AInq.Background.Helpers
 {
 
 /// <summary> <see cref="IWorkScheduler" /> extensions to run scheduled work in background queue  </summary>
@@ -451,6 +452,32 @@ public static class WorkSchedulerQueueExtension
             CreateWork(provider => provider.EnqueueAsyncWork<TAsyncWork, TResult>(cancellation, attemptsCount, priority).Ignore()),
             cronExpression,
             cancellation);
+
+    private static async void Ignore(this Task task)
+    {
+        try
+        {
+            await task.ConfigureAwait(false);
+        }
+        catch
+        {
+            // Ignore task exceptions
+            // Logged by Work Queue 
+        }
+    }
+
+    private static async void Ignore<T>(this Task<T> task)
+    {
+        try
+        {
+            await task.ConfigureAwait(false);
+        }
+        catch
+        {
+            // Ignore task exceptions
+            // Logged by Work Queue 
+        }
+    }
 }
 
 }
