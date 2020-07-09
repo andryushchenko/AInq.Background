@@ -21,6 +21,7 @@ namespace AInq.Background.Processors
 {
 
 /// <summary> Task processor factory class </summary>
+/// <remarks> Returning processors are NOT thread-safe </remarks>
 public static class ProcessorFactory
 {
     /// <summary> Create NULL-argument task processor (used in background work queue) </summary>
