@@ -7,11 +7,11 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Product>AInq.Background</Product>
     <Authors>Anton Andryushchenko</Authors>
-    <RepositoryUrl>https://github.com/andryushchenko/AInq.Support.Background</RepositoryUrl>
+    <RepositoryUrl>https://github.com/andryushchenko/AInq.Background</RepositoryUrl>
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/andryushchenko/AInq.Support.Background</PackageProjectUrl>
-    <Version>2.3.1</Version>
+    <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
+    <Version>2.3.2</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -21,9 +21,8 @@
       Background work queue, shared resource access queue, background data processing conveyor.
     </Description>
     <PackageReleaseNotes>
-      [ADD] Public component classes with documentation
-      [IMP] Components structure improvement
-      [FIX] Minor bug fix
+      [FIX] Package repository info
+      [IMP] Minor documentation improvement
     </PackageReleaseNotes>
   </PropertyGroup>
 
