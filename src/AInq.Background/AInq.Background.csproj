@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>C:\Source\AInq.Background\src\AInq.Background\AInq.Background.xml</DocumentationFile>
+    <DocumentationFile>..\..\doc\AInq.Background.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
