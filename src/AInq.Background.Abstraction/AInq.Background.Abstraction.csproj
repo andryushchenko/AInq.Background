@@ -7,11 +7,11 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Product>AInq.Background</Product>
     <Authors>Anton Andryushchenko</Authors>
-    <RepositoryUrl>https://github.com/andryushchenko/AInq.Support.Background</RepositoryUrl>
+    <RepositoryUrl>https://github.com/andryushchenko/AInq.Background</RepositoryUrl>
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/andryushchenko/AInq.Support.Background</PackageProjectUrl>
-    <Version>2.3.1</Version>
+    <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
+    <Version>2.3.2</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>AInq.Background</RootNamespace>
@@ -22,8 +22,7 @@
       Basis interfaces and helpers.
     </Description>
     <PackageReleaseNotes>
-      [ADD] Conveyor chain classes
-      [ADD] Priority conveyor emulator
+      [FIX] Package repository info
     </PackageReleaseNotes>
   </PropertyGroup>
 
