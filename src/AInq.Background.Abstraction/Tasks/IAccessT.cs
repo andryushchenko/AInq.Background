@@ -23,7 +23,7 @@ namespace AInq.Background.Tasks
 /// </summary>
 /// <typeparam name="TResource"> Shared resource type </typeparam>
 /// <typeparam name="TResult"> Access action result type </typeparam>
-public interface IAccess<in TResource, out TResult>
+public interface IAccess<in TResource, out TResult>where TResource : notnull
 {
     /// <summary> Access action </summary>
     /// <param name="resource"> Shared resource instance </param>

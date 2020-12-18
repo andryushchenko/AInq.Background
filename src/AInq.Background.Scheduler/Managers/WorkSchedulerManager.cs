@@ -34,8 +34,8 @@ namespace AInq.Background.Managers
 /// <summary> Work scheduler manager </summary>
 public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
 {
-    private readonly AsyncAutoResetEvent _newWorkEvent = new AsyncAutoResetEvent(false);
-    private ConcurrentBag<IScheduledTaskWrapper> _works = new ConcurrentBag<IScheduledTaskWrapper>();
+    private readonly AsyncAutoResetEvent _newWorkEvent = new(false);
+    private ConcurrentBag<IScheduledTaskWrapper> _works = new();
 
     void IWorkScheduler.AddDelayedWork(IWork work, TimeSpan delay, CancellationToken cancellation)
     {
@@ -212,7 +212,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     void IWorkScheduler.AddCronWork(IWork work, string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
+            cronExpression.ParseCron(),
             cancellation));
         _newWorkEvent.Set();
     }
@@ -220,7 +220,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     void IWorkScheduler.AddCronWork<TResult>(IWork<TResult> work, string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
+            (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
             cancellation));
         _newWorkEvent.Set();
     }
@@ -228,7 +228,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     void IWorkScheduler.AddCronAsyncWork(IAsyncWork work, string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
+            (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
             cancellation));
         _newWorkEvent.Set();
     }
@@ -236,7 +236,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     void IWorkScheduler.AddCronAsyncWork<TResult>(IAsyncWork<TResult> work, string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
+            (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
             cancellation));
         _newWorkEvent.Set();
     }
@@ -244,7 +244,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     void IWorkScheduler.AddCronWork<TWork>(string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
+            (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
             cancellation));
         _newWorkEvent.Set();
     }
@@ -252,7 +252,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     void IWorkScheduler.AddCronWork<TWork, TResult>(string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
+            (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
             cancellation));
         _newWorkEvent.Set();
     }
@@ -260,7 +260,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     void IWorkScheduler.AddCronAsyncWork<TAsyncWork>(string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
-            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
+            (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
             cancellation));
         _newWorkEvent.Set();
     }
@@ -268,7 +268,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     void IWorkScheduler.AddCronAsyncWork<TAsyncWork, TResult>(string cronExpression, CancellationToken cancellation)
     {
         _works.Add(CreateCronWorkWrapper(CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
-            cronExpression?.ParseCron() ?? throw new ArgumentNullException(nameof(cronExpression)),
+            (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
             cancellation));
         _newWorkEvent.Set();
     }

@@ -26,7 +26,7 @@ namespace AInq.Background.Managers
 /// <typeparam name="TData"> Input data type </typeparam>
 /// <typeparam name="TResult"> Processing result type </typeparam>
 public sealed class PriorityConveyorManager<TData, TResult> : PriorityTaskManager<IConveyorMachine<TData, TResult>>,
-                                                              IPriorityConveyor<TData, TResult>
+                                                              IPriorityConveyor<TData, TResult>where TData : notnull
 {
     private readonly int _maxAttempts;
 

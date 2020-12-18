@@ -51,7 +51,7 @@ public static class ProcessorFactory
     /// <returns> Task processor instance </returns>
     public static ITaskProcessor<TArgument, TMetadata> CreateProcessor<TArgument, TMetadata>(IEnumerable<TArgument> arguments)
     {
-        var args = arguments?.Where(argument => argument != null).ToList() ?? throw new ArgumentNullException(nameof(arguments));
+        var args = (arguments ?? throw new ArgumentNullException(nameof(arguments))).Where(argument => argument != null).ToList();
         return args.Count switch
         {
             0 => throw new ArgumentException("Empty collection", nameof(arguments)),
@@ -77,17 +77,15 @@ public static class ProcessorFactory
             throw new ArgumentNullException(nameof(argumentFactory));
         if (strategy == ReuseStrategy.Static && provider == null)
             throw new ArgumentNullException(nameof(provider));
-        return strategy switch
+        return (strategy, maxArgumentsCount) switch
         {
-            ReuseStrategy.Static => CreateProcessor<TArgument, TMetadata>(Enumerable
-                                                                          .Repeat(0, maxArgumentsCount)
-                                                                          .Select(_ => argumentFactory.Invoke(provider!))),
-            ReuseStrategy.Reuse => maxArgumentsCount <= 1
-                ? new SingleReusableProcessor<TArgument, TMetadata>(argumentFactory) as ITaskProcessor<TArgument, TMetadata>
-                : new MultipleReusableProcessor<TArgument, TMetadata>(argumentFactory, maxArgumentsCount),
-            ReuseStrategy.OneTime => maxArgumentsCount <= 1
-                ? new SingleOneTimeProcessor<TArgument, TMetadata>(argumentFactory) as ITaskProcessor<TArgument, TMetadata>
-                : new MultipleOneTimeProcessor<TArgument, TMetadata>(argumentFactory, maxArgumentsCount),
+            (ReuseStrategy.Static, <=1) => new SingleStaticProcessor<TArgument, TMetadata>(argumentFactory.Invoke(provider!)),
+            (ReuseStrategy.Static, _) => new MultipleStaticProcessor<TArgument, TMetadata>(Enumerable.Repeat(0, maxArgumentsCount)
+                .Select(_ => argumentFactory.Invoke(provider!))),
+            (ReuseStrategy.Reuse, <=1) => new SingleReusableProcessor<TArgument, TMetadata>(argumentFactory),
+            (ReuseStrategy.Reuse, _) => new MultipleReusableProcessor<TArgument, TMetadata>(argumentFactory, maxArgumentsCount),
+            (ReuseStrategy.OneTime, <=1) => new SingleOneTimeProcessor<TArgument, TMetadata>(argumentFactory),
+            (ReuseStrategy.OneTime, _) => new MultipleOneTimeProcessor<TArgument, TMetadata>(argumentFactory, maxArgumentsCount),
             _ => throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy))
         };
     }

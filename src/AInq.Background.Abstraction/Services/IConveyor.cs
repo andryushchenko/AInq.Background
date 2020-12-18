@@ -22,6 +22,7 @@ namespace AInq.Background.Services
 /// <typeparam name="TData"> Input data type </typeparam>
 /// <typeparam name="TResult"> Processing result type </typeparam>
 public interface IConveyor<in TData, TResult>
+    where TData : notnull
 {
     /// <summary> Max allowed retry on fail attempts </summary>
     int MaxAttempts { get; }

@@ -37,7 +37,7 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
     private readonly ILogger<SchedulerWorker>? _logger;
     private readonly IServiceProvider _provider;
     private readonly IWorkSchedulerManager _scheduler;
-    private readonly CancellationTokenSource _shutdown = new CancellationTokenSource();
+    private readonly CancellationTokenSource _shutdown = new();
 
     private Task? _worker;
 
@@ -46,9 +46,9 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
     /// <param name="horizon"> Upcoming task search horizon </param>
     public SchedulerWorker(IWorkSchedulerManager scheduler, IServiceProvider provider, TimeSpan? horizon = null)
     {
-        if (horizon.HasValue && horizon < MinHorizon)
+        if (horizon < MinHorizon)
             horizon = MinHorizon;
-        if (horizon.HasValue && horizon > MaxTimeout)
+        if (horizon > MaxTimeout)
             horizon = MaxTimeout;
         _horizon = horizon ?? DefaultHorizon;
         _scheduler = scheduler;

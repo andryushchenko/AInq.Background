@@ -26,7 +26,7 @@ namespace AInq.Background.Managers
 
 /// <summary> Background access queue manager with numeric prioritization </summary>
 /// <typeparam name="TResource"> Shared resource type </typeparam>
-public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<TResource>, IPriorityAccessQueue<TResource>
+public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<TResource>, IPriorityAccessQueue<TResource>where TResource : notnull
 {
     private readonly int _maxAttempts;
 

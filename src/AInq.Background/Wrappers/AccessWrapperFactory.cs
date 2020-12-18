@@ -32,6 +32,7 @@ public static class AccessWrapperFactory
     /// <returns> Wrapper and access action completion task </returns>
     public static (ITaskWrapper<TResource> Access, Task Task) CreateAccessWrapper<TResource>(IAccess<TResource> access, int attemptsCount = 1,
         CancellationToken cancellation = default)
+        where TResource : notnull
     {
         var wrapper = new AccessWrapper<TResource>(access ?? throw new ArgumentNullException(nameof(access)),
             Math.Max(1, attemptsCount),
@@ -48,6 +49,7 @@ public static class AccessWrapperFactory
     /// <returns> Wrapper and access action result task </returns>
     public static (ITaskWrapper<TResource> Access, Task<TResult> Task) CreateAccessWrapper<TResource, TResult>(IAccess<TResource, TResult> access,
         int attemptsCount = 1, CancellationToken cancellation = default)
+        where TResource : notnull
     {
         var wrapper = new AccessWrapper<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)),
             Math.Max(1, attemptsCount),
@@ -63,6 +65,7 @@ public static class AccessWrapperFactory
     /// <returns> Wrapper and access action completion task </returns>
     public static (ITaskWrapper<TResource> Access, Task Task) CreateAccessWrapper<TResource>(IAsyncAccess<TResource> access, int attemptsCount = 1,
         CancellationToken cancellation = default)
+        where TResource : notnull
     {
         var wrapper = new AsyncAccessWrapper<TResource>(access ?? throw new ArgumentNullException(nameof(access)),
             Math.Max(1, attemptsCount),
@@ -79,6 +82,7 @@ public static class AccessWrapperFactory
     /// <returns> Wrapper and access action result task </returns>
     public static (ITaskWrapper<TResource> Access, Task<TResult> Task) CreateAccessWrapper<TResource, TResult>(
         IAsyncAccess<TResource, TResult> access, int attemptsCount = 1, CancellationToken cancellation = default)
+        where TResource : notnull
     {
         var wrapper = new AsyncAccessWrapper<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)),
             Math.Max(1, attemptsCount),
@@ -87,9 +91,10 @@ public static class AccessWrapperFactory
     }
 
     private class AccessWrapper<TResource> : ITaskWrapper<TResource>
+        where TResource : notnull
     {
         private readonly IAccess<TResource> _access;
-        private readonly TaskCompletionSource<bool> _completion = new TaskCompletionSource<bool>();
+        private readonly TaskCompletionSource<bool> _completion = new();
         private readonly CancellationToken _innerCancellation;
         private int _attemptsRemain;
         private CancellationTokenRegistration _cancellationRegistration;
@@ -147,9 +152,10 @@ public static class AccessWrapperFactory
     }
 
     private class AccessWrapper<TResource, TResult> : ITaskWrapper<TResource>
+        where TResource : notnull
     {
         private readonly IAccess<TResource, TResult> _access;
-        private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
+        private readonly TaskCompletionSource<TResult> _completion = new();
         private readonly CancellationToken _innerCancellation;
         private int _attemptsRemain;
         private CancellationTokenRegistration _cancellationRegistration;
@@ -206,9 +212,10 @@ public static class AccessWrapperFactory
     }
 
     private class AsyncAccessWrapper<TResource> : ITaskWrapper<TResource>
+        where TResource : notnull
     {
         private readonly IAsyncAccess<TResource> _access;
-        private readonly TaskCompletionSource<bool> _completion = new TaskCompletionSource<bool>();
+        private readonly TaskCompletionSource<bool> _completion = new();
         private readonly CancellationToken _innerCancellation;
         private int _attemptsRemain;
         private CancellationTokenRegistration _cancellationRegistration;
@@ -266,9 +273,10 @@ public static class AccessWrapperFactory
     }
 
     private class AsyncAccessWrapper<TResource, TResult> : ITaskWrapper<TResource>
+        where TResource : notnull
     {
         private readonly IAsyncAccess<TResource, TResult> _access;
-        private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
+        private readonly TaskCompletionSource<TResult> _completion = new();
         private readonly CancellationToken _innerCancellation;
         private int _attemptsRemain;
         private CancellationTokenRegistration _cancellationRegistration;

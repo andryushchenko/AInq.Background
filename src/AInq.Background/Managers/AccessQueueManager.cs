@@ -27,6 +27,7 @@ namespace AInq.Background.Managers
 /// <summary> Background access queue manager </summary>
 /// <typeparam name="TResource"> Shared resource type </typeparam>
 public sealed class AccessQueueManager<TResource> : TaskManager<TResource>, IAccessQueue<TResource>
+    where TResource : notnull
 {
     private readonly int _maxAttempts;
 

@@ -34,7 +34,7 @@ public sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposab
     private readonly ITaskManager<TArgument, TMetadata> _manager;
     private readonly ITaskProcessor<TArgument, TMetadata> _processor;
     private readonly IServiceProvider _provider;
-    private readonly CancellationTokenSource _shutdown = new CancellationTokenSource();
+    private readonly CancellationTokenSource _shutdown = new();
     private Task? _worker;
 
     /// <param name="provider"> Service provider instance </param>

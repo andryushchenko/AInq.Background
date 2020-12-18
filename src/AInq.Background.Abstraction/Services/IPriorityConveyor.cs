@@ -22,6 +22,7 @@ namespace AInq.Background.Services
 /// <typeparam name="TData"> Input data type </typeparam>
 /// <typeparam name="TResult"> Processing result type </typeparam>
 public interface IPriorityConveyor<in TData, TResult> : IConveyor<TData, TResult>
+    where TData : notnull
 {
     /// <summary> Max allowed operation priority </summary>
     int MaxPriority { get; }

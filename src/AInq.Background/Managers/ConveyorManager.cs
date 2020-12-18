@@ -25,7 +25,7 @@ namespace AInq.Background.Managers
 /// <summary> Background data conveyor manager </summary>
 /// <typeparam name="TData"> Input data type </typeparam>
 /// <typeparam name="TResult"> Processing result type </typeparam>
-public sealed class ConveyorManager<TData, TResult> : TaskManager<IConveyorMachine<TData, TResult>>, IConveyor<TData, TResult>
+public sealed class ConveyorManager<TData, TResult> : TaskManager<IConveyorMachine<TData, TResult>>, IConveyor<TData, TResult>where TData : notnull
 {
     private readonly int _maxAttempts;
 

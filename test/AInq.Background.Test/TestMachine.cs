@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace AInq.Background.Test
 {
 
-public class TestMachine : IConveyorMachine<int, int>, IActivatable
+public class TestMachine : IConveyorMachine<int, int>, IStartStoppable
 {
     private readonly string _name;
     private bool _isRunning;
@@ -31,9 +31,9 @@ public class TestMachine : IConveyorMachine<int, int>, IActivatable
         Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} created");
     }
 
-    bool IActivatable.IsActive => _isRunning;
+    bool IStartStoppable.IsActive => _isRunning;
 
-    async Task IActivatable.ActivateAsync(CancellationToken cancellation)
+    async Task IStartStoppable.ActivateAsync(CancellationToken cancellation)
     {
         Console.WriteLine($"{DateTime.Now:T}\tStarting machine ID {_name}");
         await Task.Delay(2000, cancellation);
@@ -41,7 +41,7 @@ public class TestMachine : IConveyorMachine<int, int>, IActivatable
         Console.WriteLine($"{DateTime.Now:T}\tMachine {_name} started");
     }
 
-    async Task IActivatable.DeactivateAsync(CancellationToken cancellation)
+    async Task IStartStoppable.DeactivateAsync(CancellationToken cancellation)
     {
         Console.WriteLine($"{DateTime.Now:T}\tStopping machine ID {_name}");
         await Task.Delay(2000, cancellation);

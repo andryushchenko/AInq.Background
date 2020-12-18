@@ -22,7 +22,7 @@ namespace AInq.Background.Services
 
 /// <summary> Interface for background shared resource access queue </summary>
 /// <typeparam name="TResource"> Shared resource type</typeparam>
-public interface IAccessQueue<out TResource>
+public interface IAccessQueue<out TResource> where TResource : notnull
 {
     /// <summary> Max allowed retry on fail attempts </summary>
     int MaxAttempts { get; }

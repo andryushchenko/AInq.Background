@@ -30,14 +30,14 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
 {
     private readonly ConcurrentBag<TArgument> _active;
     private readonly ConcurrentBag<TArgument> _inactive;
-    private readonly AsyncAutoResetEvent _reset = new AsyncAutoResetEvent(false);
+    private readonly AsyncAutoResetEvent _reset = new(false);
 
     internal MultipleStaticProcessor(IEnumerable<TArgument> arguments)
     {
         _inactive = new ConcurrentBag<TArgument>(arguments);
         if (_inactive.IsEmpty)
             throw new ArgumentException("Empty collection", nameof(arguments));
-        _active = typeof(IActivatable).IsAssignableFrom(typeof(TArgument))
+        _active = typeof(IStartStoppable).IsAssignableFrom(typeof(TArgument))
             ? new ConcurrentBag<TArgument>()
             : _inactive;
     }
@@ -54,11 +54,11 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                     await _reset.WaitAsync(cancellation).ConfigureAwait(false);
                 continue;
             }
-            var activatable = argument as IActivatable;
+            var startStoppable = argument as IStartStoppable;
             var (task, metadata) = manager.GetTask();
             if (task == null)
             {
-                if (activatable != null && activatable.IsActive)
+                if (startStoppable != null && startStoppable.IsActive)
                     _active.Add(argument);
                 else _inactive.Add(argument);
                 _reset.Set();
@@ -68,12 +68,12 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                 {
                     try
                     {
-                        if (activatable != null && !activatable.IsActive)
-                            await activatable.ActivateAsync(cancellation).ConfigureAwait(false);
+                        if (startStoppable != null && !startStoppable.IsActive)
+                            await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
-                        logger?.LogError(ex, "Error starting stoppable argument {Argument}", activatable);
+                        logger?.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
                         manager.RevertTask(task, metadata);
                         _inactive.Add(argument);
                         _reset.Set();
@@ -89,7 +89,7 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                     }
                     finally
                     {
-                        if (activatable != null && activatable.IsActive)
+                        if (startStoppable != null && startStoppable.IsActive)
                             _active.Add(argument);
                         else _inactive.Add(argument);
                         _reset.Set();
@@ -98,22 +98,22 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                 cancellation));
         }
         Task.WhenAll(currentTasks)
-            .ContinueWith(task =>
+            .ContinueWith(_ =>
                 {
                     while (!_active.IsEmpty && _active.TryTake(out var result))
                     {
                         var argument = result;
                         Task.Run(async () =>
                                 {
-                                    var activatable = argument as IActivatable;
+                                    var startStoppable = argument as IStartStoppable;
                                     try
                                     {
-                                        if (activatable != null && activatable.IsActive)
-                                            await activatable.DeactivateAsync(cancellation).ConfigureAwait(false);
+                                        if (startStoppable != null && startStoppable.IsActive)
+                                            await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
                                     }
                                     catch (Exception ex)
                                     {
-                                        logger?.LogError(ex, "Error stopping stoppable argument {Argument}", activatable);
+                                        logger?.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
                                     }
                                     finally
                                     {

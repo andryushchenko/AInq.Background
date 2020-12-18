@@ -36,6 +36,7 @@ public static class AccessQueueInjection
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="resource" /> is NULL </exception>
     public static IAccessQueue<TResource> CreateAccessQueue<TResource>(this IServiceCollection services, TResource resource,
         int maxAttempts = int.MaxValue)
+        where TResource : notnull
     {
         if (resource == null)
             throw new ArgumentNullException(nameof(resource));
@@ -53,6 +54,7 @@ public static class AccessQueueInjection
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="resource" /> is NULL </exception>
     public static IServiceCollection AddAccessQueue<TResource>(this IServiceCollection services, TResource resource, int maxAttempts = int.MaxValue)
+        where TResource : notnull
     {
         if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
             throw new InvalidOperationException("Service already exists");
@@ -68,6 +70,7 @@ public static class AccessQueueInjection
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="resource" /> is NULL </exception>
     public static IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(this IServiceCollection services, TResource resource,
         int maxPriority = 100, int maxAttempts = int.MaxValue)
+        where TResource : notnull
     {
         if (resource == null)
             throw new ArgumentNullException(nameof(resource));
@@ -87,6 +90,7 @@ public static class AccessQueueInjection
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="resource" /> is NULL </exception>
     public static IServiceCollection AddPriorityAccessQueue<TResource>(this IServiceCollection services, TResource resource, int maxPriority = 100,
         int maxAttempts = int.MaxValue)
+        where TResource : notnull
     {
         if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
             throw new InvalidOperationException("Service already exists");
@@ -103,8 +107,9 @@ public static class AccessQueueInjection
     /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
     public static IAccessQueue<TResource> CreateAccessQueue<TResource>(this IServiceCollection services, IEnumerable<TResource> resources,
         int maxAttempts = int.MaxValue)
+        where TResource : notnull
     {
-        var arguments = resources?.Where(resource => resource != null).ToList() ?? throw new ArgumentNullException(nameof(resources));
+        var arguments = (resources ?? throw new ArgumentNullException(nameof(resources))).Where(resource => resource != null).ToList();
         if (arguments.Count == 0)
             throw new ArgumentException("Empty collection", nameof(resources));
         var manager = new AccessQueueManager<TResource>(maxAttempts);
@@ -123,6 +128,7 @@ public static class AccessQueueInjection
     /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
     public static IServiceCollection AddAccessQueue<TResource>(this IServiceCollection services, IEnumerable<TResource> resources,
         int maxAttempts = int.MaxValue)
+        where TResource : notnull
     {
         if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
             throw new InvalidOperationException("Service already exists");
@@ -139,8 +145,9 @@ public static class AccessQueueInjection
     /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
     public static IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(this IServiceCollection services,
         IEnumerable<TResource> resources, int maxPriority = 100, int maxAttempts = int.MaxValue)
+        where TResource : notnull
     {
-        var arguments = resources?.Where(resource => resource != null).ToList() ?? throw new ArgumentNullException(nameof(resources));
+        var arguments = (resources ?? throw new ArgumentNullException(nameof(resources))).Where(resource => resource != null).ToList();
         if (arguments.Count == 0)
             throw new ArgumentException("Empty collection", nameof(resources));
         var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);
@@ -160,6 +167,7 @@ public static class AccessQueueInjection
     /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
     public static IServiceCollection AddPriorityAccessQueue<TResource>(this IServiceCollection services, IEnumerable<TResource> resources,
         int maxPriority = 100, int maxAttempts = int.MaxValue)
+        where TResource : notnull
     {
         if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
             throw new InvalidOperationException("Service already exists");
@@ -178,6 +186,7 @@ public static class AccessQueueInjection
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
     public static IAccessQueue<TResource> CreateAccessQueue<TResource>(this IServiceCollection services,
         Func<IServiceProvider, TResource> resourceFactory, ReuseStrategy strategy, int maxResourceInstances = 1, int maxAttempts = int.MaxValue)
+        where TResource : notnull
     {
         if (resourceFactory == null)
             throw new ArgumentNullException(nameof(resourceFactory));
@@ -202,6 +211,7 @@ public static class AccessQueueInjection
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
     public static IServiceCollection AddAccessQueue<TResource>(this IServiceCollection services, Func<IServiceProvider, TResource> resourceFactory,
         ReuseStrategy strategy, int maxResourceInstances = 1, int maxAttempts = int.MaxValue)
+        where TResource : notnull
     {
         if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
             throw new InvalidOperationException("Service already exists");
@@ -224,6 +234,7 @@ public static class AccessQueueInjection
     public static IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(this IServiceCollection services,
         Func<IServiceProvider, TResource> resourceFactory, ReuseStrategy strategy, int maxResourceInstances = 1, int maxPriority = 100,
         int maxAttempts = int.MaxValue)
+        where TResource : notnull
     {
         if (resourceFactory == null)
             throw new ArgumentNullException(nameof(resourceFactory));
@@ -253,6 +264,7 @@ public static class AccessQueueInjection
     public static IServiceCollection AddPriorityAccessQueue<TResource>(this IServiceCollection services,
         Func<IServiceProvider, TResource> resourceFactory, ReuseStrategy strategy, int maxResourceInstances = 1, int maxPriority = 100,
         int maxAttempts = int.MaxValue)
+        where TResource : notnull
     {
         if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
             throw new InvalidOperationException("Service already exists");
@@ -269,6 +281,7 @@ public static class AccessQueueInjection
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
     public static IAccessQueue<TResource> CreateAccessQueue<TResource>(this IServiceCollection services, ReuseStrategy strategy,
         int maxResourceInstances = 1, int maxAttempts = int.MaxValue)
+        where TResource : notnull
         => services.CreateAccessQueue(provider => provider.GetRequiredService<TResource>(), strategy, maxResourceInstances, maxAttempts);
 
     /// <summary> Add <see cref="IAccessQueue{TResource}" /> service with given shared resources reuse <paramref name="strategy" /> </summary>
@@ -281,6 +294,7 @@ public static class AccessQueueInjection
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
     public static IServiceCollection AddAccessQueue<TResource>(this IServiceCollection services, ReuseStrategy strategy, int maxResourceInstances = 1,
         int maxAttempts = int.MaxValue)
+        where TResource : notnull
         => services.AddAccessQueue(provider => provider.GetRequiredService<TResource>(), strategy, maxResourceInstances, maxAttempts);
 
     /// <summary>
@@ -297,6 +311,7 @@ public static class AccessQueueInjection
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
     public static IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(this IServiceCollection services, ReuseStrategy strategy,
         int maxResourceInstances = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
+        where TResource : notnull
         => services.CreatePriorityAccessQueue(provider => provider.GetRequiredService<TResource>(),
             strategy,
             maxResourceInstances,
@@ -317,6 +332,7 @@ public static class AccessQueueInjection
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
     public static IServiceCollection AddPriorityAccessQueue<TResource>(this IServiceCollection services, ReuseStrategy strategy,
         int maxResourceInstances = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
+        where TResource : notnull
         => services.AddPriorityAccessQueue(provider => provider.GetRequiredService<TResource>(),
             strategy,
             maxResourceInstances,

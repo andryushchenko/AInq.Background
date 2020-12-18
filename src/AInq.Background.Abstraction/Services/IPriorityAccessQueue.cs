@@ -23,6 +23,7 @@ namespace AInq.Background.Services
 /// <summary> Interface for background shared resource access queue with prioritization </summary>
 /// <typeparam name="TResource"> Shared resource type</typeparam>
 public interface IPriorityAccessQueue<out TResource> : IAccessQueue<TResource>
+    where TResource : notnull
 {
     /// <summary> Max allowed access priority </summary>
     int MaxPriority { get; }

@@ -22,25 +22,6 @@ namespace AInq.Background.Tasks
 /// <summary> Factory class for creating <see cref="IWork" /> and <see cref="IAsyncWork" /> from delegates </summary>
 public static class WorkFactory
 {
-    /// <summary> Create <see cref="IWork" /> instance from <see cref="Action" /> </summary>
-    /// <param name="work"> Work action </param>
-    /// <returns> <see cref="IWork" /> instance for given action </returns>
-    /// <exception cref="ArgumentNullException"> Thrown when <paramref name="work" /> is NULL </exception>
-    public static IWork CreateWork(Action work)
-        => work != null
-            ? new Work(provider => work.Invoke())
-            : throw new ArgumentNullException(nameof(work));
-
-    /// <summary> Create <see cref="IWork{TResult}" /> instance from <see cref="Func{TResult}" /> </summary>
-    /// <param name="work"> Work function </param>
-    /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <returns> <see cref="IWork{TResult}" /> instance for given function </returns>
-    /// <exception cref="ArgumentNullException"> Thrown when <paramref name="work" /> is NULL </exception>
-    public static IWork<TResult> CreateWork<TResult>(Func<TResult> work)
-        => work != null
-            ? new Work<TResult>(provider => work.Invoke())
-            : throw new ArgumentNullException(nameof(work));
-
     /// <summary> Create <see cref="IWork" /> instance from <see cref="Action{IServiceProvider}" /> </summary>
     /// <param name="work"> Work action </param>
     /// <returns> <see cref="IWork" /> instance for given action </returns>
@@ -55,25 +36,6 @@ public static class WorkFactory
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="work" /> is NULL </exception>
     public static IWork<TResult> CreateWork<TResult>(Func<IServiceProvider, TResult> work)
         => new Work<TResult>(work ?? throw new ArgumentNullException(nameof(work)));
-
-    /// <summary> Create <see cref="IAsyncWork" /> instance from <see cref="Func{CancellationToken, Task}" /> </summary>
-    /// <param name="work"> Work action </param>
-    /// <returns> <see cref="IAsyncWork" /> instance for given action </returns>
-    /// <exception cref="ArgumentNullException"> Thrown when <paramref name="work" /> is NULL </exception>
-    public static IAsyncWork CreateAsyncWork(Func<CancellationToken, Task> work)
-        => work != null
-            ? new AsyncWork((provider, token) => work.Invoke(token))
-            : throw new ArgumentNullException(nameof(work));
-
-    /// <summary> Create <see cref="IAsyncWork{TResult}" /> instance from <see cref="Func{CancellationToken, Task}" /> </summary>
-    /// <param name="work"> Work function </param>
-    /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <returns> <see cref="IAsyncWork{TResult}" /> instance for given function </returns>
-    /// <exception cref="ArgumentNullException"> Thrown when <paramref name="work" /> is NULL </exception>
-    public static IAsyncWork<TResult> CreateAsyncWork<TResult>(Func<CancellationToken, Task<TResult>> work)
-        => work != null
-            ? new AsyncWork<TResult>((provider, token) => work.Invoke(token))
-            : throw new ArgumentNullException(nameof(work));
 
     /// <summary> Create <see cref="IAsyncWork" /> instance from <see cref="Func{IServiceProvider, CancellationToken, Task}" /> </summary>
     /// <param name="work"> Work action </param>

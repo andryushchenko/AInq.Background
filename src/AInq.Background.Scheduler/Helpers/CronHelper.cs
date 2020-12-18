@@ -33,7 +33,7 @@ public static class CronHelper
             {
                 5 => CronExpression.Parse(cronExpression, CronFormat.Standard),
                 6 => CronExpression.Parse(cronExpression, CronFormat.IncludeSeconds),
-                _ => throw new Exception()
+                _ => throw new CronFormatException("Unknown format")
             };
         }
         catch (Exception ex)

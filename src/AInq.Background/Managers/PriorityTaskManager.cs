@@ -28,7 +28,7 @@ namespace AInq.Background.Managers
 /// <typeparam name="TArgument"> Task argument type </typeparam>
 public class PriorityTaskManager<TArgument> : ITaskManager<TArgument, int>
 {
-    private readonly AsyncAutoResetEvent _newDataEvent = new AsyncAutoResetEvent(false);
+    private readonly AsyncAutoResetEvent _newDataEvent = new(false);
     private readonly IList<ConcurrentQueue<ITaskWrapper<TArgument>>> _queues;
 
     /// <param name="maxPriority"> Max allowed priority </param>

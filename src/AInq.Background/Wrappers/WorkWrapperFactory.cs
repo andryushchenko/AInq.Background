@@ -76,7 +76,7 @@ public static class WorkWrapperFactory
 
     private class WorkWrapper : ITaskWrapper<object?>
     {
-        private readonly TaskCompletionSource<bool> _completion = new TaskCompletionSource<bool>();
+        private readonly TaskCompletionSource<bool> _completion = new();
         private readonly CancellationToken _innerCancellation;
         private readonly IWork _work;
         private int _attemptsRemain;
@@ -136,7 +136,7 @@ public static class WorkWrapperFactory
 
     private class WorkWrapper<TResult> : ITaskWrapper<object?>
     {
-        private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
+        private readonly TaskCompletionSource<TResult> _completion = new();
         private readonly CancellationToken _innerCancellation;
         private readonly IWork<TResult> _work;
         private int _attemptsRemain;
@@ -195,7 +195,7 @@ public static class WorkWrapperFactory
 
     private class AsyncWorkWrapper : ITaskWrapper<object?>
     {
-        private readonly TaskCompletionSource<bool> _completion = new TaskCompletionSource<bool>();
+        private readonly TaskCompletionSource<bool> _completion = new();
         private readonly CancellationToken _innerCancellation;
         private readonly IAsyncWork _work;
         private int _attemptsRemain;
@@ -255,7 +255,7 @@ public static class WorkWrapperFactory
 
     private class AsyncWorkWrapper<TResult> : ITaskWrapper<object?>
     {
-        private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
+        private readonly TaskCompletionSource<TResult> _completion = new();
         private readonly CancellationToken _innerCancellation;
         private readonly IAsyncWork<TResult> _work;
         private int _attemptsRemain;

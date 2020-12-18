@@ -38,6 +38,7 @@ public static class ConveyorInjection
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyorMachine" /> is NULL </exception>
     public static IConveyor<TData, TResult> CreateConveyor<TData, TResult>(this IServiceCollection services,
         IConveyorMachine<TData, TResult> conveyorMachine, int maxAttempts = int.MaxValue)
+        where TData : notnull
     {
         if (conveyorMachine == null)
             throw new ArgumentNullException(nameof(conveyorMachine));
@@ -58,6 +59,7 @@ public static class ConveyorInjection
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyorMachine" /> is NULL </exception>
     public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services, IConveyorMachine<TData, TResult> conveyorMachine,
         int maxAttempts = int.MaxValue)
+        where TData : notnull
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
@@ -74,6 +76,7 @@ public static class ConveyorInjection
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyorMachine" /> is NULL </exception>
     public static IPriorityConveyor<TData, TResult> CreatePriorityConveyor<TData, TResult>(this IServiceCollection services,
         IConveyorMachine<TData, TResult> conveyorMachine, int maxPriority = 100, int maxAttempts = int.MaxValue)
+        where TData : notnull
     {
         if (conveyorMachine == null)
             throw new ArgumentNullException(nameof(conveyorMachine));
@@ -98,6 +101,7 @@ public static class ConveyorInjection
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyorMachine" /> is NULL </exception>
     public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services,
         IConveyorMachine<TData, TResult> conveyorMachine, int maxPriority = 100, int maxAttempts = int.MaxValue)
+        where TData : notnull
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
@@ -115,8 +119,9 @@ public static class ConveyorInjection
     /// <exception cref="ArgumentException"> Thrown if <paramref name="conveyorMachines" /> collection is empty </exception>
     public static IConveyor<TData, TResult> CreateConveyor<TData, TResult>(this IServiceCollection services,
         IEnumerable<IConveyorMachine<TData, TResult>> conveyorMachines, int maxAttempts = int.MaxValue)
+        where TData : notnull
     {
-        var arguments = conveyorMachines?.Where(machine => machine != null).ToList() ?? throw new ArgumentNullException(nameof(conveyorMachines));
+        var arguments = (conveyorMachines ?? throw new ArgumentNullException(nameof(conveyorMachines))).Where(machine => machine != null).ToList();
         if (arguments.Count == 0)
             throw new ArgumentException("Empty collection", nameof(conveyorMachines));
         var manager = new ConveyorManager<TData, TResult>(maxAttempts);
@@ -137,6 +142,7 @@ public static class ConveyorInjection
     /// <exception cref="ArgumentException"> Thrown if <paramref name="conveyorMachines" /> collection is empty </exception>
     public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services,
         IEnumerable<IConveyorMachine<TData, TResult>> conveyorMachines, int maxAttempts = int.MaxValue)
+        where TData : notnull
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
@@ -154,8 +160,9 @@ public static class ConveyorInjection
     /// <exception cref="ArgumentException"> Thrown if <paramref name="conveyorMachines" /> collection is empty </exception>
     public static IPriorityConveyor<TData, TResult> CreatePriorityConveyor<TData, TResult>(this IServiceCollection services,
         IEnumerable<IConveyorMachine<TData, TResult>> conveyorMachines, int maxPriority = 100, int maxAttempts = int.MaxValue)
+        where TData : notnull
     {
-        var arguments = conveyorMachines?.Where(machine => machine != null).ToList() ?? throw new ArgumentNullException(nameof(conveyorMachines));
+        var arguments = (conveyorMachines ?? throw new ArgumentNullException(nameof(conveyorMachines))).Where(machine => machine != null).ToList();
         if (arguments.Count == 0)
             throw new ArgumentException("Empty collection", nameof(conveyorMachines));
         var manager = new PriorityConveyorManager<TData, TResult>(maxPriority, maxAttempts);
@@ -177,6 +184,7 @@ public static class ConveyorInjection
     /// <exception cref="ArgumentException"> Thrown if <paramref name="conveyorMachines" /> collection is empty </exception>
     public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services,
         IEnumerable<IConveyorMachine<TData, TResult>> conveyorMachines, int maxPriority = 100, int maxAttempts = int.MaxValue)
+        where TData : notnull
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
@@ -200,6 +208,7 @@ public static class ConveyorInjection
     public static IConveyor<TData, TResult> CreateConveyor<TData, TResult>(this IServiceCollection services,
         Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFactory, ReuseStrategy strategy, int maxParallelMachines = 1,
         int maxAttempts = int.MaxValue)
+        where TData : notnull
     {
         if (conveyorMachineFactory == null)
             throw new ArgumentNullException(nameof(conveyorMachineFactory));
@@ -229,6 +238,7 @@ public static class ConveyorInjection
     public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services,
         Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFactory, ReuseStrategy strategy, int maxParallelMachines = 1,
         int maxAttempts = int.MaxValue)
+        where TData : notnull
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
@@ -252,6 +262,7 @@ public static class ConveyorInjection
     public static IPriorityConveyor<TData, TResult> CreatePriorityConveyor<TData, TResult>(this IServiceCollection services,
         Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFactory, ReuseStrategy strategy,
         int maxParallelMachines = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
+        where TData : notnull
     {
         if (conveyorMachineFactory == null)
             throw new ArgumentNullException(nameof(conveyorMachineFactory));
@@ -285,6 +296,7 @@ public static class ConveyorInjection
     public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services,
         Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFactory, ReuseStrategy strategy, int maxParallelMachines = 1,
         int maxPriority = 100, int maxAttempts = int.MaxValue)
+        where TData : notnull
     {
         if (services.Any(service => service.ImplementationType == typeof(IConveyor<TData, TResult>)))
             throw new InvalidOperationException("Service already exists");
@@ -306,6 +318,7 @@ public static class ConveyorInjection
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
     public static IConveyor<TData, TResult> CreateConveyor<TData, TResult, TConveyorMachine>(this IServiceCollection services, ReuseStrategy strategy,
         int maxParallelMachines = 1, int maxAttempts = int.MaxValue)
+        where TData : notnull
         where TConveyorMachine : IConveyorMachine<TData, TResult>
         => services.CreateConveyor(provider => provider.GetRequiredService<TConveyorMachine>(), strategy, maxParallelMachines, maxAttempts);
 
@@ -321,6 +334,7 @@ public static class ConveyorInjection
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
     public static IServiceCollection AddConveyor<TData, TResult, TConveyorMachine>(this IServiceCollection services, ReuseStrategy strategy,
         int maxParallelMachines = 1, int maxAttempts = int.MaxValue)
+        where TData : notnull
         where TConveyorMachine : IConveyorMachine<TData, TResult>
         => services.AddConveyor(provider => provider.GetRequiredService<TConveyorMachine>(), strategy, maxParallelMachines, maxAttempts);
 
@@ -339,6 +353,7 @@ public static class ConveyorInjection
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
     public static IPriorityConveyor<TData, TResult> CreatePriorityConveyor<TData, TResult, TConveyorMachine>(this IServiceCollection services,
         ReuseStrategy strategy, int maxParallelMachines = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
+        where TData : notnull
         where TConveyorMachine : IConveyorMachine<TData, TResult>
         => services.CreatePriorityConveyor(provider => provider.GetRequiredService<TConveyorMachine>(),
             strategy,
@@ -362,6 +377,7 @@ public static class ConveyorInjection
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
     public static IServiceCollection AddPriorityConveyor<TData, TResult, TConveyorMachine>(this IServiceCollection services, ReuseStrategy strategy,
         int maxParallelMachines = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
+        where TData : notnull
         where TConveyorMachine : IConveyorMachine<TData, TResult>
         => services.AddPriorityConveyor(provider => provider.GetRequiredService<TConveyorMachine>(),
             strategy,
