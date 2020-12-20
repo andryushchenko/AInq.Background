@@ -26,7 +26,8 @@ namespace AInq.Background.Managers
 /// <typeparam name="TData"> Input data type </typeparam>
 /// <typeparam name="TResult"> Processing result type </typeparam>
 public sealed class PriorityConveyorManager<TData, TResult> : PriorityTaskManager<IConveyorMachine<TData, TResult>>,
-                                                              IPriorityConveyor<TData, TResult>where TData : notnull
+                                                              IPriorityConveyor<TData, TResult>
+    where TData : notnull
 {
     private readonly int _maxAttempts;
 
@@ -39,7 +40,9 @@ public sealed class PriorityConveyorManager<TData, TResult> : PriorityTaskManage
 
     Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, CancellationToken cancellation, int attemptsCount)
     {
-        var (wrapper, result) = CreateConveyorDataWrapper<TData, TResult>(data, FixAttempts(attemptsCount), cancellation);
+        var (wrapper, result) = CreateConveyorDataWrapper<TData, TResult>(data ?? throw new ArgumentNullException(nameof(data)),
+            FixAttempts(attemptsCount),
+            cancellation);
         AddTask(wrapper, priority);
         return result;
     }
@@ -48,7 +51,9 @@ public sealed class PriorityConveyorManager<TData, TResult> : PriorityTaskManage
 
     Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
     {
-        var (wrapper, result) = CreateConveyorDataWrapper<TData, TResult>(data, FixAttempts(attemptsCount), cancellation);
+        var (wrapper, result) = CreateConveyorDataWrapper<TData, TResult>(data ?? throw new ArgumentNullException(nameof(data)),
+            FixAttempts(attemptsCount),
+            cancellation);
         AddTask(wrapper, 0);
         return result;
     }

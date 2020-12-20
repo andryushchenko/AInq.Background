@@ -33,15 +33,16 @@ public static class ConveyorHelper
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task </returns>
     /// <exception cref="InvalidOperationException">
-    ///     Thrown if no conveyor for given <typeparamref name="TData" /> and <typeparamref name="TResult" /> is
-    ///     registered
+    ///     Thrown if no conveyor for given <typeparamref name="TData" /> and <typeparamref name="TResult" /> is registered
     /// </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="data" /> or <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="IPriorityConveyor{TData,TResult}.ProcessDataAsync(TData, int, CancellationToken, int)" />
     public static Task<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, TData data, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TData : notnull
     {
-        var service = provider.GetService(typeof(IPriorityConveyor<TData, TResult>)) ?? provider.GetService(typeof(IConveyor<TData, TResult>));
+        var service = (provider ?? throw new ArgumentNullException(nameof(provider))).GetService(typeof(IPriorityConveyor<TData, TResult>))
+                      ?? provider.GetService(typeof(IConveyor<TData, TResult>));
         return service switch
         {
             IPriorityConveyor<TData, TResult> priorityConveyor => priorityConveyor.ProcessDataAsync(data, priority, cancellation, attemptsCount),

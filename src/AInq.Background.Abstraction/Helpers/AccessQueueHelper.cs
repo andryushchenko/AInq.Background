@@ -33,13 +33,13 @@ public static class AccessQueueHelper
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAccess(IAccess{TResource}, int, CancellationToken, int)" />
     public static Task EnqueueAccess<TResource>(this IServiceProvider provider, IAccess<TResource> access, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
     {
-        var service = provider.GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
+        var service = (provider ?? throw new ArgumentNullException(nameof(provider))).GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
         return service switch
         {
             IPriorityAccessQueue<TResource> priorityAccessQueue => priorityAccessQueue.EnqueueAccess(access, priority, cancellation, attemptsCount),
@@ -57,13 +57,14 @@ public static class AccessQueueHelper
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAccess{TAccess}(int, CancellationToken, int)" />
     public static Task EnqueueAccess<TResource, TAccess>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAccess : IAccess<TResource>
     {
-        var service = provider.GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
+        var service = (provider ?? throw new ArgumentNullException(nameof(provider))).GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
         return service switch
         {
             IPriorityAccessQueue<TResource> priorityAccessQueue => priorityAccessQueue.EnqueueAccess<TAccess>(priority, cancellation, attemptsCount),
@@ -82,13 +83,13 @@ public static class AccessQueueHelper
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAccess{TResult}(IAccess{TResource, TResult}, int, CancellationToken, int)" />
     public static Task<TResult> EnqueueAccess<TResource, TResult>(this IServiceProvider provider, IAccess<TResource, TResult> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
     {
-        var service = provider.GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
+        var service = (provider ?? throw new ArgumentNullException(nameof(provider))).GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
         return service switch
         {
             IPriorityAccessQueue<TResource> priorityAccessQueue => priorityAccessQueue.EnqueueAccess(access, priority, cancellation, attemptsCount),
@@ -107,13 +108,14 @@ public static class AccessQueueHelper
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAccess{TAccess, TResult}(int, CancellationToken, int)" />
     public static Task<TResult> EnqueueAccess<TResource, TAccess, TResult>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
     {
-        var service = provider.GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
+        var service = (provider ?? throw new ArgumentNullException(nameof(provider))).GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
         return service switch
         {
             IPriorityAccessQueue<TResource> priorityAccessQueue => priorityAccessQueue.EnqueueAccess<TAccess, TResult>(priority,
@@ -133,13 +135,13 @@ public static class AccessQueueHelper
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAsyncAccess(IAsyncAccess{TResource}, int, CancellationToken, int)" />
     public static Task EnqueueAsyncAccess<TResource>(this IServiceProvider provider, IAsyncAccess<TResource> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
     {
-        var service = provider.GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
+        var service = (provider ?? throw new ArgumentNullException(nameof(provider))).GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
         return service switch
         {
             IPriorityAccessQueue<TResource> priorityAccessQueue => priorityAccessQueue.EnqueueAsyncAccess(access,
@@ -160,13 +162,14 @@ public static class AccessQueueHelper
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAsyncAccess{TAsyncAccess}(int, CancellationToken, int)" />
     public static Task EnqueueAsyncAccess<TResource, TAsyncAccess>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
     {
-        var service = provider.GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
+        var service = (provider ?? throw new ArgumentNullException(nameof(provider))).GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
         return service switch
         {
             IPriorityAccessQueue<TResource> priorityAccessQueue => priorityAccessQueue.EnqueueAsyncAccess<TAsyncAccess>(priority,
@@ -187,13 +190,13 @@ public static class AccessQueueHelper
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAsyncAccess{TResult}(IAsyncAccess{TResource, TResult}, int, CancellationToken, int)" />
     public static Task<TResult> EnqueueAsyncAccess<TResource, TResult>(this IServiceProvider provider, IAsyncAccess<TResource, TResult> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
     {
-        var service = provider.GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
+        var service = (provider ?? throw new ArgumentNullException(nameof(provider))).GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
         return service switch
         {
             IPriorityAccessQueue<TResource> priorityAccessQueue => priorityAccessQueue.EnqueueAsyncAccess(access,
@@ -215,13 +218,14 @@ public static class AccessQueueHelper
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAsyncAccess{TAsyncAccess, TResult}(int, CancellationToken, int)" />
     public static Task<TResult> EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(this IServiceProvider provider,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
     {
-        var service = provider.GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
+        var service = (provider ?? throw new ArgumentNullException(nameof(provider))).GetService(typeof(IPriorityAccessQueue<TResource>)) ?? provider.GetService(typeof(IAccessQueue<TResource>));
         return service switch
         {
             IPriorityAccessQueue<TResource> priorityAccessQueue => priorityAccessQueue.EnqueueAsyncAccess<TAsyncAccess, TResult>(priority,

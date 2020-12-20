@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,6 +33,7 @@ public interface IConveyor<in TData, TResult>
     /// <param name="cancellation"> Processing cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <returns> Processing result task </returns>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="data" /> is NULL </exception>
     Task<TResult> ProcessDataAsync(TData data, CancellationToken cancellation = default, int attemptsCount = 1);
 }
 

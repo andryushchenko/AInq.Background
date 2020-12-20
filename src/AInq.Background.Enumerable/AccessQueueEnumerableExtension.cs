@@ -25,8 +25,21 @@ using System.Threading.Tasks;
 namespace AInq.Background.Enumerable
 {
 
+/// <summary> <see cref="IAccessQueue{TResource}" /> and <see cref="IPriorityAccessQueue{TResource}" /> batch processing extension </summary>
 public static class AccessQueueEnumerableExtension
 {
+    /// <summary> Batch process access actions with giver <paramref name="priority" /> (if supported) </summary>
+    /// <param name="accessQueue"> Access Queue instance </param>
+    /// <param name="accesses"> Access actions to process </param>
+    /// <param name="cancellation"> Processing cancellation token </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="priority"> Operation priority </param>
+    /// <param name="enqueueAll"> Option to enqueue all data first </param>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
+    /// <typeparam name="TResult"> Processing result type </typeparam>
+    /// <returns> Processing result task enumeration </returns>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="accessQueue" /> or <paramref name="accesses" /> is NULL </exception>
+    /// <seealso cref="IPriorityConveyor{TData,TResult}.ProcessDataAsync(TData, int, CancellationToken, int)" />
     public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAccessQueue<TResource> accessQueue,
         IEnumerable<IAccess<TResource, TResult>> accesses, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0, bool enqueueAll = false)
@@ -42,40 +55,82 @@ public static class AccessQueueEnumerableExtension
             yield return await result.ConfigureAwait(false);
     }
 
+    /// <inheritdoc cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},CancellationToken,int,int,bool)" />
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IEnumerable<IAccess<TResource, TResult>> accesses,
         IAccessQueue<TResource> accessQueue, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         bool enqueueAll = false)
         where TResource : notnull
         => accessQueue.AccessAsync(accesses, cancellation, attemptsCount, priority, enqueueAll);
 
+    /// <summary> Batch process access actions using registered access queue with giver <paramref name="priority" /> (if supported) </summary>
+    /// <param name="provider"> Service provider instance </param>
+    /// <param name="accesses"> Access actions to process </param>
+    /// <param name="cancellation"> Processing cancellation token </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="priority"> Operation priority </param>
+    /// <param name="enqueueAll"> Option to enqueue all data first </param>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
+    /// <typeparam name="TResult"> Processing result type </typeparam>
+    /// <returns> Processing result task enumeration </returns>
+    /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> or <paramref name="accesses" /> is NULL </exception>
+    /// <seealso cref="IPriorityConveyor{TData,TResult}.ProcessDataAsync(TData, int, CancellationToken, int)" />
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IServiceProvider provider,
-        IEnumerable<IAccess<TResource, TResult>> accesses,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, bool enqueueAll = false)
+        IEnumerable<IAccess<TResource, TResult>> accesses, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
+        bool enqueueAll = false)
         where TResource : notnull
         => ((provider ?? throw new ArgumentNullException(nameof(provider))).GetService(typeof(IAccessQueue<TResource>)) as IAccessQueue<TResource>
             ?? throw new InvalidOperationException($"No Access Queue service for {typeof(TResource)} found"))
             .AccessAsync(accesses, cancellation, attemptsCount, priority, enqueueAll);
 
-    public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAccessQueue<TResource> queue,
+    /// <summary> Batch process asynchronous access actions with giver <paramref name="priority" /> (if supported) </summary>
+    /// <param name="accessQueue"> Access Queue instance </param>
+    /// <param name="accesses"> Access actions to process </param>
+    /// <param name="cancellation"> Processing cancellation token </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="priority"> Operation priority </param>
+    /// <param name="enqueueAll"> Option to enqueue all data first </param>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
+    /// <typeparam name="TResult"> Processing result type </typeparam>
+    /// <returns> Processing result task enumeration </returns>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="accessQueue" /> or <paramref name="accesses" /> is NULL </exception>
+    /// <seealso cref="IPriorityConveyor{TData,TResult}.ProcessDataAsync(TData, int, CancellationToken, int)" />
+    public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAccessQueue<TResource> accessQueue,
         IEnumerable<IAsyncAccess<TResource, TResult>> accesses, [EnumeratorCancellation] CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0, bool enqueueAll = false)
         where TResource : notnull
     {
-        var priorityAccessQueue = (queue ?? throw new ArgumentNullException(nameof(queue))) as IPriorityAccessQueue<TResource>;
+        var priorityAccessQueue = (accessQueue ?? throw new ArgumentNullException(nameof(accessQueue))) as IPriorityAccessQueue<TResource>;
         var results = (accesses ?? throw new ArgumentNullException(nameof(accesses)))
             .Select(access => priorityAccessQueue != null
                 ? priorityAccessQueue.EnqueueAsyncAccess(access, priority, cancellation, attemptsCount)
-                : queue.EnqueueAsyncAccess(access, cancellation, attemptsCount));
+                : accessQueue.EnqueueAsyncAccess(access, cancellation, attemptsCount));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
     }
 
+    /// <inheritdoc
+    ///     cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},CancellationToken,int,int,bool)" />
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IEnumerable<IAsyncAccess<TResource, TResult>> accesses,
-        IAccessQueue<TResource> queue, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, bool enqueueAll = false)
+        IAccessQueue<TResource> accessQueue, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
+        bool enqueueAll = false)
         where TResource : notnull
-        => queue.AccessAsync(accesses, cancellation, attemptsCount, priority, enqueueAll);
+        => accessQueue.AccessAsync(accesses, cancellation, attemptsCount, priority, enqueueAll);
 
+    /// <summary> Batch process asynchronous access actions using registered access queue with giver <paramref name="priority" /> (if supported) </summary>
+    /// <param name="provider"> Service provider instance </param>
+    /// <param name="accesses"> Access actions to process </param>
+    /// <param name="cancellation"> Processing cancellation token </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="priority"> Operation priority </param>
+    /// <param name="enqueueAll"> Option to enqueue all data first </param>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
+    /// <typeparam name="TResult"> Processing result type </typeparam>
+    /// <returns> Processing result task enumeration </returns>
+    /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> or <paramref name="accesses" /> is NULL </exception>
+    /// <seealso cref="IPriorityConveyor{TData,TResult}.ProcessDataAsync(TData, int, CancellationToken, int)" />
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IServiceProvider provider,
         IEnumerable<IAsyncAccess<TResource, TResult>> accesses, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         bool enqueueAll = false)
@@ -84,6 +139,7 @@ public static class AccessQueueEnumerableExtension
             ?? throw new InvalidOperationException($"No Access Queue service for {typeof(TResource)} found"))
             .AccessAsync(accesses, cancellation, attemptsCount, priority, enqueueAll);
 
+    /// <inheritdoc cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},CancellationToken,int,int,bool)" />
     public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAccessQueue<TResource> accessQueue,
         IAsyncEnumerable<IAccess<TResource, TResult>> accesses, [EnumeratorCancellation] CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
@@ -122,11 +178,13 @@ public static class AccessQueueEnumerableExtension
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
     }
 
+    /// <inheritdoc cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},CancellationToken,int,int,bool)" />
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAsyncEnumerable<IAccess<TResource, TResult>> accesses,
         IAccessQueue<TResource> accessQueue, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         => accessQueue.AccessAsync(accesses, cancellation, attemptsCount, priority);
 
+    /// <inheritdoc cref="AccessAsync{TResource,TResult}(IServiceProvider,IEnumerable{IAccess{TResource,TResult}},CancellationToken,int,int,bool)" />
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IServiceProvider provider,
         IAsyncEnumerable<IAccess<TResource, TResult>> accesses, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -134,6 +192,8 @@ public static class AccessQueueEnumerableExtension
             ?? throw new InvalidOperationException($"No Access Queue service for {typeof(TResource)} found"))
             .AccessAsync(accesses, cancellation, attemptsCount, priority);
 
+    /// <inheritdoc
+    ///     cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},CancellationToken,int,int,bool)" />
     public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAccessQueue<TResource> accessQueue,
         IAsyncEnumerable<IAsyncAccess<TResource, TResult>> accesses, [EnumeratorCancellation] CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
@@ -172,11 +232,14 @@ public static class AccessQueueEnumerableExtension
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
     }
 
+    /// <inheritdoc
+    ///     cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},CancellationToken,int,int,bool)" />
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAsyncEnumerable<IAsyncAccess<TResource, TResult>> accesses,
         IAccessQueue<TResource> accessQueue, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         => accessQueue.AccessAsync(accesses, cancellation, attemptsCount, priority);
 
+    /// <inheritdoc cref="AccessAsync{TResource,TResult}(IServiceProvider,IEnumerable{IAsyncAccess{TResource,TResult}},CancellationToken,int,int,bool)" />
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IServiceProvider provider,
         IAsyncEnumerable<IAsyncAccess<TResource, TResult>> accesses, CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0)
