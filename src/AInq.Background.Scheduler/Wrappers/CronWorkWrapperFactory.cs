@@ -30,11 +30,15 @@ public static class CronWorkWrapperFactory
     /// <param name="cron"> Cron expression </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
-    /// <returns> Scheduled task wrapper </returns>
-    public static IScheduledTaskWrapper CreateCronWorkWrapper(IWork work, CronExpression cron, CancellationToken cancellation = default)
-        => new CronTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+    /// <returns> Wrapper and work result observable </returns>
+    public static (IScheduledTaskWrapper, IObservable<bool>) CreateCronWorkWrapper(IWork work, CronExpression cron,
+        CancellationToken cancellation = default)
+    {
+        var wrapper = new CronTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             cron ?? throw new ArgumentNullException(nameof(cron)),
             cancellation);
+        return (wrapper, wrapper.WorkObservable);
+    }
 
     /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
     /// <param name="work"> Work instance </param>
@@ -42,23 +46,30 @@ public static class CronWorkWrapperFactory
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
-    /// <returns> Scheduled task wrapper </returns>
-    public static IScheduledTaskWrapper CreateCronWorkWrapper<TResult>(IWork<TResult> work, CronExpression cron,
+    /// <returns> Wrapper and work result observable </returns>
+    public static (IScheduledTaskWrapper, IObservable<TResult>) CreateCronWorkWrapper<TResult>(IWork<TResult> work, CronExpression cron,
         CancellationToken cancellation = default)
-        => new CronTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
+    {
+        var wrapper = new CronTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
             cron ?? throw new ArgumentNullException(nameof(cron)),
             cancellation);
+        return (wrapper, wrapper.WorkObservable);
+    }
 
     /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
     /// <param name="work"> Work instance </param>
     /// <param name="cron"> Cron expression </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
-    /// <returns> Scheduled task wrapper </returns>
-    public static IScheduledTaskWrapper CreateCronWorkWrapper(IAsyncWork work, CronExpression cron, CancellationToken cancellation = default)
-        => new CronAsyncTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+    /// <returns> Wrapper and work result observable </returns>
+    public static (IScheduledTaskWrapper, IObservable<bool>) CreateCronWorkWrapper(IAsyncWork work, CronExpression cron,
+        CancellationToken cancellation = default)
+    {
+        var wrapper = new CronAsyncTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             cron ?? throw new ArgumentNullException(nameof(cron)),
             cancellation);
+        return (wrapper, wrapper.WorkObservable);
+    }
 
     /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
     /// <param name="work"> Work instance </param>
@@ -66,25 +77,33 @@ public static class CronWorkWrapperFactory
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
-    /// <returns> Scheduled task wrapper </returns>
-    public static IScheduledTaskWrapper CreateCronWorkWrapper<TResult>(IAsyncWork<TResult> work, CronExpression cron,
+    /// <returns> Wrapper and work result observable </returns>
+    public static (IScheduledTaskWrapper, IObservable<TResult>) CreateCronWorkWrapper<TResult>(IAsyncWork<TResult> work, CronExpression cron,
         CancellationToken cancellation = default)
-        => new CronAsyncTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
+    {
+        var wrapper = new CronAsyncTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
             cron ?? throw new ArgumentNullException(nameof(cron)),
             cancellation);
+        return (wrapper, wrapper.WorkObservable);
+    }
 
     private class CronTaskWrapper : IScheduledTaskWrapper
     {
         private readonly CronExpression _cron;
         private readonly CancellationToken _innerCancellation;
+        private readonly Observable<bool> _observable = new();
         private readonly IWork _work;
+        private CancellationTokenRegistration _cancellationRegistration;
 
         internal CronTaskWrapper(IWork work, CronExpression cron, CancellationToken innerCancellation)
         {
             _work = work;
             _cron = cron;
             _innerCancellation = innerCancellation;
+            _cancellationRegistration = _innerCancellation.Register(() => _observable.Complete(), false);
         }
+
+        internal IObservable<bool> WorkObservable => _observable;
 
         DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested
             ? null
@@ -99,6 +118,7 @@ public static class CronWorkWrapperFactory
                 outerCancellation.ThrowIfCancellationRequested();
                 _innerCancellation.ThrowIfCancellationRequested();
                 _work.DoWork(provider);
+                _observable.Next(true);
             }
             catch (OperationCanceledException)
             {
@@ -108,8 +128,14 @@ public static class CronWorkWrapperFactory
             catch (Exception ex)
             {
                 logger?.LogError(ex, "Error processing scheduled task {0}", _work);
+                _observable.Error(ex);
             }
-            return Task.FromResult(_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue);
+            if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue)
+                return Task.FromResult(true);
+            _observable.Complete();
+            _cancellationRegistration.Dispose();
+            _cancellationRegistration = default;
+            return Task.FromResult(false);
         }
     }
 
@@ -117,14 +143,19 @@ public static class CronWorkWrapperFactory
     {
         private readonly CronExpression _cron;
         private readonly CancellationToken _innerCancellation;
+        private readonly Observable<TResult> _observable = new();
         private readonly IWork<TResult> _work;
+        private CancellationTokenRegistration _cancellationRegistration;
 
         internal CronTaskWrapper(IWork<TResult> work, CronExpression cron, CancellationToken innerCancellation)
         {
             _work = work;
             _cron = cron;
             _innerCancellation = innerCancellation;
+            _cancellationRegistration = _innerCancellation.Register(() => _observable.Complete(), false);
         }
+
+        internal IObservable<TResult> WorkObservable => _observable;
 
         DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested
             ? null
@@ -138,7 +169,7 @@ public static class CronWorkWrapperFactory
             {
                 outerCancellation.ThrowIfCancellationRequested();
                 _innerCancellation.ThrowIfCancellationRequested();
-                _work.DoWork(provider);
+                _observable.Next(_work.DoWork(provider));
             }
             catch (OperationCanceledException)
             {
@@ -148,8 +179,14 @@ public static class CronWorkWrapperFactory
             catch (Exception ex)
             {
                 logger?.LogError(ex, "Error processing scheduled task {0}", _work);
+                _observable.Error(ex);
             }
-            return Task.FromResult(_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue);
+            if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue)
+                return Task.FromResult(true);
+            _observable.Complete();
+            _cancellationRegistration.Dispose();
+            _cancellationRegistration = default;
+            return Task.FromResult(false);
         }
     }
 
@@ -157,14 +194,19 @@ public static class CronWorkWrapperFactory
     {
         private readonly CronExpression _cron;
         private readonly CancellationToken _innerCancellation;
+        private readonly Observable<bool> _observable = new();
         private readonly IAsyncWork _work;
+        private CancellationTokenRegistration _cancellationRegistration;
 
         internal CronAsyncTaskWrapper(IAsyncWork work, CronExpression cron, CancellationToken innerCancellation)
         {
             _work = work;
             _cron = cron;
             _innerCancellation = innerCancellation;
+            _cancellationRegistration = _innerCancellation.Register(() => _observable.Complete(), false);
         }
+
+        internal IObservable<bool> WorkObservable => _observable;
 
         DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested
             ? null
@@ -178,7 +220,8 @@ public static class CronWorkWrapperFactory
             try
             {
                 aggregateCancellation.Token.ThrowIfCancellationRequested();
-                await _work.DoWorkAsync(provider, aggregateCancellation.Token).ConfigureAwait(false);
+                await _work.DoWorkAsync(provider, aggregateCancellation.Token);
+                _observable.Next(true);
             }
             catch (OperationCanceledException)
             {
@@ -188,8 +231,14 @@ public static class CronWorkWrapperFactory
             catch (Exception ex)
             {
                 logger?.LogError(ex, "Error processing scheduled task {0}", _work);
+                _observable.Error(ex);
             }
-            return _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue;
+            if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue)
+                return true;
+            _observable.Complete();
+            _cancellationRegistration.Dispose();
+            _cancellationRegistration = default;
+            return false;
         }
     }
 
@@ -197,14 +246,19 @@ public static class CronWorkWrapperFactory
     {
         private readonly CronExpression _cron;
         private readonly CancellationToken _innerCancellation;
+        private readonly Observable<TResult> _observable = new();
         private readonly IAsyncWork<TResult> _work;
+        private CancellationTokenRegistration _cancellationRegistration;
 
         internal CronAsyncTaskWrapper(IAsyncWork<TResult> work, CronExpression cron, CancellationToken innerCancellation)
         {
             _work = work;
             _cron = cron;
             _innerCancellation = innerCancellation;
+            _cancellationRegistration = _innerCancellation.Register(() => _observable.Complete(), false);
         }
+
+        internal IObservable<TResult> WorkObservable => _observable;
 
         DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested
             ? null
@@ -218,7 +272,7 @@ public static class CronWorkWrapperFactory
             try
             {
                 aggregateCancellation.Token.ThrowIfCancellationRequested();
-                await _work.DoWorkAsync(provider, aggregateCancellation.Token).ConfigureAwait(false);
+                _observable.Next(await _work.DoWorkAsync(provider, aggregateCancellation.Token));
             }
             catch (OperationCanceledException)
             {
@@ -228,8 +282,14 @@ public static class CronWorkWrapperFactory
             catch (Exception ex)
             {
                 logger?.LogError(ex, "Error processing scheduled task {0}", _work);
+                _observable.Error(ex);
             }
-            return _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue;
+            if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue)
+                return true;
+            _observable.Complete();
+            _cancellationRegistration.Dispose();
+            _cancellationRegistration = default;
+            return false;
         }
     }
 }

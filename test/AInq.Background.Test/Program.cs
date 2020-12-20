@@ -26,11 +26,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 var host = new HostBuilder()
-           .ConfigureLogging(logging =>
-           {
-               logging.ClearProviders();
-               logging.AddDebug();
-           })
+           .ConfigureLogging(logging => logging.ClearProviders().AddDebug())
            .ConfigureServices((context, services) =>
            {
                services.AddTransient<TestMachine>()
@@ -39,8 +35,10 @@ var host = new HostBuilder()
                        .AddWorkQueue()
                        .AddStartupWork(WorkFactory.CreateWork(provider =>
                        {
-                           provider.AddCronWork(WorkFactory.CreateWork(_ => Console.WriteLine($"{DateTime.Now:T}\tCRON test")),
-                               "0/10 * * * * *");
+                           provider.AddCronWork(WorkFactory.CreateWork(_ => DateTime.Now),
+                                       "0/10 * * * * *",
+                                       new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token)
+                                   .Subscribe(new TestObserver<DateTime>());
                            for (var index = 1; index <= 10; index++)
                                provider.ProcessDataAsync<int, int>(index, priority: 50 - index);
                            provider.AddDelayedAsyncQueueWork(WorkFactory.CreateAsyncWork(async (serviceProvider, _) =>
@@ -70,7 +68,8 @@ var host = new HostBuilder()
                                    _ = serviceProvider.EnqueueAsyncWork(
                                        WorkFactory.CreateAsyncWork((_, token) => Task.Delay(TimeSpan.FromSeconds(8), token)),
                                        cancel);
-                                   var test = serviceProvider.EnqueueWork(WorkFactory.CreateWork(_ => $"{DateTime.Now:T}\tDelayed work test"), cancel);
+                                   var test = serviceProvider.EnqueueWork(WorkFactory.CreateWork(_ => $"{DateTime.Now:T}\tDelayed work test"),
+                                       cancel);
                                    try
                                    {
                                        await serviceProvider.EnqueueWork(WorkFactory.CreateWork(_ => true), source.Token);
@@ -95,6 +94,10 @@ var host = new HostBuilder()
            .Build();
 var cancellation = new CancellationTokenSource();
 var work = host.DoStartupWork(cancellation.Token)
+               .ContinueWith(_=>Console.WriteLine($"{DateTime.Now}\t Starting host"))
                .ContinueWith(async _ => await host.RunAsync(cancellation.Token), cancellation.Token);
 Console.ReadLine();
-await work;
+cancellation.Cancel();
+Console.WriteLine($"{DateTime.Now:T}\tGeneral stop requested");
+await work.Unwrap();
+Console.WriteLine($"{DateTime.Now:T}\tStopped");

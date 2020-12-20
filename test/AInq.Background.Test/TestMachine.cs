@@ -36,7 +36,7 @@ public class TestMachine : IConveyorMachine<int, int>, IStartStoppable
     async Task IStartStoppable.ActivateAsync(CancellationToken cancellation)
     {
         Console.WriteLine($"{DateTime.Now:T}\tStarting machine ID {_name}");
-        await Task.Delay(2000, cancellation);
+        await Task.Delay(2000, cancellation).ConfigureAwait(false);
         _isRunning = true;
         Console.WriteLine($"{DateTime.Now:T}\tMachine {_name} started");
     }
@@ -44,7 +44,7 @@ public class TestMachine : IConveyorMachine<int, int>, IStartStoppable
     async Task IStartStoppable.DeactivateAsync(CancellationToken cancellation)
     {
         Console.WriteLine($"{DateTime.Now:T}\tStopping machine ID {_name}");
-        await Task.Delay(2000, cancellation);
+        await Task.Delay(2000, cancellation).ConfigureAwait(false);
         _isRunning = false;
         Console.WriteLine($"{DateTime.Now:T}\tMachine {_name} stopped");
     }
@@ -53,7 +53,7 @@ public class TestMachine : IConveyorMachine<int, int>, IStartStoppable
     {
         Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} checking provider {provider}");
         Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} processing {data}");
-        await Task.Delay(3000, cancellation);
+        await Task.Delay(3000, cancellation).ConfigureAwait(false);
         Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} processed {data}");
         return data;
     }
