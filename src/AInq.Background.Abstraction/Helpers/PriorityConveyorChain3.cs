@@ -26,6 +26,9 @@ namespace AInq.Background.Helpers
 /// <typeparam name="TSecondIntermediate"> Intermediate result type </typeparam>
 /// <typeparam name="TResult"> Processing result type </typeparam>
 public class PriorityConveyorChain<TData, TFirstIntermediate, TSecondIntermediate, TResult> : IPriorityConveyor<TData, TResult>
+    where TData : notnull
+    where TFirstIntermediate : notnull
+    where TSecondIntermediate : notnull
 {
     private readonly IPriorityConveyor<TData, TFirstIntermediate> _first;
     private readonly IPriorityConveyor<TFirstIntermediate, TSecondIntermediate> _second;

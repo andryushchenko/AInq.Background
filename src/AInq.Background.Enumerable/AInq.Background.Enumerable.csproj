@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Product>AInq.Background</Product>
+    <Authors>Anton Andryushchenko</Authors>
+    <RepositoryUrl>https://github.com/andryushchenko/AInq.Background</RepositoryUrl>
+    <Copyright>Anton Andryushchenko</Copyright>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
+    <Version>3.0.0</Version>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>Background;Queue;Conveyor;AInq;Enumerable;LINQ</PackageTags>
+    <Description>
+      Background work utilities for .NET Core apps based on Hosted services.
+      Enumerable extension for background work queue, access queue and data coveyor.
+    </Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>..\..\doc\AInq.Background.Enumerable.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Threading.Channels" Version="5.0.0" />
+  </ItemGroup>
+
+  <!-- ReSharper disable once UnknownProperty -->
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AInq.Background.Abstraction\AInq.Background.Abstraction.csproj" />
+  </ItemGroup>
+
+</Project>

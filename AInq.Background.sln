@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{C00E9781-8
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AInq.Background.Enumerable", "src\AInq.Background.Enumerable\AInq.Background.Enumerable.csproj", "{9815A9CC-F4EC-4C8E-BE60-468BF5BD020E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{38C89E67-C73B-4F9D-87FC-3E0047DA4865}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38C89E67-C73B-4F9D-87FC-3E0047DA4865}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38C89E67-C73B-4F9D-87FC-3E0047DA4865}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9815A9CC-F4EC-4C8E-BE60-468BF5BD020E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9815A9CC-F4EC-4C8E-BE60-468BF5BD020E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9815A9CC-F4EC-4C8E-BE60-468BF5BD020E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9815A9CC-F4EC-4C8E-BE60-468BF5BD020E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{6AEA85F7-4BD2-4757-8DED-CD8BB3A96AE4} = {3D6A0C84-C82A-4BDC-8120-6044DB3A6381}
 		{E1BD124B-09A7-4393-933F-501457180009} = {082BA690-9687-41B1-A520-0E81F9DBC7BD}
 		{38C89E67-C73B-4F9D-87FC-3E0047DA4865} = {3D6A0C84-C82A-4BDC-8120-6044DB3A6381}
+		{9815A9CC-F4EC-4C8E-BE60-468BF5BD020E} = {3D6A0C84-C82A-4BDC-8120-6044DB3A6381}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6F7DC389-4ECD-430D-8BE6-C057AF7470F9}

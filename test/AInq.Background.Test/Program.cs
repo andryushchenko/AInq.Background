@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using AInq.Background;
+using AInq.Background.Enumerable;
 using AInq.Background.Helpers;
 using AInq.Background.Tasks;
 using AInq.Background.Test;
@@ -65,22 +66,30 @@ var host = new HostBuilder()
                            provider.AddDelayedAsyncWork(WorkFactory.CreateAsyncWork(async (serviceProvider, cancel) =>
                                {
                                    using var source = new CancellationTokenSource(TimeSpan.FromSeconds(3));
-                                   Console.WriteLine($"Start\t{DateTime.Now:T}");
+                                   Console.WriteLine($"{DateTime.Now:T}\tDelayed start test");
                                    _ = serviceProvider.EnqueueAsyncWork(
                                        WorkFactory.CreateAsyncWork((_, token) => Task.Delay(TimeSpan.FromSeconds(8), token)),
                                        cancel);
-                                   var test = serviceProvider.EnqueueWork(WorkFactory.CreateWork(_ => $"Test\t{DateTime.Now:T}"), cancel);
+                                   var test = serviceProvider.EnqueueWork(WorkFactory.CreateWork(_ => $"{DateTime.Now:T}\tDelayed work test"), cancel);
                                    try
                                    {
                                        await serviceProvider.EnqueueWork(WorkFactory.CreateWork(_ => true), source.Token);
                                    }
                                    catch (Exception)
                                    {
-                                       Console.WriteLine($"Cancel\t{DateTime.Now:T}");
+                                       Console.WriteLine($"{DateTime.Now:T}\tWork cancellation test");
                                    }
                                    Console.WriteLine(await test);
                                }),
                                TimeSpan.FromSeconds(30));
+                           provider.AddDelayedAsyncWork(WorkFactory.CreateAsyncWork(async (serviceProvider, cancel) =>
+                               {
+                                   await foreach (var result in serviceProvider.ProcessDataAsync<int, int>(
+                                       Enumerable.Range(1, 10).ToAsyncEnumerable(),
+                                       cancel))
+                                       Console.WriteLine($"{DateTime.Now:T}\tEnumerator test {result}");
+                               }),
+                               TimeSpan.FromSeconds(60));
                        }));
            })
            .Build();

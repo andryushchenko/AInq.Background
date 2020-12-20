@@ -39,6 +39,7 @@ public static class ConveyorHelper
     /// <seealso cref="IPriorityConveyor{TData,TResult}.ProcessDataAsync(TData, int, CancellationToken, int)" />
     public static Task<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, TData data, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
+        where TData : notnull
     {
         var service = provider.GetService(typeof(IPriorityConveyor<TData, TResult>)) ?? provider.GetService(typeof(IConveyor<TData, TResult>));
         return service switch

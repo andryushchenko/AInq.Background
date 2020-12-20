@@ -24,6 +24,7 @@ namespace AInq.Background.Helpers
 /// <typeparam name="TData"> Input data type </typeparam>
 /// <typeparam name="TResult"> Processing result type </typeparam>
 public class PriorityConveyorEmulator<TData, TResult> : IPriorityConveyor<TData, TResult>
+    where TData : notnull
 {
     private readonly IConveyor<TData, TResult> _conveyor;
 
