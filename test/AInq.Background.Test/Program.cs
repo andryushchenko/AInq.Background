@@ -39,6 +39,10 @@ var host = new HostBuilder().ConfigureLogging(logging => logging.ClearProviders(
                                                         "0/10 * * * * *",
                                                         new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token)
                                                     .Subscribe(new TestObserver<DateTime>());
+                                            provider.AddRepeatedWork(WorkFactory.CreateWork(_ => Console.WriteLine($"{DateTime.Now:T}\tRepeated work test")),
+                                                TimeSpan.FromMinutes(1),
+                                                TimeSpan.FromSeconds(15),
+                                                execCount: 4);
                                             for (var index = 1; index <= 10; index++)
                                                 provider.ProcessDataAsync<int, int>(index, priority: 50 + index);
                                             provider.AddScheduledAsyncQueueWork(WorkFactory.CreateAsyncWork(async (serviceProvider, _) =>

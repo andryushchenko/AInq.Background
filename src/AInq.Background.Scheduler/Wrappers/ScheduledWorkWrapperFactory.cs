@@ -22,7 +22,7 @@ namespace AInq.Background.Wrappers
 {
 
 /// <summary> Factory class for creating <see cref="IScheduledTaskWrapper" /> for once scheduled work </summary>
-public static class DelayedWorkWrapperFactory
+public static class ScheduledWorkWrapperFactory
 {
     /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="time" /> </summary>
     /// <param name="work"> Work instance </param>
@@ -31,10 +31,10 @@ public static class DelayedWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Wrapper and work result task </returns>
-    public static (IScheduledTaskWrapper, Task) CreateDelayedWorkWrapper(IWork work, DateTime time, CancellationToken cancellation = default)
+    public static (IScheduledTaskWrapper, Task) CreateScheduledWorkWrapper(IWork work, DateTime time, CancellationToken cancellation = default)
     {
         time = time.ToLocalTime();
-        var wrapper = new DelayedTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+        var wrapper = new ScheduledTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time") : time,
             cancellation);
         return (wrapper, wrapper.WorkTask);
@@ -48,11 +48,11 @@ public static class DelayedWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Wrapper and work result task </returns>
-    public static (IScheduledTaskWrapper, Task<TResult>) CreateDelayedWorkWrapper<TResult>(IWork<TResult> work, DateTime time,
+    public static (IScheduledTaskWrapper, Task<TResult>) CreateScheduledWorkWrapper<TResult>(IWork<TResult> work, DateTime time,
         CancellationToken cancellation = default)
     {
         time = time.ToLocalTime();
-        var wrapper = new DelayedTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
+        var wrapper = new ScheduledTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
             time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time") : time,
             cancellation);
         return (wrapper, wrapper.WorkTask);
@@ -65,10 +65,10 @@ public static class DelayedWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Wrapper and work result task </returns>
-    public static (IScheduledTaskWrapper, Task) CreateDelayedWorkWrapper(IAsyncWork work, DateTime time, CancellationToken cancellation = default)
+    public static (IScheduledTaskWrapper, Task) CreateScheduledWorkWrapper(IAsyncWork work, DateTime time, CancellationToken cancellation = default)
     {
         time = time.ToLocalTime();
-        var wrapper = new DelayedAsyncTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+        var wrapper = new ScheduledAsyncTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time") : time,
             cancellation);
         return (wrapper, wrapper.WorkTask);
@@ -82,17 +82,17 @@ public static class DelayedWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Wrapper and work result task </returns>
-    public static (IScheduledTaskWrapper, Task<TResult>) CreateDelayedWorkWrapper<TResult>(IAsyncWork<TResult> work, DateTime time,
+    public static (IScheduledTaskWrapper, Task<TResult>) CreateScheduledWorkWrapper<TResult>(IAsyncWork<TResult> work, DateTime time,
         CancellationToken cancellation = default)
     {
         time = time.ToLocalTime();
-        var wrapper = new DelayedAsyncTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
+        var wrapper = new ScheduledAsyncTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
             time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time") : time,
             cancellation);
         return (wrapper, wrapper.WorkTask);
     }
 
-    private class DelayedTaskWrapper : IScheduledTaskWrapper
+    private class ScheduledTaskWrapper : IScheduledTaskWrapper
     {
         private readonly TaskCompletionSource<bool> _completion = new();
         private readonly CancellationToken _innerCancellation;
@@ -100,7 +100,7 @@ public static class DelayedWorkWrapperFactory
         private CancellationTokenRegistration _cancellationRegistration;
         private DateTime? _nextScheduledTime;
 
-        internal DelayedTaskWrapper(IWork work, DateTime time, CancellationToken innerCancellation)
+        internal ScheduledTaskWrapper(IWork work, DateTime time, CancellationToken innerCancellation)
         {
             _work = work;
             _innerCancellation = innerCancellation;
@@ -140,7 +140,7 @@ public static class DelayedWorkWrapperFactory
         DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested ? null : _nextScheduledTime;
     }
 
-    private class DelayedTaskWrapper<TResult> : IScheduledTaskWrapper
+    private class ScheduledTaskWrapper<TResult> : IScheduledTaskWrapper
     {
         private readonly TaskCompletionSource<TResult> _completion = new();
         private readonly CancellationToken _innerCancellation;
@@ -148,7 +148,7 @@ public static class DelayedWorkWrapperFactory
         private CancellationTokenRegistration _cancellationRegistration;
         private DateTime? _nextScheduledTime;
 
-        internal DelayedTaskWrapper(IWork<TResult> work, DateTime time, CancellationToken innerCancellation)
+        internal ScheduledTaskWrapper(IWork<TResult> work, DateTime time, CancellationToken innerCancellation)
         {
             _work = work;
             _innerCancellation = innerCancellation;
@@ -187,7 +187,7 @@ public static class DelayedWorkWrapperFactory
         DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested ? null : _nextScheduledTime;
     }
 
-    private class DelayedAsyncTaskWrapper : IScheduledTaskWrapper
+    private class ScheduledAsyncTaskWrapper : IScheduledTaskWrapper
     {
         private readonly TaskCompletionSource<bool> _completion = new();
         private readonly CancellationToken _innerCancellation;
@@ -195,7 +195,7 @@ public static class DelayedWorkWrapperFactory
         private CancellationTokenRegistration _cancellationRegistration;
         private DateTime? _nextScheduledTime;
 
-        internal DelayedAsyncTaskWrapper(IAsyncWork work, DateTime time, CancellationToken innerCancellation)
+        internal ScheduledAsyncTaskWrapper(IAsyncWork work, DateTime time, CancellationToken innerCancellation)
         {
             _work = work;
             _innerCancellation = innerCancellation;
@@ -235,7 +235,7 @@ public static class DelayedWorkWrapperFactory
         DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested ? null : _nextScheduledTime;
     }
 
-    private class DelayedAsyncTaskWrapper<TResult> : IScheduledTaskWrapper
+    private class ScheduledAsyncTaskWrapper<TResult> : IScheduledTaskWrapper
     {
         private readonly TaskCompletionSource<TResult> _completion = new();
         private readonly CancellationToken _innerCancellation;
@@ -243,7 +243,7 @@ public static class DelayedWorkWrapperFactory
         private CancellationTokenRegistration _cancellationRegistration;
         private DateTime? _nextScheduledTime;
 
-        internal DelayedAsyncTaskWrapper(IAsyncWork<TResult> work, DateTime time, CancellationToken innerCancellation)
+        internal ScheduledAsyncTaskWrapper(IAsyncWork<TResult> work, DateTime time, CancellationToken innerCancellation)
         {
             _work = work;
             _innerCancellation = innerCancellation;
