@@ -29,64 +29,105 @@ public static class CronWorkWrapperFactory
     /// <param name="work"> Work instance </param>
     /// <param name="cron"> Cron expression </param>
     /// <param name="cancellation"> Work cancellation token </param>
+    /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
-    /// <returns> Scheduled task wrapper </returns>
-    public static IScheduledTaskWrapper CreateCronWorkWrapper(IWork work, CronExpression cron, CancellationToken cancellation = default)
-        => new CronTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+    /// <returns> Wrapper and work result observable </returns>
+    public static (IScheduledTaskWrapper, IObservable<object?>) CreateCronWorkWrapper(IWork work, CronExpression cron,
+        CancellationToken cancellation = default, int execCount = -1)
+    {
+        var wrapper = new CronTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             cron ?? throw new ArgumentNullException(nameof(cron)),
-            cancellation);
+            cancellation,
+            execCount > 0 || execCount == -1
+                ? execCount
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+        return (wrapper, wrapper.WorkObservable);
+    }
+
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="cron"> Cron expression </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
+    /// <typeparam name="TResult"> Work result type </typeparam>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+    /// <returns> Wrapper and work result observable </returns>
+    public static (IScheduledTaskWrapper, IObservable<TResult>) CreateCronWorkWrapper<TResult>(IWork<TResult> work, CronExpression cron,
+        CancellationToken cancellation = default, int execCount = -1)
+    {
+        var wrapper = new CronTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
+            cron ?? throw new ArgumentNullException(nameof(cron)),
+            cancellation,
+            execCount > 0 || execCount == -1
+                ? execCount
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+        return (wrapper, wrapper.WorkObservable);
+    }
+
+    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="cron"> Cron expression </param>
+    /// <param name="cancellation"> Work cancellation token </param>
+    /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+    /// <returns> Wrapper and work result observable </returns>
+    public static (IScheduledTaskWrapper, IObservable<object?>) CreateCronWorkWrapper(IAsyncWork work, CronExpression cron,
+        CancellationToken cancellation = default, int execCount = -1)
+    {
+        var wrapper = new CronAsyncTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+            cron ?? throw new ArgumentNullException(nameof(cron)),
+            cancellation,
+            execCount > 0 || execCount == -1
+                ? execCount
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+        return (wrapper, wrapper.WorkObservable);
+    }
 
     /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
     /// <param name="work"> Work instance </param>
     /// <param name="cron"> Cron expression </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
+    /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
-    /// <returns> Scheduled task wrapper </returns>
-    public static IScheduledTaskWrapper CreateCronWorkWrapper<TResult>(IWork<TResult> work, CronExpression cron,
-        CancellationToken cancellation = default)
-        => new CronTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+    /// <returns> Wrapper and work result observable </returns>
+    public static (IScheduledTaskWrapper, IObservable<TResult>) CreateCronWorkWrapper<TResult>(IAsyncWork<TResult> work, CronExpression cron,
+        CancellationToken cancellation = default, int execCount = -1)
+    {
+        var wrapper = new CronAsyncTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
             cron ?? throw new ArgumentNullException(nameof(cron)),
-            cancellation);
-
-    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
-    /// <param name="work"> Work instance </param>
-    /// <param name="cron"> Cron expression </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
-    /// <returns> Scheduled task wrapper </returns>
-    public static IScheduledTaskWrapper CreateCronWorkWrapper(IAsyncWork work, CronExpression cron, CancellationToken cancellation = default)
-        => new CronAsyncTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            cron ?? throw new ArgumentNullException(nameof(cron)),
-            cancellation);
-
-    /// <summary> Create <see cref="IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
-    /// <param name="work"> Work instance </param>
-    /// <param name="cron"> Cron expression </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
-    /// <returns> Scheduled task wrapper </returns>
-    public static IScheduledTaskWrapper CreateCronWorkWrapper<TResult>(IAsyncWork<TResult> work, CronExpression cron,
-        CancellationToken cancellation = default)
-        => new CronAsyncTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
-            cron ?? throw new ArgumentNullException(nameof(cron)),
-            cancellation);
+            cancellation,
+            execCount > 0 || execCount == -1
+                ? execCount
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+        return (wrapper, wrapper.WorkObservable);
+    }
 
     private class CronTaskWrapper : IScheduledTaskWrapper
     {
         private readonly CronExpression _cron;
         private readonly CancellationToken _innerCancellation;
+        private readonly Observable<object?> _observable = new();
         private readonly IWork _work;
+        private CancellationTokenRegistration _cancellationRegistration;
+        private int _execCount;
 
-        internal CronTaskWrapper(IWork work, CronExpression cron, CancellationToken innerCancellation)
+        internal CronTaskWrapper(IWork work, CronExpression cron, CancellationToken innerCancellation, int execCount)
         {
             _work = work;
             _cron = cron;
             _innerCancellation = innerCancellation;
+            _execCount = execCount;
+            _cancellationRegistration = _innerCancellation.Register(() => _observable.Complete(), false);
         }
 
-        DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested
+        internal IObservable<object?> WorkObservable => _observable;
+
+        DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested || _execCount == 0
             ? null
             : _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local)?.ToLocalTime();
 
@@ -99,6 +140,8 @@ public static class CronWorkWrapperFactory
                 outerCancellation.ThrowIfCancellationRequested();
                 _innerCancellation.ThrowIfCancellationRequested();
                 _work.DoWork(provider);
+                _observable.Next(null);
+                if (_execCount != -1) _execCount--;
             }
             catch (OperationCanceledException)
             {
@@ -108,8 +151,15 @@ public static class CronWorkWrapperFactory
             catch (Exception ex)
             {
                 logger?.LogError(ex, "Error processing scheduled task {0}", _work);
+                _observable.Error(ex);
+                if (_execCount != -1) _execCount--;
             }
-            return Task.FromResult(_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue);
+            if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue && _execCount != 0)
+                return Task.FromResult(true);
+            _observable.Complete();
+            _cancellationRegistration.Dispose();
+            _cancellationRegistration = default;
+            return Task.FromResult(false);
         }
     }
 
@@ -117,16 +167,23 @@ public static class CronWorkWrapperFactory
     {
         private readonly CronExpression _cron;
         private readonly CancellationToken _innerCancellation;
+        private readonly Observable<TResult> _observable = new();
         private readonly IWork<TResult> _work;
+        private CancellationTokenRegistration _cancellationRegistration;
+        private int _execCount;
 
-        internal CronTaskWrapper(IWork<TResult> work, CronExpression cron, CancellationToken innerCancellation)
+        internal CronTaskWrapper(IWork<TResult> work, CronExpression cron, CancellationToken innerCancellation, int execCount)
         {
             _work = work;
             _cron = cron;
             _innerCancellation = innerCancellation;
+            _execCount = execCount;
+            _cancellationRegistration = _innerCancellation.Register(() => _observable.Complete(), false);
         }
 
-        DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested
+        internal IObservable<TResult> WorkObservable => _observable;
+
+        DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested || _execCount == 0
             ? null
             : _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local)?.ToLocalTime();
 
@@ -138,7 +195,8 @@ public static class CronWorkWrapperFactory
             {
                 outerCancellation.ThrowIfCancellationRequested();
                 _innerCancellation.ThrowIfCancellationRequested();
-                _work.DoWork(provider);
+                _observable.Next(_work.DoWork(provider));
+                if (_execCount != -1) _execCount--;
             }
             catch (OperationCanceledException)
             {
@@ -148,8 +206,15 @@ public static class CronWorkWrapperFactory
             catch (Exception ex)
             {
                 logger?.LogError(ex, "Error processing scheduled task {0}", _work);
+                _observable.Error(ex);
+                if (_execCount != -1) _execCount--;
             }
-            return Task.FromResult(_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue);
+            if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue && _execCount != 0)
+                return Task.FromResult(true);
+            _observable.Complete();
+            _cancellationRegistration.Dispose();
+            _cancellationRegistration = default;
+            return Task.FromResult(false);
         }
     }
 
@@ -157,16 +222,23 @@ public static class CronWorkWrapperFactory
     {
         private readonly CronExpression _cron;
         private readonly CancellationToken _innerCancellation;
+        private readonly Observable<object?> _observable = new();
         private readonly IAsyncWork _work;
+        private CancellationTokenRegistration _cancellationRegistration;
+        private int _execCount;
 
-        internal CronAsyncTaskWrapper(IAsyncWork work, CronExpression cron, CancellationToken innerCancellation)
+        internal CronAsyncTaskWrapper(IAsyncWork work, CronExpression cron, CancellationToken innerCancellation, int execCount)
         {
             _work = work;
             _cron = cron;
             _innerCancellation = innerCancellation;
+            _execCount = execCount;
+            _cancellationRegistration = _innerCancellation.Register(() => _observable.Complete(), false);
         }
 
-        DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested
+        internal IObservable<object?> WorkObservable => _observable;
+
+        DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested || _execCount == 0
             ? null
             : _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local)?.ToLocalTime();
 
@@ -178,7 +250,9 @@ public static class CronWorkWrapperFactory
             try
             {
                 aggregateCancellation.Token.ThrowIfCancellationRequested();
-                await _work.DoWorkAsync(provider, aggregateCancellation.Token).ConfigureAwait(false);
+                await _work.DoWorkAsync(provider, aggregateCancellation.Token);
+                _observable.Next(null);
+                if (_execCount != -1) _execCount--;
             }
             catch (OperationCanceledException)
             {
@@ -188,8 +262,15 @@ public static class CronWorkWrapperFactory
             catch (Exception ex)
             {
                 logger?.LogError(ex, "Error processing scheduled task {0}", _work);
+                _observable.Error(ex);
+                if (_execCount != -1) _execCount--;
             }
-            return _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue;
+            if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue && _execCount != 0)
+                return true;
+            _observable.Complete();
+            _cancellationRegistration.Dispose();
+            _cancellationRegistration = default;
+            return false;
         }
     }
 
@@ -197,16 +278,23 @@ public static class CronWorkWrapperFactory
     {
         private readonly CronExpression _cron;
         private readonly CancellationToken _innerCancellation;
+        private readonly Observable<TResult> _observable = new();
         private readonly IAsyncWork<TResult> _work;
+        private CancellationTokenRegistration _cancellationRegistration;
+        private int _execCount;
 
-        internal CronAsyncTaskWrapper(IAsyncWork<TResult> work, CronExpression cron, CancellationToken innerCancellation)
+        internal CronAsyncTaskWrapper(IAsyncWork<TResult> work, CronExpression cron, CancellationToken innerCancellation, int execCount)
         {
             _work = work;
             _cron = cron;
             _innerCancellation = innerCancellation;
+            _execCount = execCount;
+            _cancellationRegistration = _innerCancellation.Register(() => _observable.Complete(), false);
         }
 
-        DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested
+        internal IObservable<TResult> WorkObservable => _observable;
+
+        DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested || _execCount == 0
             ? null
             : _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local)?.ToLocalTime();
 
@@ -218,7 +306,8 @@ public static class CronWorkWrapperFactory
             try
             {
                 aggregateCancellation.Token.ThrowIfCancellationRequested();
-                await _work.DoWorkAsync(provider, aggregateCancellation.Token).ConfigureAwait(false);
+                _observable.Next(await _work.DoWorkAsync(provider, aggregateCancellation.Token));
+                if (_execCount != -1) _execCount--;
             }
             catch (OperationCanceledException)
             {
@@ -228,8 +317,15 @@ public static class CronWorkWrapperFactory
             catch (Exception ex)
             {
                 logger?.LogError(ex, "Error processing scheduled task {0}", _work);
+                _observable.Error(ex);
+                if (_execCount != -1) _execCount--;
             }
-            return _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue;
+            if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue && _execCount != 0)
+                return true;
+            _observable.Complete();
+            _cancellationRegistration.Dispose();
+            _cancellationRegistration = default;
+            return false;
         }
     }
 }

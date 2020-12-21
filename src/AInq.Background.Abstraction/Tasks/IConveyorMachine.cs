@@ -24,6 +24,7 @@ namespace AInq.Background.Tasks
 /// <typeparam name="TData"> Input data type </typeparam>
 /// <typeparam name="TResult"> Processing result type </typeparam>
 public interface IConveyorMachine<in TData, TResult>
+    where TData : notnull
 {
     /// <summary> Process data asynchronously </summary>
     /// <param name="data"> Data to process </param>

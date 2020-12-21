@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace AInq.Background.Test
 {
 
-public class TestMachine : IConveyorMachine<int, int>, IActivatable
+public class TestMachine : IConveyorMachine<int, int>, IStartStoppable
 {
     private readonly string _name;
     private bool _isRunning;
@@ -31,31 +31,31 @@ public class TestMachine : IConveyorMachine<int, int>, IActivatable
         Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} created");
     }
 
-    bool IActivatable.IsActive => _isRunning;
-
-    async Task IActivatable.ActivateAsync(CancellationToken cancellation)
-    {
-        Console.WriteLine($"{DateTime.Now:T}\tStarting machine ID {_name}");
-        await Task.Delay(2000, cancellation);
-        _isRunning = true;
-        Console.WriteLine($"{DateTime.Now:T}\tMachine {_name} started");
-    }
-
-    async Task IActivatable.DeactivateAsync(CancellationToken cancellation)
-    {
-        Console.WriteLine($"{DateTime.Now:T}\tStopping machine ID {_name}");
-        await Task.Delay(2000, cancellation);
-        _isRunning = false;
-        Console.WriteLine($"{DateTime.Now:T}\tMachine {_name} stopped");
-    }
-
     async Task<int> IConveyorMachine<int, int>.ProcessDataAsync(int data, IServiceProvider provider, CancellationToken cancellation)
     {
         Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} checking provider {provider}");
         Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} processing {data}");
-        await Task.Delay(3000, cancellation);
+        await Task.Delay(3000, cancellation).ConfigureAwait(false);
         Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} processed {data}");
         return data;
+    }
+
+    bool IStartStoppable.IsActive => _isRunning;
+
+    async Task IStartStoppable.ActivateAsync(CancellationToken cancellation)
+    {
+        Console.WriteLine($"{DateTime.Now:T}\tStarting machine ID {_name}");
+        await Task.Delay(2000, cancellation).ConfigureAwait(false);
+        _isRunning = true;
+        Console.WriteLine($"{DateTime.Now:T}\tMachine {_name} started");
+    }
+
+    async Task IStartStoppable.DeactivateAsync(CancellationToken cancellation)
+    {
+        Console.WriteLine($"{DateTime.Now:T}\tStopping machine ID {_name}");
+        await Task.Delay(2000, cancellation).ConfigureAwait(false);
+        _isRunning = false;
+        Console.WriteLine($"{DateTime.Now:T}\tMachine {_name} stopped");
     }
 }
 

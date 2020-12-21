@@ -30,8 +30,8 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
 {
     private readonly Func<IServiceProvider, TArgument> _argumentFabric;
     private readonly int _maxArgumentCount;
-    private readonly AsyncAutoResetEvent _reset = new AsyncAutoResetEvent(false);
-    private readonly ConcurrentBag<TArgument> _reusable = new ConcurrentBag<TArgument>();
+    private readonly AsyncAutoResetEvent _reset = new(false);
+    private readonly ConcurrentBag<TArgument> _reusable = new();
     private int _currentArgumentCount;
 
     internal MultipleReusableProcessor(Func<IServiceProvider, TArgument> argumentFabric, int maxArgumentsCount)
@@ -77,15 +77,15 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
             }
             currentTasks.AddLast(Task.Run(async () =>
                 {
-                    var activatable = argument as IActivatable;
+                    var startStoppable = argument as IStartStoppable;
                     try
                     {
-                        if (activatable != null && !activatable.IsActive)
-                            await activatable.ActivateAsync(cancellation).ConfigureAwait(false);
+                        if (startStoppable != null && !startStoppable.IsActive)
+                            await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
-                        logger?.LogError(ex, "Error starting stoppable argument {Argument}", activatable);
+                        logger?.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
                         manager.RevertTask(task, metadata);
                         Interlocked.Decrement(ref _currentArgumentCount);
                         _reset.Set();
@@ -117,15 +117,15 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                         _reset.Set();
                         _ = Task.Run(async () =>
                             {
-                                var activatable = argument as IActivatable;
+                                var startStoppable = argument as IStartStoppable;
                                 try
                                 {
-                                    if (activatable != null && activatable.IsActive)
-                                        await activatable.DeactivateAsync(cancellation).ConfigureAwait(false);
+                                    if (startStoppable != null && startStoppable.IsActive)
+                                        await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
                                 }
                                 catch (Exception ex)
                                 {
-                                    logger?.LogError(ex, "Error stopping stoppable argument {Argument}", activatable);
+                                    logger?.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
                                 }
                             },
                             cancellation);

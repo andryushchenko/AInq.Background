@@ -21,7 +21,7 @@ namespace AInq.Background.Tasks
 
 /// <summary> Interface for object which need to be activated/deactivated before/after usage </summary>
 /// <remarks> Used in <see cref="IConveyor{TData,TResult}" /> and <see cref="IAccessQueue{TResource}" /></remarks>
-public interface IActivatable
+public interface IStartStoppable
 {
     /// <summary> Shows if object is active now </summary>
     bool IsActive { get; }

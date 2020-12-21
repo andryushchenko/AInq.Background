@@ -26,15 +26,13 @@ namespace AInq.Background.Managers
 /// <typeparam name="TArgument"> Task argument type </typeparam>
 public class TaskManager<TArgument> : ITaskManager<TArgument, object?>
 {
-    private readonly AsyncAutoResetEvent _newDataEvent = new AsyncAutoResetEvent(false);
-    private readonly ConcurrentQueue<ITaskWrapper<TArgument>> _queue = new ConcurrentQueue<ITaskWrapper<TArgument>>();
+    private readonly AsyncAutoResetEvent _newDataEvent = new(false);
+    private readonly ConcurrentQueue<ITaskWrapper<TArgument>> _queue = new();
 
     bool ITaskManager<TArgument, object?>.HasTask => !_queue.IsEmpty;
 
     Task ITaskManager<TArgument, object?>.WaitForTaskAsync(CancellationToken cancellation)
-        => _queue.IsEmpty
-            ? _newDataEvent.WaitAsync(cancellation)
-            : Task.CompletedTask;
+        => _queue.IsEmpty ? _newDataEvent.WaitAsync(cancellation) : Task.CompletedTask;
 
     (ITaskWrapper<TArgument>?, object?) ITaskManager<TArgument, object?>.GetTask()
     {

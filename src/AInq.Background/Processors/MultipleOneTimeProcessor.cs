@@ -59,15 +59,15 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
                             _semaphore.Release();
                             return;
                         }
-                        var activatable = argument as IActivatable;
+                        var startStoppable = argument as IStartStoppable;
                         try
                         {
-                            if (activatable != null && !activatable.IsActive)
-                                await activatable.ActivateAsync(cancellation).ConfigureAwait(false);
+                            if (startStoppable != null && !startStoppable.IsActive)
+                                await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
                         }
                         catch (Exception ex)
                         {
-                            logger?.LogError(ex, "Error starting stoppable argument {Argument}", activatable);
+                            logger?.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
                             manager.RevertTask(task, metadata);
                             _semaphore.Release();
                             return;
@@ -76,12 +76,12 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
                             manager.RevertTask(task, metadata);
                         try
                         {
-                            if (activatable != null && activatable.IsActive)
-                                await activatable.DeactivateAsync(cancellation).ConfigureAwait(false);
+                            if (startStoppable != null && startStoppable.IsActive)
+                                await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
                         }
                         catch (Exception ex)
                         {
-                            logger?.LogError(ex, "Error stopping stoppable argument {Argument}", activatable);
+                            logger?.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
                         }
                         finally
                         {

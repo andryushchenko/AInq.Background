@@ -35,15 +35,15 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
     {
         if (!manager.HasTask)
             return;
-        var activatable = _argument as IActivatable;
+        var startStoppable = _argument as IStartStoppable;
         try
         {
-            if (activatable != null && !activatable.IsActive)
-                await activatable.ActivateAsync(cancellation).ConfigureAwait(false);
+            if (startStoppable != null && !startStoppable.IsActive)
+                await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
-            logger?.LogError(ex, "Error starting stoppable argument {Argument}", activatable);
+            logger?.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
             return;
         }
         while (manager.HasTask && !cancellation.IsCancellationRequested)
@@ -66,12 +66,12 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
         }
         try
         {
-            if (activatable != null && activatable.IsActive)
-                await activatable.DeactivateAsync(cancellation).ConfigureAwait(false);
+            if (startStoppable != null && startStoppable.IsActive)
+                await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
-            logger?.LogError(ex, "Error stopping stoppable argument {Argument}", activatable);
+            logger?.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
         }
     }
 }

@@ -1,25 +1,27 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Authors>Anton Andryushchenko</Authors>
     <Product>AInq.Background</Product>
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
     <RepositoryUrl>https://github.com/andryushchenko/AInq.Background</RepositoryUrl>
-    <Version>2.3.2</Version>
+    <Version>3.0.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <Description>Simple test app</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.4" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="System.Linq.Async" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\AInq.Background.Enumerable\AInq.Background.Enumerable.csproj" />
     <ProjectReference Include="..\..\src\AInq.Background.Scheduler\AInq.Background.Scheduler.csproj" />
     <ProjectReference Include="..\..\src\AInq.Background\AInq.Background.csproj" />
   </ItemGroup>

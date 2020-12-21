@@ -22,33 +22,13 @@ namespace AInq.Background.Tasks
 /// <summary> Factory class for creating <see cref="IAccess{TResource}" /> and <see cref="IAsyncAccess{TResource}" /> from delegates </summary>
 public static class AccessFactory
 {
-    /// <summary> Create <see cref="IAccess{TResource}" /> instance from <see cref="Action{TResource}" /> </summary>
-    /// <param name="access"> Access action </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <returns> <see cref="IAccess{TResource}" /> instance for given action </returns>
-    /// <exception cref="ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
-    public static IAccess<TResource> CreateAccess<TResource>(Action<TResource> access)
-        => access != null
-            ? new Access<TResource>((resource, provider) => access.Invoke(resource))
-            : throw new ArgumentNullException(nameof(access));
-
-    /// <summary> Create <see cref="IAccess{TResource, TResult}" /> instance from <see cref="Func{TResource, TResult}" /> </summary>
-    /// <param name="access"> Access function </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TResult"> Access result type </typeparam>
-    /// <returns> <see cref="IAccess{TResource, TResult}" /> instance for given function </returns>
-    /// <exception cref="ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
-    public static IAccess<TResource, TResult> CreateAccess<TResource, TResult>(Func<TResource, TResult> access)
-        => access != null
-            ? new Access<TResource, TResult>((resource, provider) => access.Invoke(resource))
-            : throw new ArgumentNullException(nameof(access));
-
     /// <summary> Create <see cref="IAccess{TResource}" /> instance from <see cref="Action{TResource, IServiceProvider}" /> </summary>
     /// <param name="access"> Access action </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> <see cref="IAccess{TResource}" /> instance for given action </returns>
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
     public static IAccess<TResource> CreateAccess<TResource>(Action<TResource, IServiceProvider> access)
+        where TResource : notnull
         => new Access<TResource>(access ?? throw new ArgumentNullException(nameof(access)));
 
     /// <summary> Create <see cref="IAccess{TResource, TResult}" /> instance from <see cref="Func{TResource, IServiceProvider, TResult}" /> </summary>
@@ -58,28 +38,8 @@ public static class AccessFactory
     /// <returns> <see cref="IAccess{TResource, TResult}" /> instance for given function </returns>
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
     public static IAccess<TResource, TResult> CreateAccess<TResource, TResult>(Func<TResource, IServiceProvider, TResult> access)
+        where TResource : notnull
         => new Access<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)));
-
-    /// <summary> Create <see cref="IAsyncAccess{TResource}" /> instance from <see cref="Func{TResource, CancellationToken, Task}" /> </summary>
-    /// <param name="access"> Access action </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <returns> <see cref="IAsyncAccess{TResource}" /> instance for given action </returns>
-    /// <exception cref="ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
-    public static IAsyncAccess<TResource> CreateAsyncAccess<TResource>(Func<TResource, CancellationToken, Task> access)
-        => access != null
-            ? new AsyncAccess<TResource>((resource, provider, token) => access.Invoke(resource, token))
-            : throw new ArgumentNullException(nameof(access));
-
-    /// <summary> Create <see cref="IAsyncAccess{TResource, TResult}" /> instance from <see cref="Func{TResource,  CancellationToken, TResult}" /> </summary>
-    /// <param name="access"> Access function </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TResult"> Access result type </typeparam>
-    /// <returns> <see cref="IAsyncAccess{TResource, TResult}" /> instance for given function </returns>
-    /// <exception cref="ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
-    public static IAsyncAccess<TResource, TResult> CreateAsyncAccess<TResource, TResult>(Func<TResource, CancellationToken, Task<TResult>> access)
-        => access != null
-            ? new AsyncAccess<TResource, TResult>((resource, provider, token) => access.Invoke(resource, token))
-            : throw new ArgumentNullException(nameof(access));
 
     /// <summary>
     ///     Create <see cref="IAsyncAccess{TResource}" /> instance from <see cref="Func{TResource, IServiceProvider, CancellationToken, Task}" />
@@ -89,6 +49,7 @@ public static class AccessFactory
     /// <returns> <see cref="IAsyncAccess{TResource}" /> instance for given action </returns>
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
     public static IAsyncAccess<TResource> CreateAsyncAccess<TResource>(Func<TResource, IServiceProvider, CancellationToken, Task> access)
+        where TResource : notnull
         => new AsyncAccess<TResource>(access ?? throw new ArgumentNullException(nameof(access)));
 
     /// <summary>
@@ -102,9 +63,11 @@ public static class AccessFactory
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
     public static IAsyncAccess<TResource, TResult> CreateAsyncAccess<TResource, TResult>(
         Func<TResource, IServiceProvider, CancellationToken, Task<TResult>> access)
+        where TResource : notnull
         => new AsyncAccess<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)));
 
     private class Access<TResource> : IAccess<TResource>
+        where TResource : notnull
     {
         private readonly Action<TResource, IServiceProvider> _access;
 
@@ -116,6 +79,7 @@ public static class AccessFactory
     }
 
     private class Access<TResource, TResult> : IAccess<TResource, TResult>
+        where TResource : notnull
     {
         private readonly Func<TResource, IServiceProvider, TResult> _access;
 
@@ -127,6 +91,7 @@ public static class AccessFactory
     }
 
     private class AsyncAccess<TResource> : IAsyncAccess<TResource>
+        where TResource : notnull
     {
         private readonly Func<TResource, IServiceProvider, CancellationToken, Task> _access;
 
@@ -138,6 +103,7 @@ public static class AccessFactory
     }
 
     private class AsyncAccess<TResource, TResult> : IAsyncAccess<TResource, TResult>
+        where TResource : notnull
     {
         private readonly Func<TResource, IServiceProvider, CancellationToken, Task<TResult>> _access;
 

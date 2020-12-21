@@ -22,6 +22,7 @@ namespace AInq.Background.Tasks
 /// <summary> Interface for asynchronous access to shared resource of type <typeparamref name="TResource" /> without result </summary>
 /// <typeparam name="TResource"> Shared resource type </typeparam>
 public interface IAsyncAccess<in TResource>
+    where TResource : notnull
 {
     /// <summary> Asynchronous access action </summary>
     /// <param name="resource"> Shared resource instance </param>

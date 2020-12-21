@@ -32,16 +32,17 @@ public static class ConveyorDataWrapperFactory
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Wrapper and processing result task </returns>
     public static (ITaskWrapper<IConveyorMachine<TData, TResult>>, Task<TResult>) CreateConveyorDataWrapper<TData, TResult>(TData data,
-        int attemptsCount = 1,
-        CancellationToken cancellation = default)
+        int attemptsCount = 1, CancellationToken cancellation = default)
+        where TData : notnull
     {
         var wrapper = new ConveyorDataWrapper<TData, TResult>(data, Math.Max(1, attemptsCount), cancellation);
         return (wrapper, wrapper.Result);
     }
 
     private class ConveyorDataWrapper<TData, TResult> : ITaskWrapper<IConveyorMachine<TData, TResult>>
+        where TData : notnull
     {
-        private readonly TaskCompletionSource<TResult> _completion = new TaskCompletionSource<TResult>();
+        private readonly TaskCompletionSource<TResult> _completion = new();
         private readonly TData _data;
         private readonly CancellationToken _innerCancellation;
         private int _attemptsRemain;
@@ -61,8 +62,7 @@ public static class ConveyorDataWrapperFactory
         bool ITaskWrapper<IConveyorMachine<TData, TResult>>.IsFaulted => _completion.Task.IsFaulted;
 
         async Task<bool> ITaskWrapper<IConveyorMachine<TData, TResult>>.ExecuteAsync(IConveyorMachine<TData, TResult> argument,
-            IServiceProvider provider,
-            ILogger? logger, CancellationToken cancellation)
+            IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
         {
             if (_attemptsRemain < 1)
             {
@@ -71,8 +71,6 @@ public static class ConveyorDataWrapperFactory
                 _cancellationRegistration = default;
                 return true;
             }
-            if (argument == null)
-                return false;
             _attemptsRemain--;
             using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, cancellation);
             try

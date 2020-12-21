@@ -62,118 +62,47 @@
         <member name="T:AInq.Background.Wrappers.CronWorkWrapperFactory">
             <summary> Factory class for creating <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for CRON scheduled work </summary>
         </member>
-        <member name="M:AInq.Background.Wrappers.CronWorkWrapperFactory.CreateCronWorkWrapper(AInq.Background.Tasks.IWork,Cronos.CronExpression,System.Threading.CancellationToken)">
+        <member name="M:AInq.Background.Wrappers.CronWorkWrapperFactory.CreateCronWorkWrapper(AInq.Background.Tasks.IWork,Cronos.CronExpression,System.Threading.CancellationToken,System.Int32)">
             <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
             <param name="work"> Work instance </param>
             <param name="cron"> Cron expression </param>
             <param name="cancellation"> Work cancellation token </param>
+            <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
-            <returns> Scheduled task wrapper </returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <returns> Wrapper and work result observable </returns>
         </member>
-        <member name="M:AInq.Background.Wrappers.CronWorkWrapperFactory.CreateCronWorkWrapper``1(AInq.Background.Tasks.IWork{``0},Cronos.CronExpression,System.Threading.CancellationToken)">
+        <member name="M:AInq.Background.Wrappers.CronWorkWrapperFactory.CreateCronWorkWrapper``1(AInq.Background.Tasks.IWork{``0},Cronos.CronExpression,System.Threading.CancellationToken,System.Int32)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
+            <param name="work"> Work instance </param>
+            <param name="cron"> Cron expression </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="execCount"> Max work execution count (-1 for unlimited) </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <returns> Wrapper and work result observable </returns>
+        </member>
+        <member name="M:AInq.Background.Wrappers.CronWorkWrapperFactory.CreateCronWorkWrapper(AInq.Background.Tasks.IAsyncWork,Cronos.CronExpression,System.Threading.CancellationToken,System.Int32)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
+            <param name="work"> Work instance </param>
+            <param name="cron"> Cron expression </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="execCount"> Max work execution count (-1 for unlimited) </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <returns> Wrapper and work result observable </returns>
+        </member>
+        <member name="M:AInq.Background.Wrappers.CronWorkWrapperFactory.CreateCronWorkWrapper``1(AInq.Background.Tasks.IAsyncWork{``0},Cronos.CronExpression,System.Threading.CancellationToken,System.Int32)">
             <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
             <param name="work"> Work instance </param>
             <param name="cron"> Cron expression </param>
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TResult"> Work result type </typeparam>
+            <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
-            <returns> Scheduled task wrapper </returns>
-        </member>
-        <member name="M:AInq.Background.Wrappers.CronWorkWrapperFactory.CreateCronWorkWrapper(AInq.Background.Tasks.IAsyncWork,Cronos.CronExpression,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
-            <param name="work"> Work instance </param>
-            <param name="cron"> Cron expression </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
-            <returns> Scheduled task wrapper </returns>
-        </member>
-        <member name="M:AInq.Background.Wrappers.CronWorkWrapperFactory.CreateCronWorkWrapper``1(AInq.Background.Tasks.IAsyncWork{``0},Cronos.CronExpression,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled by <paramref name="cron" /> </summary>
-            <param name="work"> Work instance </param>
-            <param name="cron"> Cron expression </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
-            <returns> Scheduled task wrapper </returns>
-        </member>
-        <member name="T:AInq.Background.Wrappers.DelayedWorkWrapperFactory">
-            <summary> Factory class for creating <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for once scheduled work </summary>
-        </member>
-        <member name="M:AInq.Background.Wrappers.DelayedWorkWrapperFactory.CreateDelayedWorkWrapper(AInq.Background.Tasks.IWork,System.DateTime,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="time" /> </summary>
-            <param name="work"> Work instance </param>
-            <param name="time"> Scheduled time </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
-            <returns> Scheduled task wrapper </returns>
-        </member>
-        <member name="M:AInq.Background.Wrappers.DelayedWorkWrapperFactory.CreateDelayedWorkWrapper(AInq.Background.Tasks.IWork,System.TimeSpan,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> delayed in <paramref name="delay" /> </summary>
-            <param name="work"> Work instance </param>
-            <param name="delay"> Execution delay </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> is less or equal to 00:00:00.000 </exception>
-            <returns> Scheduled task wrapper </returns>
-        </member>
-        <member name="M:AInq.Background.Wrappers.DelayedWorkWrapperFactory.CreateDelayedWorkWrapper``1(AInq.Background.Tasks.IWork{``0},System.DateTime,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="time" /> </summary>
-            <param name="work"> Work instance </param>
-            <param name="time"> Scheduled time </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
-            <returns> Scheduled task wrapper </returns>
-        </member>
-        <member name="M:AInq.Background.Wrappers.DelayedWorkWrapperFactory.CreateDelayedWorkWrapper``1(AInq.Background.Tasks.IWork{``0},System.TimeSpan,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> delayed in <paramref name="delay" /> </summary>
-            <param name="work"> Work instance </param>
-            <param name="delay"> Execution delay </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> is less or equal to 00:00:00.000 </exception>
-            <returns> Scheduled task wrapper </returns>
-        </member>
-        <member name="M:AInq.Background.Wrappers.DelayedWorkWrapperFactory.CreateDelayedWorkWrapper(AInq.Background.Tasks.IAsyncWork,System.DateTime,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="time" /> </summary>
-            <param name="work"> Work instance </param>
-            <param name="time"> Scheduled time </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
-            <returns> Scheduled task wrapper </returns>
-        </member>
-        <member name="M:AInq.Background.Wrappers.DelayedWorkWrapperFactory.CreateDelayedWorkWrapper(AInq.Background.Tasks.IAsyncWork,System.TimeSpan,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> delayed in <paramref name="delay" /> </summary>
-            <param name="work"> Work instance </param>
-            <param name="delay"> Execution delay </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> is less or equal to 00:00:00.000 </exception>
-            <returns> Scheduled task wrapper </returns>
-        </member>
-        <member name="M:AInq.Background.Wrappers.DelayedWorkWrapperFactory.CreateDelayedWorkWrapper``1(AInq.Background.Tasks.IAsyncWork{``0},System.DateTime,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="time" /> </summary>
-            <param name="work"> Work instance </param>
-            <param name="time"> Scheduled time </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
-            <returns> Scheduled task wrapper </returns>
-        </member>
-        <member name="M:AInq.Background.Wrappers.DelayedWorkWrapperFactory.CreateDelayedWorkWrapper``1(AInq.Background.Tasks.IAsyncWork{``0},System.TimeSpan,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> delayed in <paramref name="delay" /> </summary>
-            <param name="work"> Work instance </param>
-            <param name="delay"> Execution delay </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> is less or equal to 00:00:00.000 </exception>
-            <returns> Scheduled task wrapper </returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <returns> Wrapper and work result observable </returns>
         </member>
         <member name="T:AInq.Background.Wrappers.IScheduledTaskWrapper">
             <summary> Interface for scheduled background task wrapper </summary>
@@ -190,6 +119,108 @@
             <param name="logger"> Logger instance </param>
             <param name="cancellation"> Cancellation token </param>
             <returns> If task should be reverted to scheduler </returns>
+        </member>
+        <member name="T:AInq.Background.Wrappers.RepeatedWorkWrapperFactory">
+            <summary> Factory class for creating <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for repeated work </summary>
+        </member>
+        <member name="M:AInq.Background.Wrappers.RepeatedWorkWrapperFactory.CreateRepeatedWorkWrapper(AInq.Background.Tasks.IWork,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="startTime" /> </summary>
+            <param name="work"> Work instance </param>
+            <param name="startTime"> Work first execution time </param>
+            <param name="repeatDelay"> Work repeat delay </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="execCount"> Max work execution count (-1 for unlimited) </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
+            <returns> Wrapper and work result observable </returns>
+        </member>
+        <member name="M:AInq.Background.Wrappers.RepeatedWorkWrapperFactory.CreateRepeatedWorkWrapper``1(AInq.Background.Tasks.IWork{``0},System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="startTime" /> </summary>
+            <param name="work"> Work instance </param>
+            <param name="startTime"> Work first execution time </param>
+            <param name="repeatDelay"> Work repeat delay </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="execCount"> Max work execution count (-1 for unlimited) </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
+            <returns> Wrapper and work result observable </returns>
+        </member>
+        <member name="M:AInq.Background.Wrappers.RepeatedWorkWrapperFactory.CreateRepeatedWorkWrapper(AInq.Background.Tasks.IAsyncWork,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="startTime" /> </summary>
+            <param name="work"> Work instance </param>
+            <param name="startTime"> Work first execution time </param>
+            <param name="repeatDelay"> Work repeat delay </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="execCount"> Max work execution count (-1 for unlimited) </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
+            <returns> Wrapper and work result observable </returns>
+        </member>
+        <member name="M:AInq.Background.Wrappers.RepeatedWorkWrapperFactory.CreateRepeatedWorkWrapper``1(AInq.Background.Tasks.IAsyncWork{``0},System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="startTime" /> </summary>
+            <param name="work"> Work instance </param>
+            <param name="startTime"> Work first execution time </param>
+            <param name="repeatDelay"> Work repeat delay </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="execCount"> Max work execution count (-1 for unlimited) </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
+            <returns> Wrapper and work result observable </returns>
+        </member>
+        <member name="T:AInq.Background.Wrappers.ScheduledWorkWrapperFactory">
+            <summary> Factory class for creating <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for once scheduled work </summary>
+        </member>
+        <member name="M:AInq.Background.Wrappers.ScheduledWorkWrapperFactory.CreateScheduledWorkWrapper(AInq.Background.Tasks.IWork,System.DateTime,System.Threading.CancellationToken)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="time" /> </summary>
+            <param name="work"> Work instance </param>
+            <param name="time"> Scheduled time </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
+            <returns> Wrapper and work result task </returns>
+        </member>
+        <member name="M:AInq.Background.Wrappers.ScheduledWorkWrapperFactory.CreateScheduledWorkWrapper``1(AInq.Background.Tasks.IWork{``0},System.DateTime,System.Threading.CancellationToken)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="time" /> </summary>
+            <param name="work"> Work instance </param>
+            <param name="time"> Scheduled time </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
+            <returns> Wrapper and work result task </returns>
+        </member>
+        <member name="M:AInq.Background.Wrappers.ScheduledWorkWrapperFactory.CreateScheduledWorkWrapper(AInq.Background.Tasks.IAsyncWork,System.DateTime,System.Threading.CancellationToken)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="time" /> </summary>
+            <param name="work"> Work instance </param>
+            <param name="time"> Scheduled time </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
+            <returns> Wrapper and work result task </returns>
+        </member>
+        <member name="M:AInq.Background.Wrappers.ScheduledWorkWrapperFactory.CreateScheduledWorkWrapper``1(AInq.Background.Tasks.IAsyncWork{``0},System.DateTime,System.Threading.CancellationToken)">
+            <summary> Create <see cref="T:AInq.Background.Wrappers.IScheduledTaskWrapper" /> for given <paramref name="work" /> scheduled to <paramref name="time" /> </summary>
+            <param name="work"> Work instance </param>
+            <param name="time"> Scheduled time </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
+            <returns> Wrapper and work result task </returns>
         </member>
     </members>
 </doc>
