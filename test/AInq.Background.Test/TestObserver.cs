@@ -17,7 +17,7 @@ using System;
 namespace AInq.Background.Test
 {
 
-public class TestObserver<T>: IObserver<T>
+public class TestObserver<T> : IObserver<T>
 {
     public void OnCompleted()
         => Console.WriteLine($"{DateTime.Now:T}\tObservation completed");

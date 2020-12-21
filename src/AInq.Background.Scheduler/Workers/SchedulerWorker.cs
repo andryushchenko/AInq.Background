@@ -90,10 +90,7 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
                 var timeout = _scheduler.GetNextTaskTime()?.ToLocalTime().Subtract(Beforehand).Subtract(DateTime.Now) ?? TimeSpan.MaxValue;
                 if (timeout < Beforehand)
                     continue;
-                await Task.WhenAny(Task.Delay(timeout < MaxTimeout
-                                      ? timeout
-                                      : MaxTimeout,
-                                  cancellation.Token),
+                await Task.WhenAny(Task.Delay(timeout < MaxTimeout ? timeout : MaxTimeout, cancellation.Token),
                               _scheduler.WaitForNewTaskAsync(cancellation.Token))
                           .ConfigureAwait(false);
             }

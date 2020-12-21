@@ -260,8 +260,8 @@ public static class ConveyorInjection
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyorMachineFactory" /> is NULL </exception>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
     public static IPriorityConveyor<TData, TResult> CreatePriorityConveyor<TData, TResult>(this IServiceCollection services,
-        Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFactory, ReuseStrategy strategy,
-        int maxParallelMachines = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
+        Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFactory, ReuseStrategy strategy, int maxParallelMachines = 1,
+        int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TData : notnull
     {
         if (conveyorMachineFactory == null)

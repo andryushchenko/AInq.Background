@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using AInq.Background.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,7 +22,8 @@ namespace AInq.Background.Helpers
 {
 
 /// <summary> Helper class for <see cref="IConveyor{TData,TResult}" /> and <see cref="IPriorityConveyor{TData,TResult}" /> </summary>
-public static class ConveyorHelper
+/// <remarks> <see cref="IConveyor{TData,TResult}" /> or <see cref="IPriorityConveyor{TData,TResult}" /> should be registered on host </remarks>
+public static class ConveyorServiceProviderHelper
 {
     /// <summary> Process data using registered conveyor with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -40,16 +42,9 @@ public static class ConveyorHelper
     public static Task<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, TData data, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TData : notnull
-    {
-        var service = (provider ?? throw new ArgumentNullException(nameof(provider))).GetService(typeof(IPriorityConveyor<TData, TResult>))
-                      ?? provider.GetService(typeof(IConveyor<TData, TResult>));
-        return service switch
-        {
-            IPriorityConveyor<TData, TResult> priorityConveyor => priorityConveyor.ProcessDataAsync(data, priority, cancellation, attemptsCount),
-            IConveyor<TData, TResult> conveyor => conveyor.ProcessDataAsync(data, cancellation, attemptsCount),
-            _ => throw new InvalidOperationException($"No Conveyor service for {typeof(TData)} -> {typeof(TResult)} found")
-        };
-    }
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityConveyor<TData, TResult>>()
+                                                                          ?.ProcessDataAsync(data, priority, cancellation, attemptsCount)
+           ?? provider.GetRequiredService<IConveyor<TData, TResult>>().ProcessDataAsync(data, cancellation, attemptsCount);
 }
 
 }

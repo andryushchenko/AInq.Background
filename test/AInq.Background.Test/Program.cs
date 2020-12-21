@@ -15,6 +15,7 @@
 using AInq.Background;
 using AInq.Background.Enumerable;
 using AInq.Background.Helpers;
+using AInq.Background.Interaction;
 using AInq.Background.Tasks;
 using AInq.Background.Test;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,76 +26,76 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-var host = new HostBuilder()
-           .ConfigureLogging(logging => logging.ClearProviders().AddDebug())
-           .ConfigureServices((context, services) =>
-           {
-               services.AddTransient<TestMachine>()
-                       .AddPriorityConveyor<int, int, TestMachine>(ReuseStrategy.Reuse, 3)
-                       .AddWorkScheduler()
-                       .AddWorkQueue()
-                       .AddStartupWork(WorkFactory.CreateWork(provider =>
-                       {
-                           provider.AddCronWork(WorkFactory.CreateWork(_ => DateTime.Now),
-                                       "0/10 * * * * *",
-                                       new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token)
-                                   .Subscribe(new TestObserver<DateTime>());
-                           for (var index = 1; index <= 10; index++)
-                               provider.ProcessDataAsync<int, int>(index, priority: 50 - index);
-                           provider.AddDelayedAsyncQueueWork(WorkFactory.CreateAsyncWork(async (serviceProvider, _) =>
-                               {
-                                   using var source = new CancellationTokenSource(TimeSpan.FromSeconds(6));
-                                   var tasks = Enumerable
-                                               .Range(1, 10)
-                                               .Select(index => serviceProvider.ProcessDataAsync<int, int>(index, source.Token))
-                                               .ToList();
-                                   try
-                                   {
-                                       await Task.WhenAll(tasks);
-                                   }
-                                   catch (Exception ex)
-                                   {
-                                       Console.WriteLine(ex);
-                                   }
-                                   foreach (var task in tasks)
-                                       Console.WriteLine(
-                                           $"{tasks.IndexOf(task) + 1}\t{(task.IsCompletedSuccessfully ? task.Result.ToString() : "Canceled")}");
-                               }),
-                               TimeSpan.FromSeconds(20));
-                           provider.AddDelayedAsyncWork(WorkFactory.CreateAsyncWork(async (serviceProvider, cancel) =>
-                               {
-                                   using var source = new CancellationTokenSource(TimeSpan.FromSeconds(3));
-                                   Console.WriteLine($"{DateTime.Now:T}\tDelayed start test");
-                                   _ = serviceProvider.EnqueueAsyncWork(
-                                       WorkFactory.CreateAsyncWork((_, token) => Task.Delay(TimeSpan.FromSeconds(8), token)),
-                                       cancel);
-                                   var test = serviceProvider.EnqueueWork(WorkFactory.CreateWork(_ => $"{DateTime.Now:T}\tDelayed work test"),
-                                       cancel);
-                                   try
-                                   {
-                                       await serviceProvider.EnqueueWork(WorkFactory.CreateWork(_ => true), source.Token);
-                                   }
-                                   catch (Exception)
-                                   {
-                                       Console.WriteLine($"{DateTime.Now:T}\tWork cancellation test");
-                                   }
-                                   Console.WriteLine(await test);
-                               }),
-                               TimeSpan.FromSeconds(30));
-                           provider.AddDelayedAsyncWork(WorkFactory.CreateAsyncWork(async (serviceProvider, cancel) =>
-                               {
-                                   await foreach (var result in serviceProvider.ProcessDataAsync<int, int>(
-                                       Enumerable.Range(1, 10).ToAsyncEnumerable(),
-                                       cancel))
-                                       Console.WriteLine($"{DateTime.Now:T}\tEnumerator test {result}");
-                               }),
-                               TimeSpan.FromSeconds(60));
-                       }));
-           })
-           .Build();
+var host = new HostBuilder().ConfigureLogging(logging => logging.ClearProviders().AddDebug())
+                            .ConfigureServices((context, services) =>
+                            {
+                                services.AddTransient<TestMachine>()
+                                        .AddPriorityConveyor<int, int, TestMachine>(ReuseStrategy.Reuse, 3)
+                                        .AddWorkScheduler()
+                                        .AddWorkQueue()
+                                        .AddStartupWork(WorkFactory.CreateWork(provider =>
+                                        {
+                                            provider.AddCronWork(WorkFactory.CreateWork(_ => DateTime.Now),
+                                                        "0/10 * * * * *",
+                                                        new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token)
+                                                    .Subscribe(new TestObserver<DateTime>());
+                                            for (var index = 1; index <= 10; index++)
+                                                provider.ProcessDataAsync<int, int>(index, priority: 50 + index);
+                                            provider.AddScheduledAsyncQueueWork(WorkFactory.CreateAsyncWork(async (serviceProvider, _) =>
+                                                {
+                                                    using var source = new CancellationTokenSource(TimeSpan.FromSeconds(6));
+                                                    var tasks = Enumerable.Range(1, 10)
+                                                                          .Select(index => serviceProvider.ProcessDataAsync<int, int>(index,
+                                                                              source.Token))
+                                                                          .ToList();
+                                                    try
+                                                    {
+                                                        await Task.WhenAll(tasks);
+                                                    }
+                                                    catch (Exception ex)
+                                                    {
+                                                        Console.WriteLine(ex);
+                                                    }
+                                                    foreach (var task in tasks)
+                                                        Console.WriteLine(
+                                                            $"{tasks.IndexOf(task) + 1}\t{(task.IsCompletedSuccessfully ? task.Result.ToString() : "Canceled")}");
+                                                }),
+                                                TimeSpan.FromSeconds(20));
+                                            provider.AddScheduledAsyncWork(WorkFactory.CreateAsyncWork(async (serviceProvider, cancel) =>
+                                                {
+                                                    using var source = new CancellationTokenSource(TimeSpan.FromSeconds(3));
+                                                    Console.WriteLine($"{DateTime.Now:T}\tDelayed start test");
+                                                    _ = serviceProvider.EnqueueAsyncWork(
+                                                        WorkFactory.CreateAsyncWork((_, token) => Task.Delay(TimeSpan.FromSeconds(8), token)),
+                                                        cancel);
+                                                    var test = serviceProvider.EnqueueWork(
+                                                        WorkFactory.CreateWork(_ => $"{DateTime.Now:T}\tDelayed work test"),
+                                                        cancel);
+                                                    try
+                                                    {
+                                                        await serviceProvider.EnqueueWork(WorkFactory.CreateWork(_ => true), source.Token);
+                                                    }
+                                                    catch (Exception)
+                                                    {
+                                                        Console.WriteLine($"{DateTime.Now:T}\tWork cancellation test");
+                                                    }
+                                                    Console.WriteLine(await test);
+                                                }),
+                                                TimeSpan.FromSeconds(30));
+                                            provider.AddScheduledAsyncWork(WorkFactory.CreateAsyncWork(async (serviceProvider, cancel) =>
+                                                {
+                                                    await foreach (var result in serviceProvider.ProcessDataAsync<int, int>(
+                                                        Enumerable.Range(1, 10).ToAsyncEnumerable(),
+                                                        cancel))
+                                                        Console.WriteLine($"{DateTime.Now:T}\tEnumerator test {result}");
+                                                }),
+                                                TimeSpan.FromSeconds(60));
+                                        }));
+                            })
+                            .Build();
 var cancellation = new CancellationTokenSource();
 var work = host.DoStartupWork(cancellation.Token)
-               .ContinueWith(_=>Console.WriteLine($"{DateTime.Now}\t Starting host"))
+               .ContinueWith(_ => Console.WriteLine($"{DateTime.Now}\t Starting host"))
                .ContinueWith(async _ => await host.RunAsync(cancellation.Token), cancellation.Token);
 Console.ReadLine();
 cancellation.Cancel();

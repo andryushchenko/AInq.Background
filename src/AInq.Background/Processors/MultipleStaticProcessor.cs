@@ -37,9 +37,7 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
         _inactive = new ConcurrentBag<TArgument>(arguments);
         if (_inactive.IsEmpty)
             throw new ArgumentException("Empty collection", nameof(arguments));
-        _active = typeof(IStartStoppable).IsAssignableFrom(typeof(TArgument))
-            ? new ConcurrentBag<TArgument>()
-            : _inactive;
+        _active = typeof(IStartStoppable).IsAssignableFrom(typeof(TArgument)) ? new ConcurrentBag<TArgument>() : _inactive;
     }
 
     async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,

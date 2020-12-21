@@ -16,7 +16,6 @@ using AInq.Background.Helpers;
 using AInq.Background.Services;
 using AInq.Background.Tasks;
 using AInq.Background.Wrappers;
-using Microsoft.Extensions.DependencyInjection;
 using Nito.AsyncEx;
 using System;
 using System.Collections.Concurrent;
@@ -24,7 +23,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using static AInq.Background.Tasks.WorkFactory;
 using static AInq.Background.Wrappers.CronWorkWrapperFactory;
 using static AInq.Background.Wrappers.DelayedWorkWrapperFactory;
 
@@ -37,111 +35,11 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     private readonly AsyncAutoResetEvent _newWorkEvent = new(false);
     private ConcurrentBag<IScheduledTaskWrapper> _works = new();
 
-    Task IWorkScheduler.AddDelayedWork(IWork work, TimeSpan delay, CancellationToken cancellation)
-    {
-        var (wrapper, task) = CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            delay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
-                : delay,
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return task;
-    }
-
-    Task<TResult> IWorkScheduler.AddDelayedWork<TResult>(IWork<TResult> work, TimeSpan delay, CancellationToken cancellation)
-    {
-        var (wrapper, task) = CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            delay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
-                : delay,
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return task;
-    }
-
-    Task IWorkScheduler.AddDelayedAsyncWork(IAsyncWork work, TimeSpan delay, CancellationToken cancellation)
-    {
-        var (wrapper, task) = CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            delay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
-                : delay,
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return task;
-    }
-
-    Task<TResult> IWorkScheduler.AddDelayedAsyncWork<TResult>(IAsyncWork<TResult> work, TimeSpan delay, CancellationToken cancellation)
-    {
-        var (wrapper, task) = CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            delay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
-                : delay,
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return task;
-    }
-
-    Task IWorkScheduler.AddDelayedWork<TWork>(TimeSpan delay, CancellationToken cancellation)
-    {
-        var (wrapper, task) = CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            delay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
-                : delay,
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return task;
-    }
-
-    Task<TResult> IWorkScheduler.AddDelayedWork<TWork, TResult>(TimeSpan delay, CancellationToken cancellation)
-    {
-        var (wrapper, task) = CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            delay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
-                : delay,
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return task;
-    }
-
-    Task IWorkScheduler.AddDelayedAsyncWork<TAsyncWork>(TimeSpan delay, CancellationToken cancellation)
-    {
-        var (wrapper, task) = CreateDelayedWorkWrapper(
-            CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
-            delay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
-                : delay,
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return task;
-    }
-
-    Task<TResult> IWorkScheduler.AddDelayedAsyncWork<TAsyncWork, TResult>(TimeSpan delay, CancellationToken cancellation)
-    {
-        var (wrapper, task) = CreateDelayedWorkWrapper(
-            CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
-            delay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater then 00:00:00.000")
-                : delay,
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return task;
-    }
-
     Task IWorkScheduler.AddScheduledWork(IWork work, DateTime time, CancellationToken cancellation)
     {
         time = time.ToLocalTime();
         var (wrapper, task) = CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            time <= DateTime.Now
-                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
-                : time,
+            time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time") : time,
             cancellation);
         _works.Add(wrapper);
         _newWorkEvent.Set();
@@ -152,9 +50,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     {
         time = time.ToLocalTime();
         var (wrapper, task) = CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            time <= DateTime.Now
-                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
-                : time,
+            time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time") : time,
             cancellation);
         _works.Add(wrapper);
         _newWorkEvent.Set();
@@ -165,9 +61,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     {
         time = time.ToLocalTime();
         var (wrapper, task) = CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            time <= DateTime.Now
-                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
-                : time,
+            time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time") : time,
             cancellation);
         _works.Add(wrapper);
         _newWorkEvent.Set();
@@ -178,150 +72,74 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     {
         time = time.ToLocalTime();
         var (wrapper, task) = CreateDelayedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            time <= DateTime.Now
-                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
-                : time,
+            time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time") : time,
             cancellation);
         _works.Add(wrapper);
         _newWorkEvent.Set();
         return task;
     }
 
-    Task IWorkScheduler.AddScheduledWork<TWork>(DateTime time, CancellationToken cancellation)
-    {
-        time = time.ToLocalTime();
-        var (wrapper, task) = CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            time <= DateTime.Now
-                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
-                : time,
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return task;
-    }
-
-    Task<TResult> IWorkScheduler.AddScheduledWork<TWork, TResult>(DateTime time, CancellationToken cancellation)
-    {
-        time = time.ToLocalTime();
-        var (wrapper, task) = CreateDelayedWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            time <= DateTime.Now
-                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
-                : time,
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return task;
-    }
-
-    Task IWorkScheduler.AddScheduledAsyncWork<TAsyncWork>(DateTime time, CancellationToken cancellation)
-    {
-        time = time.ToLocalTime();
-        var (wrapper, task) = CreateDelayedWorkWrapper(
-            CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
-            time <= DateTime.Now
-                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
-                : time,
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return task;
-    }
-
-    Task<TResult> IWorkScheduler.AddScheduledAsyncWork<TAsyncWork, TResult>(DateTime time, CancellationToken cancellation)
-    {
-        time = time.ToLocalTime();
-        var (wrapper, task) = CreateDelayedWorkWrapper(
-            CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
-            time <= DateTime.Now
-                ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time")
-                : time,
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return task;
-    }
-
-    IObservable<bool> IWorkScheduler.AddCronWork(IWork work, string cronExpression, CancellationToken cancellation)
+    IObservable<object?> IWorkScheduler.AddCronWork(IWork work, string cronExpression, CancellationToken cancellation, int execCount)
     {
         var (wrapper, observable) = CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             cronExpression.ParseCron(),
-            cancellation);
+            cancellation,
+            execCount);
         _works.Add(wrapper);
         _newWorkEvent.Set();
         return observable;
     }
 
-    IObservable<TResult> IWorkScheduler.AddCronWork<TResult>(IWork<TResult> work, string cronExpression, CancellationToken cancellation)
+    IObservable<TResult> IWorkScheduler.AddCronWork<TResult>(IWork<TResult> work, string cronExpression, CancellationToken cancellation,
+        int execCount)
     {
         var (wrapper, observable) = CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
-            cancellation);
+            cancellation,
+            execCount);
         _works.Add(wrapper);
         _newWorkEvent.Set();
         return observable;
     }
 
-    IObservable<bool> IWorkScheduler.AddCronAsyncWork(IAsyncWork work, string cronExpression, CancellationToken cancellation)
+    IObservable<object?> IWorkScheduler.AddCronAsyncWork(IAsyncWork work, string cronExpression, CancellationToken cancellation, int execCount)
     {
         var (wrapper, observable) = CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
-            cancellation);
+            cancellation,
+            execCount);
         _works.Add(wrapper);
         _newWorkEvent.Set();
         return observable;
     }
 
-    IObservable<TResult> IWorkScheduler.AddCronAsyncWork<TResult>(IAsyncWork<TResult> work, string cronExpression, CancellationToken cancellation)
+    IObservable<TResult> IWorkScheduler.AddCronAsyncWork<TResult>(IAsyncWork<TResult> work, string cronExpression, CancellationToken cancellation,
+        int execCount)
     {
         var (wrapper, observable) = CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
-            cancellation);
+            cancellation,
+            execCount);
         _works.Add(wrapper);
         _newWorkEvent.Set();
         return observable;
     }
 
-    IObservable<bool> IWorkScheduler.AddCronWork<TWork>(string cronExpression, CancellationToken cancellation)
-    {
-        var (wrapper, observable) = CreateCronWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return observable;
-    }
+    IObservable<object?> IWorkScheduler.AddRepeatedWork(IWork work, DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation,
+        int execCount)
+        => throw new NotImplementedException();
 
-    IObservable<TResult> IWorkScheduler.AddCronWork<TWork, TResult>(string cronExpression, CancellationToken cancellation)
-    {
-        var (wrapper, observable) = CreateCronWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
-            (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return observable;
-    }
+    IObservable<TResult> IWorkScheduler.AddRepeatedWork<TResult>(IWork<TResult> work, DateTime starTime, TimeSpan repeatDelay,
+        CancellationToken cancellation, int execCount)
+        => throw new NotImplementedException();
 
-    IObservable<bool> IWorkScheduler.AddCronAsyncWork<TAsyncWork>(string cronExpression, CancellationToken cancellation)
-    {
-        var (wrapper, observable) = CreateCronWorkWrapper(
-            CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
-            (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return observable;
-    }
+    IObservable<object?> IWorkScheduler.AddRepeatedAsyncWork(IAsyncWork work, DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation,
+        int execCount)
+        => throw new NotImplementedException();
 
-    IObservable<TResult> IWorkScheduler.AddCronAsyncWork<TAsyncWork, TResult>(string cronExpression, CancellationToken cancellation)
-    {
-        var (wrapper, observable) = CreateCronWorkWrapper(
-            CreateAsyncWork((provider, token) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token)),
-            (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
-            cancellation);
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return observable;
-    }
+    IObservable<TResult> IWorkScheduler.AddRepeatedAsyncWork<TResult>(IAsyncWork<TResult> work, DateTime starTime, TimeSpan repeatDelay,
+        CancellationToken cancellation, int execCount)
+        => throw new NotImplementedException();
 
     Task IWorkSchedulerManager.WaitForNewTaskAsync(CancellationToken cancellation)
         => _newWorkEvent.WaitAsync(cancellation);

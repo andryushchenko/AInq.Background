@@ -32,8 +32,7 @@ public static class ConveyorDataWrapperFactory
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Wrapper and processing result task </returns>
     public static (ITaskWrapper<IConveyorMachine<TData, TResult>>, Task<TResult>) CreateConveyorDataWrapper<TData, TResult>(TData data,
-        int attemptsCount = 1,
-        CancellationToken cancellation = default)
+        int attemptsCount = 1, CancellationToken cancellation = default)
         where TData : notnull
     {
         var wrapper = new ConveyorDataWrapper<TData, TResult>(data, Math.Max(1, attemptsCount), cancellation);
@@ -63,8 +62,7 @@ public static class ConveyorDataWrapperFactory
         bool ITaskWrapper<IConveyorMachine<TData, TResult>>.IsFaulted => _completion.Task.IsFaulted;
 
         async Task<bool> ITaskWrapper<IConveyorMachine<TData, TResult>>.ExecuteAsync(IConveyorMachine<TData, TResult> argument,
-            IServiceProvider provider,
-            ILogger? logger, CancellationToken cancellation)
+            IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
         {
             if (_attemptsRemain < 1)
             {

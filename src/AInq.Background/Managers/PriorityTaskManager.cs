@@ -46,15 +46,13 @@ public class PriorityTaskManager<TArgument> : ITaskManager<TArgument, int>
     bool ITaskManager<TArgument, int>.HasTask => _queues.Any(queue => !queue.IsEmpty);
 
     Task ITaskManager<TArgument, int>.WaitForTaskAsync(CancellationToken cancellation)
-        => _queues.Any(queue => !queue.IsEmpty)
-            ? Task.CompletedTask
-            : _newDataEvent.WaitAsync(cancellation);
+        => _queues.Any(queue => !queue.IsEmpty) ? Task.CompletedTask : _newDataEvent.WaitAsync(cancellation);
 
     (ITaskWrapper<TArgument>?, int) ITaskManager<TArgument, int>.GetTask()
     {
         while (true)
         {
-            var pendingQueue = _queues.FirstOrDefault(queue => !queue.IsEmpty);
+            var pendingQueue = _queues.LastOrDefault(queue => !queue.IsEmpty);
             if (pendingQueue == null || !pendingQueue.TryDequeue(out var task))
                 return (null, -1);
             if (!task.IsCanceled)

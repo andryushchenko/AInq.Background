@@ -21,7 +21,7 @@ namespace AInq.Background.Wrappers
 
 internal class Observable<TResult> : IObservable<TResult>
 {
-    private readonly IList<IObserver<TResult>> _observers= new List<IObserver<TResult>>();
+    private readonly IList<IObserver<TResult>> _observers = new List<IObserver<TResult>>();
 
     public IDisposable Subscribe(IObserver<TResult> observer)
     {

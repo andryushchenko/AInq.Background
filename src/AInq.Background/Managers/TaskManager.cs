@@ -32,9 +32,7 @@ public class TaskManager<TArgument> : ITaskManager<TArgument, object?>
     bool ITaskManager<TArgument, object?>.HasTask => !_queue.IsEmpty;
 
     Task ITaskManager<TArgument, object?>.WaitForTaskAsync(CancellationToken cancellation)
-        => _queue.IsEmpty
-            ? _newDataEvent.WaitAsync(cancellation)
-            : Task.CompletedTask;
+        => _queue.IsEmpty ? _newDataEvent.WaitAsync(cancellation) : Task.CompletedTask;
 
     (ITaskWrapper<TArgument>?, object?) ITaskManager<TArgument, object?>.GetTask()
     {

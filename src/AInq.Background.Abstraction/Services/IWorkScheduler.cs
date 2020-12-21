@@ -23,82 +23,6 @@ namespace AInq.Background.Services
 /// <summary> Interface for work scheduler service </summary>
 public interface IWorkScheduler
 {
-    /// <summary> Add delayed work to scheduler </summary>
-    /// <param name="work"> Work instance </param>
-    /// <param name="delay"> Work execution delay </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-    Task AddDelayedWork(IWork work, TimeSpan delay, CancellationToken cancellation = default);
-
-    /// <summary> Add delayed work to scheduler </summary>
-    /// <param name="work"> Work instance </param>
-    /// <param name="delay"> Work execution delay </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-    Task<TResult> AddDelayedWork<TResult>(IWork<TResult> work, TimeSpan delay, CancellationToken cancellation = default);
-
-    /// <summary> Add delayed asynchronous work to scheduler </summary>
-    /// <param name="work"> Work instance </param>
-    /// <param name="delay"> Work execution delay </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-    Task AddDelayedAsyncWork(IAsyncWork work, TimeSpan delay, CancellationToken cancellation = default);
-
-    /// <summary> Add delayed asynchronous work to scheduler </summary>
-    /// <param name="work"> Work instance </param>
-    /// <param name="delay"> Work execution delay </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-    Task<TResult> AddDelayedAsyncWork<TResult>(IAsyncWork<TResult> work, TimeSpan delay, CancellationToken cancellation = default);
-
-    /// <summary> Add delayed work to scheduler </summary>
-    /// <param name="delay"> Work execution delay </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <typeparam name="TWork"> Work type </typeparam>
-    /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-    Task AddDelayedWork<TWork>(TimeSpan delay, CancellationToken cancellation = default)
-        where TWork : IWork;
-
-    /// <summary> Add delayed work to scheduler </summary>
-    /// <param name="delay"> Work execution delay </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <typeparam name="TWork"> Work type </typeparam>
-    /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-    Task<TResult> AddDelayedWork<TWork, TResult>(TimeSpan delay, CancellationToken cancellation = default)
-        where TWork : IWork<TResult>;
-
-    /// <summary> Add delayed asynchronous work to scheduler </summary>
-    /// <param name="delay"> Work execution delay </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <typeparam name="TAsyncWork"> Work type </typeparam>
-    /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-    Task AddDelayedAsyncWork<TAsyncWork>(TimeSpan delay, CancellationToken cancellation = default)
-        where TAsyncWork : IAsyncWork;
-
-    /// <summary> Add delayed asynchronous work to scheduler </summary>
-    /// <param name="delay"> Work execution delay </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <typeparam name="TAsyncWork"> Work type </typeparam>
-    /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
-    Task<TResult> AddDelayedAsyncWork<TAsyncWork, TResult>(TimeSpan delay, CancellationToken cancellation = default)
-        where TAsyncWork : IAsyncWork<TResult>;
-
     /// <summary> Add scheduled work to scheduler </summary>
     /// <param name="work"> Work instance </param>
     /// <param name="time"> Work execution time </param>
@@ -137,123 +61,99 @@ public interface IWorkScheduler
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
     Task<TResult> AddScheduledAsyncWork<TResult>(IAsyncWork<TResult> work, DateTime time, CancellationToken cancellation = default);
 
-    /// <summary> Add scheduled work to scheduler </summary>
-    /// <param name="time"> Work execution time </param>
+    /// <summary> Add CRON-scheduled work to scheduler </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <typeparam name="TWork"> Work type </typeparam>
-    /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-    Task AddScheduledWork<TWork>(DateTime time, CancellationToken cancellation = default)
-        where TWork : IWork;
-
-    /// <summary> Add scheduled work to scheduler </summary>
-    /// <param name="time"> Work execution time </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <typeparam name="TWork"> Work type </typeparam>
-    /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-    Task<TResult> AddScheduledWork<TWork, TResult>(DateTime time, CancellationToken cancellation = default)
-        where TWork : IWork<TResult>;
-
-    /// <summary> Add scheduled asynchronous work to scheduler </summary>
-    /// <param name="time"> Work execution time </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <typeparam name="TAsyncWork"> Work type </typeparam>
-    /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-    Task AddScheduledAsyncWork<TAsyncWork>(DateTime time, CancellationToken cancellation = default)
-        where TAsyncWork : IAsyncWork;
-
-    /// <summary> Add scheduled asynchronous work to scheduler </summary>
-    /// <param name="time"> Work execution time </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <typeparam name="TAsyncWork"> Work type </typeparam>
-    /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
-    Task<TResult> AddScheduledAsyncWork<TAsyncWork, TResult>(DateTime time, CancellationToken cancellation = default)
-        where TAsyncWork : IAsyncWork<TResult>;
+    /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
+    /// <returns> Work result observable </returns>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
+    /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+    IObservable<object?> AddCronWork(IWork work, string cronExpression, CancellationToken cancellation = default, int execCount = -1);
 
     /// <summary> Add CRON-scheduled work to scheduler </summary>
     /// <param name="work"> Work instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
-    /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-    IObservable<bool> AddCronWork(IWork work, string cronExpression, CancellationToken cancellation = default);
-
-    /// <summary> Add CRON-scheduled work to scheduler </summary>
-    /// <param name="work"> Work instance </param>
-    /// <param name="cronExpression"> Work CRON-based execution schedule </param>
-    /// <param name="cancellation"> Work cancellation token </param>
+    /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-    IObservable<TResult> AddCronWork<TResult>(IWork<TResult> work, string cronExpression, CancellationToken cancellation = default);
+    IObservable<TResult> AddCronWork<TResult>(IWork<TResult> work, string cronExpression, CancellationToken cancellation = default,
+        int execCount = -1);
 
     /// <summary> Add CRON-scheduled asynchronous work to scheduler </summary>
     /// <param name="work"> Work instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
+    /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-    IObservable<bool> AddCronAsyncWork(IAsyncWork work, string cronExpression, CancellationToken cancellation = default);
+    IObservable<object?> AddCronAsyncWork(IAsyncWork work, string cronExpression, CancellationToken cancellation = default, int execCount = -1);
 
     /// <summary> Add CRON-scheduled asynchronous work to scheduler </summary>
     /// <param name="work"> Work instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
     /// <param name="cancellation"> Work cancellation token </param>
+    /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-    IObservable<TResult> AddCronAsyncWork<TResult>(IAsyncWork<TResult> work, string cronExpression, CancellationToken cancellation = default);
+    IObservable<TResult> AddCronAsyncWork<TResult>(IAsyncWork<TResult> work, string cronExpression, CancellationToken cancellation = default,
+        int execCount = -1);
 
-    /// <summary> Add CRON-scheduled work to scheduler </summary>
-    /// <param name="cronExpression"> Work CRON-based execution schedule </param>
+    /// <summary> Add repeated work to scheduler </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="starTime"> Work first execution time </param>
+    /// <param name="repeatDelay"> Work repeat delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <typeparam name="TWork"> Work type </typeparam>
+    /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
-    /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-    IObservable<bool> AddCronWork<TWork>(string cronExpression, CancellationToken cancellation = default)
-        where TWork : IWork;
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00 </exception>
+    IObservable<object?> AddRepeatedWork(IWork work, DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default,
+        int execCount = -1);
 
-    /// <summary> Add CRON-scheduled work to scheduler </summary>
-    /// <param name="cronExpression"> Work CRON-based execution schedule </param>
+    /// <summary> Add repeated work to scheduler </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="starTime"> Work first execution time </param>
+    /// <param name="repeatDelay"> Work repeat delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <typeparam name="TWork"> Work type </typeparam>
+    /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
-    /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-    IObservable<TResult> AddCronWork<TWork, TResult>(string cronExpression, CancellationToken cancellation = default)
-        where TWork : IWork<TResult>;
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00 </exception>
+    IObservable<TResult> AddRepeatedWork<TResult>(IWork<TResult> work, DateTime starTime, TimeSpan repeatDelay,
+        CancellationToken cancellation = default, int execCount = -1);
 
-    /// <summary> Add CRON-scheduled asynchronous work to scheduler </summary>
-    /// <param name="cronExpression"> Work CRON-based execution schedule </param>
+    /// <summary> Add repeated asynchronous work to scheduler </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="starTime"> Work first execution time </param>
+    /// <param name="repeatDelay"> Work repeat delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <typeparam name="TAsyncWork"> Work type </typeparam>
+    /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
-    /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-    IObservable<bool> AddCronAsyncWork<TAsyncWork>(string cronExpression, CancellationToken cancellation = default)
-        where TAsyncWork : IAsyncWork;
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00 </exception>
+    IObservable<object?> AddRepeatedAsyncWork(IAsyncWork work, DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default,
+        int execCount = -1);
 
-    /// <summary> Add CRON-scheduled asynchronous work to scheduler </summary>
-    /// <param name="cronExpression"> Work CRON-based execution schedule </param>
+    /// <summary> Add repeated asynchronous work to scheduler </summary>
+    /// <param name="work"> Work instance </param>
+    /// <param name="starTime"> Work first execution time </param>
+    /// <param name="repeatDelay"> Work repeat delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <typeparam name="TAsyncWork"> Work type </typeparam>
+    /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> is NULL </exception>
-    /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
-    IObservable<TResult> AddCronAsyncWork<TAsyncWork, TResult>(string cronExpression, CancellationToken cancellation = default)
-        where TAsyncWork : IAsyncWork<TResult>;
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00 </exception>
+    IObservable<TResult> AddRepeatedAsyncWork<TResult>(IAsyncWork<TResult> work, DateTime starTime, TimeSpan repeatDelay,
+        CancellationToken cancellation = default, int execCount = -1);
 }
 
 }
