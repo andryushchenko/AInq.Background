@@ -18,8 +18,9 @@
     <PackageTags>Background;Queue;Conveyor;AInq;Enumerable;LINQ</PackageTags>
     <Description>
       Background work utilities for .NET Core apps based on Hosted services.
-      Enumerable extension for background work queue, access queue and data coveyor.
+      Batch processing extension for background work queue, access queue and data coveyor.
     </Description>
+    <PackageReleaseNotes>General bug fix and improvements. See README for details.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -30,7 +31,6 @@
     <PackageReference Include="System.Threading.Channels" Version="5.0.0" />
   </ItemGroup>
 
-  <!-- ReSharper disable once UnknownProperty -->
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />
   </ItemGroup>

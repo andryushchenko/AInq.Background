@@ -21,6 +21,7 @@
       Background work utilities for .NET Core apps based on Hosted services.
       Background work scheduler with cron.
     </Description>
+    <PackageReleaseNotes>General bug fix and improvements. See README for details.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
