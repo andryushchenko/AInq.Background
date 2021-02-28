@@ -76,10 +76,7 @@ public sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposab
             try
             {
                 while (_manager.HasTask && !cancellation.IsCancellationRequested)
-                {
-                    using var scope = _provider.CreateScope();
-                    await _processor.ProcessPendingTasksAsync(_manager, scope.ServiceProvider, _logger, cancellation.Token).ConfigureAwait(false);
-                }
+                    await _processor.ProcessPendingTasksAsync(_manager, _provider, _logger, cancellation.Token).ConfigureAwait(false);
                 await _manager.WaitForTaskAsync(cancellation.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
