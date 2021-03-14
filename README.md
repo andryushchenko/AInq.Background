@@ -12,6 +12,13 @@ Background work utilities for .NET Core apps based on Hosted services. Originall
 - **Work scheduler** with Cron support
 - **Startup work** utility
 
+## New in 4.0
+
+- **BREAKING CHANGES**
+  - Background work Scheduler interfaces moved to separate package **AInq.Background.Scheduler.Abstraction**
+  - Background work Scheduler now uses `Try` and `Maybe` from **AInq.Optional** to pass errors logically correct to Observable
+- Background work Scheduler now uses **System.Reactive** instead of custom buggy `IObservable<T>` implementation
+
 ## New in 3.0
 
 - **GENERAL BUGFIX**
@@ -45,7 +52,6 @@ Basic interfaces and helpers library.
   - `IWorkQueue` and `IPriorityWorkQueue` for background task queue
   - `IAccessQueue<TResource>` and `IPriorityAccessQueue<TResource>` for shared resource access queue
   - `IConveyor<TData, TResult>` and `IPriorityConveyor<TData, TResult>` for background data processing conveyor
-  - `IWorkScheduler` for background work scheduler
 - Helpers and extensions including methods to use services together (eg. enqueue `IAccess<TResource>` to `IWorkQueue`) if needed
 
 #### [![Nuget](https://img.shields.io/nuget/v/AInq.Background)](https://www.nuget.org/packages/AInq.Background/) AInq.Background
@@ -69,6 +75,14 @@ Queues and conveyor implementations.
   - Use `StartupWorkInjection` to register and run works
 
 You can extend functionality by implementing custom `ITaskWrapper`, `ITaskManager` or `ITaskProcessor` and combine with existing ones to create more service variants. 
+
+#### [![Nuget](https://img.shields.io/nuget/v/AInq.Background.Scheduler.Abstraction)](https://www.nuget.org/packages/AInq.Background.Scheduler.Abstraction/) AInq.Background.Scheduler.Abstraction
+
+Work scheduler interfaces and helpers library.
+
+- Service interfaces
+  - `IWorkScheduler` for background work scheduler
+- Helpers and extensions including methods to use services together (eg. schedule `IAccess<TResource>` to `IWorkScheduler`) if needed
 
 #### [![Nuget](https://img.shields.io/nuget/v/AInq.Background.Scheduler)](https://www.nuget.org/packages/AInq.Background.Scheduler/) AInq.Background.Scheduler
 

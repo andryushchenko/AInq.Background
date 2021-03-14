@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Optional;
 using System;
 
 namespace AInq.Background.Test
 {
 
-public class TestObserver<T> : IObserver<T>
+public class TestObserver<T> : IObserver<Try<T>>
 {
     public void OnCompleted()
         => Console.WriteLine($"{DateTime.Now:T}\tObservation completed");
@@ -25,8 +26,8 @@ public class TestObserver<T> : IObserver<T>
     public void OnError(Exception error)
         => Console.WriteLine($"{DateTime.Now:T}\tObservation error\t{error}");
 
-    public void OnNext(T value)
-        => Console.WriteLine($"{DateTime.Now:T}\tObservation test\t{value}");
+    public void OnNext(Try<T> value)
+        => Console.WriteLine($"{DateTime.Now:T}\tObservation test\t{(value.Success?$"Result {value.Value}":$"Error {value.Error}")}");
 }
 
 }

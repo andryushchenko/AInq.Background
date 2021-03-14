@@ -13,8 +13,10 @@
 // limitations under the License.
 
 using AInq.Background.Tasks;
+using AInq.Optional;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,7 +38,7 @@ public static class RepeatedWorkWrapperFactory
     ///     <paramref name="execCount" /> is 0 or less then -1
     /// </exception>
     /// <returns> Wrapper and work result observable </returns>
-    public static (IScheduledTaskWrapper, IObservable<object?>) CreateRepeatedWorkWrapper(IWork work, DateTime startTime, TimeSpan repeatDelay,
+    public static (IScheduledTaskWrapper, IObservable<Maybe<Exception>>) CreateRepeatedWorkWrapper(IWork work, DateTime startTime, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1)
     {
         startTime = startTime.ToLocalTime();
@@ -65,7 +67,7 @@ public static class RepeatedWorkWrapperFactory
     ///     <paramref name="execCount" /> is 0 or less then -1
     /// </exception>
     /// <returns> Wrapper and work result observable </returns>
-    public static (IScheduledTaskWrapper, IObservable<TResult>) CreateRepeatedWorkWrapper<TResult>(IWork<TResult> work, DateTime startTime,
+    public static (IScheduledTaskWrapper, IObservable<Try<TResult>>) CreateRepeatedWorkWrapper<TResult>(IWork<TResult> work, DateTime startTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
     {
         startTime = startTime.ToLocalTime();
@@ -93,7 +95,7 @@ public static class RepeatedWorkWrapperFactory
     ///     <paramref name="execCount" /> is 0 or less then -1
     /// </exception>
     /// <returns> Wrapper and work result observable </returns>
-    public static (IScheduledTaskWrapper, IObservable<object?>) CreateRepeatedWorkWrapper(IAsyncWork work, DateTime startTime, TimeSpan repeatDelay,
+    public static (IScheduledTaskWrapper, IObservable<Maybe<Exception>>) CreateRepeatedWorkWrapper(IAsyncWork work, DateTime startTime, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1)
     {
         startTime = startTime.ToLocalTime();
@@ -122,7 +124,7 @@ public static class RepeatedWorkWrapperFactory
     ///     <paramref name="execCount" /> is 0 or less then -1
     /// </exception>
     /// <returns> Wrapper and work result observable </returns>
-    public static (IScheduledTaskWrapper, IObservable<TResult>) CreateRepeatedWorkWrapper<TResult>(IAsyncWork<TResult> work, DateTime startTime,
+    public static (IScheduledTaskWrapper, IObservable<Try<TResult>>) CreateRepeatedWorkWrapper<TResult>(IAsyncWork<TResult> work, DateTime startTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
     {
         startTime = startTime.ToLocalTime();
@@ -141,7 +143,7 @@ public static class RepeatedWorkWrapperFactory
     private class RepeatedTaskWrapper : IScheduledTaskWrapper
     {
         private readonly CancellationToken _innerCancellation;
-        private readonly Observable<object?> _observable = new();
+        private readonly Subject<Maybe<Exception>> _subject = new();
         private readonly TimeSpan _repeatDelay;
         private readonly IWork _work;
         private CancellationTokenRegistration _cancellationRegistration;
@@ -156,10 +158,10 @@ public static class RepeatedWorkWrapperFactory
             _repeatDelay = repeatDelay;
             while (_nextScheduledTime < DateTime.Now) _nextScheduledTime += _repeatDelay;
             _execCount = execCount;
-            _cancellationRegistration = _innerCancellation.Register(() => _observable.Complete(), false);
+            _cancellationRegistration = _innerCancellation.Register(() => _subject.OnCompleted(), false);
         }
 
-        internal IObservable<object?> WorkObservable => _observable;
+        internal IObservable<Maybe<Exception>> WorkObservable => _subject;
 
         DateTime? IScheduledTaskWrapper.NextScheduledTime
             => _innerCancellation.IsCancellationRequested || _execCount == 0 ? null : _nextScheduledTime;
@@ -173,7 +175,7 @@ public static class RepeatedWorkWrapperFactory
                 outerCancellation.ThrowIfCancellationRequested();
                 _innerCancellation.ThrowIfCancellationRequested();
                 _work.DoWork(provider);
-                _observable.Next(null);
+                _subject.OnNext(Maybe.None<Exception>());
                 _nextScheduledTime += _repeatDelay;
                 if (_execCount != -1) _execCount--;
             }
@@ -185,13 +187,13 @@ public static class RepeatedWorkWrapperFactory
             catch (Exception ex)
             {
                 logger?.LogError(ex, "Error processing scheduled task {0}", _work);
-                _observable.Error(ex);
+                _subject.OnNext(Maybe.Value(ex));
                 _nextScheduledTime += _repeatDelay;
                 if (_execCount != -1) _execCount--;
             }
             if (_execCount != 0)
                 return Task.FromResult(true);
-            _observable.Complete();
+            _subject.OnCompleted();
             _cancellationRegistration.Dispose();
             _cancellationRegistration = default;
             return Task.FromResult(false);
@@ -201,7 +203,7 @@ public static class RepeatedWorkWrapperFactory
     private class RepeatedTaskWrapper<TResult> : IScheduledTaskWrapper
     {
         private readonly CancellationToken _innerCancellation;
-        private readonly Observable<TResult> _observable = new();
+        private readonly Subject<Try<TResult>> _subject = new();
         private readonly TimeSpan _repeatDelay;
         private readonly IWork<TResult> _work;
         private CancellationTokenRegistration _cancellationRegistration;
@@ -217,10 +219,10 @@ public static class RepeatedWorkWrapperFactory
             _repeatDelay = repeatDelay;
             while (_nextScheduledTime < DateTime.Now) _nextScheduledTime += _repeatDelay;
             _execCount = execCount;
-            _cancellationRegistration = _innerCancellation.Register(() => _observable.Complete(), false);
+            _cancellationRegistration = _innerCancellation.Register(() => _subject.OnCompleted(), false);
         }
 
-        internal IObservable<TResult> WorkObservable => _observable;
+        internal IObservable<Try<TResult>> WorkObservable => _subject;
 
         DateTime? IScheduledTaskWrapper.NextScheduledTime
             => _innerCancellation.IsCancellationRequested || _execCount == 0 ? null : _nextScheduledTime;
@@ -233,7 +235,8 @@ public static class RepeatedWorkWrapperFactory
             {
                 outerCancellation.ThrowIfCancellationRequested();
                 _innerCancellation.ThrowIfCancellationRequested();
-                _observable.Next(_work.DoWork(provider));
+                var result = _work.DoWork(provider);
+                _subject.OnNext(Try.Value(result));
                 _nextScheduledTime += _repeatDelay;
                 if (_execCount != -1) _execCount--;
             }
@@ -245,13 +248,13 @@ public static class RepeatedWorkWrapperFactory
             catch (Exception ex)
             {
                 logger?.LogError(ex, "Error processing scheduled task {0}", _work);
-                _observable.Error(ex);
+                _subject.OnNext(Try.Error<TResult>(ex));
                 _nextScheduledTime += _repeatDelay;
                 if (_execCount != -1) _execCount--;
             }
             if (_execCount != 0)
                 return Task.FromResult(true);
-            _observable.Complete();
+            _subject.OnCompleted();
             _cancellationRegistration.Dispose();
             _cancellationRegistration = default;
             return Task.FromResult(false);
@@ -261,7 +264,7 @@ public static class RepeatedWorkWrapperFactory
     private class RepeatedAsyncTaskWrapper : IScheduledTaskWrapper
     {
         private readonly CancellationToken _innerCancellation;
-        private readonly Observable<object?> _observable = new();
+        private readonly Subject<Maybe<Exception>> _subject = new();
         private readonly TimeSpan _repeatDelay;
         private readonly IAsyncWork _work;
         private CancellationTokenRegistration _cancellationRegistration;
@@ -277,10 +280,10 @@ public static class RepeatedWorkWrapperFactory
             _repeatDelay = repeatDelay;
             while (_nextScheduledTime < DateTime.Now) _nextScheduledTime += _repeatDelay;
             _execCount = execCount;
-            _cancellationRegistration = _innerCancellation.Register(() => _observable.Complete(), false);
+            _cancellationRegistration = _innerCancellation.Register(() => _subject.OnCompleted(), false);
         }
 
-        internal IObservable<object?> WorkObservable => _observable;
+        internal IObservable<Maybe<Exception>> WorkObservable => _subject;
 
         DateTime? IScheduledTaskWrapper.NextScheduledTime
             => _innerCancellation.IsCancellationRequested || _execCount == 0 ? null : _nextScheduledTime;
@@ -294,7 +297,7 @@ public static class RepeatedWorkWrapperFactory
             {
                 aggregateCancellation.Token.ThrowIfCancellationRequested();
                 await _work.DoWorkAsync(provider, aggregateCancellation.Token);
-                _observable.Next(null);
+                _subject.OnNext(Maybe.None<Exception>());
                 _nextScheduledTime += _repeatDelay;
                 if (_execCount != -1) _execCount--;
             }
@@ -306,13 +309,13 @@ public static class RepeatedWorkWrapperFactory
             catch (Exception ex)
             {
                 logger?.LogError(ex, "Error processing scheduled task {0}", _work);
-                _observable.Error(ex);
+                _subject.OnNext(Maybe.Value(ex));
                 _nextScheduledTime += _repeatDelay;
                 if (_execCount != -1) _execCount--;
             }
             if (_execCount != 0)
                 return true;
-            _observable.Complete();
+            _subject.OnCompleted();
             _cancellationRegistration.Dispose();
             _cancellationRegistration = default;
             return false;
@@ -322,7 +325,7 @@ public static class RepeatedWorkWrapperFactory
     private class RepeatedAsyncTaskWrapper<TResult> : IScheduledTaskWrapper
     {
         private readonly CancellationToken _innerCancellation;
-        private readonly Observable<TResult> _observable = new();
+        private readonly Subject<Try<TResult>> _subject = new();
         private readonly TimeSpan _repeatDelay;
         private readonly IAsyncWork<TResult> _work;
         private CancellationTokenRegistration _cancellationRegistration;
@@ -338,10 +341,11 @@ public static class RepeatedWorkWrapperFactory
             _repeatDelay = repeatDelay;
             while (_nextScheduledTime < DateTime.Now) _nextScheduledTime += _repeatDelay;
             _execCount = execCount;
-            _cancellationRegistration = _innerCancellation.Register(() => _observable.Complete(), false);
+            _cancellationRegistration = _innerCancellation.Register(() => _subject.OnCompleted(), false);
         }
 
-        internal IObservable<TResult> WorkObservable => _observable;
+
+        internal IObservable<Try<TResult>> WorkObservable => _subject;
 
         DateTime? IScheduledTaskWrapper.NextScheduledTime
             => _innerCancellation.IsCancellationRequested || _execCount == 0 ? null : _nextScheduledTime;
@@ -354,7 +358,8 @@ public static class RepeatedWorkWrapperFactory
             try
             {
                 aggregateCancellation.Token.ThrowIfCancellationRequested();
-                _observable.Next(await _work.DoWorkAsync(provider, aggregateCancellation.Token));
+                var result = await _work.DoWorkAsync(provider, aggregateCancellation.Token);
+                _subject.OnNext(Try.Value(result));
                 _nextScheduledTime += _repeatDelay;
                 if (_execCount != -1) _execCount--;
             }
@@ -366,13 +371,13 @@ public static class RepeatedWorkWrapperFactory
             catch (Exception ex)
             {
                 logger?.LogError(ex, "Error processing scheduled task {0}", _work);
-                _observable.Error(ex);
+                _subject.OnNext(Try.Error<TResult>(ex));
                 _nextScheduledTime += _repeatDelay;
                 if (_execCount != -1) _execCount--;
             }
             if (_execCount != 0)
                 return true;
-            _observable.Complete();
+            _subject.OnCompleted();
             _cancellationRegistration.Dispose();
             _cancellationRegistration = default;
             return false;

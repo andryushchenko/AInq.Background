@@ -14,25 +14,23 @@
     <Version>4.0.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
+    <RootNamespace>AInq.Background</RootNamespace>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageTags>Background;Queue;Conveyor;AInq;Enumerable;LINQ</PackageTags>
+    <PackageTags>Background;Scheduler;AInq;DI</PackageTags>
     <Description>
       Background work utilities for .NET Core apps based on Hosted services.
-      Batch processing extension for background work queue, access queue and data coveyor.
+      Work scheduler interfaces and helpers.
     </Description>
-    <PackageReleaseNotes>Minor bug fix.</PackageReleaseNotes>
+    <PackageReleaseNotes>Split Scheduler interfaces.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>..\..\doc\AInq.Background.Enumerable.xml</DocumentationFile>
+    <DocumentationFile>..\..\doc\AInq.Background.Scheduler.Abstraction.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Threading.Channels" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />
+    <PackageReference Include="AInq.Optional" Version="1.0.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -11,17 +11,17 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-    <Version>3.0.0</Version>
+    <Version>4.0.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>AInq.Background</RootNamespace>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageTags>Background;Queue;Conveyor;Scheduler;AInq;DI</PackageTags>
+    <PackageTags>Background;Queue;Conveyor;AInq;DI</PackageTags>
     <Description>
       Background work utilities for .NET Core apps based on Hosted services.
       Basis interfaces and helpers.
     </Description>
-    <PackageReleaseNotes>General bug fix and improvements. See README for details.</PackageReleaseNotes>
+    <PackageReleaseNotes>Split Scheduler interfaces.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

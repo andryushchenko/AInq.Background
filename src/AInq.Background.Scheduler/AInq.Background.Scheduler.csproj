@@ -11,7 +11,7 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-    <Version>3.0.0</Version>
+    <Version>4.0.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>AInq.Background</RootNamespace>
@@ -21,7 +21,7 @@
       Background work utilities for .NET Core apps based on Hosted services.
       Background work scheduler with cron.
     </Description>
-    <PackageReleaseNotes>General bug fix and improvements. See README for details.</PackageReleaseNotes>
+    <PackageReleaseNotes>General improvement in Observable usage.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -33,10 +33,11 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
     <PackageReference Include="Nito.AsyncEx" Version="5.1.0" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AInq.Background.Abstraction\AInq.Background.Abstraction.csproj" />
+    <ProjectReference Include="..\AInq.Background.Scheduler.Abstraction\AInq.Background.Scheduler.Abstraction.csproj" />
   </ItemGroup>
 
 </Project>

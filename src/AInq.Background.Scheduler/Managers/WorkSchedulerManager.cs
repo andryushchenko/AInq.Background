@@ -16,6 +16,7 @@ using AInq.Background.Helpers;
 using AInq.Background.Services;
 using AInq.Background.Tasks;
 using AInq.Background.Wrappers;
+using AInq.Optional;
 using Nito.AsyncEx;
 using System;
 using System.Collections.Concurrent;
@@ -80,7 +81,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         return task;
     }
 
-    IObservable<object?> IWorkScheduler.AddCronWork(IWork work, string cronExpression, CancellationToken cancellation, int execCount)
+    IObservable<Maybe<Exception>> IWorkScheduler.AddCronWork(IWork work, string cronExpression, CancellationToken cancellation, int execCount)
     {
         var (wrapper, observable) = CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             cronExpression.ParseCron(),
@@ -93,7 +94,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         return observable;
     }
 
-    IObservable<TResult> IWorkScheduler.AddCronWork<TResult>(IWork<TResult> work, string cronExpression, CancellationToken cancellation,
+    IObservable<Try<TResult>> IWorkScheduler.AddCronWork<TResult>(IWork<TResult> work, string cronExpression, CancellationToken cancellation,
         int execCount)
     {
         var (wrapper, observable) = CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
@@ -107,7 +108,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         return observable;
     }
 
-    IObservable<object?> IWorkScheduler.AddCronAsyncWork(IAsyncWork work, string cronExpression, CancellationToken cancellation, int execCount)
+    IObservable<Maybe<Exception>> IWorkScheduler.AddCronAsyncWork(IAsyncWork work, string cronExpression, CancellationToken cancellation, int execCount)
     {
         var (wrapper, observable) = CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
@@ -120,7 +121,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         return observable;
     }
 
-    IObservable<TResult> IWorkScheduler.AddCronAsyncWork<TResult>(IAsyncWork<TResult> work, string cronExpression, CancellationToken cancellation,
+    IObservable<Try<TResult>> IWorkScheduler.AddCronAsyncWork<TResult>(IAsyncWork<TResult> work, string cronExpression, CancellationToken cancellation,
         int execCount)
     {
         var (wrapper, observable) = CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
@@ -134,7 +135,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         return observable;
     }
 
-    IObservable<object?> IWorkScheduler.AddRepeatedWork(IWork work, DateTime startTime, TimeSpan repeatDelay, CancellationToken cancellation,
+    IObservable<Maybe<Exception>> IWorkScheduler.AddRepeatedWork(IWork work, DateTime startTime, TimeSpan repeatDelay, CancellationToken cancellation,
         int execCount)
     {
         var (wrapper, observable) = CreateRepeatedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
@@ -151,7 +152,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         return observable;
     }
 
-    IObservable<TResult> IWorkScheduler.AddRepeatedWork<TResult>(IWork<TResult> work, DateTime startTime, TimeSpan repeatDelay,
+    IObservable<Try<TResult>> IWorkScheduler.AddRepeatedWork<TResult>(IWork<TResult> work, DateTime startTime, TimeSpan repeatDelay,
         CancellationToken cancellation, int execCount)
     {
         var (wrapper, observable) = CreateRepeatedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
@@ -168,7 +169,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         return observable;
     }
 
-    IObservable<object?> IWorkScheduler.AddRepeatedAsyncWork(IAsyncWork work, DateTime startTime, TimeSpan repeatDelay,
+    IObservable<Maybe<Exception>> IWorkScheduler.AddRepeatedAsyncWork(IAsyncWork work, DateTime startTime, TimeSpan repeatDelay,
         CancellationToken cancellation, int execCount)
     {
         var (wrapper, observable) = CreateRepeatedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
@@ -185,7 +186,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         return observable;
     }
 
-    IObservable<TResult> IWorkScheduler.AddRepeatedAsyncWork<TResult>(IAsyncWork<TResult> work, DateTime startTime, TimeSpan repeatDelay,
+    IObservable<Try<TResult>> IWorkScheduler.AddRepeatedAsyncWork<TResult>(IAsyncWork<TResult> work, DateTime startTime, TimeSpan repeatDelay,
         CancellationToken cancellation, int execCount)
     {
         var (wrapper, observable) = CreateRepeatedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
