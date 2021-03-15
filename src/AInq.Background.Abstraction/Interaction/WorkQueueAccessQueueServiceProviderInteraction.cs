@@ -22,7 +22,6 @@ using System.Threading.Tasks;
 namespace AInq.Background.Interaction
 {
 
-/// <summary> <see cref="IWorkScheduler" /> extensions to run scheduled access in registered background queue  </summary>
 /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
 /// <remarks>
 ///     <see cref="IPriorityAccessQueue{TResource}" /> or <see cref="IAccessQueue{TResource}" /> service should be registered on host to run queued

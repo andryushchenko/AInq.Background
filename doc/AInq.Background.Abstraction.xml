@@ -620,7 +620,6 @@
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="queue" /> is NULL </exception>
         </member>
         <member name="T:AInq.Background.Interaction.WorkQueueAccessQueueServiceProviderInteraction">
-            <summary> <see cref="!:IWorkScheduler" /> extensions to run scheduled access in registered background queue  </summary>
             <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
             <remarks>
                 <see cref="T:AInq.Background.Services.IPriorityAccessQueue`1" /> or <see cref="T:AInq.Background.Services.IAccessQueue`1" /> service should be registered on host to run queued
