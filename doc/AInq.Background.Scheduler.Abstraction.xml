@@ -59,7 +59,10 @@
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Extensions.WorkSchedulerDelayExtension.AddRepeatedWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32)">
             <summary> Add repeated work to scheduler </summary>
@@ -72,7 +75,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Extensions.WorkSchedulerDelayExtension.AddRepeatedAsyncWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32)">
             <summary> Add repeated asynchronous work to scheduler </summary>
@@ -84,7 +90,10 @@
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Extensions.WorkSchedulerDelayExtension.AddRepeatedAsyncWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32)">
             <summary> Add repeated asynchronous work to scheduler </summary>
@@ -97,7 +106,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="T:AInq.Background.Extensions.WorkSchedulerDependencyInjectionExtension">
             <summary> <see cref="T:AInq.Background.Services.IWorkScheduler" /> extensions to schedule work from DI </summary>
@@ -2420,7 +2432,8 @@
                 Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is
                 NULL
             </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2437,7 +2450,8 @@
                 Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is
                 NULL
             </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddCronAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2453,7 +2467,8 @@
                 Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is
                 NULL
             </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2470,7 +2485,8 @@
                 Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is
                 NULL
             </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2483,7 +2499,8 @@
             <typeparam name="TWork"> Work type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddCronQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2497,7 +2514,8 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2510,7 +2528,8 @@
             <typeparam name="TAsyncWork"> Work type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddCronAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add CRON-scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2524,7 +2543,8 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2538,7 +2558,10 @@
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2553,7 +2576,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2567,7 +2593,10 @@
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2582,7 +2611,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork``1(AInq.Background.Services.IWorkScheduler,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2596,7 +2628,10 @@
             <typeparam name="TWork"> Work type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork``2(AInq.Background.Services.IWorkScheduler,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2611,7 +2646,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2625,7 +2663,10 @@
             <typeparam name="TAsyncWork"> Work type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2640,7 +2681,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2654,7 +2698,10 @@
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2669,7 +2716,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2683,7 +2733,10 @@
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2698,7 +2751,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork``1(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2712,7 +2768,10 @@
             <typeparam name="TWork"> Work type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork``2(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2727,7 +2786,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2741,7 +2803,10 @@
             <typeparam name="TAsyncWork"> Work type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
             <summary> Add repeated queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
@@ -2756,7 +2821,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="T:AInq.Background.Interaction.WorkSchedulerWorkQueueServiceProviderInteraction">
             <summary> <see cref="T:AInq.Background.Services.IWorkScheduler" /> extensions to run scheduled work in registered background queue  </summary>
@@ -3019,7 +3087,8 @@
                 Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="provider" /> is
                 NULL
             </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
             <seealso cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddCronQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueServiceProviderInteraction.AddCronQueueWork``1(System.IServiceProvider,AInq.Background.Tasks.IWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
@@ -3038,7 +3107,8 @@
                 Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="provider" /> is
                 NULL
             </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
             <seealso cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueServiceProviderInteraction.AddCronAsyncQueueWork(System.IServiceProvider,AInq.Background.Tasks.IAsyncWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
@@ -3056,7 +3126,8 @@
                 Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="provider" /> is
                 NULL
             </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
             <seealso cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddCronAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueServiceProviderInteraction.AddCronAsyncQueueWork``1(System.IServiceProvider,AInq.Background.Tasks.IAsyncWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
@@ -3075,7 +3146,8 @@
                 Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="provider" /> is
                 NULL
             </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
             <seealso
                 cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
@@ -3091,7 +3163,8 @@
             <returns> Work result observable </returns>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> or <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
             <seealso cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddCronQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueServiceProviderInteraction.AddCronQueueWork``2(System.IServiceProvider,System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
@@ -3107,7 +3180,8 @@
             <returns> Work result observable </returns>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> or <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
             <seealso cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddCronQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueServiceProviderInteraction.AddCronAsyncQueueWork``1(System.IServiceProvider,System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
@@ -3122,7 +3196,8 @@
             <returns> Work result observable </returns>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> or <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
             <seealso cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddCronAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueServiceProviderInteraction.AddCronAsyncQueueWork``2(System.IServiceProvider,System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
@@ -3138,7 +3213,8 @@
             <returns> Work result observable </returns>
             <exception cref="T:System.InvalidOperationException"> Thrown if no work scheduler is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="cronExpression" /> or <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception><exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
             <seealso
                 cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddCronAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.String,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
@@ -3154,7 +3230,10 @@
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueServiceProviderInteraction.AddRepeatedQueueWork``1(System.IServiceProvider,AInq.Background.Tasks.IWork{``0},System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
@@ -3170,7 +3249,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso
                 cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
@@ -3186,7 +3268,10 @@
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso
                 cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
@@ -3203,7 +3288,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso
                 cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
@@ -3219,7 +3307,10 @@
             <typeparam name="TWork"> Work type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork``1(AInq.Background.Services.IWorkScheduler,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueServiceProviderInteraction.AddRepeatedQueueWork``2(System.IServiceProvider,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
@@ -3235,7 +3326,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso
                 cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork``2(AInq.Background.Services.IWorkScheduler,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
@@ -3251,7 +3345,10 @@
             <typeparam name="TAsyncWork"> Work type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso
                 cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
@@ -3268,7 +3365,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso
                 cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
@@ -3284,7 +3384,10 @@
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork,System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueServiceProviderInteraction.AddRepeatedQueueWork``1(System.IServiceProvider,AInq.Background.Tasks.IWork{``0},System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
@@ -3300,7 +3403,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso
                 cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IWork{``0},System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
@@ -3316,7 +3422,10 @@
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso
                 cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork,System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
@@ -3333,7 +3442,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso
                 cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,AInq.Background.Tasks.IAsyncWork{``0},System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
@@ -3349,7 +3461,10 @@
             <typeparam name="TWork"> Work type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork``1(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Interaction.WorkSchedulerWorkQueueServiceProviderInteraction.AddRepeatedQueueWork``2(System.IServiceProvider,System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)">
@@ -3365,7 +3480,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso
                 cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork``2(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
@@ -3381,7 +3499,10 @@
             <typeparam name="TAsyncWork"> Work type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso
                 cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork``1(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
@@ -3398,7 +3519,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
             <seealso
                 cref="M:AInq.Background.Interaction.WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork``2(AInq.Background.Services.IWorkScheduler,System.TimeSpan,System.TimeSpan,System.Threading.CancellationToken,System.Int32,System.Int32,System.Int32)" />
         </member>
@@ -3498,7 +3622,10 @@
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Services.IWorkScheduler.AddRepeatedWork``1(AInq.Background.Tasks.IWork{``0},System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32)">
             <summary> Add repeated work to scheduler </summary>
@@ -3510,7 +3637,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Services.IWorkScheduler.AddRepeatedAsyncWork(AInq.Background.Tasks.IAsyncWork,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32)">
             <summary> Add repeated asynchronous work to scheduler </summary>
@@ -3521,7 +3651,10 @@
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
         <member name="M:AInq.Background.Services.IWorkScheduler.AddRepeatedAsyncWork``1(AInq.Background.Tasks.IAsyncWork{``0},System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32)">
             <summary> Add repeated asynchronous work to scheduler </summary>
@@ -3533,7 +3666,10 @@
             <typeparam name="TResult"> Work result type </typeparam>
             <returns> Work result observable </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+                <paramref name="execCount" /> is 0 or less then -1
+            </exception>
         </member>
     </members>
 </doc>

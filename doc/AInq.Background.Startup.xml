@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AInq.Background.Startup</name>
+    </assembly>
+    <members>
+        <member name="T:AInq.Background.StartupWorkInjection">
+            <summary> Startup work injection </summary>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.DoStartupWorkAsync(Microsoft.Extensions.Hosting.IHost,System.Threading.CancellationToken)">
+            <summary> Run registered startup works asynchronously </summary>
+            <param name="host"> Current host </param>
+            <param name="cancellation"> Startup work cancellation token </param>
+            <returns></returns>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupWork(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IWork)">
+            <summary> Register startup work </summary>
+            <param name="services"> Service collection </param>
+            <param name="work"> Work instance </param>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary> Register startup work </summary>
+            <param name="services"> Service collection </param>
+            <typeparam name="TWork"> Work type </typeparam>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IWork{``0})">
+            <summary> Register startup work </summary>
+            <param name="services"> Service collection </param>
+            <param name="work"> Work instance </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupWork``2(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary> Register startup work </summary>
+            <param name="services"> Service collection </param>
+            <typeparam name="TWork"> Work type </typeparam>
+            <typeparam name="TResult"> Work result type </typeparam>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncWork(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IAsyncWork)">
+            <summary> Register asynchronous startup work </summary>
+            <param name="services"> Service collection </param>
+            <param name="work"> Work instance </param>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary> Register asynchronous startup work </summary>
+            <param name="services"> Service collection </param>
+            <typeparam name="TAsyncWork"> Work type </typeparam>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IAsyncWork{``0})">
+            <summary> Register asynchronous startup work </summary>
+            <param name="services"> Service collection </param>
+            <param name="work"> Work instance </param>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncWork``2(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary> Register asynchronous startup work </summary>
+            <param name="services"> Service collection </param>
+            <typeparam name="TAsyncWork"> Work type </typeparam>
+            <typeparam name="TResult"> Work result type </typeparam>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupQueuedWork(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IWork,System.Int32,System.Int32)">
+            <summary> Register queued startup work with given <paramref name="priority" /> (if supported) </summary>
+            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
+            <param name="services"> Service collection </param>
+            <param name="work"> Work instance </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupQueuedWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Int32,System.Int32)">
+            <summary> Register queued startup work with given <paramref name="priority" /> (if supported) </summary>
+            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
+            <param name="services"> Service collection </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TWork"> Work type </typeparam>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupQueuedWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IWork{``0},System.Int32,System.Int32)">
+            <summary> Register queued startup work with given <paramref name="priority" /> (if supported) </summary>
+            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
+            <param name="services"> Service collection </param>
+            <param name="work"> Work instance </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupQueuedWork``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Int32,System.Int32)">
+            <summary> Register queued startup work with given <paramref name="priority" /> (if supported) </summary>
+            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
+            <param name="services"> Service collection </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TWork"> Work type </typeparam>
+            <typeparam name="TResult"> Work result type </typeparam>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncQueuedWork(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IAsyncWork,System.Int32,System.Int32)">
+            <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
+            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
+            <param name="services"> Service collection </param>
+            <param name="work"> Work instance </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncQueuedWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Int32,System.Int32)">
+            <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
+            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
+            <param name="services"> Service collection </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TAsyncWork"> Work type </typeparam>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncQueuedWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IAsyncWork{``0},System.Int32,System.Int32)">
+            <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
+            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
+            <param name="services"> Service collection </param>
+            <param name="work"> Work instance </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+        </member>
+        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncQueuedWork``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Int32,System.Int32)">
+            <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
+            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
+            <param name="services"> Service collection </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TAsyncWork"> Work type </typeparam>
+            <typeparam name="TResult"> Work result type </typeparam>
+        </member>
+    </members>
+</doc>

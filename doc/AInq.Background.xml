@@ -549,126 +549,6 @@
         <member name="F:AInq.Background.ReuseStrategy.OneTime">
             <summary> Generate new for each action </summary>
         </member>
-        <member name="T:AInq.Background.StartupWorkInjection">
-            <summary> Startup work injection </summary>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.DoStartupWork(Microsoft.Extensions.Hosting.IHost,System.Threading.CancellationToken)">
-            <summary> Run registered startup works asynchronously </summary>
-            <param name="host"> Current host </param>
-            <param name="cancellation"> Startup work cancellation token </param>
-            <returns></returns>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupWork(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IWork)">
-            <summary> Register startup work </summary>
-            <param name="services"> Service collection </param>
-            <param name="work"> Work instance </param>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary> Register startup work </summary>
-            <param name="services"> Service collection </param>
-            <typeparam name="TWork"> Work type </typeparam>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IWork{``0})">
-            <summary> Register startup work </summary>
-            <param name="services"> Service collection </param>
-            <param name="work"> Work instance </param>
-            <typeparam name="TResult"> Work result type </typeparam>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupWork``2(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary> Register startup work </summary>
-            <param name="services"> Service collection </param>
-            <typeparam name="TWork"> Work type </typeparam>
-            <typeparam name="TResult"> Work result type </typeparam>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncWork(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IAsyncWork)">
-            <summary> Register asynchronous startup work </summary>
-            <param name="services"> Service collection </param>
-            <param name="work"> Work instance </param>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary> Register asynchronous startup work </summary>
-            <param name="services"> Service collection </param>
-            <typeparam name="TAsyncWork"> Work type </typeparam>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IAsyncWork{``0})">
-            <summary> Register asynchronous startup work </summary>
-            <param name="services"> Service collection </param>
-            <param name="work"> Work instance </param>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncWork``2(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary> Register asynchronous startup work </summary>
-            <param name="services"> Service collection </param>
-            <typeparam name="TAsyncWork"> Work type </typeparam>
-            <typeparam name="TResult"> Work result type </typeparam>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupQueuedWork(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IWork,System.Int32,System.Int32)">
-            <summary> Register queued startup work with given <paramref name="priority" /> (if supported) </summary>
-            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
-            <param name="services"> Service collection </param>
-            <param name="work"> Work instance </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupQueuedWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Int32,System.Int32)">
-            <summary> Register queued startup work with given <paramref name="priority" /> (if supported) </summary>
-            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
-            <param name="services"> Service collection </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TWork"> Work type </typeparam>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupQueuedWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IWork{``0},System.Int32,System.Int32)">
-            <summary> Register queued startup work with given <paramref name="priority" /> (if supported) </summary>
-            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
-            <param name="services"> Service collection </param>
-            <param name="work"> Work instance </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TResult"> Work result type </typeparam>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupQueuedWork``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Int32,System.Int32)">
-            <summary> Register queued startup work with given <paramref name="priority" /> (if supported) </summary>
-            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
-            <param name="services"> Service collection </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TWork"> Work type </typeparam>
-            <typeparam name="TResult"> Work result type </typeparam>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncQueuedWork(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IAsyncWork,System.Int32,System.Int32)">
-            <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
-            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
-            <param name="services"> Service collection </param>
-            <param name="work"> Work instance </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncQueuedWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Int32,System.Int32)">
-            <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
-            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
-            <param name="services"> Service collection </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TAsyncWork"> Work type </typeparam>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncQueuedWork``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IAsyncWork{``0},System.Int32,System.Int32)">
-            <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
-            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
-            <param name="services"> Service collection </param>
-            <param name="work"> Work instance </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TResult"> Work result type </typeparam>
-        </member>
-        <member name="M:AInq.Background.StartupWorkInjection.AddStartupAsyncQueuedWork``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Int32,System.Int32)">
-            <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
-            <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
-            <param name="services"> Service collection </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TAsyncWork"> Work type </typeparam>
-            <typeparam name="TResult"> Work result type </typeparam>
-        </member>
         <member name="T:AInq.Background.Workers.TaskWorker`2">
             <summary> Background task worker service </summary>
             <typeparam name="TArgument"> Task argument type </typeparam>
@@ -711,41 +591,41 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
         </member>
         <member name="T:AInq.Background.Wrappers.AccessWrapperFactory">
-            <summary> Factory class for creating <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for background access queues </summary>
+            <summary> Factory class for creating <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for background asyncAccess queues </summary>
         </member>
         <member name="M:AInq.Background.Wrappers.AccessWrapperFactory.CreateAccessWrapper``1(AInq.Background.Tasks.IAccess{``0},System.Int32,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given access action </summary>
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asyncAccess action </summary>
             <param name="access"> Access action instance </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
-            <returns> Wrapper and access action completion task </returns>
+            <returns> Wrapper and asyncAccess action completion task </returns>
         </member>
         <member name="M:AInq.Background.Wrappers.AccessWrapperFactory.CreateAccessWrapper``2(AInq.Background.Tasks.IAccess{``0,``1},System.Int32,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given access action </summary>
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asyncAccess action </summary>
             <param name="access"> Access action instance </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
-            <returns> Wrapper and access action result task </returns>
+            <returns> Wrapper and asyncAccess action result task </returns>
         </member>
         <member name="M:AInq.Background.Wrappers.AccessWrapperFactory.CreateAccessWrapper``1(AInq.Background.Tasks.IAsyncAccess{``0},System.Int32,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asynchronous access action </summary>
-            <param name="access"> Access action instance </param>
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asynchronous asyncAccess action </summary>
+            <param name="asyncAccess"> Async access action instance </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
-            <returns> Wrapper and access action completion task </returns>
+            <returns> Wrapper and asyncAccess action completion task </returns>
         </member>
         <member name="M:AInq.Background.Wrappers.AccessWrapperFactory.CreateAccessWrapper``2(AInq.Background.Tasks.IAsyncAccess{``0,``1},System.Int32,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asynchronous access action </summary>
-            <param name="access"> Access action instance </param>
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asynchronous asyncAccess action </summary>
+            <param name="asyncAccess"> Async access action instance </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
-            <returns> Wrapper and access action result task </returns>
+            <returns> Wrapper and asyncAccess action result task </returns>
         </member>
         <member name="T:AInq.Background.Wrappers.ConveyorDataWrapperFactory">
             <summary> Factory class for creating <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for background data conveyors </summary>
@@ -781,37 +661,37 @@
             <returns> If task is completed or should be reverted to queue/conveyor </returns>
         </member>
         <member name="T:AInq.Background.Wrappers.WorkWrapperFactory">
-            <summary> Factory class for creating <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for background work queues </summary>
+            <summary> Factory class for creating <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for background asyncWork queues </summary>
         </member>
         <member name="M:AInq.Background.Wrappers.WorkWrapperFactory.CreateWorkWrapper(AInq.Background.Tasks.IWork,System.Int32,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given work </summary>
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asyncWork </summary>
             <param name="work"> Work instance </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="cancellation"> Work cancellation token </param>
-            <returns> Wrapper and work completion task </returns>
+            <returns> Wrapper and asyncWork completion task </returns>
         </member>
         <member name="M:AInq.Background.Wrappers.WorkWrapperFactory.CreateWorkWrapper``1(AInq.Background.Tasks.IWork{``0},System.Int32,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given work </summary>
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asyncWork </summary>
             <param name="work"> Work instance </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TResult"> Work result type </typeparam>
-            <returns> Wrapper and work result task </returns>
+            <returns> Wrapper and asyncWork result task </returns>
         </member>
         <member name="M:AInq.Background.Wrappers.WorkWrapperFactory.CreateWorkWrapper(AInq.Background.Tasks.IAsyncWork,System.Int32,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asynchronous work </summary>
-            <param name="work"> Work instance </param>
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asynchronous asyncWork </summary>
+            <param name="asyncWork"> Async work instance </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="cancellation"> Work cancellation token </param>
-            <returns> Wrapper and work completion task </returns>
+            <returns> Wrapper and asyncWork completion task </returns>
         </member>
         <member name="M:AInq.Background.Wrappers.WorkWrapperFactory.CreateWorkWrapper``1(AInq.Background.Tasks.IAsyncWork{``0},System.Int32,System.Threading.CancellationToken)">
-            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asynchronous work </summary>
-            <param name="work"> Work instance </param>
+            <summary> Create <see cref="T:AInq.Background.Wrappers.ITaskWrapper`1" /> for given asynchronous asyncWork </summary>
+            <param name="asyncWork"> Async work instance </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
             <param name="cancellation"> Work cancellation token </param>
             <typeparam name="TResult"> Work result type </typeparam>
-            <returns> Wrapper and work result task </returns>
+            <returns> Wrapper and asyncWork result task </returns>
         </member>
     </members>
 </doc>
