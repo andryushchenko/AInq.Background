@@ -1,4 +1,4 @@
-﻿// Copyright 2020 Anton Andryushchenko
+﻿// Copyright 2021 Anton Andryushchenko
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ public static class ProcessorFactory
     /// <returns> Task processor instance </returns>
     public static ITaskProcessor<object?, TMetadata> CreateNullProcessor<TMetadata>(int maxParallelTasks = 1)
         => maxParallelTasks <= 1
-            ? new SingleNullProcessor<TMetadata>() as ITaskProcessor<object?, TMetadata>
+            ? new SingleNullProcessor<TMetadata>()
             : new MultipleNullProcessor<TMetadata>(maxParallelTasks);
 
     /// <summary> Create task processor with single static argument </summary>

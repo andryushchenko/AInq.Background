@@ -12,6 +12,12 @@ Background work utilities for .NET Core apps based on Hosted services. Originall
 - **Work scheduler** with Cron support
 - **Startup work** utility
 
+## New in 4.1
+
+- **BREAKING CHANGES**
+  - **Startup work** utility moved to separate package **AInq.Background.Startup**
+- Minor bug fix and internal optimization
+
 ## New in 4.0
 
 - **BREAKING CHANGES**
@@ -70,9 +76,6 @@ Queues and conveyor implementations.
   - Support single or many conveyor machines with different lifetime
   - Optional support for prioritizing
   - Use `ConveyorInjection` to regiter service or create for internal usage
-- Startup work utility for running some work *before* host start
-  - Support interaction with background work queue
-  - Use `StartupWorkInjection` to register and run works
 
 You can extend functionality by implementing custom `ITaskWrapper`, `ITaskManager` or `ITaskProcessor` and combine with existing ones to create more service variants. 
 
@@ -98,6 +101,12 @@ You can extend functionality by implementing custom `IScheduledTaskWrapper` or `
 
 **NEW** Batch processing extensions for `IWorkQueue`, `IAccessQueue<TResource>` and `IConveyor<TData, TResult>`
 
+#### [![Nuget](https://img.shields.io/nuget/v/AInq.Background.Startup)](https://www.nuget.org/packages/AInq.Background.Startup/) AInq.Background.Startup
+
+**NEW** Startup work utility for running some work *before* host start
+
+Support interaction with background work queue
+
 ## Documentation
 
 As for now documentation is provided in this document and by XML documentation inside packages.
@@ -109,5 +118,5 @@ These packages are in active production use, all fixes and improvements will be 
 If you find a bug, have a question or something else - you are friendly welcome to open an issue.
 
 ## License
-[Apache-2.0](LICENSE)
+Copyright © 2020-2021 Anton Andryushchenko. AInq.Background is licensed under [Apache License 2.0](LICENSE)
 

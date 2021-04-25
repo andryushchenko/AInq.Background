@@ -1,4 +1,4 @@
-﻿// Copyright 2020 Anton Andryushchenko
+﻿// Copyright 2021 Anton Andryushchenko
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -90,8 +90,9 @@ public static class AccessQueueDependencyInjectionExtension
         CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(CreateAsyncAccess<TResource, TResult>(
-                (resource, provider, cancel) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
+        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(
+            CreateAsyncAccess<TResource, TResult>((resource, provider, cancel)
+                => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
             cancellation,
             attemptsCount);
 
@@ -167,8 +168,9 @@ public static class AccessQueueDependencyInjectionExtension
         CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(CreateAsyncAccess<TResource, TResult>(
-                (resource, provider, cancel) => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
+        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(
+            CreateAsyncAccess<TResource, TResult>((resource, provider, cancel)
+                => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
             priority,
             cancellation,
             attemptsCount);

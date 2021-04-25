@@ -1,4 +1,4 @@
-﻿// Copyright 2020 Anton Andryushchenko
+﻿// Copyright 2021 Anton Andryushchenko
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -61,28 +61,25 @@ public class PriorityConveyorChain<TData, TIntermediate, TResult> : IPriorityCon
     int IConveyor<TData, TResult>.MaxAttempts => Math.Max(_first.MaxAttempts, _second.MaxAttempts);
 
     async Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
-        => await _second
-                 .ProcessDataAsync(
-                     await _first.ProcessDataAsync(data, cancellation, Math.Min(_first.MaxAttempts, attemptsCount)).ConfigureAwait(false),
-                     cancellation,
-                     Math.Min(_second.MaxAttempts, attemptsCount))
-                 .ConfigureAwait(false);
+        => await _second.ProcessDataAsync(
+                            await _first.ProcessDataAsync(data, cancellation, Math.Min(_first.MaxAttempts, attemptsCount)).ConfigureAwait(false),
+                            cancellation,
+                            Math.Min(_second.MaxAttempts, attemptsCount))
+                        .ConfigureAwait(false);
 
     int IPriorityConveyor<TData, TResult>.MaxPriority => Math.Max(_first.MaxPriority, _second.MaxPriority);
 
     async Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, CancellationToken cancellation,
         int attemptsCount)
-        => await _second
-                 .ProcessDataAsync(
-                     await _first.ProcessDataAsync(data,
-                                     Math.Min(_first.MaxPriority, priority),
-                                     cancellation,
-                                     Math.Min(_first.MaxAttempts, attemptsCount))
-                                 .ConfigureAwait(false),
-                     Math.Min(_second.MaxPriority, priority),
-                     cancellation,
-                     Math.Min(_second.MaxAttempts, attemptsCount))
-                 .ConfigureAwait(false);
+        => await _second.ProcessDataAsync(await _first.ProcessDataAsync(data,
+                                                          Math.Min(_first.MaxPriority, priority),
+                                                          cancellation,
+                                                          Math.Min(_first.MaxAttempts, attemptsCount))
+                                                      .ConfigureAwait(false),
+                            Math.Min(_second.MaxPriority, priority),
+                            cancellation,
+                            Math.Min(_second.MaxAttempts, attemptsCount))
+                        .ConfigureAwait(false);
 }
 
 }

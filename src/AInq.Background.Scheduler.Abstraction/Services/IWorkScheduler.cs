@@ -1,11 +1,11 @@
-﻿// Copyright 2020 Anton Andryushchenko
-//
+﻿// Copyright 2021 Anton Andryushchenko
+// 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-//
+// 
 // http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -95,7 +95,8 @@ public interface IWorkScheduler
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
-    IObservable<Maybe<Exception>> AddCronAsyncWork(IAsyncWork work, string cronExpression, CancellationToken cancellation = default, int execCount = -1);
+    IObservable<Maybe<Exception>> AddCronAsyncWork(IAsyncWork work, string cronExpression, CancellationToken cancellation = default,
+        int execCount = -1);
 
     /// <summary> Add CRON-scheduled asynchronous work to scheduler </summary>
     /// <param name="work"> Work instance </param>
@@ -118,7 +119,10 @@ public interface IWorkScheduler
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+    ///     <paramref name="execCount" /> is 0 or less then -1
+    /// </exception>
     IObservable<Maybe<Exception>> AddRepeatedWork(IWork work, DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default,
         int execCount = -1);
 
@@ -131,7 +135,10 @@ public interface IWorkScheduler
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+    ///     <paramref name="execCount" /> is 0 or less then -1
+    /// </exception>
     IObservable<Try<TResult>> AddRepeatedWork<TResult>(IWork<TResult> work, DateTime starTime, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1);
 
@@ -143,8 +150,12 @@ public interface IWorkScheduler
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
-    IObservable<Maybe<Exception>> AddRepeatedAsyncWork(IAsyncWork work, DateTime startTime, TimeSpan repeatDelay, CancellationToken cancellation = default,
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+    ///     <paramref name="execCount" /> is 0 or less then -1
+    /// </exception>
+    IObservable<Maybe<Exception>> AddRepeatedAsyncWork(IAsyncWork work, DateTime startTime, TimeSpan repeatDelay,
+        CancellationToken cancellation = default,
         int execCount = -1);
 
     /// <summary> Add repeated asynchronous work to scheduler </summary>
@@ -156,7 +167,10 @@ public interface IWorkScheduler
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
+    ///     <paramref name="execCount" /> is 0 or less then -1
+    /// </exception>
     IObservable<Try<TResult>> AddRepeatedAsyncWork<TResult>(IAsyncWork<TResult> work, DateTime startTime, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1);
 }

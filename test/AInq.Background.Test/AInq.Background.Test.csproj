@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\AInq.Background.Enumerable\AInq.Background.Enumerable.csproj" />
     <ProjectReference Include="..\..\src\AInq.Background.Scheduler\AInq.Background.Scheduler.csproj" />
+    <ProjectReference Include="..\..\src\AInq.Background.Startup\AInq.Background.Startup.csproj" />
     <ProjectReference Include="..\..\src\AInq.Background\AInq.Background.csproj" />
   </ItemGroup>
 

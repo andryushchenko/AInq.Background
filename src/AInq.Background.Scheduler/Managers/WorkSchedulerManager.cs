@@ -1,11 +1,11 @@
-﻿// Copyright 2020 Anton Andryushchenko
-//
+﻿// Copyright 2021 Anton Andryushchenko
+// 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-//
+// 
 // http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -86,7 +86,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         var (wrapper, observable) = CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             cronExpression.ParseCron(),
             cancellation,
-            execCount > 0 || execCount == -1
+            execCount is > 0 or -1
                 ? execCount
                 : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
         _works.Add(wrapper);
@@ -100,7 +100,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         var (wrapper, observable) = CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
             cancellation,
-            execCount > 0 || execCount == -1
+            execCount is > 0 or -1
                 ? execCount
                 : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
         _works.Add(wrapper);
@@ -108,26 +108,28 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         return observable;
     }
 
-    IObservable<Maybe<Exception>> IWorkScheduler.AddCronAsyncWork(IAsyncWork work, string cronExpression, CancellationToken cancellation, int execCount)
-    {
-        var (wrapper, observable) = CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
-            cancellation,
-            execCount > 0 || execCount == -1
-                ? execCount
-                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
-        _works.Add(wrapper);
-        _newWorkEvent.Set();
-        return observable;
-    }
-
-    IObservable<Try<TResult>> IWorkScheduler.AddCronAsyncWork<TResult>(IAsyncWork<TResult> work, string cronExpression, CancellationToken cancellation,
+    IObservable<Maybe<Exception>> IWorkScheduler.AddCronAsyncWork(IAsyncWork work, string cronExpression, CancellationToken cancellation,
         int execCount)
     {
         var (wrapper, observable) = CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
             cancellation,
-            execCount > 0 || execCount == -1
+            execCount is > 0 or -1
+                ? execCount
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+        _works.Add(wrapper);
+        _newWorkEvent.Set();
+        return observable;
+    }
+
+    IObservable<Try<TResult>> IWorkScheduler.AddCronAsyncWork<TResult>(IAsyncWork<TResult> work, string cronExpression,
+        CancellationToken cancellation,
+        int execCount)
+    {
+        var (wrapper, observable) = CreateCronWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
+            (cronExpression ?? throw new ArgumentNullException(nameof(cronExpression))).ParseCron(),
+            cancellation,
+            execCount is > 0 or -1
                 ? execCount
                 : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
         _works.Add(wrapper);
@@ -144,7 +146,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
                 ? throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater then 00:00:00.000")
                 : repeatDelay,
             cancellation,
-            execCount > 0 || execCount == -1
+            execCount is > 0 or -1
                 ? execCount
                 : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
         _works.Add(wrapper);
@@ -161,7 +163,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
                 ? throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater then 00:00:00.000")
                 : repeatDelay,
             cancellation,
-            execCount > 0 || execCount == -1
+            execCount is > 0 or -1
                 ? execCount
                 : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
         _works.Add(wrapper);
@@ -178,7 +180,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
                 ? throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater then 00:00:00.000")
                 : repeatDelay,
             cancellation,
-            execCount > 0 || execCount == -1
+            execCount is > 0 or -1
                 ? execCount
                 : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
         _works.Add(wrapper);
@@ -195,7 +197,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
                 ? throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater then 00:00:00.000")
                 : repeatDelay,
             cancellation,
-            execCount > 0 || execCount == -1
+            execCount is > 0 or -1
                 ? execCount
                 : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
         _works.Add(wrapper);

@@ -1,4 +1,4 @@
-﻿// Copyright 2020 Anton Andryushchenko
+﻿// Copyright 2021 Anton Andryushchenko
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ public class TestObserver<T> : IObserver<Try<T>>
         => Console.WriteLine($"{DateTime.Now:T}\tObservation error\t{error}");
 
     public void OnNext(Try<T> value)
-        => Console.WriteLine($"{DateTime.Now:T}\tObservation test\t{(value.Success?$"Result {value.Value}":$"Error {value.Error}")}");
+        => Console.WriteLine($"{DateTime.Now:T}\tObservation test\t{(value.Success ? $"Result {value.Value}" : $"Error {value.Error}")}");
 }
 
 }

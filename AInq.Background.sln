@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Background.Enumerable"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Background.Scheduler.Abstraction", "src\AInq.Background.Scheduler.Abstraction\AInq.Background.Scheduler.Abstraction.csproj", "{9756727B-8EC4-43C1-A70B-506E6D6B04FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AInq.Background.Startup", "src\AInq.Background.Startup\AInq.Background.Startup.csproj", "{2E8DD8F4-4329-41D2-BD17-9A2931F887E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{9756727B-8EC4-43C1-A70B-506E6D6B04FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9756727B-8EC4-43C1-A70B-506E6D6B04FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9756727B-8EC4-43C1-A70B-506E6D6B04FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E8DD8F4-4329-41D2-BD17-9A2931F887E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E8DD8F4-4329-41D2-BD17-9A2931F887E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E8DD8F4-4329-41D2-BD17-9A2931F887E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E8DD8F4-4329-41D2-BD17-9A2931F887E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +74,7 @@ Global
 		{38C89E67-C73B-4F9D-87FC-3E0047DA4865} = {3D6A0C84-C82A-4BDC-8120-6044DB3A6381}
 		{9815A9CC-F4EC-4C8E-BE60-468BF5BD020E} = {3D6A0C84-C82A-4BDC-8120-6044DB3A6381}
 		{9756727B-8EC4-43C1-A70B-506E6D6B04FB} = {3D6A0C84-C82A-4BDC-8120-6044DB3A6381}
+		{2E8DD8F4-4329-41D2-BD17-9A2931F887E1} = {3D6A0C84-C82A-4BDC-8120-6044DB3A6381}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6F7DC389-4ECD-430D-8BE6-C057AF7470F9}

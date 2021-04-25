@@ -1,11 +1,11 @@
-﻿// Copyright 2020 Anton Andryushchenko
-//
+﻿// Copyright 2021 Anton Andryushchenko
+// 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-//
+// 
 // http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,8 @@ var host = new HostBuilder().ConfigureLogging(logging => logging.ClearProviders(
                                                         "0/10 * * * * *",
                                                         new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token)
                                                     .Subscribe(new TestObserver<DateTime>());
-                                            provider.AddRepeatedWork(WorkFactory.CreateWork(_ => Console.WriteLine($"{DateTime.Now:T}\tRepeated work test")),
+                                            provider.AddRepeatedWork(
+                                                WorkFactory.CreateWork(_ => Console.WriteLine($"{DateTime.Now:T}\tRepeated work test")),
                                                 TimeSpan.FromMinutes(1),
                                                 TimeSpan.FromSeconds(15),
                                                 execCount: 4);
@@ -98,7 +99,7 @@ var host = new HostBuilder().ConfigureLogging(logging => logging.ClearProviders(
                             })
                             .Build();
 var cancellation = new CancellationTokenSource();
-var work = host.DoStartupWork(cancellation.Token)
+var work = host.DoStartupWorkAsync(cancellation.Token)
                .ContinueWith(_ => Console.WriteLine($"{DateTime.Now}\t Starting host"))
                .ContinueWith(async _ => await host.RunAsync(cancellation.Token), cancellation.Token);
 Console.ReadLine();

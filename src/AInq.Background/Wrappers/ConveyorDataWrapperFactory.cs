@@ -1,4 +1,4 @@
-﻿// Copyright 2020 Anton Andryushchenko
+﻿// Copyright 2021 Anton Andryushchenko
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ public static class ConveyorDataWrapperFactory
         bool ITaskWrapper<IConveyorMachine<TData, TResult>>.IsFaulted => _completion.Task.IsFaulted;
 
         async Task<bool> ITaskWrapper<IConveyorMachine<TData, TResult>>.ExecuteAsync(IConveyorMachine<TData, TResult> argument,
-            IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
+            IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
             {
@@ -72,9 +72,9 @@ public static class ConveyorDataWrapperFactory
                 return true;
             }
             _attemptsRemain--;
-            using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, cancellation);
             try
             {
+                using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
                 aggregateCancellation.Token.ThrowIfCancellationRequested();
                 _completion.TrySetResult(await argument.ProcessDataAsync(_data, provider, aggregateCancellation.Token).ConfigureAwait(false));
             }
@@ -85,6 +85,8 @@ public static class ConveyorDataWrapperFactory
             }
             catch (OperationCanceledException ex)
             {
+                if(outerCancellation.IsCancellationRequested)
+                    logger?.LogWarning("Processing data {Data} with machine {Machine} canceled by runtime", _data, argument.GetType());
                 if (!_innerCancellation.IsCancellationRequested)
                     _attemptsRemain++;
                 if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
@@ -93,7 +95,7 @@ public static class ConveyorDataWrapperFactory
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing data {Data} with machine {Type}", _data, argument.GetType());
+                logger?.LogError(ex, "Error processing data {Data} with machine {Machine}", _data, argument.GetType());
                 if (_attemptsRemain > 0)
                     return false;
                 _completion.TrySetException(ex);

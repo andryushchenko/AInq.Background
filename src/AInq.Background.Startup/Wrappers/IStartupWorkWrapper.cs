@@ -12,22 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AInq.Background.Tasks
+namespace AInq.Background.Wrappers
 {
 
-/// <summary> Interface for asynchronous work with result of type <typeparamref name="TResult" /> </summary>
-/// <typeparam name="TResult"> Work result type </typeparam>
-public interface IAsyncWork<TResult>
+internal interface IStartupWorkWrapper
 {
-    /// <summary> Asynchronous work action </summary>
-    /// <param name="serviceProvider"> Service provider instance </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <returns> Work result task </returns>
-    Task<TResult> DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation = default);
+    Task DoWorkAsync(IServiceProvider provider, ILogger? logger, CancellationToken cancellation);
 }
 
 }
