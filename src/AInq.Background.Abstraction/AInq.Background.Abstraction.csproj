@@ -17,12 +17,12 @@
     <RootNamespace>AInq.Background</RootNamespace>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Background;Queue;Conveyor;AInq;DI</PackageTags>
-    <Description>
-      Background work utilities for .NET Core apps based on Hosted services.
-      Basis interfaces and helpers.
+    <Description>Background work utilities for .NET Core apps based on Hosted services.
+Basis interfaces and helpers.
     </Description>
     <PackageReleaseNotes>[FIX] Missed documentation
-[IMP] Minor internal improvement</PackageReleaseNotes>
+[IMP] Minor internal improvement
+    </PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

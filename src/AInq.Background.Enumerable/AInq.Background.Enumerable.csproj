@@ -16,9 +16,8 @@
     <Nullable>enable</Nullable>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Background;Queue;Conveyor;AInq;Enumerable;LINQ</PackageTags>
-    <Description>
-      Background work utilities for .NET Core apps based on Hosted services.
-      Batch processing extension for background work queue, access queue and data coveyor.
+    <Description>Background work utilities for .NET Core apps based on Hosted services.
+Batch processing extension for background work queue, access queue and data coveyor.
     </Description>
     <PackageReleaseNotes>[UPD] Internal dependency update</PackageReleaseNotes>
   </PropertyGroup>

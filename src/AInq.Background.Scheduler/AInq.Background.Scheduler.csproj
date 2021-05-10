@@ -17,9 +17,8 @@
     <RootNamespace>AInq.Background</RootNamespace>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Background;Scheduler;Cron;AInq</PackageTags>
-    <Description>
-      Background work utilities for .NET Core apps based on Hosted services.
-      Background work scheduler with cron.
+    <Description>Background work utilities for .NET Core apps based on Hosted services.
+Background work scheduler with cron.
     </Description>
     <PackageReleaseNotes>[FIX] Bug in SchedulerWorker error logging</PackageReleaseNotes>
   </PropertyGroup>

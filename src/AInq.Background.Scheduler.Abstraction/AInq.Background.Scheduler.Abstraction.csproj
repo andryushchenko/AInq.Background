@@ -17,9 +17,8 @@
     <RootNamespace>AInq.Background</RootNamespace>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Background;Scheduler;AInq;DI</PackageTags>
-    <Description>
-      Background work utilities for .NET Core apps based on Hosted services.
-      Work scheduler interfaces and helpers.
+    <Description>Background work utilities for .NET Core apps based on Hosted services.
+Work scheduler interfaces and helpers.
     </Description>
     <PackageReleaseNotes>[UPD] Dependency update</PackageReleaseNotes>
   </PropertyGroup>
