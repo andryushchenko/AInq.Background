@@ -31,6 +31,8 @@ public class PriorityConveyorChain<TData, TFirstIntermediate, TSecondIntermediat
     where TSecondIntermediate : notnull
 {
     private readonly IPriorityConveyor<TData, TFirstIntermediate> _first;
+    private readonly int _maxAttempts;
+    private readonly int _maxPriority;
     private readonly IPriorityConveyor<TFirstIntermediate, TSecondIntermediate> _second;
     private readonly IPriorityConveyor<TSecondIntermediate, TResult> _third;
 
@@ -44,6 +46,8 @@ public class PriorityConveyorChain<TData, TFirstIntermediate, TSecondIntermediat
         _first = first ?? throw new ArgumentNullException(nameof(first));
         _second = second ?? throw new ArgumentNullException(nameof(second));
         _third = third ?? throw new ArgumentNullException(nameof(third));
+        _maxAttempts = Math.Max(_first.MaxAttempts, Math.Max(_second.MaxAttempts, _third.MaxAttempts));
+        _maxPriority = Math.Max(_first.MaxPriority, Math.Max(_second.MaxPriority, _third.MaxPriority));
     }
 
     /// <param name="first"> First conveyor </param>
@@ -56,6 +60,8 @@ public class PriorityConveyorChain<TData, TFirstIntermediate, TSecondIntermediat
         _first = new PriorityConveyorEmulator<TData, TFirstIntermediate>(first);
         _second = second ?? throw new ArgumentNullException(nameof(second));
         _third = third ?? throw new ArgumentNullException(nameof(third));
+        _maxAttempts = Math.Max(_first.MaxAttempts, Math.Max(_second.MaxAttempts, _third.MaxAttempts));
+        _maxPriority = Math.Max(_first.MaxPriority, Math.Max(_second.MaxPriority, _third.MaxPriority));
     }
 
     /// <param name="first"> First conveyor </param>
@@ -68,6 +74,8 @@ public class PriorityConveyorChain<TData, TFirstIntermediate, TSecondIntermediat
         _first = first ?? throw new ArgumentNullException(nameof(first));
         _second = new PriorityConveyorEmulator<TFirstIntermediate, TSecondIntermediate>(second);
         _third = third ?? throw new ArgumentNullException(nameof(third));
+        _maxAttempts = Math.Max(_first.MaxAttempts, Math.Max(_second.MaxAttempts, _third.MaxAttempts));
+        _maxPriority = Math.Max(_first.MaxPriority, Math.Max(_second.MaxPriority, _third.MaxPriority));
     }
 
     /// <param name="first"> First conveyor </param>
@@ -80,6 +88,8 @@ public class PriorityConveyorChain<TData, TFirstIntermediate, TSecondIntermediat
         _first = first ?? throw new ArgumentNullException(nameof(first));
         _second = second ?? throw new ArgumentNullException(nameof(second));
         _third = new PriorityConveyorEmulator<TSecondIntermediate, TResult>(third);
+        _maxAttempts = Math.Max(_first.MaxAttempts, Math.Max(_second.MaxAttempts, _third.MaxAttempts));
+        _maxPriority = Math.Max(_first.MaxPriority, Math.Max(_second.MaxPriority, _third.MaxPriority));
     }
 
     /// <param name="first"> First conveyor </param>
@@ -92,6 +102,8 @@ public class PriorityConveyorChain<TData, TFirstIntermediate, TSecondIntermediat
         _first = new PriorityConveyorEmulator<TData, TFirstIntermediate>(first);
         _second = new PriorityConveyorEmulator<TFirstIntermediate, TSecondIntermediate>(second);
         _third = third ?? throw new ArgumentNullException(nameof(third));
+        _maxAttempts = Math.Max(_first.MaxAttempts, Math.Max(_second.MaxAttempts, _third.MaxAttempts));
+        _maxPriority = Math.Max(_first.MaxPriority, Math.Max(_second.MaxPriority, _third.MaxPriority));
     }
 
     /// <param name="first"> First conveyor </param>
@@ -104,6 +116,8 @@ public class PriorityConveyorChain<TData, TFirstIntermediate, TSecondIntermediat
         _first = new PriorityConveyorEmulator<TData, TFirstIntermediate>(first);
         _second = second ?? throw new ArgumentNullException(nameof(second));
         _third = new PriorityConveyorEmulator<TSecondIntermediate, TResult>(third);
+        _maxAttempts = Math.Max(_first.MaxAttempts, Math.Max(_second.MaxAttempts, _third.MaxAttempts));
+        _maxPriority = Math.Max(_first.MaxPriority, Math.Max(_second.MaxPriority, _third.MaxPriority));
     }
 
     /// <param name="first"> First conveyor </param>
@@ -116,9 +130,11 @@ public class PriorityConveyorChain<TData, TFirstIntermediate, TSecondIntermediat
         _first = first ?? throw new ArgumentNullException(nameof(first));
         _second = new PriorityConveyorEmulator<TFirstIntermediate, TSecondIntermediate>(second);
         _third = new PriorityConveyorEmulator<TSecondIntermediate, TResult>(third);
+        _maxAttempts = Math.Max(_first.MaxAttempts, Math.Max(_second.MaxAttempts, _third.MaxAttempts));
+        _maxPriority = Math.Max(_first.MaxPriority, Math.Max(_second.MaxPriority, _third.MaxPriority));
     }
 
-    int IConveyor<TData, TResult>.MaxAttempts => Math.Max(_first.MaxAttempts, Math.Max(_second.MaxAttempts, _third.MaxAttempts));
+    int IConveyor<TData, TResult>.MaxAttempts => _maxAttempts;
 
     async Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
         => await _third.ProcessDataAsync(await _second.ProcessDataAsync(await _first
@@ -133,7 +149,7 @@ public class PriorityConveyorChain<TData, TFirstIntermediate, TSecondIntermediat
                            Math.Min(_third.MaxAttempts, attemptsCount))
                        .ConfigureAwait(false);
 
-    int IPriorityConveyor<TData, TResult>.MaxPriority => Math.Max(_first.MaxPriority, Math.Max(_second.MaxPriority, _third.MaxPriority));
+    int IPriorityConveyor<TData, TResult>.MaxPriority => _maxPriority;
 
     async Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, CancellationToken cancellation,
         int attemptsCount)

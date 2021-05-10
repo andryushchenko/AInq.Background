@@ -4,6 +4,9 @@
         <name>AInq.Background.Abstraction</name>
     </assembly>
     <members>
+        <member name="T:AInq.Background.Extensions.AccessQueueDependencyInjectionExtension">
+            <summary> <see cref="T:AInq.Background.Services.IAccessQueue`1" /> and <see cref="T:AInq.Background.Services.IPriorityAccessQueue`1" /> extensions to enqueue access action from DI </summary>
+        </member>
         <member name="M:AInq.Background.Extensions.AccessQueueDependencyInjectionExtension.EnqueueAccess``2(AInq.Background.Services.IAccessQueue{``0},System.Threading.CancellationToken,System.Int32)">
             <summary> Enqueue access action </summary>
             <param name="queue"> Access queue instance </param>

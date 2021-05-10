@@ -85,7 +85,7 @@ public sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposab
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unhandled error in task processor {0}", _processor.GetType());
+                _logger?.LogError(ex, "Unhandled error in task processor {0}", _processor.GetType());
             }
     }
 }

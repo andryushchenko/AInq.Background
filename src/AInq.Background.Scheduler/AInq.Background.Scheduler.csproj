@@ -11,7 +11,7 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-    <Version>4.0.2</Version>
+    <Version>4.1.1</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>AInq.Background</RootNamespace>
@@ -21,7 +21,7 @@
       Background work utilities for .NET Core apps based on Hosted services.
       Background work scheduler with cron.
     </Description>
-    <PackageReleaseNotes>[FIX] Minor bug fix.</PackageReleaseNotes>
+    <PackageReleaseNotes>[FIX] Bug in SchedulerWorker error logging</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

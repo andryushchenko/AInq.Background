@@ -29,6 +29,7 @@ public class ConveyorChain<TData, TIntermediate, TResult> : IConveyor<TData, TRe
     where TIntermediate : notnull
 {
     private readonly IConveyor<TData, TIntermediate> _first;
+    private readonly int _maxAttempts;
     private readonly IConveyor<TIntermediate, TResult> _second;
 
     /// <param name="first"> First conveyor </param>
@@ -38,9 +39,10 @@ public class ConveyorChain<TData, TIntermediate, TResult> : IConveyor<TData, TRe
     {
         _first = first ?? throw new ArgumentNullException(nameof(first));
         _second = second ?? throw new ArgumentNullException(nameof(second));
+        _maxAttempts = Math.Max(_first.MaxAttempts, _second.MaxAttempts);
     }
 
-    int IConveyor<TData, TResult>.MaxAttempts => Math.Max(_first.MaxAttempts, _second.MaxAttempts);
+    int IConveyor<TData, TResult>.MaxAttempts => _maxAttempts;
 
     async Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
         => await _second.ProcessDataAsync(

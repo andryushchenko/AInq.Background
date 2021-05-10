@@ -54,7 +54,7 @@ internal sealed class SingleOneTimeProcessor<TArgument, TMetadata> : ITaskProces
             var startStoppable = argument as IStartStoppable;
             try
             {
-                if (startStoppable != null && !startStoppable.IsActive)
+                if (startStoppable is {IsActive: false})
                     await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
             }
             catch (Exception ex)
@@ -69,7 +69,7 @@ internal sealed class SingleOneTimeProcessor<TArgument, TMetadata> : ITaskProces
                     {
                         try
                         {
-                            if (startStoppable != null && startStoppable.IsActive)
+                            if (startStoppable is {IsActive: true})
                                 await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
                         }
                         catch (Exception ex)

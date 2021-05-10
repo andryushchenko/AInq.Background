@@ -100,7 +100,7 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unhandled error processing scheduled tasks");
+                _logger?.LogError(ex, "Unhandled error processing scheduled tasks");
             }
     }
 

@@ -56,7 +56,7 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
             var (task, metadata) = manager.GetTask();
             if (task == null)
             {
-                if (startStoppable != null && startStoppable.IsActive)
+                if (startStoppable is {IsActive: true})
                     _active.Add(argument);
                 else _inactive.Add(argument);
                 _reset.Set();
@@ -66,7 +66,7 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                 {
                     try
                     {
-                        if (startStoppable != null && !startStoppable.IsActive)
+                        if (startStoppable is {IsActive: false})
                             await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
                     }
                     catch (Exception ex)
@@ -82,12 +82,12 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                         manager.RevertTask(task, metadata);
                     try
                     {
-                        if (manager.HasTask && argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
+                        if (manager.HasTask && argument is IThrottling {Timeout: {Ticks: > 0}} throttling)
                             await Task.Delay(throttling.Timeout, cancellation).ConfigureAwait(false);
                     }
                     finally
                     {
-                        if (startStoppable != null && startStoppable.IsActive)
+                        if (startStoppable is {IsActive: true})
                             _active.Add(argument);
                         else _inactive.Add(argument);
                         _reset.Set();
@@ -106,7 +106,7 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                                     var startStoppable = argument as IStartStoppable;
                                     try
                                     {
-                                        if (startStoppable != null && startStoppable.IsActive)
+                                        if (startStoppable is {IsActive: true})
                                             await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
                                     }
                                     catch (Exception ex)

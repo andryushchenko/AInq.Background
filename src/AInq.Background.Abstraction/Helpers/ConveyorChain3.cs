@@ -31,6 +31,7 @@ public class ConveyorChain<TData, TFirstIntermediate, TSecondIntermediate, TResu
     where TSecondIntermediate : notnull
 {
     private readonly IConveyor<TData, TFirstIntermediate> _first;
+    private readonly int _maxAttempts;
     private readonly IConveyor<TFirstIntermediate, TSecondIntermediate> _second;
     private readonly IConveyor<TSecondIntermediate, TResult> _third;
 
@@ -44,9 +45,10 @@ public class ConveyorChain<TData, TFirstIntermediate, TSecondIntermediate, TResu
         _first = first ?? throw new ArgumentNullException(nameof(first));
         _second = second ?? throw new ArgumentNullException(nameof(second));
         _third = third ?? throw new ArgumentNullException(nameof(third));
+        _maxAttempts = Math.Max(_first.MaxAttempts, Math.Max(_second.MaxAttempts, _third.MaxAttempts));
     }
 
-    int IConveyor<TData, TResult>.MaxAttempts => Math.Max(_first.MaxAttempts, Math.Max(_second.MaxAttempts, _third.MaxAttempts));
+    int IConveyor<TData, TResult>.MaxAttempts => _maxAttempts;
 
     async Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
         => await _third.ProcessDataAsync(await _second.ProcessDataAsync(await _first.ProcessDataAsync(data,

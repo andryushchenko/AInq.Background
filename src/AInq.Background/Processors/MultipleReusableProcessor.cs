@@ -80,7 +80,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                     var startStoppable = argument as IStartStoppable;
                     try
                     {
-                        if (startStoppable != null && !startStoppable.IsActive)
+                        if (startStoppable is {IsActive: false})
                             await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
                     }
                     catch (Exception ex)
@@ -95,7 +95,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                         manager.RevertTask(task, metadata);
                     try
                     {
-                        if (manager.HasTask && argument is IThrottling throttling && throttling.Timeout.Ticks > 0)
+                        if (manager.HasTask && argument is IThrottling {Timeout: {Ticks: > 0}} throttling)
                             await Task.Delay(throttling.Timeout, cancellation).ConfigureAwait(false);
                     }
                     finally
@@ -120,7 +120,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                                 var startStoppable = argument as IStartStoppable;
                                 try
                                 {
-                                    if (startStoppable != null && startStoppable.IsActive)
+                                    if (startStoppable is {IsActive: true})
                                         await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
                                 }
                                 catch (Exception ex)

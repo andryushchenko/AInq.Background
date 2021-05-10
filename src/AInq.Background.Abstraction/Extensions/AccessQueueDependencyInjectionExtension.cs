@@ -23,6 +23,7 @@ using static AInq.Background.Tasks.AccessFactory;
 namespace AInq.Background.Extensions
 {
 
+/// <summary> <see cref="IAccessQueue{T}" /> and <see cref="IPriorityAccessQueue{T}" /> extensions to enqueue access action from DI </summary>
 public static class AccessQueueDependencyInjectionExtension
 {
     /// <summary> Enqueue access action </summary>
