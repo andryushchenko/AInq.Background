@@ -17,6 +17,7 @@ using AInq.Background.Processors;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Nito.AsyncEx;
 using System;
 using System.Threading;
@@ -30,7 +31,7 @@ namespace AInq.Background.Workers
 /// <typeparam name="TMetadata"> Task metadata type </typeparam>
 public sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposable
 {
-    private readonly ILogger<TaskWorker<TArgument, TMetadata>>? _logger;
+    private readonly ILogger<TaskWorker<TArgument, TMetadata>> _logger;
     private readonly ITaskManager<TArgument, TMetadata> _manager;
     private readonly ITaskProcessor<TArgument, TMetadata> _processor;
     private readonly IServiceProvider _provider;
@@ -45,7 +46,8 @@ public sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposab
         _provider = provider;
         _manager = manager;
         _processor = processor;
-        _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<TaskWorker<TArgument, TMetadata>>();
+        _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<TaskWorker<TArgument, TMetadata>>()
+                  ?? NullLogger<TaskWorker<TArgument, TMetadata>>.Instance;
     }
 
     void IDisposable.Dispose()
@@ -85,7 +87,7 @@ public sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposab
             }
             catch (Exception ex)
             {
-                _logger?.LogError(ex, "Unhandled error in task processor {0}", _processor.GetType());
+                _logger.LogError(ex, "Unhandled error in task processor {0}", _processor.GetType());
             }
     }
 }

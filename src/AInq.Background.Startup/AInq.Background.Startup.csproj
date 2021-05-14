@@ -11,7 +11,7 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-    <Version>4.1.1</Version>
+    <Version>4.1.1.1</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>AInq.Background</RootNamespace>
@@ -20,7 +20,7 @@
     <Description>Background work utilities for .NET Core apps based on Hosted services.
 Host startup work service.
     </Description>
-    <PackageReleaseNotes>[UPD] Internal dependency update</PackageReleaseNotes>
+    <PackageReleaseNotes>[IMP] Replace ILogger? with NullLogger</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

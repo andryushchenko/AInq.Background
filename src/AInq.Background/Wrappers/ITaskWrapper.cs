@@ -39,7 +39,7 @@ public interface ITaskWrapper<in TArgument>
     /// <param name="logger"> Logger instance </param>
     /// <param name="cancellation"> Cancellation token </param>
     /// <returns> If task is completed or should be reverted to queue/conveyor </returns>
-    Task<bool> ExecuteAsync(TArgument argument, IServiceProvider provider, ILogger? logger = null, CancellationToken cancellation = default);
+    Task<bool> ExecuteAsync(TArgument argument, IServiceProvider provider, ILogger logger, CancellationToken cancellation = default);
 }
 
 }

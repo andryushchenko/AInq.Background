@@ -32,7 +32,7 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
         => _argumentFabric = argumentFabric ?? throw new ArgumentNullException(nameof(argumentFabric));
 
     async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,
-        ILogger? logger, CancellationToken cancellation)
+        ILogger logger, CancellationToken cancellation)
     {
         if (!manager.HasTask)
             return;
@@ -43,7 +43,7 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
         }
         catch (Exception ex)
         {
-            logger?.LogError(ex, "Error creating argument {Type} with {Fabric}", typeof(TArgument), _argumentFabric);
+            logger.LogError(ex, "Error creating argument {Type} with {Fabric}", typeof(TArgument), _argumentFabric);
             return;
         }
         var startStoppable = argument as IStartStoppable;
@@ -54,7 +54,7 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
         }
         catch (Exception ex)
         {
-            logger?.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
+            logger.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
             return;
         }
         while (manager.HasTask && !cancellation.IsCancellationRequested)
@@ -84,7 +84,7 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
                     }
                     catch (Exception ex)
                     {
-                        logger?.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
+                        logger.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
                     }
                 },
                 cancellation)

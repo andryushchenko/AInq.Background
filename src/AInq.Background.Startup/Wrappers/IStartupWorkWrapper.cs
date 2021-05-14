@@ -22,7 +22,7 @@ namespace AInq.Background.Wrappers
 
 internal interface IStartupWorkWrapper
 {
-    Task DoWorkAsync(IServiceProvider provider, ILogger? logger, CancellationToken cancellation);
+    Task DoWorkAsync(IServiceProvider provider, ILogger logger, CancellationToken cancellation);
 }
 
 }

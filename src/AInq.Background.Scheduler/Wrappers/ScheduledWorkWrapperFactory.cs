@@ -123,7 +123,7 @@ public static class ScheduledWorkWrapperFactory
         internal Task WorkTask => _completion.Task;
         bool IScheduledTaskWrapper.IsCanceled => _innerCancellation.IsCancellationRequested;
 
-        async Task<bool> IScheduledTaskWrapper.ExecuteAsync(IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
+        async Task<bool> IScheduledTaskWrapper.ExecuteAsync(IServiceProvider provider, ILogger logger, CancellationToken outerCancellation)
         {
             using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
             try
@@ -137,12 +137,12 @@ public static class ScheduledWorkWrapperFactory
             catch (OperationCanceledException)
             {
                 if (outerCancellation.IsCancellationRequested)
-                    logger?.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
+                    logger.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
                 return true;
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
+                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
                 _completion.TrySetException(ex);
             }
             _nextScheduledTime = null;
@@ -184,7 +184,7 @@ public static class ScheduledWorkWrapperFactory
         internal Task<TResult> WorkTask => _completion.Task;
         bool IScheduledTaskWrapper.IsCanceled => _innerCancellation.IsCancellationRequested;
 
-        async Task<bool> IScheduledTaskWrapper.ExecuteAsync(IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
+        async Task<bool> IScheduledTaskWrapper.ExecuteAsync(IServiceProvider provider, ILogger logger, CancellationToken outerCancellation)
         {
             using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
             try
@@ -197,12 +197,12 @@ public static class ScheduledWorkWrapperFactory
             catch (OperationCanceledException)
             {
                 if (outerCancellation.IsCancellationRequested)
-                    logger?.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
+                    logger.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
                 return true;
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
+                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
                 _completion.TrySetException(ex);
             }
             _nextScheduledTime = null;

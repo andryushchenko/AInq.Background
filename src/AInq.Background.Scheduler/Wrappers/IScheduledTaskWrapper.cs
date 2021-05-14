@@ -34,7 +34,7 @@ public interface IScheduledTaskWrapper
     /// <param name="logger"> Logger instance </param>
     /// <param name="cancellation"> Cancellation token </param>
     /// <returns> If task should be reverted to scheduler </returns>
-    Task<bool> ExecuteAsync(IServiceProvider provider, ILogger? logger = null, CancellationToken cancellation = default);
+    Task<bool> ExecuteAsync(IServiceProvider provider, ILogger logger, CancellationToken cancellation = default);
 }
 
 }

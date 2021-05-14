@@ -19,6 +19,7 @@ using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Nito.AsyncEx;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,7 +38,7 @@ public static class StartupWorkInjection
     /// <returns></returns>
     public static async Task DoStartupWorkAsync(this IHost host, CancellationToken cancellation = default)
     {
-        var logger = host.Services.GetService<ILoggerFactory>()?.CreateLogger("Startup work");
+        var logger = host.Services.GetService<ILoggerFactory>()?.CreateLogger("Startup work") ?? NullLogger.Instance;
         foreach (var work in host.Services.GetServices<IStartupWorkWrapper>())
         {
             using var scope = host.Services.CreateScope();

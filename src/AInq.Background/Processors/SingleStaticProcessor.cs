@@ -31,7 +31,7 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
         => _argument = argument;
 
     async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,
-        ILogger? logger, CancellationToken cancellation)
+        ILogger logger, CancellationToken cancellation)
     {
         if (!manager.HasTask)
             return;
@@ -43,7 +43,7 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
         }
         catch (Exception ex)
         {
-            logger?.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
+            logger.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
             return;
         }
         while (manager.HasTask && !cancellation.IsCancellationRequested)
@@ -71,7 +71,7 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
         }
         catch (Exception ex)
         {
-            logger?.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
+            logger.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
         }
     }
 }

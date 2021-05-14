@@ -123,7 +123,7 @@ public static class AccessWrapperFactory
         bool ITaskWrapper<TResource>.IsCompleted => _completion.Task.IsCompleted;
         bool ITaskWrapper<TResource>.IsFaulted => _completion.Task.IsFaulted;
 
-        async Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger? logger,
+        async Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger logger,
             CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
@@ -146,7 +146,7 @@ public static class AccessWrapperFactory
             catch (OperationCanceledException ex)
             {
                 if (outerCancellation.IsCancellationRequested)
-                    logger?.LogWarning("Accessing resource {Type} with {Access} canceled by runtime",
+                    logger.LogWarning("Accessing resource {Type} with {Access} canceled by runtime",
                         typeof(TResource),
                         _asyncAccess as object ?? _access);
                 if (!_innerCancellation.IsCancellationRequested)
@@ -157,7 +157,7 @@ public static class AccessWrapperFactory
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error accessing resource {Type} with {Access}", typeof(TResource), _asyncAccess as object ?? _access);
+                logger.LogError(ex, "Error accessing resource {Type} with {Access}", typeof(TResource), _asyncAccess as object ?? _access);
                 if (_attemptsRemain > 0)
                     return false;
                 _completion.TrySetException(ex);
@@ -201,7 +201,7 @@ public static class AccessWrapperFactory
         bool ITaskWrapper<TResource>.IsCompleted => _completion.Task.IsCompleted;
         bool ITaskWrapper<TResource>.IsFaulted => _completion.Task.IsFaulted;
 
-        async Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger? logger,
+        async Task<bool> ITaskWrapper<TResource>.ExecuteAsync(TResource argument, IServiceProvider provider, ILogger logger,
             CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
@@ -223,7 +223,7 @@ public static class AccessWrapperFactory
             catch (OperationCanceledException ex)
             {
                 if (outerCancellation.IsCancellationRequested)
-                    logger?.LogWarning("Accessing resource {Type} with {Access} canceled by runtime",
+                    logger.LogWarning("Accessing resource {Type} with {Access} canceled by runtime",
                         typeof(TResource),
                         _asyncAccess as object ?? _access);
                 if (!_innerCancellation.IsCancellationRequested)
@@ -234,7 +234,7 @@ public static class AccessWrapperFactory
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error accessing resource {Type} with {Access}", typeof(TResource), _asyncAccess as object ?? _access);
+                logger.LogError(ex, "Error accessing resource {Type} with {Access}", typeof(TResource), _asyncAccess as object ?? _access);
                 if (_attemptsRemain > 0)
                     return false;
                 _completion.TrySetException(ex);

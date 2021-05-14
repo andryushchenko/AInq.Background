@@ -17,6 +17,7 @@ using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Nito.AsyncEx;
 using System;
 using System.Threading;
@@ -34,7 +35,7 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
     private static readonly TimeSpan Beforehand = TimeSpan.FromSeconds(5);
 
     private readonly TimeSpan _horizon;
-    private readonly ILogger<SchedulerWorker>? _logger;
+    private readonly ILogger<SchedulerWorker> _logger;
     private readonly IServiceProvider _provider;
     private readonly IWorkSchedulerManager _scheduler;
     private readonly CancellationTokenSource _shutdown = new();
@@ -53,7 +54,7 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
         _horizon = horizon ?? DefaultHorizon;
         _scheduler = scheduler;
         _provider = provider;
-        _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<SchedulerWorker>();
+        _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<SchedulerWorker>() ?? NullLogger<SchedulerWorker>.Instance;
     }
 
     void IDisposable.Dispose()
@@ -100,7 +101,7 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
             }
             catch (Exception ex)
             {
-                _logger?.LogError(ex, "Unhandled error processing scheduled tasks");
+                _logger.LogError(ex, "Unhandled error processing scheduled tasks");
             }
     }
 

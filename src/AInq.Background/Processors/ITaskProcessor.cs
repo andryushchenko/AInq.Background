@@ -32,7 +32,7 @@ public interface ITaskProcessor<TArgument, TMetadata>
     /// <param name="logger"> Logger instance </param>
     /// <param name="cancellation"> Cancellation token </param>
     /// <returns></returns>
-    Task ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger? logger = null,
+    Task ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger logger,
         CancellationToken cancellation = default);
 }
 

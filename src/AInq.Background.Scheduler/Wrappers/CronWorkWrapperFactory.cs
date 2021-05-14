@@ -147,7 +147,7 @@ public static class CronWorkWrapperFactory
 
         bool IScheduledTaskWrapper.IsCanceled => _innerCancellation.IsCancellationRequested;
 
-        async Task<bool> IScheduledTaskWrapper.ExecuteAsync(IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
+        async Task<bool> IScheduledTaskWrapper.ExecuteAsync(IServiceProvider provider, ILogger logger, CancellationToken outerCancellation)
         {
             using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
             try
@@ -162,11 +162,11 @@ public static class CronWorkWrapperFactory
             catch (OperationCanceledException)
             {
                 if (outerCancellation.IsCancellationRequested)
-                    logger?.LogError("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
+                    logger.LogError("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
+                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
                 _subject.OnNext(Maybe.Value(ex));
                 if (_execCount != -1) _execCount--;
             }
@@ -217,7 +217,7 @@ public static class CronWorkWrapperFactory
 
         bool IScheduledTaskWrapper.IsCanceled => _innerCancellation.IsCancellationRequested;
 
-        async Task<bool> IScheduledTaskWrapper.ExecuteAsync(IServiceProvider provider, ILogger? logger, CancellationToken outerCancellation)
+        async Task<bool> IScheduledTaskWrapper.ExecuteAsync(IServiceProvider provider, ILogger logger, CancellationToken outerCancellation)
         {
             using var aggregateCancellation = CancellationTokenSource.CreateLinkedTokenSource(_innerCancellation, outerCancellation);
             try
@@ -232,11 +232,11 @@ public static class CronWorkWrapperFactory
             catch (OperationCanceledException)
             {
                 if (outerCancellation.IsCancellationRequested)
-                    logger?.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
+                    logger.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
+                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
                 _subject.OnNext(Try.Error<TResult>(ex));
                 if (_execCount != -1) _execCount--;
             }

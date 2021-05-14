@@ -36,7 +36,7 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
     }
 
     async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,
-        ILogger? logger, CancellationToken cancellation)
+        ILogger logger, CancellationToken cancellation)
     {
         while (manager.HasTask && !cancellation.IsCancellationRequested)
         {
@@ -54,7 +54,7 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
                         }
                         catch (Exception ex)
                         {
-                            logger?.LogError(ex, "Error creating argument {Type} with {Fabric}", typeof(TArgument), _argumentFabric);
+                            logger.LogError(ex, "Error creating argument {Type} with {Fabric}", typeof(TArgument), _argumentFabric);
                             manager.RevertTask(task, metadata);
                             _semaphore.Release();
                             return;
@@ -67,7 +67,7 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
                         }
                         catch (Exception ex)
                         {
-                            logger?.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
+                            logger.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
                             manager.RevertTask(task, metadata);
                             _semaphore.Release();
                             return;
@@ -81,7 +81,7 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
                         }
                         catch (Exception ex)
                         {
-                            logger?.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
+                            logger.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
                         }
                         finally
                         {

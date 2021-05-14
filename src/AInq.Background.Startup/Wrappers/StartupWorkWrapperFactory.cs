@@ -52,7 +52,7 @@ internal static class StartupWorkWrapperFactory
             _asyncWork = asyncWork;
         }
 
-        async Task IStartupWorkWrapper.DoWorkAsync(IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
+        async Task IStartupWorkWrapper.DoWorkAsync(IServiceProvider provider, ILogger logger, CancellationToken cancellation)
         {
             if (cancellation.IsCancellationRequested) return;
             try
@@ -63,11 +63,11 @@ internal static class StartupWorkWrapperFactory
             }
             catch (OperationCanceledException)
             {
-                logger?.LogWarning("Startup work {Work} canceled", _asyncWork as object ?? _work);
+                logger.LogWarning("Startup work {Work} canceled", _asyncWork as object ?? _work);
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing startup work {Work}", _asyncWork as object ?? _work);
+                logger.LogError(ex, "Error processing startup work {Work}", _asyncWork as object ?? _work);
             }
         }
     }
@@ -89,7 +89,7 @@ internal static class StartupWorkWrapperFactory
             _asyncWork = asyncWork;
         }
 
-        async Task IStartupWorkWrapper.DoWorkAsync(IServiceProvider provider, ILogger? logger, CancellationToken cancellation)
+        async Task IStartupWorkWrapper.DoWorkAsync(IServiceProvider provider, ILogger logger, CancellationToken cancellation)
         {
             if (cancellation.IsCancellationRequested) return;
             try
@@ -100,11 +100,11 @@ internal static class StartupWorkWrapperFactory
             }
             catch (OperationCanceledException)
             {
-                logger?.LogWarning("Startup work {Work} canceled", _asyncWork as object ?? _work);
+                logger.LogWarning("Startup work {Work} canceled", _asyncWork as object ?? _work);
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing startup work {Work}", _asyncWork as object ?? _work);
+                logger.LogError(ex, "Error processing startup work {Work}", _asyncWork as object ?? _work);
             }
         }
     }

@@ -41,7 +41,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
     }
 
     async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,
-        ILogger? logger, CancellationToken cancellation)
+        ILogger logger, CancellationToken cancellation)
     {
         var currentTasks = new LinkedList<Task>();
         while (manager.HasTask && !cancellation.IsCancellationRequested)
@@ -57,7 +57,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                     }
                     catch (Exception ex)
                     {
-                        logger?.LogError(ex, "Error creating argument {Type} with {Fabric}", typeof(TArgument), _argumentFabric);
+                        logger.LogError(ex, "Error creating argument {Type} with {Fabric}", typeof(TArgument), _argumentFabric);
                         continue;
                     }
                     Interlocked.Increment(ref _currentArgumentCount);
@@ -85,7 +85,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                     }
                     catch (Exception ex)
                     {
-                        logger?.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
+                        logger.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
                         manager.RevertTask(task, metadata);
                         Interlocked.Decrement(ref _currentArgumentCount);
                         _reset.Set();
@@ -125,7 +125,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                                 }
                                 catch (Exception ex)
                                 {
-                                    logger?.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
+                                    logger.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
                                 }
                             },
                             cancellation);

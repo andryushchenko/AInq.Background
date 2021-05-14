@@ -108,7 +108,7 @@ public static class WorkWrapperFactory
         bool ITaskWrapper<object?>.IsCompleted => _completion.Task.IsCompleted;
         bool ITaskWrapper<object?>.IsFaulted => _completion.Task.IsFaulted;
 
-        async Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger,
+        async Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger logger,
             CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
@@ -131,7 +131,7 @@ public static class WorkWrapperFactory
             catch (OperationCanceledException ex)
             {
                 if (outerCancellation.IsCancellationRequested)
-                    logger?.LogWarning("Queued work {Work} canceled by runtime", _asyncWork as object ?? _work);
+                    logger.LogWarning("Queued work {Work} canceled by runtime", _asyncWork as object ?? _work);
                 if (!_innerCancellation.IsCancellationRequested)
                     _attemptsRemain++;
                 if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
@@ -140,7 +140,7 @@ public static class WorkWrapperFactory
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing queued work {Work}", _asyncWork as object ?? _work);
+                logger.LogError(ex, "Error processing queued work {Work}", _asyncWork as object ?? _work);
                 if (_attemptsRemain > 0)
                     return false;
                 _completion.TrySetException(ex);
@@ -183,7 +183,7 @@ public static class WorkWrapperFactory
         bool ITaskWrapper<object?>.IsCompleted => _completion.Task.IsCompleted;
         bool ITaskWrapper<object?>.IsFaulted => _completion.Task.IsFaulted;
 
-        async Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger? logger,
+        async Task<bool> ITaskWrapper<object?>.ExecuteAsync(object? argument, IServiceProvider provider, ILogger logger,
             CancellationToken outerCancellation)
         {
             if (_attemptsRemain < 1)
@@ -205,7 +205,7 @@ public static class WorkWrapperFactory
             catch (OperationCanceledException ex)
             {
                 if (outerCancellation.IsCancellationRequested)
-                    logger?.LogWarning("Queued work {Work} canceled by runtime", _asyncWork as object ?? _work);
+                    logger.LogWarning("Queued work {Work} canceled by runtime", _asyncWork as object ?? _work);
                 if (!_innerCancellation.IsCancellationRequested)
                     _attemptsRemain++;
                 if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
@@ -214,7 +214,7 @@ public static class WorkWrapperFactory
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "Error processing queued work {Work}", _asyncWork as object ?? _work);
+                logger.LogError(ex, "Error processing queued work {Work}", _asyncWork as object ?? _work);
                 if (_attemptsRemain > 0)
                     return false;
                 _completion.TrySetException(ex);
