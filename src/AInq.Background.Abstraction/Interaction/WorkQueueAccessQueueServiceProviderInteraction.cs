@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Helpers;
 using AInq.Background.Services;
 using AInq.Background.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,7 +44,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     public static Task EnqueueAccess<TResource>(this IServiceProvider provider, IAccess<TResource> access, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
                                                                           .EnqueueAccess(access, cancellation, attemptsCount, priority);
 
     /// <summary> Enqueue access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
@@ -61,7 +61,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     public static Task<TResult> EnqueueAccess<TResource, TResult>(this IServiceProvider provider, IAccess<TResource, TResult> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
                                                                           .EnqueueAccess(access, cancellation, attemptsCount, priority);
 
     /// <summary> Enqueue asynchronous access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
@@ -77,7 +77,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     public static Task EnqueueAsyncAccess<TResource>(this IServiceProvider provider, IAsyncAccess<TResource> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
                                                                           .EnqueueAsyncAccess(access, cancellation, attemptsCount, priority);
 
     /// <summary> Enqueue asynchronous access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
@@ -95,7 +95,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     public static Task<TResult> EnqueueAsyncAccess<TResource, TResult>(this IServiceProvider provider, IAsyncAccess<TResource, TResult> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
                                                                           .EnqueueAsyncAccess(access, cancellation, attemptsCount, priority);
 
 #endregion
@@ -116,7 +116,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAccess : IAccess<TResource>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
                                                                           .EnqueueAccess<TResource, TAccess>(cancellation, attemptsCount, priority);
 
     /// <summary> Enqueue access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
@@ -134,7 +134,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
                                                                           .EnqueueAccess<TResource, TAccess, TResult>(cancellation,
                                                                               attemptsCount,
                                                                               priority);
@@ -153,7 +153,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
                                                                           .EnqueueAsyncAccess<TResource, TAsyncAccess>(cancellation,
                                                                               attemptsCount,
                                                                               priority);
@@ -173,7 +173,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
                                                                           .EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(cancellation,
                                                                               attemptsCount,
                                                                               priority);

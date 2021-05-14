@@ -16,7 +16,6 @@ using AInq.Background.Extensions;
 using AInq.Background.Services;
 using AInq.Background.Tasks;
 using AInq.Optional;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,7 +40,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
     /// <seealso cref="WorkSchedulerDelayExtension.AddScheduledWork(IWorkScheduler, IWork, TimeSpan, CancellationToken)" />
     public static Task AddScheduledWork(this IServiceProvider provider, IWork work, TimeSpan delay, CancellationToken cancellation = default)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledWork(work, delay, cancellation);
 
     /// <summary> Add delayed work to registered scheduler </summary>
@@ -57,7 +56,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="WorkSchedulerDelayExtension.AddScheduledWork{TResult}(IWorkScheduler, IWork{TResult}, TimeSpan, CancellationToken)" />
     public static Task<TResult> AddScheduledWork<TResult>(this IServiceProvider provider, IWork<TResult> work, TimeSpan delay,
         CancellationToken cancellation = default)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledWork(work, delay, cancellation);
 
     /// <summary> Add delayed asynchronous work to registered scheduler </summary>
@@ -72,7 +71,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="WorkSchedulerDelayExtension.AddScheduledAsyncWork(IWorkScheduler, IAsyncWork, TimeSpan, CancellationToken)" />
     public static Task AddScheduledAsyncWork(this IServiceProvider provider, IAsyncWork work, TimeSpan delay,
         CancellationToken cancellation = default)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncWork(work, delay, cancellation);
 
     /// <summary> Add delayed asynchronous work to registered scheduler </summary>
@@ -88,7 +87,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="WorkSchedulerDelayExtension.AddScheduledAsyncWork{TResult}(IWorkScheduler, IAsyncWork{TResult}, TimeSpan, CancellationToken)" />
     public static Task<TResult> AddScheduledAsyncWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work, TimeSpan delay,
         CancellationToken cancellation = default)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncWork(work, delay, cancellation);
 
 #endregion
@@ -107,7 +106,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="WorkSchedulerDependencyInjectionExtension.AddScheduledWork{TWork}(IWorkScheduler, TimeSpan, CancellationToken)" />
     public static Task AddScheduledWork<TWork>(this IServiceProvider provider, TimeSpan delay, CancellationToken cancellation = default)
         where TWork : IWork
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledWork<TWork>(delay, cancellation);
 
     /// <summary> Add delayed work to registered scheduler </summary>
@@ -124,7 +123,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static Task<TResult> AddScheduledWork<TWork, TResult>(this IServiceProvider provider, TimeSpan delay,
         CancellationToken cancellation = default)
         where TWork : IWork<TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledWork<TWork, TResult>(delay, cancellation);
 
     /// <summary> Add delayed asynchronous work to registered scheduler </summary>
@@ -139,7 +138,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="WorkSchedulerDependencyInjectionExtension.AddScheduledAsyncWork{TAsyncWork}(IWorkScheduler, TimeSpan, CancellationToken)" />
     public static Task AddScheduledAsyncWork<TAsyncWork>(this IServiceProvider provider, TimeSpan delay, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncWork<TAsyncWork>(delay, cancellation);
 
     /// <summary> Add delayed work to registered scheduler </summary>
@@ -156,7 +155,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static Task<TResult> AddScheduledAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, TimeSpan delay,
         CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork<TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncWork<TAsyncWork, TResult>(delay, cancellation);
 
 #endregion
@@ -174,7 +173,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
     /// <seealso cref="IWorkScheduler.AddScheduledWork(IWork, DateTime, CancellationToken)" />
     public static Task AddScheduledWork(this IServiceProvider provider, IWork work, DateTime time, CancellationToken cancellation = default)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledWork(work, time, cancellation);
 
     /// <summary> Add scheduled work to registered scheduler </summary>
@@ -190,7 +189,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="IWorkScheduler.AddScheduledWork{TResult}(IWork{TResult}, DateTime, CancellationToken)" />
     public static Task<TResult> AddScheduledWork<TResult>(this IServiceProvider provider, IWork<TResult> work, DateTime time,
         CancellationToken cancellation = default)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledWork(work, time, cancellation);
 
     /// <summary> Add scheduled asynchronous work to registered scheduler </summary>
@@ -204,7 +203,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
     /// <seealso cref="IWorkScheduler.AddScheduledAsyncWork(IAsyncWork, DateTime, CancellationToken)" />
     public static Task AddScheduledAsyncWork(this IServiceProvider provider, IAsyncWork work, DateTime time, CancellationToken cancellation = default)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncWork(work, time, cancellation);
 
     /// <summary> Add scheduled asynchronous work to registered scheduler </summary>
@@ -220,7 +219,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="IWorkScheduler.AddScheduledAsyncWork{TResult}(IAsyncWork{TResult}, DateTime, CancellationToken)" />
     public static Task<TResult> AddScheduledAsyncWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work, DateTime time,
         CancellationToken cancellation = default)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncWork(work, time, cancellation);
 
 #endregion
@@ -239,7 +238,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="WorkSchedulerDependencyInjectionExtension.AddScheduledWork{TWork}(IWorkScheduler, DateTime, CancellationToken)" />
     public static Task AddScheduledWork<TWork>(this IServiceProvider provider, DateTime time, CancellationToken cancellation = default)
         where TWork : IWork
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledWork<TWork>(time, cancellation);
 
     /// <summary> Add scheduled work to registered scheduler </summary>
@@ -256,7 +255,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static Task<TResult> AddScheduledWork<TWork, TResult>(this IServiceProvider provider, DateTime time,
         CancellationToken cancellation = default)
         where TWork : IWork<TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledWork<TWork, TResult>(time, cancellation);
 
     /// <summary> Add scheduled asynchronous work to registered scheduler </summary>
@@ -271,7 +270,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="WorkSchedulerDependencyInjectionExtension.AddScheduledAsyncWork{TAsyncWork}(IWorkScheduler, DateTime, CancellationToken)" />
     public static Task AddScheduledAsyncWork<TAsyncWork>(this IServiceProvider provider, DateTime time, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncWork<TAsyncWork>(time, cancellation);
 
     /// <summary> Add scheduled asynchronous work to registered scheduler </summary>
@@ -288,7 +287,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static Task<TResult> AddScheduledAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, DateTime time,
         CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork<TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncWork<TAsyncWork, TResult>(time, cancellation);
 
 #endregion
@@ -311,7 +310,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="IWorkScheduler.AddCronWork(IWork, string, CancellationToken, int)" />
     public static IObservable<Maybe<Exception>> AddCronWork(this IServiceProvider provider, IWork work, string cronExpression,
         CancellationToken cancellation = default, int execCount = -1)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronWork(work, cronExpression, cancellation, execCount);
 
     /// <summary> Add CRON-scheduled work to registered scheduler </summary>
@@ -331,7 +330,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="IWorkScheduler.AddCronWork{TResult}(IWork{TResult}, string, CancellationToken, int)" />
     public static IObservable<Try<TResult>> AddCronWork<TResult>(this IServiceProvider provider, IWork<TResult> work, string cronExpression,
         CancellationToken cancellation = default, int execCount = -1)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronWork(work, cronExpression, cancellation, execCount);
 
     /// <summary> Add CRON-scheduled asynchronous work to registered scheduler </summary>
@@ -350,7 +349,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="IWorkScheduler.AddCronAsyncWork(IAsyncWork, string, CancellationToken, int)" />
     public static IObservable<Maybe<Exception>> AddCronAsyncWork(this IServiceProvider provider, IAsyncWork work, string cronExpression,
         CancellationToken cancellation = default, int execCount = -1)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronAsyncWork(work, cronExpression, cancellation, execCount);
 
     /// <summary> Add CRON-scheduled asynchronous work to registered scheduler </summary>
@@ -370,7 +369,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="IWorkScheduler.AddCronAsyncWork{TResult}(IAsyncWork{TResult}, string, CancellationToken, int)" />
     public static IObservable<Try<TResult>> AddCronAsyncWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work, string cronExpression,
         CancellationToken cancellation = default, int execCount = -1)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronAsyncWork(work, cronExpression, cancellation, execCount);
 
 #endregion
@@ -391,7 +390,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static IObservable<Maybe<Exception>> AddCronWork<TWork>(this IServiceProvider provider, string cronExpression,
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronWork<TWork>(cronExpression, cancellation, execCount);
 
     /// <summary> Add CRON-scheduled work to registered scheduler </summary>
@@ -409,7 +408,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static IObservable<Try<TResult>> AddCronWork<TWork, TResult>(this IServiceProvider provider, string cronExpression,
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork<TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronWork<TWork, TResult>(cronExpression, cancellation, execCount);
 
     /// <summary> Add CRON-scheduled asynchronous work to registered scheduler </summary>
@@ -426,7 +425,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static IObservable<Maybe<Exception>> AddCronAsyncWork<TAsyncWork>(this IServiceProvider provider, string cronExpression,
         CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronAsyncWork<TAsyncWork>(cronExpression, cancellation, execCount);
 
     /// <summary> Add CRON-scheduled asynchronous work to registered scheduler </summary>
@@ -444,7 +443,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static IObservable<Try<TResult>> AddCronAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, string cronExpression,
         CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork<TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronAsyncWork<TAsyncWork, TResult>(cronExpression,
                                                                               cancellation,
                                                                               execCount);
@@ -466,7 +465,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="IWorkScheduler.AddRepeatedWork(IWork,DateTime,TimeSpan,CancellationToken,int)" />
     public static IObservable<Maybe<Exception>> AddRepeatedWork(this IServiceProvider provider, IWork work, DateTime starTime, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedWork(work, starTime, repeatDelay, cancellation, execCount);
 
     /// <summary> Add repeated work to registered scheduler </summary>
@@ -483,7 +482,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="IWorkScheduler.AddRepeatedWork{TResult}(IWork{TResult},DateTime,TimeSpan,CancellationToken,int)" />
     public static IObservable<Try<TResult>> AddRepeatedWork<TResult>(this IServiceProvider provider, IWork<TResult> work, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedWork(work, starTime, repeatDelay, cancellation, execCount);
 
     /// <summary> Add repeated asynchronous work to registered scheduler </summary>
@@ -499,7 +498,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="IWorkScheduler.AddRepeatedAsyncWork(IAsyncWork,DateTime,TimeSpan,CancellationToken,int)" />
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncWork(this IServiceProvider provider, IAsyncWork work, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncWork(work, starTime, repeatDelay, cancellation, execCount);
 
     /// <summary> Add repeated asynchronous work to registered scheduler </summary>
@@ -516,7 +515,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="IWorkScheduler.AddRepeatedAsyncWork{TResult}(IAsyncWork{TResult},DateTime,TimeSpan,CancellationToken,int)" />
     public static IObservable<Try<TResult>> AddRepeatedAsyncWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncWork(work, starTime, repeatDelay, cancellation, execCount);
 
 #endregion
@@ -537,7 +536,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static IObservable<Maybe<Exception>> AddRepeatedWork<TWork>(this IServiceProvider provider, DateTime starTime, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedWork<TWork>(starTime, repeatDelay, cancellation, execCount);
 
     /// <summary> Add repeated work to registered scheduler </summary>
@@ -555,7 +554,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static IObservable<Try<TResult>> AddRepeatedWork<TWork, TResult>(this IServiceProvider provider, DateTime starTime, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork<TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedWork<TWork, TResult>(starTime,
                                                                               repeatDelay,
                                                                               cancellation,
@@ -575,7 +574,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncWork<TAsyncWork>(this IServiceProvider provider, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncWork<TAsyncWork>(starTime,
                                                                               repeatDelay,
                                                                               cancellation,
@@ -597,7 +596,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static IObservable<Try<TResult>> AddRepeatedAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork<TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncWork<TAsyncWork, TResult>(starTime,
                                                                               repeatDelay,
                                                                               cancellation,
@@ -620,7 +619,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="WorkSchedulerDelayExtension.AddRepeatedWork(IWorkScheduler,IWork,TimeSpan,TimeSpan,CancellationToken,int)" />
     public static IObservable<Maybe<Exception>> AddRepeatedWork(this IServiceProvider provider, IWork work, TimeSpan startDelay, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedWork(work, startDelay, repeatDelay, cancellation, execCount);
 
     /// <summary> Add repeated work to registered scheduler </summary>
@@ -637,7 +636,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="WorkSchedulerDelayExtension.AddRepeatedWork{TResult}(IWorkScheduler,IWork{TResult},TimeSpan,TimeSpan,CancellationToken,int)" />
     public static IObservable<Try<TResult>> AddRepeatedWork<TResult>(this IServiceProvider provider, IWork<TResult> work, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedWork(work, startDelay, repeatDelay, cancellation, execCount);
 
     /// <summary> Add repeated asynchronous work to registered scheduler </summary>
@@ -653,7 +652,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="WorkSchedulerDelayExtension.AddRepeatedAsyncWork(IWorkScheduler,IAsyncWork,TimeSpan,TimeSpan,CancellationToken,int)" />
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncWork(this IServiceProvider provider, IAsyncWork work, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncWork(work,
                                                                               startDelay,
                                                                               repeatDelay,
@@ -674,7 +673,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <seealso cref="WorkSchedulerDelayExtension.AddRepeatedAsyncWork{TResult}(IWorkScheduler,IAsyncWork{TResult},TimeSpan,TimeSpan,CancellationToken,int)" />
     public static IObservable<Try<TResult>> AddRepeatedAsyncWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work,
         TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncWork(work,
                                                                               startDelay,
                                                                               repeatDelay,
@@ -699,7 +698,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static IObservable<Maybe<Exception>> AddRepeatedWork<TWork>(this IServiceProvider provider, TimeSpan startDelay, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedWork<TWork>(startDelay, repeatDelay, cancellation, execCount);
 
     /// <summary> Add repeated work to registered scheduler </summary>
@@ -717,7 +716,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static IObservable<Try<TResult>> AddRepeatedWork<TWork, TResult>(this IServiceProvider provider, TimeSpan startDelay, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork<TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedWork<TWork, TResult>(startDelay,
                                                                               repeatDelay,
                                                                               cancellation,
@@ -737,7 +736,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncWork<TAsyncWork>(this IServiceProvider provider, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncWork<TAsyncWork>(startDelay,
                                                                               repeatDelay,
                                                                               cancellation,
@@ -759,7 +758,7 @@ public static class WorkSchedulerServiceProviderHelper
     public static IObservable<Try<TResult>> AddRepeatedAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork<TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncWork<TAsyncWork, TResult>(startDelay,
                                                                               repeatDelay,
                                                                               cancellation,

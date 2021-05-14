@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using AInq.Background.Services;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,9 +41,9 @@ public static class ConveyorServiceProviderHelper
     public static Task<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, TData data, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TData : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityConveyor<TData, TResult>>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).Service<IPriorityConveyor<TData, TResult>>()
                                                                           ?.ProcessDataAsync(data, priority, cancellation, attemptsCount)
-           ?? provider.GetRequiredService<IConveyor<TData, TResult>>().ProcessDataAsync(data, cancellation, attemptsCount);
+           ?? provider.RequiredService<IConveyor<TData, TResult>>().ProcessDataAsync(data, cancellation, attemptsCount);
 }
 
 }

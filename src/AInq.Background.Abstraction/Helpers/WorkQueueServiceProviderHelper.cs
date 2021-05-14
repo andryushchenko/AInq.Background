@@ -15,7 +15,6 @@
 using AInq.Background.Extensions;
 using AInq.Background.Services;
 using AInq.Background.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,9 +40,9 @@ public static class WorkQueueServiceProviderHelper
     /// <seealso cref="IPriorityWorkQueue.EnqueueWork(IWork, int, CancellationToken, int)" />
     public static Task EnqueueWork(this IServiceProvider provider, IWork work, CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).Service<IPriorityWorkQueue>()
                                                                           ?.EnqueueWork(work, priority, cancellation, attemptsCount)
-           ?? provider.GetRequiredService<IWorkQueue>().EnqueueWork(work, cancellation, attemptsCount);
+           ?? provider.RequiredService<IWorkQueue>().EnqueueWork(work, cancellation, attemptsCount);
 
     /// <summary> Enqueue background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -58,9 +57,9 @@ public static class WorkQueueServiceProviderHelper
     /// <seealso cref="IPriorityWorkQueue.EnqueueWork{TResult}(IWork{TResult}, int, CancellationToken, int)" />
     public static Task<TResult> EnqueueWork<TResult>(this IServiceProvider provider, IWork<TResult> work, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).Service<IPriorityWorkQueue>()
                                                                           ?.EnqueueWork(work, priority, cancellation, attemptsCount)
-           ?? provider.GetRequiredService<IWorkQueue>().EnqueueWork(work, cancellation, attemptsCount);
+           ?? provider.RequiredService<IWorkQueue>().EnqueueWork(work, cancellation, attemptsCount);
 
     /// <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -74,9 +73,9 @@ public static class WorkQueueServiceProviderHelper
     /// <seealso cref="IPriorityWorkQueue.EnqueueAsyncWork(IAsyncWork, int, CancellationToken, int)" />
     public static Task EnqueueAsyncWork(this IServiceProvider provider, IAsyncWork work, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).Service<IPriorityWorkQueue>()
                                                                           ?.EnqueueAsyncWork(work, priority, cancellation, attemptsCount)
-           ?? provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, attemptsCount);
+           ?? provider.RequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, attemptsCount);
 
     /// <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -91,9 +90,9 @@ public static class WorkQueueServiceProviderHelper
     /// <seealso cref="IPriorityWorkQueue.EnqueueAsyncWork{TResult}(IAsyncWork{TResult}, int, CancellationToken, int)" />
     public static Task<TResult> EnqueueAsyncWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).Service<IPriorityWorkQueue>()
                                                                           ?.EnqueueAsyncWork(work, priority, cancellation, attemptsCount)
-           ?? provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, attemptsCount);
+           ?? provider.RequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, attemptsCount);
 
 #endregion
 
@@ -112,9 +111,9 @@ public static class WorkQueueServiceProviderHelper
     public static Task EnqueueWork<TWork>(this IServiceProvider provider, CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0)
         where TWork : IWork
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).Service<IPriorityWorkQueue>()
                                                                           ?.EnqueueWork<TWork>(priority, cancellation, attemptsCount)
-           ?? provider.GetRequiredService<IWorkQueue>().EnqueueWork<TWork>(cancellation, attemptsCount);
+           ?? provider.RequiredService<IWorkQueue>().EnqueueWork<TWork>(cancellation, attemptsCount);
 
     /// <summary> Enqueue background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -130,9 +129,9 @@ public static class WorkQueueServiceProviderHelper
     public static Task<TResult> EnqueueWork<TWork, TResult>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TWork : IWork<TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).Service<IPriorityWorkQueue>()
                                                                           ?.EnqueueWork<TWork, TResult>(priority, cancellation, attemptsCount)
-           ?? provider.GetRequiredService<IWorkQueue>().EnqueueWork<TWork, TResult>(cancellation, attemptsCount);
+           ?? provider.RequiredService<IWorkQueue>().EnqueueWork<TWork, TResult>(cancellation, attemptsCount);
 
     /// <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -147,9 +146,9 @@ public static class WorkQueueServiceProviderHelper
     public static Task EnqueueAsyncWork<TAsyncWork>(this IServiceProvider provider, CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0)
         where TAsyncWork : IAsyncWork
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).Service<IPriorityWorkQueue>()
                                                                           ?.EnqueueAsyncWork<TAsyncWork>(priority, cancellation, attemptsCount)
-           ?? provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork>(cancellation, attemptsCount);
+           ?? provider.RequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork>(cancellation, attemptsCount);
 
     /// <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -165,11 +164,11 @@ public static class WorkQueueServiceProviderHelper
     public static Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork<TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityWorkQueue>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).Service<IPriorityWorkQueue>()
                                                                           ?.EnqueueAsyncWork<TAsyncWork, TResult>(priority,
                                                                               cancellation,
                                                                               attemptsCount)
-           ?? provider.GetRequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork, TResult>(cancellation, attemptsCount);
+           ?? provider.RequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork, TResult>(cancellation, attemptsCount);
 
 #endregion
 }

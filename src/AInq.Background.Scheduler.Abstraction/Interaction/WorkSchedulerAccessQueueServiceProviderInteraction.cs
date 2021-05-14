@@ -15,7 +15,7 @@
 using AInq.Background.Services;
 using AInq.Background.Tasks;
 using AInq.Optional;
-using Microsoft.Extensions.DependencyInjection;
+using AInq.Background.Helpers;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,7 +50,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
     public static Task AddScheduledQueueAccess<TResource>(this IServiceProvider provider, IAccess<TResource> access, TimeSpan delay,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledQueueAccess(access,
                                                                               delay,
                                                                               cancellation,
@@ -75,7 +75,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
     public static Task<TResult> AddScheduledQueueAccess<TResource, TResult>(this IServiceProvider provider, IAccess<TResource, TResult> access,
         TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledQueueAccess(access,
                                                                               delay,
                                                                               cancellation,
@@ -99,7 +99,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
     public static Task AddScheduledAsyncQueueAccess<TResource>(this IServiceProvider provider, IAsyncAccess<TResource> access, TimeSpan delay,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncQueueAccess(access,
                                                                               delay,
                                                                               cancellation,
@@ -124,7 +124,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
     public static Task<TResult> AddScheduledAsyncQueueAccess<TResource, TResult>(this IServiceProvider provider,
         IAsyncAccess<TResource, TResult> access, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncQueueAccess(access,
                                                                               delay,
                                                                               cancellation,
@@ -152,7 +152,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAccess : IAccess<TResource>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledQueueAccess<TResource, TAccess>(delay,
                                                                               cancellation,
                                                                               attemptsCount,
@@ -177,7 +177,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledQueueAccess<TResource, TAccess, TResult>(delay,
                                                                               cancellation,
                                                                               attemptsCount,
@@ -201,7 +201,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncQueueAccess<TResource, TAsyncAccess>(delay,
                                                                               cancellation,
                                                                               attemptsCount,
@@ -226,7 +226,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncQueueAccess<TResource, TAsyncAccess, TResult>(delay,
                                                                               cancellation,
                                                                               attemptsCount,
@@ -253,7 +253,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
     public static Task AddScheduledQueueAccess<TResource>(this IServiceProvider provider, IAccess<TResource> access, DateTime time,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledQueueAccess(access,
                                                                               time,
                                                                               cancellation,
@@ -278,7 +278,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
     public static Task<TResult> AddScheduledQueueAccess<TResource, TResult>(this IServiceProvider provider, IAccess<TResource, TResult> access,
         DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledQueueAccess(access,
                                                                               time,
                                                                               cancellation,
@@ -302,7 +302,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
     public static Task AddScheduledAsyncQueueAccess<TResource>(this IServiceProvider provider, IAsyncAccess<TResource> access, DateTime time,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncQueueAccess(access,
                                                                               time,
                                                                               cancellation,
@@ -327,7 +327,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
     public static Task<TResult> AddScheduledAsyncQueueAccess<TResource, TResult>(this IServiceProvider provider,
         IAsyncAccess<TResource, TResult> access, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncQueueAccess(access,
                                                                               time,
                                                                               cancellation,
@@ -355,7 +355,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAccess : IAccess<TResource>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledQueueAccess<TResource, TAccess>(time,
                                                                               cancellation,
                                                                               attemptsCount,
@@ -380,7 +380,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledQueueAccess<TResource, TAccess, TResult>(time,
                                                                               cancellation,
                                                                               attemptsCount,
@@ -404,7 +404,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncQueueAccess<TResource, TAsyncAccess>(time,
                                                                               cancellation,
                                                                               attemptsCount,
@@ -429,7 +429,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncQueueAccess<TResource, TAsyncAccess, TResult>(time,
                                                                               cancellation,
                                                                               attemptsCount,
@@ -460,7 +460,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
     public static IObservable<Maybe<Exception>> AddCronQueueAccess<TResource>(this IServiceProvider provider, IAccess<TResource> access,
         string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronQueueAccess(access,
                                                                               cronExpression,
                                                                               cancellation,
@@ -490,7 +490,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
     public static IObservable<Try<TResult>> AddCronQueueAccess<TResource, TResult>(this IServiceProvider provider, IAccess<TResource, TResult> access,
         string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronQueueAccess(access,
                                                                               cronExpression,
                                                                               cancellation,
@@ -519,7 +519,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
     public static IObservable<Maybe<Exception>> AddCronAsyncQueueAccess<TResource>(this IServiceProvider provider, IAsyncAccess<TResource> access,
         string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronAsyncQueueAccess(access,
                                                                               cronExpression,
                                                                               cancellation,
@@ -550,7 +550,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         IAsyncAccess<TResource, TResult> access, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0, int execCount = -1)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronAsyncQueueAccess(access,
                                                                               cronExpression,
                                                                               cancellation,
@@ -580,7 +580,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
         where TAccess : IAccess<TResource>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronQueueAccess<TResource, TAccess>(cronExpression,
                                                                               cancellation,
                                                                               attemptsCount,
@@ -607,7 +607,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronQueueAccess<TResource, TAccess, TResult>(cronExpression,
                                                                               cancellation,
                                                                               attemptsCount,
@@ -633,7 +633,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronAsyncQueueAccess<TResource, TAsyncAccess>(cronExpression,
                                                                               cancellation,
                                                                               attemptsCount,
@@ -660,7 +660,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddCronAsyncQueueAccess<TResource, TAsyncAccess, TResult>(cronExpression,
                                                                               cancellation,
                                                                               attemptsCount,
@@ -690,7 +690,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         int execCount = -1)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedQueueAccess(access,
                                                                               starTime,
                                                                               repeatDelay,
@@ -720,7 +720,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         int priority = 0,
         int execCount = -1)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedQueueAccess(access,
                                                                               starTime,
                                                                               repeatDelay,
@@ -748,7 +748,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         int execCount = -1)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncQueueAccess(access,
                                                                               starTime,
                                                                               repeatDelay,
@@ -777,7 +777,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         IAsyncAccess<TResource, TResult> access, DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncQueueAccess(access,
                                                                               starTime,
                                                                               repeatDelay,
@@ -809,7 +809,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
         where TAccess : IAccess<TResource>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedQueueAccess<TResource, TAccess>(starTime,
                                                                               repeatDelay,
                                                                               cancellation,
@@ -837,7 +837,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedQueueAccess<TResource, TAccess, TResult>(starTime,
                                                                               repeatDelay,
                                                                               cancellation,
@@ -865,7 +865,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         int execCount = -1)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess>(starTime,
                                                                               repeatDelay,
                                                                               cancellation,
@@ -894,7 +894,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         int execCount = -1)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess, TResult>(starTime,
                                                                               repeatDelay,
                                                                               cancellation,
@@ -925,7 +925,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         int execCount = -1)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedQueueAccess(access,
                                                                               startDelay,
                                                                               repeatDelay,
@@ -955,7 +955,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         int attemptsCount = 1, int priority = 0,
         int execCount = -1)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedQueueAccess(access,
                                                                               startDelay,
                                                                               repeatDelay,
@@ -983,7 +983,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         int execCount = -1)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncQueueAccess(access,
                                                                               startDelay,
                                                                               repeatDelay,
@@ -1012,7 +1012,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         IAsyncAccess<TResource, TResult> access, TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncQueueAccess(access,
                                                                               startDelay,
                                                                               repeatDelay,
@@ -1044,7 +1044,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
         where TAccess : IAccess<TResource>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedQueueAccess<TResource, TAccess>(startDelay,
                                                                               repeatDelay,
                                                                               cancellation,
@@ -1072,7 +1072,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedQueueAccess<TResource, TAccess, TResult>(startDelay,
                                                                               repeatDelay,
                                                                               cancellation,
@@ -1100,7 +1100,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         int execCount = -1)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess>(startDelay,
                                                                               repeatDelay,
                                                                               cancellation,
@@ -1129,7 +1129,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         int execCount = -1)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess, TResult>(startDelay,
                                                                               repeatDelay,
                                                                               cancellation,

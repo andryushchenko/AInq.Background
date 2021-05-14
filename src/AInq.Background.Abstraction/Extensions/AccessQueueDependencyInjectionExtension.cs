@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Helpers;
 using AInq.Background.Services;
 using AInq.Background.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,7 +41,7 @@ public static class AccessQueueDependencyInjectionExtension
         where TResource : notnull
         where TAccess : IAccess<TResource>
         => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAccess(
-            CreateAccess<TResource>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)),
+            CreateAccess<TResource>((resource, provider) => provider.RequiredService<TAccess>().Access(resource, provider)),
             cancellation,
             attemptsCount);
 
@@ -59,7 +59,7 @@ public static class AccessQueueDependencyInjectionExtension
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
         => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAccess(
-            CreateAccess<TResource, TResult>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)),
+            CreateAccess<TResource, TResult>((resource, provider) => provider.RequiredService<TAccess>().Access(resource, provider)),
             cancellation,
             attemptsCount);
 
@@ -76,7 +76,7 @@ public static class AccessQueueDependencyInjectionExtension
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
         => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(CreateAsyncAccess<TResource>((resource, provider, cancel)
-                => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
+                => provider.RequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
             cancellation,
             attemptsCount);
 
@@ -95,7 +95,7 @@ public static class AccessQueueDependencyInjectionExtension
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
         => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(CreateAsyncAccess<TResource, TResult>(
                 (resource, provider, cancel)
-                    => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
+                    => provider.RequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
             cancellation,
             attemptsCount);
 
@@ -117,7 +117,7 @@ public static class AccessQueueDependencyInjectionExtension
         where TResource : notnull
         where TAccess : IAccess<TResource>
         => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAccess(
-            CreateAccess<TResource>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)),
+            CreateAccess<TResource>((resource, provider) => provider.RequiredService<TAccess>().Access(resource, provider)),
             priority,
             cancellation,
             attemptsCount);
@@ -137,7 +137,7 @@ public static class AccessQueueDependencyInjectionExtension
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
         => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAccess(
-            CreateAccess<TResource, TResult>((resource, provider) => provider.GetRequiredService<TAccess>().Access(resource, provider)),
+            CreateAccess<TResource, TResult>((resource, provider) => provider.RequiredService<TAccess>().Access(resource, provider)),
             priority,
             cancellation,
             attemptsCount);
@@ -156,7 +156,7 @@ public static class AccessQueueDependencyInjectionExtension
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
         => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(CreateAsyncAccess<TResource>((resource, provider, cancel)
-                => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
+                => provider.RequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
             priority,
             cancellation,
             attemptsCount);
@@ -177,7 +177,7 @@ public static class AccessQueueDependencyInjectionExtension
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
         => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(CreateAsyncAccess<TResource, TResult>(
                 (resource, provider, cancel)
-                    => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
+                    => provider.RequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
             priority,
             cancellation,
             attemptsCount);

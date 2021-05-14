@@ -419,6 +419,22 @@
             <param name="conveyor"> Conveyor instance </param>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="conveyor" /> is NULL </exception>
         </member>
+        <member name="T:AInq.Background.Helpers.ServiceProviderHelper">
+            <summary> <see cref="T:System.IServiceProvider" /> helper utility </summary>
+        </member>
+        <member name="M:AInq.Background.Helpers.ServiceProviderHelper.Service``1(System.IServiceProvider)">
+            <summary> Get service of type <typeparamref name="T"/> from the <see cref="T:System.IServiceProvider" /> </summary>
+            <param name="provider"> Service provider instance </param>
+            <typeparam name="T">Service type</typeparam>
+            <returns> Service instance or NULL if service not exists </returns>
+        </member>
+        <member name="M:AInq.Background.Helpers.ServiceProviderHelper.RequiredService``1(System.IServiceProvider)">
+            <summary> Get service of type <typeparamref name="T"/> from the <see cref="T:System.IServiceProvider" /> </summary>
+            <param name="provider"> Service provider instance </param>
+            <typeparam name="T">Service type</typeparam>
+            <returns> Service instance </returns>
+            <exception cref="T:System.InvalidOperationException"> Thrown if service not exists </exception>
+        </member>
         <member name="T:AInq.Background.Helpers.WorkQueueServiceProviderHelper">
             <summary> Helper class for <see cref="T:AInq.Background.Services.IWorkQueue" /> and <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> </summary>
             <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>

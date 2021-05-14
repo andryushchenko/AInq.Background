@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Helpers;
 using AInq.Background.Services;
 using AInq.Background.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,7 +95,7 @@ public static class WorkQueueEnumerableExtension
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IServiceProvider provider, IEnumerable<IWork<TResult>> works,
         CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false, int priority = 0)
     {
-        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkQueue>();
+        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>();
         return queue is IPriorityWorkQueue priorityQueue
             ? priorityQueue.DoWorkAsync(works, priority, cancellation, attemptsCount, enqueueAll)
             : queue.DoWorkAsync(works, cancellation, attemptsCount, enqueueAll);
@@ -166,7 +166,7 @@ public static class WorkQueueEnumerableExtension
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IServiceProvider provider, IEnumerable<IAsyncWork<TResult>> works,
         CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false, int priority = 0)
     {
-        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkQueue>();
+        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>();
         return queue is IPriorityWorkQueue priorityQueue
             ? priorityQueue.DoWorkAsync(works, priority, cancellation, attemptsCount, enqueueAll)
             : queue.DoWorkAsync(works, cancellation, attemptsCount, enqueueAll);
@@ -256,7 +256,7 @@ public static class WorkQueueEnumerableExtension
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IServiceProvider provider, IAsyncEnumerable<IWork<TResult>> works,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
     {
-        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkQueue>();
+        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>();
         return queue is IPriorityWorkQueue priorityQueue
             ? priorityQueue.DoWorkAsync(works, priority, cancellation, attemptsCount)
             : queue.DoWorkAsync(works, cancellation, attemptsCount);
@@ -343,7 +343,7 @@ public static class WorkQueueEnumerableExtension
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IServiceProvider provider, IAsyncEnumerable<IAsyncWork<TResult>> works,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
     {
-        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkQueue>();
+        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>();
         return queue is IPriorityWorkQueue priorityQueue
             ? priorityQueue.DoWorkAsync(works, priority, cancellation, attemptsCount)
             : queue.DoWorkAsync(works, cancellation, attemptsCount);

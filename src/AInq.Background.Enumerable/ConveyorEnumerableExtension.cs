@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Helpers;
 using AInq.Background.Services;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -106,7 +106,7 @@ public static class ConveyorEnumerableExtension
         CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false, int priority = 0)
         where TData : notnull
     {
-        var conveyor = (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IConveyor<TData, TResult>>();
+        var conveyor = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IConveyor<TData, TResult>>();
         return conveyor is IPriorityConveyor<TData, TResult> priorityConveyor
             ? priorityConveyor.ProcessDataAsync(data, priority, cancellation, attemptsCount, enqueueAll)
             : conveyor.ProcessDataAsync(data, cancellation, attemptsCount, enqueueAll);
@@ -202,7 +202,7 @@ public static class ConveyorEnumerableExtension
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TData : notnull
     {
-        var conveyor = (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IConveyor<TData, TResult>>();
+        var conveyor = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IConveyor<TData, TResult>>();
         return conveyor is IPriorityConveyor<TData, TResult> priorityConveyor
             ? priorityConveyor.ProcessDataAsync(data, priority, cancellation, attemptsCount)
             : conveyor.ProcessDataAsync(data, cancellation, attemptsCount);

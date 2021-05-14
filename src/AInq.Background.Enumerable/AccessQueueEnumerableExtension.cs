@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Helpers;
 using AInq.Background.Services;
 using AInq.Background.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -113,7 +113,7 @@ public static class AccessQueueEnumerableExtension
         int priority = 0)
         where TResource : notnull
     {
-        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IAccessQueue<TResource>>();
+        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IAccessQueue<TResource>>();
         return queue is IPriorityAccessQueue<TResource> priorityQueue
             ? priorityQueue.AccessAsync(accesses, priority, cancellation, attemptsCount, enqueueAll)
             : queue.AccessAsync(accesses, cancellation, attemptsCount, enqueueAll);
@@ -201,7 +201,7 @@ public static class AccessQueueEnumerableExtension
         bool enqueueAll = false, int priority = 0)
         where TResource : notnull
     {
-        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IAccessQueue<TResource>>();
+        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IAccessQueue<TResource>>();
         return queue is IPriorityAccessQueue<TResource> priorityQueue
             ? priorityQueue.AccessAsync(accesses, priority, cancellation, attemptsCount, enqueueAll)
             : queue.AccessAsync(accesses, cancellation, attemptsCount, enqueueAll);
@@ -301,7 +301,7 @@ public static class AccessQueueEnumerableExtension
         IAsyncEnumerable<IAccess<TResource, TResult>> accesses, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
     {
-        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IAccessQueue<TResource>>();
+        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IAccessQueue<TResource>>();
         return queue is IPriorityAccessQueue<TResource> priorityQueue
             ? priorityQueue.AccessAsync(accesses, priority, cancellation, attemptsCount)
             : queue.AccessAsync(accesses, cancellation, attemptsCount);
@@ -399,7 +399,7 @@ public static class AccessQueueEnumerableExtension
         int priority = 0)
         where TResource : notnull
     {
-        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IAccessQueue<TResource>>();
+        var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IAccessQueue<TResource>>();
         return queue is IPriorityAccessQueue<TResource> priorityQueue
             ? priorityQueue.AccessAsync(accesses, priority, cancellation, attemptsCount)
             : queue.AccessAsync(accesses, cancellation, attemptsCount);

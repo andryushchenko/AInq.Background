@@ -15,10 +15,10 @@
 using AInq.Background.Services;
 using AInq.Background.Tasks;
 using AInq.Optional;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AInq.Background.Helpers;
 using static AInq.Background.Tasks.WorkFactory;
 
 namespace AInq.Background.Extensions
@@ -40,7 +40,7 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static Task AddScheduledWork<TWork>(this IWorkScheduler scheduler, DateTime time, CancellationToken cancellation = default)
         where TWork : IWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledWork(
-            CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
+            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
             time,
             cancellation);
 
@@ -57,7 +57,7 @@ public static class WorkSchedulerDependencyInjectionExtension
         CancellationToken cancellation = default)
         where TWork : IWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledWork(
-            CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
+            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
             time,
             cancellation);
 
@@ -72,7 +72,7 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static Task AddScheduledAsyncWork<TAsyncWork>(this IWorkScheduler scheduler, DateTime time, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
+            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
             time,
             cancellation);
 
@@ -89,7 +89,7 @@ public static class WorkSchedulerDependencyInjectionExtension
         CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
+            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
             time,
             cancellation);
 
@@ -168,7 +168,7 @@ public static class WorkSchedulerDependencyInjectionExtension
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronWork(
-            CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
+            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
             cronExpression,
             cancellation,
             execCount);
@@ -188,7 +188,7 @@ public static class WorkSchedulerDependencyInjectionExtension
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronWork(
-            CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
+            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
             cronExpression,
             cancellation,
             execCount);
@@ -207,7 +207,7 @@ public static class WorkSchedulerDependencyInjectionExtension
         CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
+            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
             cronExpression,
             cancellation,
             execCount);
@@ -227,7 +227,7 @@ public static class WorkSchedulerDependencyInjectionExtension
         CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
+            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
             cronExpression,
             cancellation,
             execCount);
@@ -253,7 +253,7 @@ public static class WorkSchedulerDependencyInjectionExtension
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedWork(
-            CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
+            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
             starTime,
             repeatDelay,
             cancellation,
@@ -277,7 +277,7 @@ public static class WorkSchedulerDependencyInjectionExtension
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedWork(
-            CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider)),
+            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
             starTime,
             repeatDelay,
             cancellation,
@@ -300,7 +300,7 @@ public static class WorkSchedulerDependencyInjectionExtension
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
+            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
             starTime,
             repeatDelay,
             cancellation,
@@ -324,7 +324,7 @@ public static class WorkSchedulerDependencyInjectionExtension
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
+            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
             starTime,
             repeatDelay,
             cancellation,

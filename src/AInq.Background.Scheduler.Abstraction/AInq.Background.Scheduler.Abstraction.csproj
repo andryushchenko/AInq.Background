@@ -11,7 +11,7 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-    <Version>4.1.1</Version>
+    <Version>4.1.2</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>AInq.Background</RootNamespace>
@@ -20,7 +20,7 @@
     <Description>Background work utilities for .NET Core apps based on Hosted services.
 Work scheduler interfaces and helpers.
     </Description>
-    <PackageReleaseNotes>[UPD] Dependency update</PackageReleaseNotes>
+    <PackageReleaseNotes>[IMP] Remove unused dependency</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -29,7 +29,6 @@ Work scheduler interfaces and helpers.
 
   <ItemGroup>
     <PackageReference Include="AInq.Optional" Version="1.0.3.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
