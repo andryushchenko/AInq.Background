@@ -31,6 +31,8 @@ namespace AInq.Background.Interaction
 /// </remarks>
 public static class WorkSchedulerAccessQueueServiceProviderInteraction
 {
+#region DelayedAccess
+
     /// <summary> Add delayed queued access to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="access"> Access instance </param>
@@ -129,6 +131,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
                                                                               attemptsCount,
                                                                               priority);
 
+#endregion
+
+#region DelayedAccessDI
+
     /// <summary> Add delayed queued access to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="delay"> Access execution delay </param>
@@ -225,6 +231,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
                                                                               cancellation,
                                                                               attemptsCount,
                                                                               priority);
+
+#endregion
+
+#region ScheduledAccess
 
     /// <summary> Add scheduled queued access to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -324,6 +334,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
                                                                               attemptsCount,
                                                                               priority);
 
+#endregion
+
+#region ScheduledAccessDI
+
     /// <summary> Add scheduled queued access to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="time"> Access execution time </param>
@@ -420,6 +434,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
                                                                               cancellation,
                                                                               attemptsCount,
                                                                               priority);
+
+#endregion
+
+#region CronAccess
 
     /// <summary> Add CRON-scheduled queued access to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -540,6 +558,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
                                                                               priority,
                                                                               execCount);
 
+#endregion
+
+#region CronAccessDI
+
     /// <summary> Add CRON-scheduled queued access to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="cronExpression"> Access CRON-based execution schedule </param>
@@ -644,6 +666,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
                                                                               attemptsCount,
                                                                               priority,
                                                                               execCount);
+
+#endregion
+
+#region RepeatedScheduledAccess
 
     /// <summary> Add repeated queued access to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -760,6 +786,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
                                                                               priority,
                                                                               execCount);
 
+#endregion
+
+#region RepeatedScheduledAccessDI
+
     /// <summary> Add repeated queued access to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="starTime"> Access first execution time</param>
@@ -871,6 +901,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
                                                                               attemptsCount,
                                                                               priority,
                                                                               execCount);
+
+#endregion
+
+#region RepeatedDelayedAccess
 
     /// <summary> Add repeated queued access to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -987,6 +1021,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
                                                                               priority,
                                                                               execCount);
 
+#endregion
+
+#region RepeatedDelayedAccessDI
+
     /// <summary> Add repeated queued access to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="startDelay"> Access first execution delay </param>
@@ -1098,6 +1136,8 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
                                                                               attemptsCount,
                                                                               priority,
                                                                               execCount);
+
+#endregion
 }
 
 }

@@ -23,9 +23,11 @@ using static AInq.Background.Tasks.AccessFactory;
 namespace AInq.Background.Extensions
 {
 
-/// <summary> <see cref="IAccessQueue{T}" /> and <see cref="IPriorityAccessQueue{T}" /> extensions to enqueue access action from DI </summary>
+/// <summary> <see cref="IAccessQueue{TResource}" /> and <see cref="IPriorityAccessQueue{T}" /> extensions to enqueue access action from DI </summary>
 public static class AccessQueueDependencyInjectionExtension
 {
+#region BaseDI
+
     /// <summary> Enqueue access action </summary>
     /// <param name="queue"> Access queue instance </param>
     /// <param name="cancellation"> Access cancellation token </param>
@@ -91,11 +93,15 @@ public static class AccessQueueDependencyInjectionExtension
         CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(
-            CreateAsyncAccess<TResource, TResult>((resource, provider, cancel)
-                => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
+        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(CreateAsyncAccess<TResource, TResult>(
+                (resource, provider, cancel)
+                    => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
             cancellation,
             attemptsCount);
+
+#endregion
+
+#region PriorityDI
 
     /// <summary> Enqueue access action </summary>
     /// <param name="queue"> Access queue instance </param>
@@ -169,12 +175,14 @@ public static class AccessQueueDependencyInjectionExtension
         CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(
-            CreateAsyncAccess<TResource, TResult>((resource, provider, cancel)
-                => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
+        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(CreateAsyncAccess<TResource, TResult>(
+                (resource, provider, cancel)
+                    => provider.GetRequiredService<TAsyncAccess>().AccessAsync(resource, provider, cancel)),
             priority,
             cancellation,
             attemptsCount);
+
+#endregion
 }
 
 }

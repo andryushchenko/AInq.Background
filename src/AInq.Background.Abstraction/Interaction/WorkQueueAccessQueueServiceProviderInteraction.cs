@@ -29,6 +29,8 @@ namespace AInq.Background.Interaction
 /// </remarks>
 public static class WorkQueueAccessQueueServiceProviderInteraction
 {
+#region QueueAccess
+
     /// <summary> Enqueue access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="access"> Access action instance </param>
@@ -95,6 +97,10 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
         where TResource : notnull
         => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkQueue>()
                                                                           .EnqueueAsyncAccess(access, cancellation, attemptsCount, priority);
+
+#endregion
+
+#region QueueAccessDI
 
     /// <summary> Enqueue access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -171,6 +177,8 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
                                                                           .EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(cancellation,
                                                                               attemptsCount,
                                                                               priority);
+
+#endregion
 }
 
 }

@@ -24,6 +24,8 @@ namespace AInq.Background.Services
 /// <summary> Interface for work scheduler service </summary>
 public interface IWorkScheduler
 {
+#region Scheduled
+
     /// <summary> Add scheduled work to scheduler </summary>
     /// <param name="work"> Work instance </param>
     /// <param name="time"> Work execution time </param>
@@ -61,6 +63,10 @@ public interface IWorkScheduler
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
     Task<TResult> AddScheduledAsyncWork<TResult>(IAsyncWork<TResult> work, DateTime time, CancellationToken cancellation = default);
+
+#endregion
+
+#region Cron
 
     /// <summary> Add CRON-scheduled work to scheduler </summary>
     /// <param name="work"> Work instance </param>
@@ -110,6 +116,10 @@ public interface IWorkScheduler
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
     IObservable<Try<TResult>> AddCronAsyncWork<TResult>(IAsyncWork<TResult> work, string cronExpression, CancellationToken cancellation = default,
         int execCount = -1);
+
+#endregion
+
+#region RepeatedScheduled
 
     /// <summary> Add repeated work to scheduler </summary>
     /// <param name="work"> Work instance </param>
@@ -173,6 +183,8 @@ public interface IWorkScheduler
     /// </exception>
     IObservable<Try<TResult>> AddRepeatedAsyncWork<TResult>(IAsyncWork<TResult> work, DateTime startTime, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1);
+
+#endregion
 }
 
 }

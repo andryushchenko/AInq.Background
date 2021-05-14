@@ -198,19 +198,6 @@
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
             <seealso cref="M:AInq.Background.Services.IPriorityAccessQueue`1.EnqueueAccess(AInq.Background.Tasks.IAccess{`0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
         </member>
-        <member name="M:AInq.Background.Helpers.AccessQueueServiceProviderHelper.EnqueueAccess``2(System.IServiceProvider,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Enqueue access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
-            <param name="provider"> Service provider instance </param>
-            <param name="cancellation"> Access action cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Access action priority </param>
-            <typeparam name="TResource"> Shared resource type </typeparam>
-            <typeparam name="TAccess"> Access action type </typeparam>
-            <returns> Access action completion task </returns>
-            <exception cref="T:System.InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
-            <seealso cref="M:AInq.Background.Extensions.AccessQueueDependencyInjectionExtension.EnqueueAccess``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
-        </member>
         <member name="M:AInq.Background.Helpers.AccessQueueServiceProviderHelper.EnqueueAccess``2(System.IServiceProvider,AInq.Background.Tasks.IAccess{``0,``1},System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Enqueue access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
             <param name="provider"> Service provider instance </param>
@@ -224,6 +211,46 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
             <seealso cref="M:AInq.Background.Services.IPriorityAccessQueue`1.EnqueueAccess``1(AInq.Background.Tasks.IAccess{`0,``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
+        </member>
+        <member name="M:AInq.Background.Helpers.AccessQueueServiceProviderHelper.EnqueueAsyncAccess``1(System.IServiceProvider,AInq.Background.Tasks.IAsyncAccess{``0},System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
+            <param name="provider"> Service provider instance </param>
+            <param name="access"> Access action instance </param>
+            <param name="cancellation"> Access action cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Access action priority </param>
+            <typeparam name="TResource"> Shared resource type </typeparam>
+            <returns> Access action completion task </returns>
+            <exception cref="T:System.InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
+            <seealso cref="M:AInq.Background.Services.IPriorityAccessQueue`1.EnqueueAsyncAccess(AInq.Background.Tasks.IAsyncAccess{`0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
+        </member>
+        <member name="M:AInq.Background.Helpers.AccessQueueServiceProviderHelper.EnqueueAsyncAccess``2(System.IServiceProvider,AInq.Background.Tasks.IAsyncAccess{``0,``1},System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
+            <param name="provider"> Service provider instance </param>
+            <param name="access"> Access action instance </param>
+            <param name="cancellation"> Access action cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Access action priority </param>
+            <typeparam name="TResource"> Shared resource type </typeparam>
+            <typeparam name="TResult"> Access action result type </typeparam>
+            <returns> Access action result task </returns>
+            <exception cref="T:System.InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
+            <seealso cref="M:AInq.Background.Services.IPriorityAccessQueue`1.EnqueueAsyncAccess``1(AInq.Background.Tasks.IAsyncAccess{`0,``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
+        </member>
+        <member name="M:AInq.Background.Helpers.AccessQueueServiceProviderHelper.EnqueueAccess``2(System.IServiceProvider,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Enqueue access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
+            <param name="provider"> Service provider instance </param>
+            <param name="cancellation"> Access action cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Access action priority </param>
+            <typeparam name="TResource"> Shared resource type </typeparam>
+            <typeparam name="TAccess"> Access action type </typeparam>
+            <returns> Access action completion task </returns>
+            <exception cref="T:System.InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
+            <seealso cref="M:AInq.Background.Extensions.AccessQueueDependencyInjectionExtension.EnqueueAccess``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.AccessQueueServiceProviderHelper.EnqueueAccess``3(System.IServiceProvider,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Enqueue access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
@@ -240,19 +267,6 @@
             <seealso
                 cref="M:AInq.Background.Extensions.AccessQueueDependencyInjectionExtension.EnqueueAccess``3(AInq.Background.Services.IPriorityAccessQueue{``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
         </member>
-        <member name="M:AInq.Background.Helpers.AccessQueueServiceProviderHelper.EnqueueAsyncAccess``1(System.IServiceProvider,AInq.Background.Tasks.IAsyncAccess{``0},System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
-            <param name="provider"> Service provider instance </param>
-            <param name="access"> Access action instance </param>
-            <param name="cancellation"> Access action cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Access action priority </param>
-            <typeparam name="TResource"> Shared resource type </typeparam>
-            <returns> Access action completion task </returns>
-            <exception cref="T:System.InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
-            <seealso cref="M:AInq.Background.Services.IPriorityAccessQueue`1.EnqueueAsyncAccess(AInq.Background.Tasks.IAsyncAccess{`0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
-        </member>
         <member name="M:AInq.Background.Helpers.AccessQueueServiceProviderHelper.EnqueueAsyncAccess``2(System.IServiceProvider,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
             <param name="provider"> Service provider instance </param>
@@ -266,20 +280,6 @@
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
             <seealso
                 cref="M:AInq.Background.Extensions.AccessQueueDependencyInjectionExtension.EnqueueAsyncAccess``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
-        </member>
-        <member name="M:AInq.Background.Helpers.AccessQueueServiceProviderHelper.EnqueueAsyncAccess``2(System.IServiceProvider,AInq.Background.Tasks.IAsyncAccess{``0,``1},System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
-            <param name="provider"> Service provider instance </param>
-            <param name="access"> Access action instance </param>
-            <param name="cancellation"> Access action cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Access action priority </param>
-            <typeparam name="TResource"> Shared resource type </typeparam>
-            <typeparam name="TResult"> Access action result type </typeparam>
-            <returns> Access action result task </returns>
-            <exception cref="T:System.InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
-            <seealso cref="M:AInq.Background.Services.IPriorityAccessQueue`1.EnqueueAsyncAccess``1(AInq.Background.Tasks.IAsyncAccess{`0,``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.AccessQueueServiceProviderHelper.EnqueueAsyncAccess``3(System.IServiceProvider,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
@@ -435,18 +435,6 @@
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
             <seealso cref="M:AInq.Background.Services.IPriorityWorkQueue.EnqueueWork(AInq.Background.Tasks.IWork,System.Int32,System.Threading.CancellationToken,System.Int32)" />
         </member>
-        <member name="M:AInq.Background.Helpers.WorkQueueServiceProviderHelper.EnqueueWork``1(System.IServiceProvider,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Enqueue background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
-            <param name="provider"> Service provider instance </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TWork"> Work type </typeparam>
-            <returns> Work completion task </returns>
-            <exception cref="T:System.InvalidOperationException"> Thrown if no work queue is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
-            <seealso cref="M:AInq.Background.Extensions.WorkQueueDependencyInjectionExtension.EnqueueWork``1(AInq.Background.Services.IPriorityWorkQueue,System.Int32,System.Threading.CancellationToken,System.Int32)" />
-        </member>
         <member name="M:AInq.Background.Helpers.WorkQueueServiceProviderHelper.EnqueueWork``1(System.IServiceProvider,AInq.Background.Tasks.IWork{``0},System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Enqueue background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
             <param name="provider"> Service provider instance </param>
@@ -459,6 +447,43 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work queue is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
             <seealso cref="M:AInq.Background.Services.IPriorityWorkQueue.EnqueueWork``1(AInq.Background.Tasks.IWork{``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkQueueServiceProviderHelper.EnqueueAsyncWork(System.IServiceProvider,AInq.Background.Tasks.IAsyncWork,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
+            <param name="provider"> Service provider instance </param>
+            <param name="work"> Work instance </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <returns> Work completion task </returns>
+            <exception cref="T:System.InvalidOperationException"> Thrown if no work queue is registered </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
+            <seealso cref="M:AInq.Background.Services.IPriorityWorkQueue.EnqueueAsyncWork(AInq.Background.Tasks.IAsyncWork,System.Int32,System.Threading.CancellationToken,System.Int32)" />
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkQueueServiceProviderHelper.EnqueueAsyncWork``1(System.IServiceProvider,AInq.Background.Tasks.IAsyncWork{``0},System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
+            <param name="provider"> Service provider instance </param>
+            <param name="work"> Work instance </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TResult"> Work result type </typeparam>
+            <returns> Work completion task </returns>
+            <exception cref="T:System.InvalidOperationException"> Thrown if no work queue is registered </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
+            <seealso cref="M:AInq.Background.Services.IPriorityWorkQueue.EnqueueAsyncWork``1(AInq.Background.Tasks.IAsyncWork{``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
+        </member>
+        <member name="M:AInq.Background.Helpers.WorkQueueServiceProviderHelper.EnqueueWork``1(System.IServiceProvider,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary> Enqueue background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
+            <param name="provider"> Service provider instance </param>
+            <param name="cancellation"> Work cancellation token </param>
+            <param name="attemptsCount"> Retry on fail attempts count </param>
+            <param name="priority"> Work priority </param>
+            <typeparam name="TWork"> Work type </typeparam>
+            <returns> Work completion task </returns>
+            <exception cref="T:System.InvalidOperationException"> Thrown if no work queue is registered </exception>
+            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
+            <seealso cref="M:AInq.Background.Extensions.WorkQueueDependencyInjectionExtension.EnqueueWork``1(AInq.Background.Services.IPriorityWorkQueue,System.Int32,System.Threading.CancellationToken,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkQueueServiceProviderHelper.EnqueueWork``2(System.IServiceProvider,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Enqueue background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
@@ -473,18 +498,6 @@
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
             <seealso cref="M:AInq.Background.Extensions.WorkQueueDependencyInjectionExtension.EnqueueWork``2(AInq.Background.Services.IPriorityWorkQueue,System.Int32,System.Threading.CancellationToken,System.Int32)" />
         </member>
-        <member name="M:AInq.Background.Helpers.WorkQueueServiceProviderHelper.EnqueueAsyncWork(System.IServiceProvider,AInq.Background.Tasks.IAsyncWork,System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
-            <param name="provider"> Service provider instance </param>
-            <param name="work"> Work instance </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <returns> Work completion task </returns>
-            <exception cref="T:System.InvalidOperationException"> Thrown if no work queue is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
-            <seealso cref="M:AInq.Background.Services.IPriorityWorkQueue.EnqueueAsyncWork(AInq.Background.Tasks.IAsyncWork,System.Int32,System.Threading.CancellationToken,System.Int32)" />
-        </member>
         <member name="M:AInq.Background.Helpers.WorkQueueServiceProviderHelper.EnqueueAsyncWork``1(System.IServiceProvider,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
             <param name="provider"> Service provider instance </param>
@@ -496,19 +509,6 @@
             <exception cref="T:System.InvalidOperationException"> Thrown if no work queue is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
             <seealso cref="M:AInq.Background.Extensions.WorkQueueDependencyInjectionExtension.EnqueueAsyncWork``1(AInq.Background.Services.IPriorityWorkQueue,System.Int32,System.Threading.CancellationToken,System.Int32)" />
-        </member>
-        <member name="M:AInq.Background.Helpers.WorkQueueServiceProviderHelper.EnqueueAsyncWork``1(System.IServiceProvider,AInq.Background.Tasks.IAsyncWork{``0},System.Threading.CancellationToken,System.Int32,System.Int32)">
-            <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
-            <param name="provider"> Service provider instance </param>
-            <param name="work"> Work instance </param>
-            <param name="cancellation"> Work cancellation token </param>
-            <param name="attemptsCount"> Retry on fail attempts count </param>
-            <param name="priority"> Work priority </param>
-            <typeparam name="TResult"> Work result type </typeparam>
-            <returns> Work completion task </returns>
-            <exception cref="T:System.InvalidOperationException"> Thrown if no work queue is registered </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
-            <seealso cref="M:AInq.Background.Services.IPriorityWorkQueue.EnqueueAsyncWork``1(AInq.Background.Tasks.IAsyncWork{``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.WorkQueueServiceProviderHelper.EnqueueAsyncWork``2(System.IServiceProvider,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>

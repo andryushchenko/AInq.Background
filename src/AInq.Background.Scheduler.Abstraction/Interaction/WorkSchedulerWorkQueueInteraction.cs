@@ -29,6 +29,8 @@ namespace AInq.Background.Interaction
 /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
 public static class WorkSchedulerWorkQueueInteraction
 {
+#region DelayedQueue
+
     /// <summary> Add delayed queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work scheduler instance </param>
     /// <param name="work"> Work instance </param>
@@ -111,6 +113,10 @@ public static class WorkSchedulerWorkQueueInteraction
             cancellation);
     }
 
+#endregion
+
+#region DelayedQueueDI
+
     /// <summary> Add delayed queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work scheduler instance </param>
     /// <param name="delay"> Work execution delay </param>
@@ -184,6 +190,10 @@ public static class WorkSchedulerWorkQueueInteraction
             CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncWork<TAsyncWork, TResult>(cancel, attemptsCount, priority)),
             delay,
             cancellation);
+
+#endregion
+
+#region ScheduledQueue
 
     /// <summary> Add scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work scheduler instance </param>
@@ -267,6 +277,10 @@ public static class WorkSchedulerWorkQueueInteraction
             cancellation);
     }
 
+#endregion
+
+#region ScheduledQueueDI
+
     /// <summary> Add scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work scheduler instance </param>
     /// <param name="time"> Work execution time </param>
@@ -340,6 +354,10 @@ public static class WorkSchedulerWorkQueueInteraction
             CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncWork<TAsyncWork, TResult>(cancel, attemptsCount, priority)),
             time,
             cancellation);
+
+#endregion
+
+#region CronQueue
 
     /// <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work scheduler instance </param>
@@ -447,6 +465,10 @@ public static class WorkSchedulerWorkQueueInteraction
             execCount);
     }
 
+#endregion
+
+#region CronQueueDI
+
     /// <summary> Add CRON-scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work scheduler instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
@@ -532,6 +554,10 @@ public static class WorkSchedulerWorkQueueInteraction
             cronExpression,
             cancellation,
             execCount);
+
+#endregion
+
+#region RepeatedScheduledQueue
 
     /// <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -631,6 +657,10 @@ public static class WorkSchedulerWorkQueueInteraction
             repeatDelay,
             cancellation,
             execCount);
+
+#endregion
+
+#region RepeatedScheduledQueueDI
 
     /// <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -734,6 +764,10 @@ public static class WorkSchedulerWorkQueueInteraction
             cancellation,
             execCount);
 
+#endregion
+
+#region RepeatedDelayedQueue
+
     /// <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
     /// <param name="work"> Work instance </param>
@@ -832,6 +866,10 @@ public static class WorkSchedulerWorkQueueInteraction
             repeatDelay,
             cancellation,
             execCount);
+
+#endregion
+
+#region RepeatedDelayedQueueDI
 
     /// <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -934,6 +972,8 @@ public static class WorkSchedulerWorkQueueInteraction
             repeatDelay,
             cancellation,
             execCount);
+
+#endregion
 }
 
 }

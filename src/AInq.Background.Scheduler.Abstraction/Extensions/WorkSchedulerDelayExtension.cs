@@ -25,6 +25,8 @@ namespace AInq.Background.Extensions
 /// <summary> <see cref="IWorkScheduler" /> extensions to schedule work with delayed start </summary>
 public static class WorkSchedulerDelayExtension
 {
+#region Delayed
+
     /// <summary> Add delayed work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
     /// <param name="work"> Work instance </param>
@@ -72,6 +74,10 @@ public static class WorkSchedulerDelayExtension
     public static Task<TResult> AddScheduledAsyncWork<TResult>(this IWorkScheduler scheduler, IAsyncWork<TResult> work, TimeSpan delay,
         CancellationToken cancellation = default)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(work, DateTime.Now.Add(delay), cancellation);
+
+#endregion
+
+#region RepeatedDelayed
 
     /// <summary> Add repeated work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -158,6 +164,8 @@ public static class WorkSchedulerDelayExtension
             repeatDelay,
             cancellation,
             execCount);
+
+#endregion
 }
 
 }

@@ -300,5 +300,20 @@
         <member name="M:AInq.Background.Enumerable.WorkQueueEnumerableExtension.DoWorkAsync``1(System.IServiceProvider,System.Collections.Generic.IAsyncEnumerable{AInq.Background.Tasks.IWork{``0}},System.Threading.CancellationToken,System.Int32,System.Int32)">
             <inheritdoc cref="M:AInq.Background.Enumerable.WorkQueueEnumerableExtension.DoWorkAsync``1(System.IServiceProvider,System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IWork{``0}},System.Threading.CancellationToken,System.Int32,System.Boolean,System.Int32)" />
         </member>
+        <member name="M:AInq.Background.Enumerable.WorkQueueEnumerableExtension.DoWorkAsync``1(AInq.Background.Services.IWorkQueue,System.Collections.Generic.IAsyncEnumerable{AInq.Background.Tasks.IAsyncWork{``0}},System.Threading.CancellationToken,System.Int32)">
+            <inheritdoc cref="M:AInq.Background.Enumerable.WorkQueueEnumerableExtension.DoWorkAsync``1(AInq.Background.Services.IWorkQueue,System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAsyncWork{``0}},System.Threading.CancellationToken,System.Int32,System.Boolean)" />
+        </member>
+        <member name="M:AInq.Background.Enumerable.WorkQueueEnumerableExtension.DoWorkAsync``1(System.Collections.Generic.IAsyncEnumerable{AInq.Background.Tasks.IAsyncWork{``0}},AInq.Background.Services.IWorkQueue,System.Threading.CancellationToken,System.Int32)">
+            <inheritdoc cref="M:AInq.Background.Enumerable.WorkQueueEnumerableExtension.DoWorkAsync``1(AInq.Background.Services.IWorkQueue,System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAsyncWork{``0}},System.Threading.CancellationToken,System.Int32,System.Boolean)" />
+        </member>
+        <member name="M:AInq.Background.Enumerable.WorkQueueEnumerableExtension.DoWorkAsync``1(AInq.Background.Services.IPriorityWorkQueue,System.Collections.Generic.IAsyncEnumerable{AInq.Background.Tasks.IAsyncWork{``0}},System.Int32,System.Threading.CancellationToken,System.Int32)">
+            <inheritdoc cref="M:AInq.Background.Enumerable.WorkQueueEnumerableExtension.DoWorkAsync``1(AInq.Background.Services.IPriorityWorkQueue,System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAsyncWork{``0}},System.Int32,System.Threading.CancellationToken,System.Int32,System.Boolean)" />
+        </member>
+        <member name="M:AInq.Background.Enumerable.WorkQueueEnumerableExtension.DoWorkAsync``1(System.Collections.Generic.IAsyncEnumerable{AInq.Background.Tasks.IAsyncWork{``0}},AInq.Background.Services.IPriorityWorkQueue,System.Int32,System.Threading.CancellationToken,System.Int32)">
+            <inheritdoc cref="M:AInq.Background.Enumerable.WorkQueueEnumerableExtension.DoWorkAsync``1(AInq.Background.Services.IPriorityWorkQueue,System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAsyncWork{``0}},System.Int32,System.Threading.CancellationToken,System.Int32,System.Boolean)" />
+        </member>
+        <member name="M:AInq.Background.Enumerable.WorkQueueEnumerableExtension.DoWorkAsync``1(System.IServiceProvider,System.Collections.Generic.IAsyncEnumerable{AInq.Background.Tasks.IAsyncWork{``0}},System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <inheritdoc cref="M:AInq.Background.Enumerable.WorkQueueEnumerableExtension.DoWorkAsync``1(System.IServiceProvider,System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAsyncWork{``0}},System.Threading.CancellationToken,System.Int32,System.Boolean,System.Int32)" />
+        </member>
     </members>
 </doc>

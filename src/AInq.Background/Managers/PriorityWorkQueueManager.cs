@@ -35,6 +35,11 @@ public sealed class PriorityWorkQueueManager : PriorityTaskManager<object?>, IPr
     int IWorkQueue.MaxAttempts => _maxAttempts;
     int IPriorityWorkQueue.MaxPriority => MaxPriority;
 
+    private int FixAttempts(int attemptsCount)
+        => Math.Min(_maxAttempts, Math.Max(1, attemptsCount));
+
+#region Base
+
     Task IWorkQueue.EnqueueWork(IWork work, CancellationToken cancellation, int attemptsCount)
     {
         var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
@@ -62,6 +67,10 @@ public sealed class PriorityWorkQueueManager : PriorityTaskManager<object?>, IPr
         AddTask(workWrapper, 0);
         return task;
     }
+
+#endregion
+
+#region Priority
 
     Task IPriorityWorkQueue.EnqueueWork(IWork work, int priority, CancellationToken cancellation, int attemptsCount)
     {
@@ -92,8 +101,7 @@ public sealed class PriorityWorkQueueManager : PriorityTaskManager<object?>, IPr
         return task;
     }
 
-    private int FixAttempts(int attemptsCount)
-        => Math.Min(_maxAttempts, Math.Max(1, attemptsCount));
+#endregion
 }
 
 }

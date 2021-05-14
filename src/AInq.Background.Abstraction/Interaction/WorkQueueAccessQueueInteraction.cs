@@ -29,6 +29,8 @@ namespace AInq.Background.Interaction
 /// </remarks>
 public static class WorkQueueAccessQueueInteraction
 {
+#region QueueAccess
+
     /// <summary> Enqueue access action into work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="queue"> Work queue instance </param>
     /// <param name="access"> Access action instance </param>
@@ -110,6 +112,10 @@ public static class WorkQueueAccessQueueInteraction
             ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
             : queue.EnqueueAsyncWork(work, cancellation);
     }
+
+#endregion
+
+#region QueueAccessDI
 
     /// <summary> Enqueue access action into work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="queue"> Work queue instance </param>
@@ -193,6 +199,8 @@ public static class WorkQueueAccessQueueInteraction
             ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
             : queue.EnqueueAsyncWork(work, cancellation);
     }
+
+#endregion
 }
 
 }

@@ -27,6 +27,8 @@ namespace AInq.Background.Extensions
 /// <summary> <see cref="IWorkScheduler" /> extensions to schedule work from DI </summary>
 public static class WorkSchedulerDependencyInjectionExtension
 {
+#region ScheduledDI
+
     /// <summary> Add scheduled work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
     /// <param name="time"> Work execution time </param>
@@ -91,6 +93,10 @@ public static class WorkSchedulerDependencyInjectionExtension
             time,
             cancellation);
 
+#endregion
+
+#region DelayedDI
+
     /// <summary> Add delayed work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
     /// <param name="delay"> Work execution delay </param>
@@ -143,6 +149,10 @@ public static class WorkSchedulerDependencyInjectionExtension
         where TAsyncWork : IAsyncWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork<TAsyncWork, TResult>(DateTime.Now.Add(delay),
             cancellation);
+
+#endregion
+
+#region CronDI
 
     /// <summary> Add CRON-scheduled work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -221,6 +231,10 @@ public static class WorkSchedulerDependencyInjectionExtension
             cronExpression,
             cancellation,
             execCount);
+
+#endregion
+
+#region RepeatedScheduledDI
 
     /// <summary> Add repeated work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -316,6 +330,10 @@ public static class WorkSchedulerDependencyInjectionExtension
             cancellation,
             execCount);
 
+#endregion
+
+#region RepeatedDelayedDI
+
     /// <summary> Add repeated work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
     /// <param name="startDelay"> Work first execution delay </param>
@@ -401,6 +419,8 @@ public static class WorkSchedulerDependencyInjectionExtension
             repeatDelay,
             cancellation,
             execCount);
+
+#endregion
 }
 
 }

@@ -37,6 +37,11 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
     int IPriorityAccessQueue<TResource>.MaxPriority => MaxPriority;
     int IAccessQueue<TResource>.MaxAttempts => _maxAttempts;
 
+    private int FixAttempts(int attemptsCount)
+        => Math.Min(_maxAttempts, Math.Max(1, attemptsCount));
+
+#region Base
+
     Task IAccessQueue<TResource>.EnqueueAccess(IAccess<TResource> access, CancellationToken cancellation, int attemptsCount)
     {
         var (accessWrapper, task) =
@@ -70,6 +75,10 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
         AddTask(accessWrapper, 0);
         return task;
     }
+
+#endregion
+
+#region Priority
 
     Task IPriorityAccessQueue<TResource>.EnqueueAccess(IAccess<TResource> access, int priority, CancellationToken cancellation, int attemptsCount)
     {
@@ -106,8 +115,7 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
         return task;
     }
 
-    private int FixAttempts(int attemptsCount)
-        => Math.Min(_maxAttempts, Math.Max(1, attemptsCount));
+#endregion
 }
 
 }

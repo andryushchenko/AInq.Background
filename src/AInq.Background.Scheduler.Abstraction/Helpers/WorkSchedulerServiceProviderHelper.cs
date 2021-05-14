@@ -28,6 +28,8 @@ namespace AInq.Background.Helpers
 /// <remarks> <see cref="IWorkScheduler" /> service should be registered on host to schedule work </remarks>
 public static class WorkSchedulerServiceProviderHelper
 {
+#region Delayed
+
     /// <summary> Add delayed work to registered scheduler </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
@@ -88,6 +90,10 @@ public static class WorkSchedulerServiceProviderHelper
         CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncWork(work, delay, cancellation);
+
+#endregion
+
+#region DelaeydDI
 
     /// <summary> Add delayed work to registered scheduler </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -153,6 +159,10 @@ public static class WorkSchedulerServiceProviderHelper
         => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncWork<TAsyncWork, TResult>(delay, cancellation);
 
+#endregion
+
+#region Scheduled
+
     /// <summary> Add scheduled work to registered scheduler </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
@@ -212,6 +222,10 @@ public static class WorkSchedulerServiceProviderHelper
         CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncWork(work, time, cancellation);
+
+#endregion
+
+#region ScheduledDI
 
     /// <summary> Add scheduled work to registered scheduler </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -276,6 +290,10 @@ public static class WorkSchedulerServiceProviderHelper
         where TAsyncWork : IAsyncWork<TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
                                                                           .AddScheduledAsyncWork<TAsyncWork, TResult>(time, cancellation);
+
+#endregion
+
+#region Cron
 
     /// <summary> Add CRON-scheduled work to registered scheduler </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -355,6 +373,10 @@ public static class WorkSchedulerServiceProviderHelper
         => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
                                                                           .AddCronAsyncWork(work, cronExpression, cancellation, execCount);
 
+#endregion
+
+#region CronDI
+
     /// <summary> Add CRON-scheduled work to registered scheduler </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
@@ -427,6 +449,10 @@ public static class WorkSchedulerServiceProviderHelper
                                                                               cancellation,
                                                                               execCount);
 
+#endregion
+
+#region RepeatedScheduled
+
     /// <summary> Add repeated work to registered scheduler </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
@@ -492,6 +518,10 @@ public static class WorkSchedulerServiceProviderHelper
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         => (provider ?? throw new ArgumentNullException(nameof(provider))).GetRequiredService<IWorkScheduler>()
                                                                           .AddRepeatedAsyncWork(work, starTime, repeatDelay, cancellation, execCount);
+
+#endregion
+
+#region RepeatedScheduledDI
 
     /// <summary> Add repeated work to registered scheduler </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -573,6 +603,10 @@ public static class WorkSchedulerServiceProviderHelper
                                                                               cancellation,
                                                                               execCount);
 
+#endregion
+
+#region RepeatedDelayed
+
     /// <summary> Add repeated work to registered scheduler </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
@@ -646,6 +680,10 @@ public static class WorkSchedulerServiceProviderHelper
                                                                               repeatDelay,
                                                                               cancellation,
                                                                               execCount);
+
+#endregion
+
+#region RepeatedDelayedDI
 
     /// <summary> Add repeated work to registered scheduler </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -726,6 +764,8 @@ public static class WorkSchedulerServiceProviderHelper
                                                                               repeatDelay,
                                                                               cancellation,
                                                                               execCount);
+
+#endregion
 }
 
 }

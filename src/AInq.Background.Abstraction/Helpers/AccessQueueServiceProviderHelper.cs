@@ -30,6 +30,8 @@ namespace AInq.Background.Helpers
 /// </remarks>
 public static class AccessQueueServiceProviderHelper
 {
+#region Access
+
     /// <summary> Enqueue access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="access"> Access action instance </param>
@@ -50,25 +52,6 @@ public static class AccessQueueServiceProviderHelper
 
     /// <summary> Enqueue access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
-    /// <param name="cancellation"> Access action cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Access action priority </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TAccess"> Access action type </typeparam>
-    /// <returns> Access action completion task </returns>
-    /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
-    /// <seealso cref="AccessQueueDependencyInjectionExtension.EnqueueAccess{TResource,TAccess}(IPriorityAccessQueue{TResource},int, CancellationToken, int)" />
-    public static Task EnqueueAccess<TResource, TAccess>(this IServiceProvider provider, CancellationToken cancellation = default,
-        int attemptsCount = 1, int priority = 0)
-        where TResource : notnull
-        where TAccess : IAccess<TResource>
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityAccessQueue<TResource>>()
-                                                                          ?.EnqueueAccess<TResource, TAccess>(priority, cancellation, attemptsCount)
-           ?? provider.GetRequiredService<IAccessQueue<TResource>>().EnqueueAccess<TResource, TAccess>(cancellation, attemptsCount);
-
-    /// <summary> Enqueue access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
     /// <param name="access"> Access action instance </param>
     /// <param name="cancellation"> Access action cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -85,6 +68,66 @@ public static class AccessQueueServiceProviderHelper
         => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityAccessQueue<TResource>>()
                                                                           ?.EnqueueAccess(access, priority, cancellation, attemptsCount)
            ?? provider.GetRequiredService<IAccessQueue<TResource>>().EnqueueAccess(access, cancellation, attemptsCount);
+
+    /// <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
+    /// <param name="provider"> Service provider instance </param>
+    /// <param name="access"> Access action instance </param>
+    /// <param name="cancellation"> Access action cancellation token </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="priority"> Access action priority </param>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
+    /// <returns> Access action completion task </returns>
+    /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
+    /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAsyncAccess(IAsyncAccess{TResource}, int, CancellationToken, int)" />
+    public static Task EnqueueAsyncAccess<TResource>(this IServiceProvider provider, IAsyncAccess<TResource> access,
+        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+        where TResource : notnull
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityAccessQueue<TResource>>()
+                                                                          ?.EnqueueAsyncAccess(access, priority, cancellation, attemptsCount)
+           ?? provider.GetRequiredService<IAccessQueue<TResource>>().EnqueueAsyncAccess(access, cancellation, attemptsCount);
+
+    /// <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
+    /// <param name="provider"> Service provider instance </param>
+    /// <param name="access"> Access action instance </param>
+    /// <param name="cancellation"> Access action cancellation token </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="priority"> Access action priority </param>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
+    /// <typeparam name="TResult"> Access action result type </typeparam>
+    /// <returns> Access action result task </returns>
+    /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
+    /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAsyncAccess{TResult}(IAsyncAccess{TResource, TResult}, int, CancellationToken, int)" />
+    public static Task<TResult> EnqueueAsyncAccess<TResource, TResult>(this IServiceProvider provider, IAsyncAccess<TResource, TResult> access,
+        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+        where TResource : notnull
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityAccessQueue<TResource>>()
+                                                                          ?.EnqueueAsyncAccess(access, priority, cancellation, attemptsCount)
+           ?? provider.GetRequiredService<IAccessQueue<TResource>>().EnqueueAsyncAccess(access, cancellation, attemptsCount);
+
+#endregion
+
+#region AccessDI
+
+    /// <summary> Enqueue access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
+    /// <param name="provider"> Service provider instance </param>
+    /// <param name="cancellation"> Access action cancellation token </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="priority"> Access action priority </param>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
+    /// <typeparam name="TAccess"> Access action type </typeparam>
+    /// <returns> Access action completion task </returns>
+    /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
+    /// <seealso cref="AccessQueueDependencyInjectionExtension.EnqueueAccess{TResource,TAccess}(IPriorityAccessQueue{TResource},int, CancellationToken, int)" />
+    public static Task EnqueueAccess<TResource, TAccess>(this IServiceProvider provider, CancellationToken cancellation = default,
+        int attemptsCount = 1, int priority = 0)
+        where TResource : notnull
+        where TAccess : IAccess<TResource>
+        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityAccessQueue<TResource>>()
+                                                                          ?.EnqueueAccess<TResource, TAccess>(priority, cancellation, attemptsCount)
+           ?? provider.GetRequiredService<IAccessQueue<TResource>>().EnqueueAccess<TResource, TAccess>(cancellation, attemptsCount);
 
     /// <summary> Enqueue access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -111,24 +154,6 @@ public static class AccessQueueServiceProviderHelper
 
     /// <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
-    /// <param name="access"> Access action instance </param>
-    /// <param name="cancellation"> Access action cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Access action priority </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <returns> Access action completion task </returns>
-    /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
-    /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAsyncAccess(IAsyncAccess{TResource}, int, CancellationToken, int)" />
-    public static Task EnqueueAsyncAccess<TResource>(this IServiceProvider provider, IAsyncAccess<TResource> access,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
-        where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityAccessQueue<TResource>>()
-                                                                          ?.EnqueueAsyncAccess(access, priority, cancellation, attemptsCount)
-           ?? provider.GetRequiredService<IAccessQueue<TResource>>().EnqueueAsyncAccess(access, cancellation, attemptsCount);
-
-    /// <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
     /// <param name="cancellation"> Access action cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access action priority </param>
@@ -148,25 +173,6 @@ public static class AccessQueueServiceProviderHelper
                                                                               cancellation,
                                                                               attemptsCount)
            ?? provider.GetRequiredService<IAccessQueue<TResource>>().EnqueueAsyncAccess<TResource, TAsyncAccess>(cancellation, attemptsCount);
-
-    /// <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="access"> Access action instance </param>
-    /// <param name="cancellation"> Access action cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Access action priority </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TResult"> Access action result type </typeparam>
-    /// <returns> Access action result task </returns>
-    /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
-    /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAsyncAccess{TResult}(IAsyncAccess{TResource, TResult}, int, CancellationToken, int)" />
-    public static Task<TResult> EnqueueAsyncAccess<TResource, TResult>(this IServiceProvider provider, IAsyncAccess<TResource, TResult> access,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
-        where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).GetService<IPriorityAccessQueue<TResource>>()
-                                                                          ?.EnqueueAsyncAccess(access, priority, cancellation, attemptsCount)
-           ?? provider.GetRequiredService<IAccessQueue<TResource>>().EnqueueAsyncAccess(access, cancellation, attemptsCount);
 
     /// <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -191,6 +197,8 @@ public static class AccessQueueServiceProviderHelper
                                                                               attemptsCount)
            ?? provider.GetRequiredService<IAccessQueue<TResource>>()
                       .EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(cancellation, attemptsCount);
+
+#endregion
 }
 
 }

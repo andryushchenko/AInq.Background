@@ -35,7 +35,6 @@ public static class StartupWorkInjection
     /// <summary> Run registered startup works asynchronously </summary>
     /// <param name="host"> Current host </param>
     /// <param name="cancellation"> Startup work cancellation token </param>
-    /// <returns></returns>
     public static async Task DoStartupWorkAsync(this IHost host, CancellationToken cancellation = default)
     {
         var logger = host.Services.GetService<ILoggerFactory>()?.CreateLogger("Startup work") ?? NullLogger.Instance;
@@ -46,6 +45,8 @@ public static class StartupWorkInjection
         }
     }
 
+#region Work
+
     /// <summary> Register startup work </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="work"> Work instance </param>
@@ -54,17 +55,33 @@ public static class StartupWorkInjection
 
     /// <summary> Register startup work </summary>
     /// <param name="services"> Service collection </param>
-    /// <typeparam name="TWork"> Work type </typeparam>
-    public static IServiceCollection AddStartupWork<TWork>(this IServiceCollection services)
-        where TWork : IWork
-        => services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider))));
-
-    /// <summary> Register startup work </summary>
-    /// <param name="services"> Service collection </param>
     /// <param name="work"> Work instance </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     public static IServiceCollection AddStartupWork<TResult>(this IServiceCollection services, IWork<TResult> work)
         => services.AddSingleton(CreateStartupWorkWrapper(work));
+
+    /// <summary> Register asynchronous startup work </summary>
+    /// <param name="services"> Service collection </param>
+    /// <param name="work"> Work instance </param>
+    public static IServiceCollection AddStartupAsyncWork(this IServiceCollection services, IAsyncWork work)
+        => services.AddSingleton(CreateStartupWorkWrapper(work));
+
+    /// <summary> Register asynchronous startup work </summary>
+    /// <param name="services"> Service collection </param>
+    /// <param name="work"> Work instance </param>
+    public static IServiceCollection AddStartupAsyncWork<TResult>(this IServiceCollection services, IAsyncWork<TResult> work)
+        => services.AddSingleton(CreateStartupWorkWrapper(work));
+
+#endregion
+
+#region WorkDI
+
+    /// <summary> Register startup work </summary>
+    /// <param name="services"> Service collection </param>
+    /// <typeparam name="TWork"> Work type </typeparam>
+    public static IServiceCollection AddStartupWork<TWork>(this IServiceCollection services)
+        where TWork : IWork
+        => services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider => provider.GetRequiredService<TWork>().DoWork(provider))));
 
     /// <summary> Register startup work </summary>
     /// <param name="services"> Service collection </param>
@@ -76,23 +93,11 @@ public static class StartupWorkInjection
 
     /// <summary> Register asynchronous startup work </summary>
     /// <param name="services"> Service collection </param>
-    /// <param name="work"> Work instance </param>
-    public static IServiceCollection AddStartupAsyncWork(this IServiceCollection services, IAsyncWork work)
-        => services.AddSingleton(CreateStartupWorkWrapper(work));
-
-    /// <summary> Register asynchronous startup work </summary>
-    /// <param name="services"> Service collection </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     public static IServiceCollection AddStartupAsyncWork<TAsyncWork>(this IServiceCollection services)
         where TAsyncWork : IAsyncWork
         => services.AddSingleton(CreateStartupWorkWrapper(CreateAsyncWork((provider, token)
             => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token))));
-
-    /// <summary> Register asynchronous startup work </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="work"> Work instance </param>
-    public static IServiceCollection AddStartupAsyncWork<TResult>(this IServiceCollection services, IAsyncWork<TResult> work)
-        => services.AddSingleton(CreateStartupWorkWrapper(work));
 
     /// <summary> Register asynchronous startup work </summary>
     /// <param name="services"> Service collection </param>
@@ -102,6 +107,10 @@ public static class StartupWorkInjection
         where TAsyncWork : IAsyncWork<TResult>
         => services.AddSingleton(CreateStartupWorkWrapper(CreateAsyncWork((provider, token)
             => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, token))));
+
+#endregion
+
+#region QueueWork
 
     /// <summary> Register queued startup work with given <paramref name="priority" /> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
@@ -116,17 +125,6 @@ public static class StartupWorkInjection
     /// <summary> Register queued startup work with given <paramref name="priority" /> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
     /// <param name="services"> Service collection </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Work priority </param>
-    /// <typeparam name="TWork"> Work type </typeparam>
-    public static IServiceCollection AddStartupQueuedWork<TWork>(this IServiceCollection services, int attemptsCount = 1, int priority = 0)
-        where TWork : IWork
-        => services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
-            => provider.EnqueueWork<TWork>(CancellationToken.None, attemptsCount, priority).Ignore())));
-
-    /// <summary> Register queued startup work with given <paramref name="priority" /> (if supported) </summary>
-    /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
-    /// <param name="services"> Service collection </param>
     /// <param name="work"> Work instance </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Work priority </param>
@@ -135,6 +133,44 @@ public static class StartupWorkInjection
         int priority = 0)
         => services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
             => provider.EnqueueWork(work, CancellationToken.None, attemptsCount, priority).Ignore())));
+
+    /// <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
+    /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
+    /// <param name="services"> Service collection </param>
+    /// <param name="work"> Work instance </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="priority"> Work priority </param>
+    public static IServiceCollection AddStartupAsyncQueuedWork(this IServiceCollection services, IAsyncWork work, int attemptsCount = 1,
+        int priority = 0)
+        => services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
+            => provider.EnqueueAsyncWork(work, CancellationToken.None, attemptsCount, priority).Ignore())));
+
+    /// <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
+    /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
+    /// <param name="services"> Service collection </param>
+    /// <param name="work"> Work instance </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="priority"> Work priority </param>
+    /// <typeparam name="TResult"> Work result type </typeparam>
+    public static IServiceCollection AddStartupAsyncQueuedWork<TResult>(this IServiceCollection services, IAsyncWork<TResult> work,
+        int attemptsCount = 1, int priority = 0)
+        => services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
+            => provider.EnqueueAsyncWork(work, CancellationToken.None, attemptsCount, priority).Ignore())));
+
+#endregion
+
+#region QueueWorkDI
+
+    /// <summary> Register queued startup work with given <paramref name="priority" /> (if supported) </summary>
+    /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
+    /// <param name="services"> Service collection </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="priority"> Work priority </param>
+    /// <typeparam name="TWork"> Work type </typeparam>
+    public static IServiceCollection AddStartupQueuedWork<TWork>(this IServiceCollection services, int attemptsCount = 1, int priority = 0)
+        where TWork : IWork
+        => services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
+            => provider.EnqueueWork<TWork>(CancellationToken.None, attemptsCount, priority).Ignore())));
 
     /// <summary> Register queued startup work with given <paramref name="priority" /> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
@@ -151,17 +187,6 @@ public static class StartupWorkInjection
     /// <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
     /// <param name="services"> Service collection </param>
-    /// <param name="work"> Work instance </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Work priority </param>
-    public static IServiceCollection AddStartupAsyncQueuedWork(this IServiceCollection services, IAsyncWork work, int attemptsCount = 1,
-        int priority = 0)
-        => services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
-            => provider.EnqueueAsyncWork(work, CancellationToken.None, attemptsCount, priority).Ignore())));
-
-    /// <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
-    /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
-    /// <param name="services"> Service collection </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Work priority </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
@@ -169,18 +194,6 @@ public static class StartupWorkInjection
         where TAsyncWork : IAsyncWork
         => services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
             => provider.EnqueueAsyncWork<TAsyncWork>(CancellationToken.None, attemptsCount, priority).Ignore())));
-
-    /// <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
-    /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
-    /// <param name="services"> Service collection </param>
-    /// <param name="work"> Work instance </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Work priority </param>
-    /// <typeparam name="TResult"> Work result type </typeparam>
-    public static IServiceCollection AddStartupAsyncQueuedWork<TResult>(this IServiceCollection services, IAsyncWork<TResult> work,
-        int attemptsCount = 1, int priority = 0)
-        => services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
-            => provider.EnqueueAsyncWork(work, CancellationToken.None, attemptsCount, priority).Ignore())));
 
     /// <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
@@ -194,6 +207,8 @@ public static class StartupWorkInjection
         where TAsyncWork : IAsyncWork<TResult>
         => services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
             => provider.EnqueueAsyncWork<TAsyncWork, TResult>(CancellationToken.None, attemptsCount, priority).Ignore())));
+
+#endregion
 }
 
 }

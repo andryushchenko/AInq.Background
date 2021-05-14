@@ -31,6 +31,8 @@ namespace AInq.Background.Interaction
 /// </remarks>
 public static class WorkSchedulerAccessQueueInteraction
 {
+#region DelayedAccess
+
     /// <summary> Add delayed queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="access"> Access instance </param>
@@ -121,6 +123,10 @@ public static class WorkSchedulerAccessQueueInteraction
             cancellation);
     }
 
+#endregion
+
+#region DelayedAccessDI
+
     /// <summary> Add delayed queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="delay"> Access execution delay </param>
@@ -202,6 +208,10 @@ public static class WorkSchedulerAccessQueueInteraction
                 => provider.EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(cancel, attemptsCount, priority)),
             delay,
             cancellation);
+
+#endregion
+
+#region ScheduledAccess
 
     /// <summary> Add scheduled queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
@@ -293,6 +303,10 @@ public static class WorkSchedulerAccessQueueInteraction
             cancellation);
     }
 
+#endregion
+
+#region ScheduledAccessDI
+
     /// <summary> Add scheduled queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="time"> Access execution time </param>
@@ -374,6 +388,10 @@ public static class WorkSchedulerAccessQueueInteraction
                 => provider.EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(cancel, attemptsCount, priority)),
             time,
             cancellation);
+
+#endregion
+
+#region CronAccess
 
     /// <summary> Add CRON-scheduled queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
@@ -486,6 +504,10 @@ public static class WorkSchedulerAccessQueueInteraction
             execCount);
     }
 
+#endregion
+
+#region CronAccessDI
+
     /// <summary> Add CRON-scheduled queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="cronExpression"> Access CRON-based execution schedule </param>
@@ -575,6 +597,10 @@ public static class WorkSchedulerAccessQueueInteraction
             cronExpression,
             cancellation,
             execCount);
+
+#endregion
+
+#region RepeatedScheduledAccess
 
     /// <summary> Add repeated queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
@@ -673,6 +699,10 @@ public static class WorkSchedulerAccessQueueInteraction
             repeatDelay,
             cancellation,
             execCount);
+
+#endregion
+
+#region RepeatedScheduledAccessDI
 
     /// <summary> Add repeated queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
@@ -773,6 +803,10 @@ public static class WorkSchedulerAccessQueueInteraction
             cancellation,
             execCount);
 
+#endregion
+
+#region RepeatedDelayedAccess
+
     /// <summary> Add repeated queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
     /// <param name="access"> Access instance </param>
@@ -870,6 +904,10 @@ public static class WorkSchedulerAccessQueueInteraction
             repeatDelay,
             cancellation,
             execCount);
+
+#endregion
+
+#region RepeatedDelayedAccessDI
 
     /// <summary> Add repeated queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
@@ -970,6 +1008,8 @@ public static class WorkSchedulerAccessQueueInteraction
             repeatDelay,
             cancellation,
             execCount);
+
+#endregion
 }
 
 }

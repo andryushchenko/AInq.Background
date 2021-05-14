@@ -28,6 +28,8 @@ namespace AInq.Background.Enumerable
 /// <summary> <see cref="IConveyor{TData,TResult}" /> and <see cref="IPriorityConveyor{TData,TResult}" /> batch processing extension </summary>
 public static class ConveyorEnumerableExtension
 {
+#region Enumerable
+
     /// <summary> Batch process data </summary>
     /// <param name="conveyor"> Conveyor instance </param>
     /// <param name="data"> Data to process </param>
@@ -109,6 +111,10 @@ public static class ConveyorEnumerableExtension
             ? priorityConveyor.ProcessDataAsync(data, priority, cancellation, attemptsCount, enqueueAll)
             : conveyor.ProcessDataAsync(data, cancellation, attemptsCount, enqueueAll);
     }
+
+#endregion
+
+#region AsyncEnumerable
 
     /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IConveyor{TData,TResult},IEnumerable{TData},CancellationToken,int,bool)" />
     public static async IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IConveyor<TData, TResult> conveyor,
@@ -201,6 +207,8 @@ public static class ConveyorEnumerableExtension
             ? priorityConveyor.ProcessDataAsync(data, priority, cancellation, attemptsCount)
             : conveyor.ProcessDataAsync(data, cancellation, attemptsCount);
     }
+
+#endregion
 }
 
 }

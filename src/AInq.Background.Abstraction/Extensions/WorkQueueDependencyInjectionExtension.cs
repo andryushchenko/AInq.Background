@@ -26,6 +26,8 @@ namespace AInq.Background.Extensions
 /// <summary> <see cref="IWorkQueue" /> and <see cref="IPriorityWorkQueue" /> extensions to enqueue work from DI </summary>
 public static class WorkQueueDependencyInjectionExtension
 {
+#region BaseDI
+
     /// <summary> Enqueue background work </summary>
     /// <param name="queue"> Work queue instance </param>
     /// <param name="cancellation"> Work cancellation token </param>
@@ -84,6 +86,10 @@ public static class WorkQueueDependencyInjectionExtension
             CreateAsyncWork((provider, cancel) => provider.GetRequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
             cancellation,
             attemptsCount);
+
+#endregion
+
+#region PriorityDI
 
     /// <summary> Enqueue background work with given <paramref name="priority" /> </summary>
     /// <param name="queue"> Work queue instance </param>
@@ -154,6 +160,8 @@ public static class WorkQueueDependencyInjectionExtension
             priority,
             cancellation,
             attemptsCount);
+
+#endregion
 }
 
 }

@@ -37,6 +37,48 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     private readonly AsyncAutoResetEvent _newWorkEvent = new(false);
     private ConcurrentBag<IScheduledTaskWrapper> _works = new();
 
+    Task IWorkSchedulerManager.WaitForNewTaskAsync(CancellationToken cancellation)
+        => _newWorkEvent.WaitAsync(cancellation);
+
+    DateTime? IWorkSchedulerManager.GetNextTaskTime()
+    {
+        var works = Interlocked.Exchange(ref _works, new ConcurrentBag<IScheduledTaskWrapper>());
+        DateTime? next = null;
+        while (!works.IsEmpty)
+            if (works.TryTake(out var work) && !work.IsCanceled && work.NextScheduledTime.HasValue)
+            {
+                if (next == null || work.NextScheduledTime!.Value < next.Value)
+                    next = work.NextScheduledTime;
+                _works.Add(work);
+            }
+        return next;
+    }
+
+    ILookup<DateTime, IScheduledTaskWrapper> IWorkSchedulerManager.GetUpcomingTasks(TimeSpan horizon)
+    {
+        var works = Interlocked.Exchange(ref _works, new ConcurrentBag<IScheduledTaskWrapper>());
+        var upcoming = new LinkedList<IScheduledTaskWrapper>();
+        var time = DateTime.Now.Add(horizon);
+        while (!works.IsEmpty)
+            if (works.TryTake(out var work) && !work.IsCanceled && work.NextScheduledTime.HasValue)
+            {
+                if (work.NextScheduledTime!.Value <= time)
+                    upcoming.AddLast(work);
+                else _works.Add(work);
+            }
+        return upcoming.ToLookup(work => work.NextScheduledTime ?? DateTime.Now);
+    }
+
+    void IWorkSchedulerManager.RevertTask(IScheduledTaskWrapper task)
+    {
+        if (task.IsCanceled || !task.NextScheduledTime.HasValue)
+            return;
+        _works.Add(task);
+        _newWorkEvent.Set();
+    }
+
+#region Scheduled
+
     Task IWorkScheduler.AddScheduledWork(IWork work, DateTime time, CancellationToken cancellation)
     {
         time = time.ToLocalTime();
@@ -80,6 +122,10 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         _newWorkEvent.Set();
         return task;
     }
+
+#endregion
+
+#region Cron
 
     IObservable<Maybe<Exception>> IWorkScheduler.AddCronWork(IWork work, string cronExpression, CancellationToken cancellation, int execCount)
     {
@@ -136,6 +182,10 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         _newWorkEvent.Set();
         return observable;
     }
+
+#endregion
+
+#region RepeatedScheduled
 
     IObservable<Maybe<Exception>> IWorkScheduler.AddRepeatedWork(IWork work, DateTime startTime, TimeSpan repeatDelay, CancellationToken cancellation,
         int execCount)
@@ -205,45 +255,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         return observable;
     }
 
-    Task IWorkSchedulerManager.WaitForNewTaskAsync(CancellationToken cancellation)
-        => _newWorkEvent.WaitAsync(cancellation);
-
-    DateTime? IWorkSchedulerManager.GetNextTaskTime()
-    {
-        var works = Interlocked.Exchange(ref _works, new ConcurrentBag<IScheduledTaskWrapper>());
-        DateTime? next = null;
-        while (!works.IsEmpty)
-            if (works.TryTake(out var work) && !work.IsCanceled && work.NextScheduledTime.HasValue)
-            {
-                if (next == null || work.NextScheduledTime!.Value < next.Value)
-                    next = work.NextScheduledTime;
-                _works.Add(work);
-            }
-        return next;
-    }
-
-    ILookup<DateTime, IScheduledTaskWrapper> IWorkSchedulerManager.GetUpcomingTasks(TimeSpan horizon)
-    {
-        var works = Interlocked.Exchange(ref _works, new ConcurrentBag<IScheduledTaskWrapper>());
-        var upcoming = new LinkedList<IScheduledTaskWrapper>();
-        var time = DateTime.Now.Add(horizon);
-        while (!works.IsEmpty)
-            if (works.TryTake(out var work) && !work.IsCanceled && work.NextScheduledTime.HasValue)
-            {
-                if (work.NextScheduledTime!.Value <= time)
-                    upcoming.AddLast(work);
-                else _works.Add(work);
-            }
-        return upcoming.ToLookup(work => work.NextScheduledTime ?? DateTime.Now);
-    }
-
-    void IWorkSchedulerManager.RevertTask(IScheduledTaskWrapper task)
-    {
-        if (task.IsCanceled || !task.NextScheduledTime.HasValue)
-            return;
-        _works.Add(task);
-        _newWorkEvent.Set();
-    }
+#endregion
 }
 
 }

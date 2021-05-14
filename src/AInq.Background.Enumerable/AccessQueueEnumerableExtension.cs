@@ -29,6 +29,8 @@ namespace AInq.Background.Enumerable
 /// <summary> <see cref="IAccessQueue{TResource}" /> and <see cref="IPriorityAccessQueue{TResource}" /> batch processing extension </summary>
 public static class AccessQueueEnumerableExtension
 {
+#region Enumerable
+
     /// <summary> Batch process access actions </summary>
     /// <param name="accessQueue"> Access Queue instance </param>
     /// <param name="accesses"> Access actions to process </param>
@@ -204,6 +206,10 @@ public static class AccessQueueEnumerableExtension
             ? priorityQueue.AccessAsync(accesses, priority, cancellation, attemptsCount, enqueueAll)
             : queue.AccessAsync(accesses, cancellation, attemptsCount, enqueueAll);
     }
+
+#endregion
+
+#region AsyncEnumerable
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},CancellationToken,int,bool)" />
     public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAccessQueue<TResource> accessQueue,
@@ -398,6 +404,8 @@ public static class AccessQueueEnumerableExtension
             ? priorityQueue.AccessAsync(accesses, priority, cancellation, attemptsCount)
             : queue.AccessAsync(accesses, cancellation, attemptsCount);
     }
+
+#endregion
 }
 
 }

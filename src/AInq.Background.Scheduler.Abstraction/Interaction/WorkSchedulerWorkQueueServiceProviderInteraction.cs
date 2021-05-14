@@ -28,6 +28,8 @@ namespace AInq.Background.Interaction
 /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
 public static class WorkSchedulerWorkQueueServiceProviderInteraction
 {
+#region DelayedQueue
+
     /// <summary> Add delayed queued work to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
@@ -109,6 +111,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
                                                                               cancellation,
                                                                               attemptsCount,
                                                                               priority);
+
+#endregion
+
+#region DelayedQueueDI
 
     /// <summary> Add delayed queued work to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -195,6 +201,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
                                                                               attemptsCount,
                                                                               priority);
 
+#endregion
+
+#region ScheduledQueue
+
     /// <summary> Add scheduled queued work to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="work"> Work instance </param>
@@ -274,6 +284,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
                                                                               cancellation,
                                                                               attemptsCount,
                                                                               priority);
+
+#endregion
+
+#region ScheduledQueueDI
 
     /// <summary> Add scheduled queued work to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -358,6 +372,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
                                                                               cancellation,
                                                                               attemptsCount,
                                                                               priority);
+
+#endregion
+
+#region CronQueue
 
     /// <summary> Add CRON-scheduled queued work to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -470,6 +488,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
                                                                               priority,
                                                                               execCount);
 
+#endregion
+
+#region CronQueueDI
+
     /// <summary> Add CRON-scheduled queued work to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="cronExpression"> Work CRON-based execution schedule </param>
@@ -568,6 +590,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
                                                                               attemptsCount,
                                                                               priority,
                                                                               execCount);
+
+#endregion
+
+#region RepeatedScheduledQueue
 
     /// <summary> Add repeated queued work to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -683,6 +709,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
                                                                               priority,
                                                                               execCount);
 
+#endregion
+
+#region RepeatedScheduledQueueDI
+
     /// <summary> Add repeated queued work to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="starTime"> Work first execution time</param>
@@ -795,6 +825,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
                                                                               attemptsCount,
                                                                               priority,
                                                                               execCount);
+
+#endregion
+
+#region RepeatedDelayedQueue
 
     /// <summary> Add repeated queued work to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -910,6 +944,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
                                                                               priority,
                                                                               execCount);
 
+#endregion
+
+#region RepeatedDelayedQueueDI
+
     /// <summary> Add repeated queued work to registered scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="startDelay"> Work first execution delay </param>
@@ -1022,6 +1060,8 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
                                                                               attemptsCount,
                                                                               priority,
                                                                               execCount);
+
+#endregion
 }
 
 }
