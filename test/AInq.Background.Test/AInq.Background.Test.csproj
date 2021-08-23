@@ -10,7 +10,7 @@
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
     <RepositoryUrl>https://github.com/andryushchenko/AInq.Background</RepositoryUrl>
     <Version>4.2.0-preview</Version>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <Description>Simple test app</Description>
   </PropertyGroup>

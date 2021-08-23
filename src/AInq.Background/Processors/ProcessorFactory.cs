@@ -86,7 +86,7 @@ public static class ProcessorFactory
             (ReuseStrategy.Reuse, _) => new MultipleReusableProcessor<TArgument, TMetadata>(argumentFactory, maxArgumentsCount),
             (ReuseStrategy.OneTime, <=1) => new SingleOneTimeProcessor<TArgument, TMetadata>(argumentFactory),
             (ReuseStrategy.OneTime, _) => new MultipleOneTimeProcessor<TArgument, TMetadata>(argumentFactory, maxArgumentsCount),
-            _ => throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy))
+            _ => throw new InvalidEnumArgumentException(nameof(strategy), (int)strategy, typeof(ReuseStrategy))
         };
     }
 }

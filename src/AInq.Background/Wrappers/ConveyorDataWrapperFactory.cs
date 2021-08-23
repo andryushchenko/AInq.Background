@@ -85,7 +85,7 @@ public static class ConveyorDataWrapperFactory
             }
             catch (OperationCanceledException ex)
             {
-                if(outerCancellation.IsCancellationRequested)
+                if (outerCancellation.IsCancellationRequested)
                     logger.LogWarning("Processing data {Data} with machine {Machine} canceled by runtime", _data, argument.GetType());
                 if (!_innerCancellation.IsCancellationRequested)
                     _attemptsRemain++;

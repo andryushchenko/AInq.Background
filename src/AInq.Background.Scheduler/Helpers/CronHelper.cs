@@ -29,7 +29,7 @@ public static class CronHelper
     {
         try
         {
-            return cronExpression.Trim().Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries).Length switch
+            return cronExpression.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length switch
             {
                 5 => CronExpression.Parse(cronExpression, CronFormat.Standard),
                 6 => CronExpression.Parse(cronExpression, CronFormat.IncludeSeconds),

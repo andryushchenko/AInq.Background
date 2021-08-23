@@ -181,7 +181,7 @@ public static class WorkQueueEnumerableExtension
         [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
-        var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
+        var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions { SingleReader = true, SingleWriter = true });
         var reader = channel.Reader;
         var writer = channel.Writer;
         _ = Task.Run(async () =>
@@ -219,7 +219,7 @@ public static class WorkQueueEnumerableExtension
         int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
-        var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
+        var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions { SingleReader = true, SingleWriter = true });
         var reader = channel.Reader;
         var writer = channel.Writer;
         _ = Task.Run(async () =>
@@ -267,7 +267,7 @@ public static class WorkQueueEnumerableExtension
         [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
-        var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
+        var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions { SingleReader = true, SingleWriter = true });
         var reader = channel.Reader;
         var writer = channel.Writer;
         _ = Task.Run(async () =>
@@ -305,7 +305,7 @@ public static class WorkQueueEnumerableExtension
         int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
-        var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
+        var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions { SingleReader = true, SingleWriter = true });
         var reader = channel.Reader;
         var writer = channel.Writer;
         _ = Task.Run(async () =>

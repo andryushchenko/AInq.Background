@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Helpers;
 using AInq.Background.Services;
 using AInq.Background.Tasks;
 using AInq.Optional;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AInq.Background.Helpers;
 using static AInq.Background.Tasks.WorkFactory;
 
 namespace AInq.Background.Extensions

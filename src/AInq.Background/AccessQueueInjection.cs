@@ -191,7 +191,7 @@ public static class AccessQueueInjection
         if (resourceFactory == null)
             throw new ArgumentNullException(nameof(resourceFactory));
         if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
-            throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
+            throw new InvalidEnumArgumentException(nameof(strategy), (int)strategy, typeof(ReuseStrategy));
         var manager = new AccessQueueManager<TResource>(maxAttempts);
         services.AddHostedService(provider => new TaskWorker<TResource, object?>(provider,
             manager,
@@ -239,7 +239,7 @@ public static class AccessQueueInjection
         if (resourceFactory == null)
             throw new ArgumentNullException(nameof(resourceFactory));
         if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
-            throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
+            throw new InvalidEnumArgumentException(nameof(strategy), (int)strategy, typeof(ReuseStrategy));
         var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);
         services.AddHostedService(provider => new TaskWorker<TResource, int>(provider,
             manager,

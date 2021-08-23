@@ -20,14 +20,14 @@ namespace AInq.Background.Helpers
 /// <summary> <see cref="IServiceProvider" /> helper utility </summary>
 public static class ServiceProviderHelper
 {
-    /// <summary> Get service of type <typeparamref name="T"/> from the <see cref="IServiceProvider" /> </summary>
+    /// <summary> Get service of type <typeparamref name="T" /> from the <see cref="IServiceProvider" /> </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <typeparam name="T">Service type</typeparam>
     /// <returns> Service instance or NULL if service not exists </returns>
     public static T? Service<T>(this IServiceProvider provider)
         => provider.GetService(typeof(T)) is T service ? service : default;
 
-    /// <summary> Get service of type <typeparamref name="T"/> from the <see cref="IServiceProvider" /> </summary>
+    /// <summary> Get service of type <typeparamref name="T" /> from the <see cref="IServiceProvider" /> </summary>
     /// <param name="provider"> Service provider instance </param>
     /// <typeparam name="T">Service type</typeparam>
     /// <returns> Service instance </returns>
