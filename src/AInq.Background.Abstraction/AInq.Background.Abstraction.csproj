@@ -11,7 +11,7 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-    <Version>4.2.0</Version>
+    <Version>4.2.0-preview</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>AInq.Background</RootNamespace>
