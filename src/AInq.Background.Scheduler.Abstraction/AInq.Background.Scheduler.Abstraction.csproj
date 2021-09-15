@@ -11,7 +11,7 @@
     <Copyright>Anton Andryushchenko</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-    <Version>4.2.0-preview</Version>
+    <Version>4.2.0-preview.2</Version>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>AInq.Background</RootNamespace>
@@ -28,7 +28,7 @@ Work scheduler interfaces and helpers.
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AInq.Optional" Version="1.1.0-preview" />
+    <PackageReference Include="AInq.Optional" Version="1.1.0-preview.2" />
   </ItemGroup>
 
   <ItemGroup>
