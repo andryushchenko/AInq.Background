@@ -37,7 +37,7 @@ public class TestMachine : IConveyorMachine<int, int>, IStartStoppable
         Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} processing {data}");
         await Task.Delay(3000, cancellation).ConfigureAwait(false);
         Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} processed {data}");
-        return data;
+        return data * data;
     }
 
     bool IStartStoppable.IsActive => _isRunning;

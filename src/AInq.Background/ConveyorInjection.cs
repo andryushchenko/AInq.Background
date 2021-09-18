@@ -213,7 +213,7 @@ public static class ConveyorInjection
         if (conveyorMachineFactory == null)
             throw new ArgumentNullException(nameof(conveyorMachineFactory));
         if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
-            throw new InvalidEnumArgumentException(nameof(strategy), (int)strategy, typeof(ReuseStrategy));
+            throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
         var manager = new ConveyorManager<TData, TResult>(maxAttempts);
         services.AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider,
             manager,
@@ -267,7 +267,7 @@ public static class ConveyorInjection
         if (conveyorMachineFactory == null)
             throw new ArgumentNullException(nameof(conveyorMachineFactory));
         if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
-            throw new InvalidEnumArgumentException(nameof(strategy), (int)strategy, typeof(ReuseStrategy));
+            throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
         var manager = new PriorityConveyorManager<TData, TResult>(maxPriority, maxAttempts);
         services.AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider,
             manager,

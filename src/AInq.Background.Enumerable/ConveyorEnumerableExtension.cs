@@ -122,7 +122,7 @@ public static class ConveyorEnumerableExtension
         where TData : notnull
     {
         _ = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
-        var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions { SingleReader = true, SingleWriter = true });
+        var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
         var writer = channel.Writer;
         _ = Task.Run(async () =>
@@ -138,7 +138,7 @@ public static class ConveyorEnumerableExtension
                 }
                 catch (Exception ex)
                 {
-                    await writer.WriteAsync(Task.FromException<TResult>(ex), cancellation).ConfigureAwait(false);
+                    await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
                 }
                 finally
                 {
@@ -162,7 +162,7 @@ public static class ConveyorEnumerableExtension
         where TData : notnull
     {
         _ = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
-        var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions { SingleReader = true, SingleWriter = true });
+        var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
         var writer = channel.Writer;
         _ = Task.Run(async () =>
@@ -179,7 +179,7 @@ public static class ConveyorEnumerableExtension
                 }
                 catch (Exception ex)
                 {
-                    await writer.WriteAsync(Task.FromException<TResult>(ex), cancellation).ConfigureAwait(false);
+                    await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
                 }
                 finally
                 {
