@@ -1,42 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0;net6.0</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Product>AInq.Background</Product>
-    <Authors>Anton Andryushchenko</Authors>
-    <RepositoryUrl>https://github.com/andryushchenko/AInq.Background</RepositoryUrl>
-    <Copyright>Anton Andryushchenko</Copyright>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-    <Version>4.2.0-preview.2</Version>
-    <LangVersion>preview</LangVersion>
-    <Nullable>enable</Nullable>
-    <RootNamespace>AInq.Background</RootNamespace>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageTags>Background;Scheduler;Cron;AInq</PackageTags>
-    <Description>Background work utilities for .NET Core apps based on Hosted services.
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net5.0;net6.0</TargetFrameworks>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<Product>AInq.Background</Product>
+		<Authors>Anton Andryushchenko</Authors>
+		<RepositoryUrl>https://github.com/andryushchenko/AInq.Background</RepositoryUrl>
+		<Copyright>Anton Andryushchenko</Copyright>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
+		<Version>4.2.0-preview.3</Version>
+		<LangVersion>preview</LangVersion>
+		<Nullable>enable</Nullable>
+		<RootNamespace>AInq.Background</RootNamespace>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageTags>Background;Scheduler;Cron;AInq</PackageTags>
+		<Description>Background work utilities for .NET Core apps based on Hosted services.
 Background work scheduler with cron.
-    </Description>
-    <PackageReleaseNotes>[ADD] .NET 6.0 support</PackageReleaseNotes>
-  </PropertyGroup>
+		</Description>
+		<PackageReleaseNotes>[ADD] .NET 6.0 support</PackageReleaseNotes>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>..\..\doc\AInq.Background.Scheduler.xml</DocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DocumentationFile>..\..\doc\AInq.Background.Scheduler.xml</DocumentationFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Cronos" Version="0.7.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0-rc.1.21451.13" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0-rc.1.21451.13" />
-    <PackageReference Include="Nito.AsyncEx.Coordination" Version="5.1.0" />
-    <PackageReference Include="System.Reactive" Version="5.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Cronos" Version="0.7.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0-rc.1.21451.13" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0-rc.1.21451.13" />
+		<PackageReference Include="Nito.AsyncEx.Coordination" Version="5.1.2" />
+		<PackageReference Include="System.Reactive" Version="5.0.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\AInq.Background.Scheduler.Abstraction\AInq.Background.Scheduler.Abstraction.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\AInq.Background.Scheduler.Abstraction\AInq.Background.Scheduler.Abstraction.csproj" />
+	</ItemGroup>
 
 </Project>

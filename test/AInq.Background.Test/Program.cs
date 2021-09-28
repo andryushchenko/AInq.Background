@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using AInq.Background;
-using AInq.Background.Enumerable;
 using AInq.Background.Helpers;
 using AInq.Background.Interaction;
 using AInq.Background.Services;

@@ -23,7 +23,7 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
-namespace AInq.Background.Enumerable
+namespace AInq.Background
 {
 
 /// <summary> <see cref="IWorkQueue" /> and <see cref="IPriorityWorkQueue" /> batch processing extension </summary>
@@ -205,8 +205,13 @@ public static class WorkQueueEnumerableExtension
                 }
             },
             cancellation);
+#if NET5_0_OR_GREATER
+        await foreach (var result in reader.ReadAllAsync(cancellation).ConfigureAwait(false))
+            yield return await result.ConfigureAwait(false);
+#else
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
+#endif
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IWorkQueue,IEnumerable{IWork{TResult}},CancellationToken,int,bool)" />
@@ -243,8 +248,13 @@ public static class WorkQueueEnumerableExtension
                 }
             },
             cancellation);
+#if NET5_0_OR_GREATER
+        await foreach (var result in reader.ReadAllAsync(cancellation).ConfigureAwait(false))
+            yield return await result.ConfigureAwait(false);
+#else
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
+#endif
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IWork{TResult}},int,CancellationToken,int,bool)" />
@@ -291,8 +301,13 @@ public static class WorkQueueEnumerableExtension
                 }
             },
             cancellation);
+#if NET5_0_OR_GREATER
+        await foreach (var result in reader.ReadAllAsync(cancellation).ConfigureAwait(false))
+            yield return await result.ConfigureAwait(false);
+#else
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
+#endif
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IWorkQueue,IEnumerable{IAsyncWork{TResult}},CancellationToken,int,bool)" />
@@ -330,8 +345,13 @@ public static class WorkQueueEnumerableExtension
                 }
             },
             cancellation);
+#if NET5_0_OR_GREATER
+        await foreach (var result in reader.ReadAllAsync(cancellation).ConfigureAwait(false))
+            yield return await result.ConfigureAwait(false);
+#else
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
+#endif
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IAsyncWork{TResult}},int,CancellationToken,int,bool)" />

@@ -23,10 +23,10 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
-namespace AInq.Background.Enumerable
+namespace AInq.Background
 {
 
-/// <summary> <see cref="IAccessQueue{TResource}" /> and <see cref="IPriorityAccessQueue{TResource}" /> batch processing extension </summary>
+/// <summary> <see cref="IPriorityAccessQueue{TResource}" /> and <see cref="IAccessQueue{TResource}" /> batch processing extension </summary>
 public static class AccessQueueEnumerableExtension
 {
 #region Enumerable
@@ -40,7 +40,7 @@ public static class AccessQueueEnumerableExtension
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="accessQueue" /> or <paramref name="accesses" /> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="accesses" /> or <paramref name="accesses" /> is NULL </exception>
     public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAccessQueue<TResource> accessQueue,
         IEnumerable<IAccess<TResource, TResult>> accesses, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1,
         bool enqueueAll = false)
@@ -242,8 +242,13 @@ public static class AccessQueueEnumerableExtension
                 }
             },
             cancellation);
+#if NET5_0_OR_GREATER
+        await foreach (var result in reader.ReadAllAsync(cancellation).ConfigureAwait(false))
+            yield return await result.ConfigureAwait(false);
+#else
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
+#endif
     }
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},CancellationToken,int,bool)" />
@@ -285,8 +290,13 @@ public static class AccessQueueEnumerableExtension
                 }
             },
             cancellation);
+#if NET5_0_OR_GREATER
+        await foreach (var result in reader.ReadAllAsync(cancellation).ConfigureAwait(false))
+            yield return await result.ConfigureAwait(false);
+#else
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
+#endif
     }
 
     /// <inheritdoc
@@ -339,8 +349,13 @@ public static class AccessQueueEnumerableExtension
                 }
             },
             cancellation);
+#if NET5_0_OR_GREATER
+        await foreach (var result in reader.ReadAllAsync(cancellation).ConfigureAwait(false))
+            yield return await result.ConfigureAwait(false);
+#else
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
+#endif
     }
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},CancellationToken,int,bool)" />
@@ -382,8 +397,13 @@ public static class AccessQueueEnumerableExtension
                 }
             },
             cancellation);
+#if NET5_0_OR_GREATER
+        await foreach (var result in reader.ReadAllAsync(cancellation).ConfigureAwait(false))
+            yield return await result.ConfigureAwait(false);
+#else
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
+#endif
     }
 
     /// <inheritdoc
