@@ -12,19 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Helpers;
-using AInq.Background.Services;
-using AInq.Background.Tasks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Channels;
-using System.Threading.Tasks;
-
-namespace AInq.Background
-{
+namespace AInq.Background;
 
 /// <summary> <see cref="IWorkQueue" /> and <see cref="IPriorityWorkQueue" /> batch processing extension </summary>
 public static class WorkQueueEnumerableExtension
@@ -370,6 +358,4 @@ public static class WorkQueueEnumerableExtension
     }
 
 #endregion
-}
-
 }

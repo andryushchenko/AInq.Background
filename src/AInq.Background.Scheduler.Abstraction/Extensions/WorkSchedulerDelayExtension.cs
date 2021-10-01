@@ -12,15 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Services;
-using AInq.Background.Tasks;
-using AInq.Optional;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Background.Extensions
-{
+namespace AInq.Background.Extensions;
 
 /// <summary> <see cref="IWorkScheduler" /> extensions to schedule work with delayed start </summary>
 public static class WorkSchedulerDelayExtension
@@ -166,6 +158,4 @@ public static class WorkSchedulerDelayExtension
             execCount);
 
 #endregion
-}
-
 }

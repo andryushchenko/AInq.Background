@@ -12,14 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Tasks;
-using AInq.Optional;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Background.Services
-{
+namespace AInq.Background.Services;
 
 /// <summary> Interface for work scheduler service </summary>
 public interface IWorkScheduler
@@ -185,6 +178,4 @@ public interface IWorkScheduler
         CancellationToken cancellation = default, int execCount = -1);
 
 #endregion
-}
-
 }

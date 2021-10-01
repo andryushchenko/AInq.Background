@@ -14,20 +14,15 @@
 
 using AInq.Background.Helpers;
 using AInq.Background.Services;
-using AInq.Background.Tasks;
 using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Nito.AsyncEx;
-using System.Threading;
-using System.Threading.Tasks;
 using static AInq.Background.Tasks.WorkFactory;
 using static AInq.Background.Wrappers.StartupWorkWrapperFactory;
 
-namespace AInq.Background
-{
+namespace AInq.Background;
 
 /// <summary> Startup work injection </summary>
 public static class StartupWorkInjection
@@ -209,6 +204,4 @@ public static class StartupWorkInjection
             => provider.EnqueueAsyncWork<TAsyncWork, TResult>(CancellationToken.None, attemptsCount, priority).Ignore())));
 
 #endregion
-}
-
 }

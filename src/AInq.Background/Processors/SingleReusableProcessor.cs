@@ -13,16 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Managers;
-using AInq.Background.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Nito.AsyncEx;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Processors
-{
+namespace AInq.Background.Processors;
 
 internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
 {
@@ -90,6 +82,4 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
                 cancellation)
             .Ignore();
     }
-}
-
 }

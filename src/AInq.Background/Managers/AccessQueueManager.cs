@@ -12,15 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Services;
-using AInq.Background.Tasks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using static AInq.Background.Wrappers.AccessWrapperFactory;
 
-namespace AInq.Background.Managers
-{
+namespace AInq.Background.Managers;
 
 /// <summary> Background access queue manager </summary>
 /// <typeparam name="TResource"> Shared resource type </typeparam>
@@ -71,6 +65,4 @@ public sealed class AccessQueueManager<TResource> : TaskManager<TResource>, IAcc
 
     private int FixAttempts(int attemptsCount)
         => Math.Min(_maxAttempts, Math.Max(1, attemptsCount));
-}
-
 }

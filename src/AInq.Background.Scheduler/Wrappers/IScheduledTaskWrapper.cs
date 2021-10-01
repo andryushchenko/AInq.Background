@@ -12,13 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Background.Wrappers
-{
+namespace AInq.Background.Wrappers;
 
 /// <summary> Interface for scheduled background task wrapper </summary>
 public interface IScheduledTaskWrapper
@@ -35,6 +29,4 @@ public interface IScheduledTaskWrapper
     /// <param name="cancellation"> Cancellation token </param>
     /// <returns> If task should be reverted to scheduler </returns>
     Task<bool> ExecuteAsync(IServiceProvider provider, ILogger logger, CancellationToken cancellation = default);
-}
-
 }

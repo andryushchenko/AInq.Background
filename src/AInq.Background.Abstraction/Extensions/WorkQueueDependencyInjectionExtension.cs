@@ -15,13 +15,9 @@
 using AInq.Background.Helpers;
 using AInq.Background.Services;
 using AInq.Background.Tasks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using static AInq.Background.Tasks.WorkFactory;
 
-namespace AInq.Background.Extensions
-{
+namespace AInq.Background.Extensions;
 
 /// <summary> <see cref="IWorkQueue" /> and <see cref="IPriorityWorkQueue" /> extensions to enqueue work from DI </summary>
 public static class WorkQueueDependencyInjectionExtension
@@ -162,6 +158,4 @@ public static class WorkQueueDependencyInjectionExtension
             attemptsCount);
 
 #endregion
-}
-
 }

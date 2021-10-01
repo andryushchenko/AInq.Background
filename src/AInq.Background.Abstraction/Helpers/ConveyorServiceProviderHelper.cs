@@ -13,12 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Services;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Helpers
-{
+namespace AInq.Background.Helpers;
 
 /// <summary> Helper class for <see cref="IConveyor{TData,TResult}" /> and <see cref="IPriorityConveyor{TData,TResult}" /> </summary>
 /// <remarks> <see cref="IConveyor{TData,TResult}" /> or <see cref="IPriorityConveyor{TData,TResult}" /> should be registered on host </remarks>
@@ -44,6 +40,4 @@ public static class ConveyorServiceProviderHelper
         => (provider ?? throw new ArgumentNullException(nameof(provider))).Service<IPriorityConveyor<TData, TResult>>()
                                                                           ?.ProcessDataAsync(data, priority, cancellation, attemptsCount)
            ?? provider.RequiredService<IConveyor<TData, TResult>>().ProcessDataAsync(data, cancellation, attemptsCount);
-}
-
 }

@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
-namespace AInq.Background.Tasks
-{
+namespace AInq.Background.Tasks;
 
 /// <summary> Interface for synchronous work with result of type <typeparamref name="TResult" /> </summary>
 /// <typeparam name="TResult"> Work result type </typeparam>
@@ -25,6 +22,4 @@ public interface IWork<out TResult>
     /// <param name="serviceProvider"> Service provider instance </param>
     /// <returns> Work result </returns>
     TResult DoWork(IServiceProvider serviceProvider);
-}
-
 }

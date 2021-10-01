@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace AInq.Background
-{
+namespace AInq.Background;
 
 /// <summary> Reuse strategy for Shared Resources and Conveyor Machines </summary>
 public enum ReuseStrategy
@@ -26,6 +25,4 @@ public enum ReuseStrategy
 
     /// <summary> Generate new for each action </summary>
     OneTime
-}
-
 }

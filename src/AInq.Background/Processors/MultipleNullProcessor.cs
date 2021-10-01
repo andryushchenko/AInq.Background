@@ -13,15 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Managers;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Nito.AsyncEx;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Processors
-{
+namespace AInq.Background.Processors;
 
 internal sealed class MultipleNullProcessor<TMetadata> : ITaskProcessor<object?, TMetadata>
 {
@@ -50,6 +43,4 @@ internal sealed class MultipleNullProcessor<TMetadata> : ITaskProcessor<object?,
                 .Ignore();
         }
     }
-}
-
 }

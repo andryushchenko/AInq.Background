@@ -13,12 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Tasks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Services
-{
+namespace AInq.Background.Services;
 
 /// <summary> Interface for background work queue </summary>
 public interface IWorkQueue
@@ -59,6 +55,4 @@ public interface IWorkQueue
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     Task<TResult> EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, CancellationToken cancellation = default, int attemptsCount = 1);
-}
-
 }

@@ -13,12 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Wrappers;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Managers
-{
+namespace AInq.Background.Managers;
 
 /// <summary> Interface for background task manager </summary>
 /// <typeparam name="TArgument"> Task argument type </typeparam>
@@ -42,6 +38,4 @@ public interface ITaskManager<TArgument, TMetadata>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="task" /> or <paramref name="metadata" /> is NULL</exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="metadata" /> has incorrect value </exception>
     void RevertTask(ITaskWrapper<TArgument> task, TMetadata metadata);
-}
-
 }

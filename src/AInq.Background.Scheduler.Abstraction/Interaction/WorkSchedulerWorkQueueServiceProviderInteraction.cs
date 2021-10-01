@@ -12,16 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Helpers;
-using AInq.Background.Services;
-using AInq.Background.Tasks;
-using AInq.Optional;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Background.Interaction
-{
+namespace AInq.Background.Interaction;
 
 /// <summary> <see cref="IWorkScheduler" /> extensions to run scheduled work in registered background queue  </summary>
 /// <remarks> <see cref="IWorkScheduler" /> service should be registered on host to schedule work </remarks>
@@ -1062,6 +1053,4 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
                                                                               execCount);
 
 #endregion
-}
-
 }

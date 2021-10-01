@@ -12,16 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Tasks;
-using AInq.Optional;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Reactive.Subjects;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Background.Wrappers
-{
+namespace AInq.Background.Wrappers;
 
 /// <summary> Factory class for creating <see cref="IScheduledTaskWrapper" /> for repeated work </summary>
 public static class RepeatedWorkWrapperFactory
@@ -294,6 +285,4 @@ public static class RepeatedWorkWrapperFactory
             return false;
         }
     }
-}
-
 }

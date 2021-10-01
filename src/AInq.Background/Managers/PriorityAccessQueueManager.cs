@@ -12,15 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Services;
-using AInq.Background.Tasks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using static AInq.Background.Wrappers.AccessWrapperFactory;
 
-namespace AInq.Background.Managers
-{
+namespace AInq.Background.Managers;
 
 /// <summary> Background access queue manager with numeric prioritization </summary>
 /// <typeparam name="TResource"> Shared resource type </typeparam>
@@ -116,6 +110,4 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
     }
 
 #endregion
-}
-
 }

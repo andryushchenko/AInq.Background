@@ -15,12 +15,8 @@
 using AInq.Background.Extensions;
 using AInq.Background.Services;
 using AInq.Background.Tasks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Helpers
-{
+namespace AInq.Background.Helpers;
 
 /// <summary> Helper class for <see cref="IWorkQueue" /> and <see cref="IPriorityWorkQueue" /> </summary>
 /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
@@ -171,6 +167,4 @@ public static class WorkQueueServiceProviderHelper
            ?? provider.RequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork, TResult>(cancellation, attemptsCount);
 
 #endregion
-}
-
 }

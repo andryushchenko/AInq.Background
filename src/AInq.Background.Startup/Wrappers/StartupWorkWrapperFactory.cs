@@ -12,14 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Tasks;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Background.Wrappers
-{
+namespace AInq.Background.Wrappers;
 
 internal static class StartupWorkWrapperFactory
 {
@@ -108,6 +101,4 @@ internal static class StartupWorkWrapperFactory
             }
         }
     }
-}
-
 }

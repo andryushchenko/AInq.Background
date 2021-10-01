@@ -13,12 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Services;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Tasks
-{
+namespace AInq.Background.Tasks;
 
 /// <summary> Interface for data processing machine for <see cref="IConveyor{TData,TResult}" /> </summary>
 /// <typeparam name="TData"> Input data type </typeparam>
@@ -32,6 +28,4 @@ public interface IConveyorMachine<in TData, TResult>
     /// <param name="cancellation"> Processing cancellation token </param>
     /// <returns> Processing result task </returns>
     Task<TResult> ProcessDataAsync(TData data, IServiceProvider provider, CancellationToken cancellation = default);
-}
-
 }

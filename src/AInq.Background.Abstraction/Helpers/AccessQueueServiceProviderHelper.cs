@@ -15,12 +15,8 @@
 using AInq.Background.Extensions;
 using AInq.Background.Services;
 using AInq.Background.Tasks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Helpers
-{
+namespace AInq.Background.Helpers;
 
 /// <summary> Helper class for <see cref="IAccessQueue{TResource}" /> and <see cref="IPriorityAccessQueue{TResource}" /> </summary>
 /// <remarks>
@@ -198,6 +194,4 @@ public static class AccessQueueServiceProviderHelper
                       .EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(cancellation, attemptsCount);
 
 #endregion
-}
-
 }

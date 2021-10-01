@@ -12,12 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Background.Services
-{
+namespace AInq.Background.Services;
 
 /// <summary> Interface for background data processing conveyor </summary>
 /// <typeparam name="TData"> Input data type </typeparam>
@@ -35,6 +30,4 @@ public interface IConveyor<in TData, TResult>
     /// <returns> Processing result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="data" /> is NULL </exception>
     Task<TResult> ProcessDataAsync(TData data, CancellationToken cancellation = default, int attemptsCount = 1);
-}
-
 }

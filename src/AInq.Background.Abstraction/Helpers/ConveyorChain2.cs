@@ -13,12 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Services;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Helpers
-{
+namespace AInq.Background.Helpers;
 
 /// <summary> Chain of two conveyors </summary>
 /// <typeparam name="TData"> Input data type </typeparam>
@@ -45,12 +41,9 @@ public class ConveyorChain<TData, TIntermediate, TResult> : IConveyor<TData, TRe
     int IConveyor<TData, TResult>.MaxAttempts => _maxAttempts;
 
     async Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
-        => await _second.ProcessDataAsync(
-                            await _first.ProcessDataAsync(data, cancellation, Math.Max(1, Math.Min(_first.MaxAttempts, attemptsCount)))
-                                        .ConfigureAwait(false),
+        => await _second.ProcessDataAsync(await _first.ProcessDataAsync(data, cancellation, Math.Max(1, Math.Min(_first.MaxAttempts, attemptsCount)))
+                                                      .ConfigureAwait(false),
                             cancellation,
                             Math.Max(1, Math.Min(_second.MaxAttempts, attemptsCount)))
                         .ConfigureAwait(false);
-}
-
 }

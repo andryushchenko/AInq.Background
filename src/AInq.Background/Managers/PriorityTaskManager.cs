@@ -13,16 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Wrappers;
-using Nito.AsyncEx;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Managers
-{
+namespace AInq.Background.Managers;
 
 /// <summary> Basic task manager with numeric prioritization </summary>
 /// <typeparam name="TArgument"> Task argument type </typeparam>
@@ -77,6 +69,4 @@ public class PriorityTaskManager<TArgument> : ITaskManager<TArgument, int>
 
     private int FixPriority(int priority)
         => Math.Min(MaxPriority, Math.Max(0, priority));
-}
-
 }

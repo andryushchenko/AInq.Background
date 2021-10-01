@@ -13,14 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Wrappers;
-using Nito.AsyncEx;
-using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Managers
-{
+namespace AInq.Background.Managers;
 
 /// <summary> Basic task manager with single queue </summary>
 /// <typeparam name="TArgument"> Task argument type </typeparam>
@@ -58,6 +52,4 @@ public class TaskManager<TArgument> : ITaskManager<TArgument, object?>
         _queue.Enqueue(task ?? throw new ArgumentNullException(nameof(task)));
         _newDataEvent.Set();
     }
-}
-
 }

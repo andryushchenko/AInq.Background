@@ -12,15 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Services;
-using AInq.Background.Tasks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using static AInq.Background.Wrappers.WorkWrapperFactory;
 
-namespace AInq.Background.Managers
-{
+namespace AInq.Background.Managers;
 
 /// <summary> Background work queue manager with numeric prioritization </summary>
 public sealed class PriorityWorkQueueManager : PriorityTaskManager<object?>, IPriorityWorkQueue
@@ -102,6 +96,4 @@ public sealed class PriorityWorkQueueManager : PriorityTaskManager<object?>, IPr
     }
 
 #endregion
-}
-
 }

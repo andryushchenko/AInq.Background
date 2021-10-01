@@ -14,14 +14,9 @@
 
 using AInq.Background.Managers;
 using AInq.Background.Processors;
-using AInq.Background.Services;
 using AInq.Background.Workers;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
 
-namespace AInq.Background
-{
+namespace AInq.Background;
 
 /// <summary> Background Work Queue dependency injection </summary>
 public static class WorkQueueInjection
@@ -78,6 +73,4 @@ public static class WorkQueueInjection
         var queue = services.CreatePriorityWorkQueue(maxPriority, maxParallelWorks, maxAttempts);
         return services.AddSingleton<IWorkQueue>(queue).AddSingleton(queue);
     }
-}
-
 }

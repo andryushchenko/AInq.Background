@@ -12,17 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Background.Wrappers
-{
+namespace AInq.Background.Wrappers;
 
 internal interface IStartupWorkWrapper
 {
     Task DoWorkAsync(IServiceProvider provider, ILogger logger, CancellationToken cancellation);
-}
-
 }

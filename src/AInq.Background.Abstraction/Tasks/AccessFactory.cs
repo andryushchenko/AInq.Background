@@ -12,12 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Background.Tasks
-{
+namespace AInq.Background.Tasks;
 
 /// <summary> Factory class for creating <see cref="IAccess{TResource}" /> and <see cref="IAsyncAccess{TResource}" /> from delegates </summary>
 public static class AccessFactory
@@ -114,6 +109,4 @@ public static class AccessFactory
             CancellationToken cancellation)
             => await _access.Invoke(resource, serviceProvider, cancellation).ConfigureAwait(false);
     }
-}
-
 }

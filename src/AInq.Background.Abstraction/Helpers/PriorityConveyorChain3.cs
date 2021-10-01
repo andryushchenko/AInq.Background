@@ -13,12 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Services;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Helpers
-{
+namespace AInq.Background.Helpers;
 
 /// <summary> Chain of three priority conveyors </summary>
 /// <typeparam name="TData"> Input data type </typeparam>
@@ -166,6 +162,4 @@ public class PriorityConveyorChain<TData, TFirstIntermediate, TSecondIntermediat
                            cancellation,
                            Math.Max(1, Math.Min(_third.MaxAttempts, attemptsCount)))
                        .ConfigureAwait(false);
-}
-
 }

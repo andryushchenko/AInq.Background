@@ -12,12 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Background.Tasks
-{
+namespace AInq.Background.Tasks;
 
 /// <summary> Interface for asynchronous access to shared resource of type <typeparamref name="TResource" /> without result </summary>
 /// <typeparam name="TResource"> Shared resource type </typeparam>
@@ -30,6 +25,4 @@ public interface IAsyncAccess<in TResource>
     /// <param name="cancellation"> Access action cancellation token </param>
     /// <returns> Access action completion task </returns>
     Task AccessAsync(TResource resource, IServiceProvider serviceProvider, CancellationToken cancellation = default);
-}
-
 }

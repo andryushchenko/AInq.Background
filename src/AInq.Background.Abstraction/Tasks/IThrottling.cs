@@ -13,10 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Services;
-using System;
 
-namespace AInq.Background.Tasks
-{
+namespace AInq.Background.Tasks;
 
 /// <summary> Interface for objects need to have timeout before reuse </summary>
 /// <remarks> Used in <see cref="IConveyor{TData,TResult}" /> and <see cref="IAccessQueue{TResource}" /></remarks>
@@ -24,6 +22,4 @@ public interface IThrottling
 {
     /// <summary> Timeout duration </summary>
     TimeSpan Timeout { get; }
-}
-
 }

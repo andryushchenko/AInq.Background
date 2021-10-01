@@ -13,10 +13,8 @@
 // limitations under the License.
 
 using Cronos;
-using System;
 
-namespace AInq.Background.Helpers
-{
+namespace AInq.Background.Helpers;
 
 /// <summary> Cron expression parsing utility </summary>
 public static class CronHelper
@@ -41,6 +39,4 @@ public static class CronHelper
             throw new ArgumentException("Syntax error in cron expression", nameof(cronExpression), ex);
         }
     }
-}
-
 }

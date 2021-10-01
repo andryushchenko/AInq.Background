@@ -12,14 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Tasks;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Background.Wrappers
-{
+namespace AInq.Background.Wrappers;
 
 /// <summary> Factory class for creating <see cref="IScheduledTaskWrapper" /> for once scheduled work </summary>
 public static class ScheduledWorkWrapperFactory
@@ -213,6 +206,4 @@ public static class ScheduledWorkWrapperFactory
 
         DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested ? null : _nextScheduledTime;
     }
-}
-
 }

@@ -12,13 +12,15 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
 		<Version>4.2.0-preview.3</Version>
-		<LangVersion>preview</LangVersion>
+		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>AInq.Background</RootNamespace>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>Background;Queue;Conveyor;AInq;Enumerable;LINQ</PackageTags>
-		<Description>Background work utilities for .NET Core apps based on Hosted services.
-Batch processing extension for background work queue, access queue and data coveyor.
+		<Description>
+			Background work utilities for .NET Core apps based on Hosted services.
+			Batch processing extension for background work queue, access queue and data coveyor.
 		</Description>
 		<PackageReleaseNotes>[ADD] .NET 6.0 support</PackageReleaseNotes>
 	</PropertyGroup>
@@ -37,6 +39,14 @@ Batch processing extension for background work queue, access queue and data cove
 
 	<ItemGroup>
 		<ProjectReference Include="..\AInq.Background.Abstraction\AInq.Background.Abstraction.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="AInq.Background.Helpers" />
+		<Using Include="AInq.Background.Services" />
+		<Using Include="AInq.Background.Tasks" />
+		<Using Include="System.Runtime.CompilerServices" />
+		<Using Include="System.Threading.Channels" />
 	</ItemGroup>
 
 </Project>

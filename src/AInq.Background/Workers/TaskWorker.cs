@@ -14,17 +14,10 @@
 
 using AInq.Background.Managers;
 using AInq.Background.Processors;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Nito.AsyncEx;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Workers
-{
+namespace AInq.Background.Workers;
 
 /// <summary> Background task worker service </summary>
 /// <typeparam name="TArgument"> Task argument type </typeparam>
@@ -90,6 +83,4 @@ public sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposab
                 _logger.LogError(ex, "Unhandled error in task processor {0}", _processor.GetType());
             }
     }
-}
-
 }

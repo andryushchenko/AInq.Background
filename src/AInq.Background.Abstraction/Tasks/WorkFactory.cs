@@ -12,12 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Background.Tasks
-{
+namespace AInq.Background.Tasks;
 
 /// <summary> Factory class for creating <see cref="IWork" /> and <see cref="IAsyncWork" /> from delegates </summary>
 public static class WorkFactory
@@ -95,6 +90,4 @@ public static class WorkFactory
         async Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
             => await _work.Invoke(serviceProvider, cancellation).ConfigureAwait(false);
     }
-}
-
 }

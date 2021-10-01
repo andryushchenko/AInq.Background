@@ -13,12 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Services;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Helpers
-{
+namespace AInq.Background.Helpers;
 
 /// <summary> Wrapper around <see cref="IConveyor{TData,TResult}" /> to emulate <see cref="IPriorityConveyor{TData,TResult}" /> </summary>
 /// <typeparam name="TData"> Input data type </typeparam>
@@ -42,6 +38,4 @@ public class PriorityConveyorEmulator<TData, TResult> : IPriorityConveyor<TData,
 
     Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, CancellationToken cancellation, int attemptsCount)
         => _conveyor.ProcessDataAsync(data, cancellation, attemptsCount);
-}
-
 }

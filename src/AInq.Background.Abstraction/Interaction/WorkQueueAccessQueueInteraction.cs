@@ -14,13 +14,9 @@
 
 using AInq.Background.Services;
 using AInq.Background.Tasks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using static AInq.Background.Tasks.WorkFactory;
 
-namespace AInq.Background.Interaction
-{
+namespace AInq.Background.Interaction;
 
 /// <summary> <see cref="IWorkQueue" /> and <see cref="IPriorityWorkQueue" /> extensions to run access in background queue  </summary>
 /// <remarks>
@@ -201,6 +197,4 @@ public static class WorkQueueAccessQueueInteraction
     }
 
 #endregion
-}
-
 }

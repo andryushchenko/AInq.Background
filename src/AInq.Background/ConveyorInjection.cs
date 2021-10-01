@@ -14,17 +14,10 @@
 
 using AInq.Background.Managers;
 using AInq.Background.Processors;
-using AInq.Background.Services;
-using AInq.Background.Tasks;
 using AInq.Background.Workers;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 
-namespace AInq.Background
-{
+namespace AInq.Background;
 
 /// <summary> Background data processing Conveyor dependency injection </summary>
 public static class ConveyorInjection
@@ -384,6 +377,4 @@ public static class ConveyorInjection
             maxParallelMachines,
             maxPriority,
             maxAttempts);
-}
-
 }

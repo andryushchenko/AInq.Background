@@ -12,13 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 
-namespace AInq.Background.Processors
-{
+namespace AInq.Background.Processors;
 
 /// <summary> Task processor factory class </summary>
 /// <remarks> Returning processors are NOT thread-safe </remarks>
@@ -89,6 +85,4 @@ public static class ProcessorFactory
             _ => throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy))
         };
     }
-}
-
 }

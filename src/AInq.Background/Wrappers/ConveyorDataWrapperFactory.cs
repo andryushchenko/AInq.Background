@@ -12,14 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Tasks;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Background.Wrappers
-{
+namespace AInq.Background.Wrappers;
 
 /// <summary> Factory class for creating <see cref="ITaskWrapper{TArgument}" /> for background data conveyors </summary>
 public static class ConveyorDataWrapperFactory
@@ -105,6 +98,4 @@ public static class ConveyorDataWrapperFactory
             return true;
         }
     }
-}
-
 }

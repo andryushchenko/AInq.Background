@@ -12,12 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Background.Tasks
-{
+namespace AInq.Background.Tasks;
 
 /// <summary> Extension class for converting <see cref="IWork" /> to <see cref="IAsyncWork" /> </summary>
 public static class WorkConverter
@@ -77,6 +72,4 @@ public static class WorkConverter
             }
         }
     }
-}
-
 }

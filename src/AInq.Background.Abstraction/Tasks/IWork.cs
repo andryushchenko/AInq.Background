@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
-namespace AInq.Background.Tasks
-{
+namespace AInq.Background.Tasks;
 
 /// <summary> Interface for synchronous work without result </summary>
 public interface IWork
@@ -23,6 +20,4 @@ public interface IWork
     /// <summary> Work action </summary>
     /// <param name="serviceProvider"> Service provider instance </param>
     void DoWork(IServiceProvider serviceProvider);
-}
-
 }

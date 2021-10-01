@@ -13,12 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Tasks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Test
-{
+namespace AInq.Background.Test;
 
 public class TestMachine : IConveyorMachine<int, int>, IStartStoppable
 {
@@ -57,6 +53,4 @@ public class TestMachine : IConveyorMachine<int, int>, IStartStoppable
         _isRunning = false;
         Console.WriteLine($"{DateTime.Now:T}\tMachine {_name} stopped");
     }
-}
-
 }

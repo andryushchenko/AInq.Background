@@ -13,12 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Tasks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Services
-{
+namespace AInq.Background.Services;
 
 /// <summary> Interface for background shared resource access queue with prioritization </summary>
 /// <typeparam name="TResource"> Shared resource type</typeparam>
@@ -67,6 +63,4 @@ public interface IPriorityAccessQueue<out TResource> : IAccessQueue<TResource>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> is NULL </exception>
     Task<TResult> EnqueueAsyncAccess<TResult>(IAsyncAccess<TResource, TResult> access, int priority, CancellationToken cancellation = default,
         int attemptsCount = 1);
-}
-
 }

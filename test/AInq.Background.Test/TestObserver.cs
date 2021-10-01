@@ -13,10 +13,8 @@
 // limitations under the License.
 
 using AInq.Optional;
-using System;
 
-namespace AInq.Background.Test
-{
+namespace AInq.Background.Test;
 
 public class TestObserver<T> : IObserver<Try<T>>
 {
@@ -28,6 +26,4 @@ public class TestObserver<T> : IObserver<Try<T>>
 
     public void OnNext(Try<T> value)
         => Console.WriteLine($"{DateTime.Now:T}\tObservation test\t{(value.Success ? $"Result {value.Value}" : $"Error {value.Error}")}");
-}
-
 }

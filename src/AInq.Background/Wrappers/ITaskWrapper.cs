@@ -12,13 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace AInq.Background.Wrappers
-{
+namespace AInq.Background.Wrappers;
 
 /// <summary> Interface for background task wrappers </summary>
 /// <typeparam name="TArgument"> Task argument type </typeparam>
@@ -40,6 +34,4 @@ public interface ITaskWrapper<in TArgument>
     /// <param name="cancellation"> Cancellation token </param>
     /// <returns> If task is completed or should be reverted to queue/conveyor </returns>
     Task<bool> ExecuteAsync(TArgument argument, IServiceProvider provider, ILogger logger, CancellationToken cancellation = default);
-}
-
 }

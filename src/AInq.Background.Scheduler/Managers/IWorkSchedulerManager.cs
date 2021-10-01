@@ -13,13 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Wrappers;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Managers
-{
+namespace AInq.Background.Managers;
 
 /// <summary> Interface for background work scheduler manager </summary>
 public interface IWorkSchedulerManager
@@ -41,6 +36,4 @@ public interface IWorkSchedulerManager
     /// <param name="task"> Task instance </param>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="task" /> is NULL </exception>
     void RevertTask(IScheduledTaskWrapper task);
-}
-
 }

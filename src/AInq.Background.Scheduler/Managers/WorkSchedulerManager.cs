@@ -14,22 +14,14 @@
 
 using AInq.Background.Helpers;
 using AInq.Background.Services;
-using AInq.Background.Tasks;
 using AInq.Background.Wrappers;
-using AInq.Optional;
 using Nito.AsyncEx;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using static AInq.Background.Wrappers.CronWorkWrapperFactory;
 using static AInq.Background.Wrappers.RepeatedWorkWrapperFactory;
 using static AInq.Background.Wrappers.ScheduledWorkWrapperFactory;
 
-namespace AInq.Background.Managers
-{
+namespace AInq.Background.Managers;
 
 /// <summary> Work scheduler manager </summary>
 public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
@@ -256,6 +248,4 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     }
 
 #endregion
-}
-
 }

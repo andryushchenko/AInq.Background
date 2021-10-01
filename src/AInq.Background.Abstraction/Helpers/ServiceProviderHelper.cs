@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
-namespace AInq.Background.Helpers
-{
+namespace AInq.Background.Helpers;
 
 /// <summary> <see cref="IServiceProvider" /> helper utility </summary>
 public static class ServiceProviderHelper
@@ -34,6 +31,4 @@ public static class ServiceProviderHelper
     /// <exception cref="InvalidOperationException"> Thrown if service not exists </exception>
     public static T RequiredService<T>(this IServiceProvider provider)
         => provider.GetService(typeof(T)) is T service ? service : throw new InvalidOperationException("Service not exists");
-}
-
 }

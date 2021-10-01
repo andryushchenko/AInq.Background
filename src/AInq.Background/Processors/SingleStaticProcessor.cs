@@ -13,15 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Managers;
-using AInq.Background.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Processors
-{
+namespace AInq.Background.Processors;
 
 internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
 {
@@ -74,6 +67,4 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
             logger.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
         }
     }
-}
-
 }

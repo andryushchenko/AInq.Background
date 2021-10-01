@@ -12,13 +12,15 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
 		<Version>4.2.0-preview.3</Version>
-		<LangVersion>preview</LangVersion>
+		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>AInq.Background</RootNamespace>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>Background;Startup;AInq</PackageTags>
-		<Description>Background work utilities for .NET Core apps based on Hosted services.
-Host startup work service.
+		<Description>
+			Background work utilities for .NET Core apps based on Hosted services.
+			Host startup work service.
 		</Description>
 		<PackageReleaseNotes>[ADD] .NET 6.0 support</PackageReleaseNotes>
 	</PropertyGroup>
@@ -35,6 +37,11 @@ Host startup work service.
 
 	<ItemGroup>
 		<ProjectReference Include="..\AInq.Background.Abstraction\AInq.Background.Abstraction.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="AInq.Background.Tasks" />
+		<Using Include="Microsoft.Extensions.Logging" />
 	</ItemGroup>
 
 </Project>

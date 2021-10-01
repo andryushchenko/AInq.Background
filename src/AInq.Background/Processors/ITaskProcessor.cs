@@ -13,13 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Managers;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Processors
-{
+namespace AInq.Background.Processors;
 
 /// <summary> Interface for task processor </summary>
 /// <typeparam name="TArgument"> Task argument type </typeparam>
@@ -34,6 +29,4 @@ public interface ITaskProcessor<TArgument, TMetadata>
     /// <returns></returns>
     Task ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider, ILogger logger,
         CancellationToken cancellation = default);
-}
-
 }

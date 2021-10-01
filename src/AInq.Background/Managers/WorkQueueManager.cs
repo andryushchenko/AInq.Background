@@ -12,15 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Services;
-using AInq.Background.Tasks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using static AInq.Background.Wrappers.WorkWrapperFactory;
 
-namespace AInq.Background.Managers
-{
+namespace AInq.Background.Managers;
 
 /// <summary> Background work queue manager </summary>
 public sealed class WorkQueueManager : TaskManager<object?>, IWorkQueue
@@ -63,6 +57,4 @@ public sealed class WorkQueueManager : TaskManager<object?>, IWorkQueue
 
     private int FixAttempts(int attemptsCount)
         => Math.Min(_maxAttempts, Math.Max(1, attemptsCount));
-}
-
 }

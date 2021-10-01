@@ -15,12 +15,8 @@
 using AInq.Background.Helpers;
 using AInq.Background.Services;
 using AInq.Background.Tasks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Interaction
-{
+namespace AInq.Background.Interaction;
 
 /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
 /// <remarks>
@@ -179,6 +175,4 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
                                                                               priority);
 
 #endregion
-}
-
 }

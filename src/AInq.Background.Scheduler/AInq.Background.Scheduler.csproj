@@ -12,13 +12,15 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
 		<Version>4.2.0-preview.3</Version>
-		<LangVersion>preview</LangVersion>
+		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>AInq.Background</RootNamespace>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>Background;Scheduler;Cron;AInq</PackageTags>
-		<Description>Background work utilities for .NET Core apps based on Hosted services.
-Background work scheduler with cron.
+		<Description>
+			Background work utilities for .NET Core apps based on Hosted services.
+			Background work scheduler with cron.
 		</Description>
 		<PackageReleaseNotes>[ADD] .NET 6.0 support</PackageReleaseNotes>
 	</PropertyGroup>
@@ -37,6 +39,13 @@ Background work scheduler with cron.
 
 	<ItemGroup>
 		<ProjectReference Include="..\AInq.Background.Scheduler.Abstraction\AInq.Background.Scheduler.Abstraction.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="AInq.Background.Tasks" />
+		<Using Include="AInq.Optional" />
+		<Using Include="Microsoft.Extensions.Logging" />
+		<Using Include="System.Reactive.Subjects" />
 	</ItemGroup>
 
 </Project>

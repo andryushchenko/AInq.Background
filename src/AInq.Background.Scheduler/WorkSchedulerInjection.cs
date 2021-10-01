@@ -16,11 +16,8 @@ using AInq.Background.Managers;
 using AInq.Background.Services;
 using AInq.Background.Workers;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
 
-namespace AInq.Background
-{
+namespace AInq.Background;
 
 /// <summary> Work Scheduler dependency injection </summary>
 public static class WorkSchedulerInjection
@@ -45,6 +42,4 @@ public static class WorkSchedulerInjection
             throw new InvalidOperationException("Service already exists");
         return services.AddSingleton(services.CreateWorkScheduler(horizon));
     }
-}
-
 }

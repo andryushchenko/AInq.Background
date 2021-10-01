@@ -13,11 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Services;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Tasks
-{
+namespace AInq.Background.Tasks;
 
 /// <summary> Interface for object which need to be activated/deactivated before/after usage </summary>
 /// <remarks> Used in <see cref="IConveyor{TData,TResult}" /> and <see cref="IAccessQueue{TResource}" /></remarks>
@@ -35,6 +32,4 @@ public interface IStartStoppable
     /// <param name="cancellation"> Deactivation cancellation token </param>
     /// <returns> Deactivation completion task </returns>
     Task DeactivateAsync(CancellationToken cancellation = default);
-}
-
 }

@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
-namespace AInq.Background.Tasks
-{
+namespace AInq.Background.Tasks;
 
 /// <summary> Interface for synchronous access to shared resource of type <typeparamref name="TResource" /> without result </summary>
 /// <typeparam name="TResource"> Shared resource type </typeparam>
@@ -26,6 +23,4 @@ public interface IAccess<in TResource>
     /// <param name="resource"> Shared resource instance </param>
     /// <param name="serviceProvider"> Service provider instance </param>
     void Access(TResource resource, IServiceProvider serviceProvider);
-}
-
 }

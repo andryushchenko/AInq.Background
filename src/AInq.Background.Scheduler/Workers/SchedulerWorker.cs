@@ -16,15 +16,10 @@ using AInq.Background.Managers;
 using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Nito.AsyncEx;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace AInq.Background.Workers
-{
+namespace AInq.Background.Workers;
 
 /// <summary> Background scheduled task worker service </summary>
 public sealed class SchedulerWorker : IHostedService, IDisposable
@@ -125,6 +120,4 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
         if (await work.ExecuteAsync(scope.ServiceProvider, _logger, cancellation).ConfigureAwait(false))
             _scheduler.RevertTask(work);
     }
-}
-
 }

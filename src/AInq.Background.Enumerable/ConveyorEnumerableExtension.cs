@@ -12,18 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Helpers;
-using AInq.Background.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Channels;
-using System.Threading.Tasks;
-
-namespace AInq.Background
-{
+namespace AInq.Background;
 
 /// <summary> <see cref="IConveyor{TData,TResult}" /> and <see cref="IPriorityConveyor{TData,TResult}" /> batch processing extension </summary>
 public static class ConveyorEnumerableExtension
@@ -219,6 +208,4 @@ public static class ConveyorEnumerableExtension
     }
 
 #endregion
-}
-
 }
