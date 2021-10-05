@@ -2,9 +2,6 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netstandard2.1;net5.0;net6.0</TargetFrameworks>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<Product>AInq.Background</Product>
 		<Authors>Anton Andryushchenko</Authors>
 		<RepositoryUrl>https://github.com/andryushchenko/AInq.Background</RepositoryUrl>
@@ -18,11 +15,7 @@
 		<RootNamespace>AInq.Background</RootNamespace>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>Background;Scheduler;Cron;AInq</PackageTags>
-		<Description>
-			Background work utilities for .NET Core apps based on Hosted services.
-			Background work scheduler with cron.
-		</Description>
-		<PackageReleaseNotes>[ADD] .NET 6.0 support</PackageReleaseNotes>
+		<Description>Background work utilities for .NET Core apps based on Hosted services. Background work scheduler with cron.</Description>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
