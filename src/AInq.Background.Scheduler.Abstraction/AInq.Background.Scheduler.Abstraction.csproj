@@ -23,7 +23,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AInq.Optional" Version="1.1.0-preview.2" />
+		<PackageReference Include="AInq.Optional" Version="1.1.0-preview.3" />
 	</ItemGroup>
 
 	<ItemGroup>
