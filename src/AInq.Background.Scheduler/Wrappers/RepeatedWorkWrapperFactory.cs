@@ -192,6 +192,13 @@ public static class RepeatedWorkWrapperFactory
                 if (outerCancellation.IsCancellationRequested)
                     logger.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
             }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
+                _subject.OnNext(Maybe.Value(ex));
+                _nextScheduledTime += _repeatDelay;
+                if (_execCount != -1) _execCount--;
+            }
             if (_execCount != 0)
                 return true;
             _subject.OnCompleted();
@@ -262,6 +269,13 @@ public static class RepeatedWorkWrapperFactory
             {
                 if (outerCancellation.IsCancellationRequested)
                     logger.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
+                _subject.OnNext(Try.Error<TResult>(ex));
+                _nextScheduledTime += _repeatDelay;
+                if (_execCount != -1) _execCount--;
             }
             if (_execCount != 0)
                 return true;

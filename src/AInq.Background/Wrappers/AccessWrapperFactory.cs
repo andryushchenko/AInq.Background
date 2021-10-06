@@ -148,6 +148,13 @@ public static class AccessWrapperFactory
                     return false;
                 _completion.TrySetCanceled(ex.CancellationToken);
             }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error accessing resource {Type} with {Access}", typeof(TResource), _asyncAccess as object ?? _access);
+                if (_attemptsRemain > 0)
+                    return false;
+                _completion.TrySetException(ex);
+            }
             _cancellationRegistration.Dispose();
             _cancellationRegistration = default;
             return true;
@@ -217,6 +224,13 @@ public static class AccessWrapperFactory
                 if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
                     return false;
                 _completion.TrySetCanceled(ex.CancellationToken);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error accessing resource {Type} with {Access}", typeof(TResource), _asyncAccess as object ?? _access);
+                if (_attemptsRemain > 0)
+                    return false;
+                _completion.TrySetException(ex);
             }
             _cancellationRegistration.Dispose();
             _cancellationRegistration = default;

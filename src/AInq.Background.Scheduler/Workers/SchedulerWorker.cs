@@ -14,6 +14,10 @@
 
 using AInq.Background.Managers;
 using AInq.Background.Wrappers;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging.Abstractions;
+using Nito.AsyncEx;
 
 namespace AInq.Background.Workers;
 
@@ -89,6 +93,10 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
             catch (OperationCanceledException)
             {
                 return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unhandled error processing scheduled tasks");
             }
     }
 

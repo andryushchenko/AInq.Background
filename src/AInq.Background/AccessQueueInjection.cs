@@ -15,6 +15,7 @@
 using AInq.Background.Managers;
 using AInq.Background.Processors;
 using AInq.Background.Workers;
+using System.ComponentModel;
 
 namespace AInq.Background;
 

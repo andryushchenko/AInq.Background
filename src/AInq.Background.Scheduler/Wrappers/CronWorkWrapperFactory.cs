@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Cronos;
+
 namespace AInq.Background.Wrappers;
 
 /// <summary> Factory class for creating <see cref="IScheduledTaskWrapper" /> for CRON scheduled work </summary>
@@ -154,6 +156,12 @@ public static class CronWorkWrapperFactory
                 if (outerCancellation.IsCancellationRequested)
                     logger.LogError("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
             }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
+                _subject.OnNext(Maybe.Value(ex));
+                if (_execCount != -1) _execCount--;
+            }
             if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue && _execCount != 0)
                 return true;
             _subject.OnCompleted();
@@ -217,6 +225,12 @@ public static class CronWorkWrapperFactory
             {
                 if (outerCancellation.IsCancellationRequested)
                     logger.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
+                _subject.OnNext(Try.Error<TResult>(ex));
+                if (_execCount != -1) _execCount--;
             }
             if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue && _execCount != 0)
                 return true;

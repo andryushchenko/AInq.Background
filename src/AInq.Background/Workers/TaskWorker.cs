@@ -14,6 +14,8 @@
 
 using AInq.Background.Managers;
 using AInq.Background.Processors;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace AInq.Background.Workers;
 
@@ -75,6 +77,10 @@ public sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposab
             catch (OperationCanceledException)
             {
                 return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unhandled error in task processor {0}", _processor.GetType());
             }
     }
 }
