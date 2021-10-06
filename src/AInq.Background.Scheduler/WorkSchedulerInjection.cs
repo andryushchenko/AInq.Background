@@ -15,7 +15,6 @@
 using AInq.Background.Managers;
 using AInq.Background.Services;
 using AInq.Background.Workers;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AInq.Background;
 

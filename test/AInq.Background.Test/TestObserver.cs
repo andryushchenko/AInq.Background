@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Optional;
-
 namespace AInq.Background.Test;
 
 public class TestObserver<T> : IObserver<Try<T>>

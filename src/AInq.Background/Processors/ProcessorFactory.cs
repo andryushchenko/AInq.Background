@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.ComponentModel;
-
 namespace AInq.Background.Processors;
 
 /// <summary> Task processor factory class </summary>

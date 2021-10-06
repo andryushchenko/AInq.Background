@@ -125,10 +125,6 @@ public static class ConveyorEnumerableExtension
                 {
                     await writer.WriteAsync(Task.FromCanceled<TResult>(ex.CancellationToken), CancellationToken.None).ConfigureAwait(false);
                 }
-                catch (Exception ex)
-                {
-                    await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
-                }
                 finally
                 {
                     writer.Complete();
@@ -170,10 +166,6 @@ public static class ConveyorEnumerableExtension
                 catch (OperationCanceledException ex)
                 {
                     await writer.WriteAsync(Task.FromCanceled<TResult>(ex.CancellationToken), CancellationToken.None).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
                 }
                 finally
                 {

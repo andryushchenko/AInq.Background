@@ -220,10 +220,6 @@ public static class AccessQueueEnumerableExtension
                 {
                     await writer.WriteAsync(Task.FromCanceled<TResult>(ex.CancellationToken), CancellationToken.None).ConfigureAwait(false);
                 }
-                catch (Exception ex)
-                {
-                    await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
-                }
                 finally
                 {
                     writer.Complete();
@@ -267,10 +263,6 @@ public static class AccessQueueEnumerableExtension
                 catch (OperationCanceledException ex)
                 {
                     await writer.WriteAsync(Task.FromCanceled<TResult>(ex.CancellationToken), CancellationToken.None).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
                 }
                 finally
                 {
@@ -327,10 +319,6 @@ public static class AccessQueueEnumerableExtension
                 {
                     await writer.WriteAsync(Task.FromCanceled<TResult>(ex.CancellationToken), CancellationToken.None).ConfigureAwait(false);
                 }
-                catch (Exception ex)
-                {
-                    await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
-                }
                 finally
                 {
                     writer.Complete();
@@ -374,10 +362,6 @@ public static class AccessQueueEnumerableExtension
                 catch (OperationCanceledException ex)
                 {
                     await writer.WriteAsync(Task.FromCanceled<TResult>(ex.CancellationToken), CancellationToken.None).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
                 }
                 finally
                 {

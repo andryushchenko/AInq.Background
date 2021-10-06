@@ -133,11 +133,6 @@ public static class ScheduledWorkWrapperFactory
                     logger.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
                 return true;
             }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
-                _completion.TrySetException(ex);
-            }
             _nextScheduledTime = null;
             _cancellationRegistration.Dispose();
             _cancellationRegistration = default;
@@ -192,11 +187,6 @@ public static class ScheduledWorkWrapperFactory
                 if (outerCancellation.IsCancellationRequested)
                     logger.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
                 return true;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
-                _completion.TrySetException(ex);
             }
             _nextScheduledTime = null;
             _cancellationRegistration.Dispose();

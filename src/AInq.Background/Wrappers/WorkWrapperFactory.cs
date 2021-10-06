@@ -131,13 +131,6 @@ public static class WorkWrapperFactory
                     return false;
                 _completion.TrySetCanceled(ex.CancellationToken);
             }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error processing queued work {Work}", _asyncWork as object ?? _work);
-                if (_attemptsRemain > 0)
-                    return false;
-                _completion.TrySetException(ex);
-            }
             _cancellationRegistration.Dispose();
             _cancellationRegistration = default;
             return true;
@@ -204,13 +197,6 @@ public static class WorkWrapperFactory
                 if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
                     return false;
                 _completion.TrySetCanceled(ex.CancellationToken);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error processing queued work {Work}", _asyncWork as object ?? _work);
-                if (_attemptsRemain > 0)
-                    return false;
-                _completion.TrySetException(ex);
             }
             _cancellationRegistration.Dispose();
             _cancellationRegistration = default;

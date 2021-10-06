@@ -12,13 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Helpers;
 using AInq.Background.Services;
 using AInq.Background.Wrappers;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging.Abstractions;
-using Nito.AsyncEx;
 using static AInq.Background.Tasks.WorkFactory;
 using static AInq.Background.Wrappers.StartupWorkWrapperFactory;
 

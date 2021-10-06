@@ -76,23 +76,6 @@ public static class ConveyorDataWrapperFactory
                 logger.LogError(ex, "Bad data {Data}", _data);
                 _completion.TrySetException(ex);
             }
-            catch (OperationCanceledException ex)
-            {
-                if (outerCancellation.IsCancellationRequested)
-                    logger.LogWarning("Processing data {Data} with machine {Machine} canceled by runtime", _data, argument.GetType());
-                if (!_innerCancellation.IsCancellationRequested)
-                    _attemptsRemain++;
-                if (_attemptsRemain > 0 && !_innerCancellation.IsCancellationRequested)
-                    return false;
-                _completion.TrySetCanceled(ex.CancellationToken);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error processing data {Data} with machine {Machine}", _data, argument.GetType());
-                if (_attemptsRemain > 0)
-                    return false;
-                _completion.TrySetException(ex);
-            }
             _cancellationRegistration.Dispose();
             _cancellationRegistration = default;
             return true;

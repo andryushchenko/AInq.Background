@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Tasks;
-
 namespace AInq.Background.Test;
 
 public class TestMachine : IConveyorMachine<int, int>, IStartStoppable
@@ -27,6 +25,8 @@ public class TestMachine : IConveyorMachine<int, int>, IStartStoppable
         Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} created");
     }
 
+    bool IStartStoppable.IsActive => _isRunning;
+
     async Task<int> IConveyorMachine<int, int>.ProcessDataAsync(int data, IServiceProvider provider, CancellationToken cancellation)
     {
         Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} checking provider {provider}");
@@ -35,8 +35,6 @@ public class TestMachine : IConveyorMachine<int, int>, IStartStoppable
         Console.WriteLine($"{DateTime.Now:T}\tMachine ID {_name} processed {data}");
         return data * data;
     }
-
-    bool IStartStoppable.IsActive => _isRunning;
 
     async Task IStartStoppable.ActivateAsync(CancellationToken cancellation)
     {

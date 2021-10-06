@@ -13,14 +13,7 @@
 // limitations under the License.
 
 using AInq.Background;
-using AInq.Background.Helpers;
-using AInq.Background.Interaction;
-using AInq.Background.Services;
-using AInq.Background.Tasks;
 using AInq.Background.Test;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 var host = Host.CreateDefaultBuilder(args)
                .ConfigureLogging(logging => logging.ClearProviders().AddDebug())
@@ -87,7 +80,7 @@ async Task ConveyorTestAsync(IServiceProvider provider, CancellationToken cancel
     using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(5));
     using var cancel = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, cancellation);
     var tasks = Enumerable.Range(1, 10)
-                          .Select(index => provider.ProcessDataAsync<int, int>(index, cancel.Token, priority: 50 + index))
+                          .Select<int, IAsyncEnumerable<int>>(index => provider.ProcessDataAsync<int, int>(index, cancel.Token, priority: 50 + index))
                           .ToList();
     try
     {
