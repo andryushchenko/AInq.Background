@@ -19,7 +19,7 @@ jobs:
     - name: ReSharper tools setup
       run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.3.0-eap02
     - name: Code cleanup
-      run: jb cleanupcode --profile=Full --properties:Configuration=Release AInq.Optional.sln
+      run: jb cleanupcode --profile=Full --properties:Configuration=Release AInq.Background.sln
     - name: Git DIFF
       id: git-diff
       run: echo ::set-output name=modified::$(if git diff-index --quiet --ignore-cr-at-eol HEAD ; then echo "false"; else echo "true"; fi)
