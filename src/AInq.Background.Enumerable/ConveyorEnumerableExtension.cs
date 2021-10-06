@@ -135,13 +135,8 @@ public static class ConveyorEnumerableExtension
                 }
             },
             cancellation);
-#if NET5_0_OR_GREATER
-        await foreach (var result in reader.ReadAllAsync(cancellation).ConfigureAwait(false))
-            yield return await result.ConfigureAwait(false);
-#else
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
-#endif
     }
 
     /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IConveyor{TData,TResult},IEnumerable{TData},CancellationToken,int,bool)" />
@@ -181,13 +176,8 @@ public static class ConveyorEnumerableExtension
                 }
             },
             cancellation);
-#if NET5_0_OR_GREATER
-        await foreach (var result in reader.ReadAllAsync(cancellation).ConfigureAwait(false))
-            yield return await result.ConfigureAwait(false);
-#else
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
-#endif
     }
 
     /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IPriorityConveyor{TData,TResult},IEnumerable{TData},int,CancellationToken,int,bool)" />

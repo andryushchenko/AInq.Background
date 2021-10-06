@@ -230,13 +230,8 @@ public static class AccessQueueEnumerableExtension
                 }
             },
             cancellation);
-#if NET5_0_OR_GREATER
-        await foreach (var result in reader.ReadAllAsync(cancellation).ConfigureAwait(false))
-            yield return await result.ConfigureAwait(false);
-#else
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
-#endif
     }
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},CancellationToken,int,bool)" />
@@ -278,13 +273,8 @@ public static class AccessQueueEnumerableExtension
                 }
             },
             cancellation);
-#if NET5_0_OR_GREATER
-        await foreach (var result in reader.ReadAllAsync(cancellation).ConfigureAwait(false))
-            yield return await result.ConfigureAwait(false);
-#else
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
-#endif
     }
 
     /// <inheritdoc
@@ -337,13 +327,8 @@ public static class AccessQueueEnumerableExtension
                 }
             },
             cancellation);
-#if NET5_0_OR_GREATER
-        await foreach (var result in reader.ReadAllAsync(cancellation).ConfigureAwait(false))
-            yield return await result.ConfigureAwait(false);
-#else
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
-#endif
     }
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},CancellationToken,int,bool)" />
@@ -385,13 +370,8 @@ public static class AccessQueueEnumerableExtension
                 }
             },
             cancellation);
-#if NET5_0_OR_GREATER
-        await foreach (var result in reader.ReadAllAsync(cancellation).ConfigureAwait(false))
-            yield return await result.ConfigureAwait(false);
-#else
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
-#endif
     }
 
     /// <inheritdoc
