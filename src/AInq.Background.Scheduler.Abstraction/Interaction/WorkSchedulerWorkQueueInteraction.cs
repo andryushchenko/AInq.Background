@@ -16,7 +16,7 @@ using static AInq.Background.Tasks.WorkFactory;
 
 namespace AInq.Background.Interaction;
 
-/// <summary> <see cref="IWorkScheduler" /> extensions to run scheduled work in background queue  </summary>
+/// <summary> <see cref="IWorkScheduler" /> extensions to run scheduled work in background queue </summary>
 /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
 public static class WorkSchedulerWorkQueueInteraction
 {
@@ -359,10 +359,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <param name="priority"> Work priority </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is
-    ///     NULL
-    /// </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Maybe<Exception>> AddCronQueueWork(this IWorkScheduler scheduler, IWork work, string cronExpression,
@@ -386,10 +383,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is
-    ///     NULL
-    /// </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Try<TResult>> AddCronQueueWork<TResult>(this IWorkScheduler scheduler, IWork<TResult> work, string cronExpression,
@@ -412,10 +406,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <param name="priority"> Work priority </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is
-    ///     NULL
-    /// </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Maybe<Exception>> AddCronAsyncQueueWork(this IWorkScheduler scheduler, IAsyncWork work, string cronExpression,
@@ -439,10 +430,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is
-    ///     NULL
-    /// </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Try<TResult>> AddCronAsyncQueueWork<TResult>(this IWorkScheduler scheduler, IAsyncWork<TResult> work,
@@ -561,10 +549,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Maybe<Exception>> AddRepeatedQueueWork(this IWorkScheduler scheduler, IWork work, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
@@ -586,10 +571,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Try<TResult>> AddRepeatedQueueWork<TResult>(this IWorkScheduler scheduler, IWork<TResult> work, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
@@ -610,10 +592,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncQueueWork(this IWorkScheduler scheduler, IAsyncWork work, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
@@ -635,10 +614,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Try<TResult>> AddRepeatedAsyncQueueWork<TResult>(this IWorkScheduler scheduler, IAsyncWork<TResult> work,
         DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         int execCount = -1)
@@ -655,7 +631,7 @@ public static class WorkSchedulerWorkQueueInteraction
 
     /// <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
-    /// <param name="starTime"> Work first execution time</param>
+    /// <param name="starTime"> Work first execution time </param>
     /// <param name="repeatDelay"> Work repeat delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -664,10 +640,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Maybe<Exception>> AddRepeatedQueueWork<TWork>(this IWorkScheduler scheduler, DateTime starTime, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TWork : IWork
@@ -680,7 +653,7 @@ public static class WorkSchedulerWorkQueueInteraction
 
     /// <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
-    /// <param name="starTime"> Work first execution time</param>
+    /// <param name="starTime"> Work first execution time </param>
     /// <param name="repeatDelay"> Work repeat delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -690,10 +663,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Try<TResult>> AddRepeatedQueueWork<TWork, TResult>(this IWorkScheduler scheduler, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TWork : IWork<TResult>
@@ -706,7 +676,7 @@ public static class WorkSchedulerWorkQueueInteraction
 
     /// <summary> Add repeated queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
-    /// <param name="starTime"> Work first execution time</param>
+    /// <param name="starTime"> Work first execution time </param>
     /// <param name="repeatDelay"> Work repeat delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -715,10 +685,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncQueueWork<TAsyncWork>(this IWorkScheduler scheduler, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TAsyncWork : IAsyncWork
@@ -731,7 +698,7 @@ public static class WorkSchedulerWorkQueueInteraction
 
     /// <summary> Add repeated queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
-    /// <param name="starTime"> Work first execution time</param>
+    /// <param name="starTime"> Work first execution time </param>
     /// <param name="repeatDelay"> Work repeat delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -741,10 +708,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Try<TResult>> AddRepeatedAsyncQueueWork<TAsyncWork, TResult>(this IWorkScheduler scheduler, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TAsyncWork : IAsyncWork<TResult>
@@ -770,10 +734,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Maybe<Exception>> AddRepeatedQueueWork(this IWorkScheduler scheduler, IWork work, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
@@ -795,10 +756,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Try<TResult>> AddRepeatedQueueWork<TResult>(this IWorkScheduler scheduler, IWork<TResult> work, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
@@ -819,10 +777,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncQueueWork(this IWorkScheduler scheduler, IAsyncWork work, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
@@ -844,10 +799,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Try<TResult>> AddRepeatedAsyncQueueWork<TResult>(this IWorkScheduler scheduler, IAsyncWork<TResult> work,
         TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         int execCount = -1)
@@ -873,10 +825,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Maybe<Exception>> AddRepeatedQueueWork<TWork>(this IWorkScheduler scheduler, TimeSpan startDelay, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TWork : IWork
@@ -899,10 +848,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Try<TResult>> AddRepeatedQueueWork<TWork, TResult>(this IWorkScheduler scheduler, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TWork : IWork<TResult>
@@ -924,10 +870,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncQueueWork<TAsyncWork>(this IWorkScheduler scheduler, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TAsyncWork : IAsyncWork
@@ -950,10 +893,7 @@ public static class WorkSchedulerWorkQueueInteraction
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     public static IObservable<Try<TResult>> AddRepeatedAsyncQueueWork<TAsyncWork, TResult>(this IWorkScheduler scheduler, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TAsyncWork : IAsyncWork<TResult>

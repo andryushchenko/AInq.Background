@@ -72,8 +72,7 @@ public static class AccessQueueEnumerableExtension
             yield return await result.ConfigureAwait(false);
     }
 
-    /// <inheritdoc
-    ///     cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
+    /// <inheritdoc cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IEnumerable<IAccess<TResource, TResult>> accesses,
         IPriorityAccessQueue<TResource> accessQueue, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         bool enqueueAll = false)
@@ -160,8 +159,7 @@ public static class AccessQueueEnumerableExtension
             yield return await result.ConfigureAwait(false);
     }
 
-    /// <inheritdoc
-    ///     cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
+    /// <inheritdoc cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IEnumerable<IAsyncAccess<TResource, TResult>> accesses,
         IPriorityAccessQueue<TResource> accessQueue, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         bool enqueueAll = false)
@@ -240,8 +238,7 @@ public static class AccessQueueEnumerableExtension
         where TResource : notnull
         => accessQueue.AccessAsync(accesses, cancellation, attemptsCount);
 
-    /// <inheritdoc
-    ///     cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
+    /// <inheritdoc cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
     public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IPriorityAccessQueue<TResource> accessQueue,
         IAsyncEnumerable<IAccess<TResource, TResult>> accesses, int priority, [EnumeratorCancellation] CancellationToken cancellation = default,
         int attemptsCount = 1)
@@ -277,8 +274,7 @@ public static class AccessQueueEnumerableExtension
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
     }
 
-    /// <inheritdoc
-    ///     cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
+    /// <inheritdoc cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAsyncEnumerable<IAccess<TResource, TResult>> accesses,
         IPriorityAccessQueue<TResource> accessQueue, int priority, CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull
@@ -337,8 +333,7 @@ public static class AccessQueueEnumerableExtension
         where TResource : notnull
         => accessQueue.AccessAsync(accesses, cancellation, attemptsCount);
 
-    /// <inheritdoc
-    ///     cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
+    /// <inheritdoc cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
     public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IPriorityAccessQueue<TResource> accessQueue,
         IAsyncEnumerable<IAsyncAccess<TResource, TResult>> accesses, int priority, [EnumeratorCancellation] CancellationToken cancellation = default,
         int attemptsCount = 1)
@@ -374,8 +369,7 @@ public static class AccessQueueEnumerableExtension
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
     }
 
-    /// <inheritdoc
-    ///     cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
+    /// <inheritdoc cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAsyncEnumerable<IAsyncAccess<TResource, TResult>> accesses,
         IPriorityAccessQueue<TResource> accessQueue, int priority, CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull

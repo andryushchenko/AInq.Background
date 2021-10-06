@@ -17,7 +17,7 @@ using AInq.Background.Services;
 namespace AInq.Background.Tasks;
 
 /// <summary> Interface for object which need to be activated/deactivated before/after usage </summary>
-/// <remarks> Used in <see cref="IConveyor{TData,TResult}" /> and <see cref="IAccessQueue{TResource}" /></remarks>
+/// <remarks> Used in <see cref="IConveyor{TData,TResult}" /> and <see cref="IAccessQueue{TResource}" /> </remarks>
 public interface IStartStoppable
 {
     /// <summary> Shows if object is active now </summary>
@@ -28,7 +28,7 @@ public interface IStartStoppable
     /// <returns> Activation completion task </returns>
     Task ActivateAsync(CancellationToken cancellation = default);
 
-    /// <summary> Deactivate object asynchronously  </summary>
+    /// <summary> Deactivate object asynchronously </summary>
     /// <param name="cancellation"> Deactivation cancellation token </param>
     /// <returns> Deactivation completion task </returns>
     Task DeactivateAsync(CancellationToken cancellation = default);

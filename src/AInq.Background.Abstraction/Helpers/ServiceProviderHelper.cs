@@ -19,14 +19,14 @@ public static class ServiceProviderHelper
 {
     /// <summary> Get service of type <typeparamref name="T" /> from the <see cref="IServiceProvider" /> </summary>
     /// <param name="provider"> Service provider instance </param>
-    /// <typeparam name="T">Service type</typeparam>
+    /// <typeparam name="T"> Service type </typeparam>
     /// <returns> Service instance or NULL if service not exists </returns>
     public static T? Service<T>(this IServiceProvider provider)
         => provider.GetService(typeof(T)) is T service ? service : default;
 
     /// <summary> Get service of type <typeparamref name="T" /> from the <see cref="IServiceProvider" /> </summary>
     /// <param name="provider"> Service provider instance </param>
-    /// <typeparam name="T">Service type</typeparam>
+    /// <typeparam name="T"> Service type </typeparam>
     /// <returns> Service instance </returns>
     /// <exception cref="InvalidOperationException"> Thrown if service not exists </exception>
     public static T RequiredService<T>(this IServiceProvider provider)

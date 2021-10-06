@@ -12,7 +12,7 @@
             <param name="queue"> Access queue instance </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAccess"> Access action type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="queue" /> is NULL </exception>
@@ -22,7 +22,7 @@
             <param name="queue"> Access queue instance </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAccess"> Access action type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
             <returns> Access action result task </returns>
@@ -33,7 +33,7 @@
             <param name="queue"> Access queue instance </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAsyncAccess"> Access action type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="queue" /> is NULL </exception>
@@ -43,7 +43,7 @@
             <param name="queue"> Access queue instance </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAsyncAccess"> Access action type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
             <returns> Access action result task </returns>
@@ -55,7 +55,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAccess"> Access action type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="queue" /> is NULL </exception>
@@ -66,7 +66,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAccess"> Access action type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
             <returns> Access action result task </returns>
@@ -78,7 +78,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAsyncAccess"> Access action type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="queue" /> is NULL </exception>
@@ -89,7 +89,7 @@
             <param name="cancellation"> Access cancellation token </param>
             <param name="priority"> Access action priority </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAsyncAccess"> Access action type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
             <returns> Access action result task </returns>
@@ -180,10 +180,7 @@
         </member>
         <member name="T:AInq.Background.Helpers.AccessQueueServiceProviderHelper">
             <summary> Helper class for <see cref="T:AInq.Background.Services.IAccessQueue`1" /> and <see cref="T:AInq.Background.Services.IPriorityAccessQueue`1" /> </summary>
-            <remarks>
-                <see cref="T:AInq.Background.Services.IAccessQueue`1" /> or <see cref="T:AInq.Background.Services.IPriorityAccessQueue`1" /> service should be registered on host to run queued
-                access action
-            </remarks>
+            <remarks> <see cref="T:AInq.Background.Services.IAccessQueue`1" /> or <see cref="T:AInq.Background.Services.IPriorityAccessQueue`1" /> service should be registered on host to run queued access action </remarks>
         </member>
         <member name="M:AInq.Background.Helpers.AccessQueueServiceProviderHelper.EnqueueAccess``1(System.IServiceProvider,AInq.Background.Tasks.IAccess{``0},System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Enqueue access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
@@ -264,8 +261,7 @@
             <returns> Access action result task </returns>
             <exception cref="T:System.InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
-            <seealso
-                cref="M:AInq.Background.Extensions.AccessQueueDependencyInjectionExtension.EnqueueAccess``3(AInq.Background.Services.IPriorityAccessQueue{``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
+            <seealso cref="M:AInq.Background.Extensions.AccessQueueDependencyInjectionExtension.EnqueueAccess``3(AInq.Background.Services.IPriorityAccessQueue{``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.AccessQueueServiceProviderHelper.EnqueueAsyncAccess``2(System.IServiceProvider,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
@@ -278,8 +274,7 @@
             <returns> Access action completion task </returns>
             <exception cref="T:System.InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
-            <seealso
-                cref="M:AInq.Background.Extensions.AccessQueueDependencyInjectionExtension.EnqueueAsyncAccess``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
+            <seealso cref="M:AInq.Background.Extensions.AccessQueueDependencyInjectionExtension.EnqueueAsyncAccess``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Helpers.AccessQueueServiceProviderHelper.EnqueueAsyncAccess``3(System.IServiceProvider,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Enqueue asynchronous access action into registered access queue with giver <paramref name="priority" /> (if supported) </summary>
@@ -293,8 +288,7 @@
             <returns> Access action result task </returns>
             <exception cref="T:System.InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
-            <seealso
-                cref="M:AInq.Background.Extensions.AccessQueueDependencyInjectionExtension.EnqueueAsyncAccess``3(AInq.Background.Services.IPriorityAccessQueue{``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
+            <seealso cref="M:AInq.Background.Extensions.AccessQueueDependencyInjectionExtension.EnqueueAsyncAccess``3(AInq.Background.Services.IPriorityAccessQueue{``0},System.Int32,System.Threading.CancellationToken,System.Int32)" />
         </member>
         <member name="T:AInq.Background.Helpers.ConveyorChain`3">
             <summary> Chain of two conveyors </summary>
@@ -334,9 +328,7 @@
             <typeparam name="TData"> Input data type </typeparam>
             <typeparam name="TResult"> Processing result type </typeparam>
             <returns> Processing result task </returns>
-            <exception cref="T:System.InvalidOperationException">
-                Thrown if no conveyor for given <typeparamref name="TData" /> and <typeparamref name="TResult" /> is registered
-            </exception>
+            <exception cref="T:System.InvalidOperationException"> Thrown if no conveyor for given <typeparamref name="TData" /> and <typeparamref name="TResult" /> is registered </exception>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="data" /> or <paramref name="provider" /> is NULL </exception>
             <seealso cref="M:AInq.Background.Services.IPriorityConveyor`2.ProcessDataAsync(`0,System.Int32,System.Threading.CancellationToken,System.Int32)" />
         </member>
@@ -425,13 +417,13 @@
         <member name="M:AInq.Background.Helpers.ServiceProviderHelper.Service``1(System.IServiceProvider)">
             <summary> Get service of type <typeparamref name="T" /> from the <see cref="T:System.IServiceProvider" /> </summary>
             <param name="provider"> Service provider instance </param>
-            <typeparam name="T">Service type</typeparam>
+            <typeparam name="T"> Service type </typeparam>
             <returns> Service instance or NULL if service not exists </returns>
         </member>
         <member name="M:AInq.Background.Helpers.ServiceProviderHelper.RequiredService``1(System.IServiceProvider)">
             <summary> Get service of type <typeparamref name="T" /> from the <see cref="T:System.IServiceProvider" /> </summary>
             <param name="provider"> Service provider instance </param>
-            <typeparam name="T">Service type</typeparam>
+            <typeparam name="T"> Service type </typeparam>
             <returns> Service instance </returns>
             <exception cref="T:System.InvalidOperationException"> Thrown if service not exists </exception>
         </member>
@@ -540,11 +532,8 @@
             <seealso cref="M:AInq.Background.Extensions.WorkQueueDependencyInjectionExtension.EnqueueWork``2(AInq.Background.Services.IPriorityWorkQueue,System.Int32,System.Threading.CancellationToken,System.Int32)" />
         </member>
         <member name="T:AInq.Background.Interaction.WorkQueueAccessQueueInteraction">
-            <summary> <see cref="T:AInq.Background.Services.IWorkQueue" /> and <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> extensions to run access in background queue  </summary>
-            <remarks>
-                <see cref="T:AInq.Background.Services.IPriorityAccessQueue`1" /> or <see cref="T:AInq.Background.Services.IAccessQueue`1" /> service should be registered on host to run queued
-                access
-            </remarks>
+            <summary> <see cref="T:AInq.Background.Services.IWorkQueue" /> and <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> extensions to run access in background queue </summary>
+            <remarks> <see cref="T:AInq.Background.Services.IPriorityAccessQueue`1" /> or <see cref="T:AInq.Background.Services.IAccessQueue`1" /> service should be registered on host to run queued access </remarks>
         </member>
         <member name="M:AInq.Background.Interaction.WorkQueueAccessQueueInteraction.EnqueueAccess``1(AInq.Background.Services.IWorkQueue,AInq.Background.Tasks.IAccess{``0},System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Enqueue access action into work queue with given <paramref name="priority" /> (if supported) </summary>
@@ -553,7 +542,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="queue" /> is NULL </exception>
         </member>
@@ -564,7 +553,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="queue" /> is NULL </exception>
@@ -576,7 +565,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="queue" /> is NULL </exception>
         </member>
@@ -587,7 +576,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="queue" /> is NULL </exception>
@@ -598,7 +587,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAccess"> Access action type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if or <paramref name="queue" /> is NULL </exception>
@@ -609,7 +598,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAccess"> Access action type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
             <returns> Access action completion task </returns>
@@ -621,7 +610,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAsyncAccess"> Access action type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="queue" /> is NULL </exception>
@@ -632,7 +621,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAsyncAccess"> Access action type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
             <returns> Access action completion task </returns>
@@ -640,10 +629,7 @@
         </member>
         <member name="T:AInq.Background.Interaction.WorkQueueAccessQueueServiceProviderInteraction">
             <remarks> <see cref="T:AInq.Background.Services.IPriorityWorkQueue" /> or <see cref="T:AInq.Background.Services.IWorkQueue" /> service should be registered on host to run queued work </remarks>
-            <remarks>
-                <see cref="T:AInq.Background.Services.IPriorityAccessQueue`1" /> or <see cref="T:AInq.Background.Services.IAccessQueue`1" /> service should be registered on host to run queued
-                access
-            </remarks>
+            <remarks> <see cref="T:AInq.Background.Services.IPriorityAccessQueue`1" /> or <see cref="T:AInq.Background.Services.IAccessQueue`1" /> service should be registered on host to run queued access </remarks>
         </member>
         <member name="M:AInq.Background.Interaction.WorkQueueAccessQueueServiceProviderInteraction.EnqueueAccess``1(System.IServiceProvider,AInq.Background.Tasks.IAccess{``0},System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Enqueue access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
@@ -652,7 +638,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
             <seealso cref="M:AInq.Background.Interaction.WorkQueueAccessQueueInteraction.EnqueueAccess``1(AInq.Background.Services.IWorkQueue,AInq.Background.Tasks.IAccess{``0},System.Threading.CancellationToken,System.Int32,System.Int32)" />
@@ -664,7 +650,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
@@ -677,7 +663,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
             <seealso cref="M:AInq.Background.Interaction.WorkQueueAccessQueueInteraction.EnqueueAsyncAccess``1(AInq.Background.Services.IWorkQueue,AInq.Background.Tasks.IAsyncAccess{``0},System.Threading.CancellationToken,System.Int32,System.Int32)" />
@@ -689,12 +675,11 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
-            <seealso
-                cref="M:AInq.Background.Interaction.WorkQueueAccessQueueInteraction.EnqueueAsyncAccess``2(AInq.Background.Services.IWorkQueue,AInq.Background.Tasks.IAsyncAccess{``0,``1},System.Threading.CancellationToken,System.Int32,System.Int32)" />
+            <seealso cref="M:AInq.Background.Interaction.WorkQueueAccessQueueInteraction.EnqueueAsyncAccess``2(AInq.Background.Services.IWorkQueue,AInq.Background.Tasks.IAsyncAccess{``0,``1},System.Threading.CancellationToken,System.Int32,System.Int32)" />
         </member>
         <member name="M:AInq.Background.Interaction.WorkQueueAccessQueueServiceProviderInteraction.EnqueueAccess``2(System.IServiceProvider,System.Threading.CancellationToken,System.Int32,System.Int32)">
             <summary> Enqueue access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
@@ -702,7 +687,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAccess"> Access action type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
@@ -714,7 +699,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAccess"> Access action type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
             <returns> Access action completion task </returns>
@@ -727,7 +712,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAsyncAccess"> Access action type </typeparam>
             <returns> Access action completion task </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
@@ -739,7 +724,7 @@
             <param name="priority"> Access action priority </param>
             <param name="cancellation"> Access cancellation token </param>
             <param name="attemptsCount"> Retry on fail attempts count </param>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TAsyncAccess"> Access action type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
             <returns> Access action completion task </returns>
@@ -748,7 +733,7 @@
         </member>
         <member name="T:AInq.Background.Services.IAccessQueue`1">
             <summary> Interface for background shared resource access queue </summary>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
         </member>
         <member name="P:AInq.Background.Services.IAccessQueue`1.MaxAttempts">
             <summary> Max allowed retry on fail attempts </summary>
@@ -805,7 +790,7 @@
         </member>
         <member name="T:AInq.Background.Services.IPriorityAccessQueue`1">
             <summary> Interface for background shared resource access queue with prioritization </summary>
-            <typeparam name="TResource"> Shared resource type</typeparam>
+            <typeparam name="TResource"> Shared resource type </typeparam>
         </member>
         <member name="P:AInq.Background.Services.IPriorityAccessQueue`1.MaxPriority">
             <summary> Max allowed access priority </summary>
@@ -986,19 +971,14 @@
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
         </member>
         <member name="M:AInq.Background.Tasks.AccessFactory.CreateAsyncAccess``1(System.Func{``0,System.IServiceProvider,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
-            <summary>
-                Create <see cref="T:AInq.Background.Tasks.IAsyncAccess`1" /> instance from <see cref="T:System.Func`4" />
-            </summary>
+            <summary> Create <see cref="T:AInq.Background.Tasks.IAsyncAccess`1" /> instance from <see cref="T:System.Func`4" /> </summary>
             <param name="access"> Access action </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <returns> <see cref="T:AInq.Background.Tasks.IAsyncAccess`1" /> instance for given action </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
         </member>
         <member name="M:AInq.Background.Tasks.AccessFactory.CreateAsyncAccess``2(System.Func{``0,System.IServiceProvider,System.Threading.CancellationToken,System.Threading.Tasks.Task{``1}})">
-            <summary>
-                Create <see cref="T:AInq.Background.Tasks.IAsyncAccess`2" /> instance from
-                <see cref="T:System.Func`4" />
-            </summary>
+            <summary> Create <see cref="T:AInq.Background.Tasks.IAsyncAccess`2" /> instance from <see cref="T:System.Func`4" /> </summary>
             <param name="access"> Access function </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TResult"> Access result type </typeparam>
@@ -1015,10 +995,7 @@
             <param name="serviceProvider"> Service provider instance </param>
         </member>
         <member name="T:AInq.Background.Tasks.IAccess`2">
-            <summary>
-                Interface for synchronous access to shared resource of type <typeparamref name="TResource" /> with result of type
-                <typeparamref name="TResult" />
-            </summary>
+            <summary> Interface for synchronous access to shared resource of type <typeparamref name="TResource" /> with result of type <typeparamref name="TResult" /> </summary>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
         </member>
@@ -1040,10 +1017,7 @@
             <returns> Access action completion task </returns>
         </member>
         <member name="T:AInq.Background.Tasks.IAsyncAccess`2">
-            <summary>
-                Interface for asynchronous access to shared resource of type <typeparamref name="TResource" /> with result of type
-                <typeparamref name="TResult" />
-            </summary>
+            <summary> Interface for asynchronous access to shared resource of type <typeparamref name="TResource" /> with result of type <typeparamref name="TResult" /> </summary>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <typeparam name="TResult"> Access action result type </typeparam>
         </member>
@@ -1087,7 +1061,7 @@
         </member>
         <member name="T:AInq.Background.Tasks.IStartStoppable">
             <summary> Interface for object which need to be activated/deactivated before/after usage </summary>
-            <remarks> Used in <see cref="T:AInq.Background.Services.IConveyor`2" /> and <see cref="T:AInq.Background.Services.IAccessQueue`1" /></remarks>
+            <remarks> Used in <see cref="T:AInq.Background.Services.IConveyor`2" /> and <see cref="T:AInq.Background.Services.IAccessQueue`1" /> </remarks>
         </member>
         <member name="P:AInq.Background.Tasks.IStartStoppable.IsActive">
             <summary> Shows if object is active now </summary>
@@ -1098,13 +1072,13 @@
             <returns> Activation completion task </returns>
         </member>
         <member name="M:AInq.Background.Tasks.IStartStoppable.DeactivateAsync(System.Threading.CancellationToken)">
-            <summary> Deactivate object asynchronously  </summary>
+            <summary> Deactivate object asynchronously </summary>
             <param name="cancellation"> Deactivation cancellation token </param>
             <returns> Deactivation completion task </returns>
         </member>
         <member name="T:AInq.Background.Tasks.IThrottling">
             <summary> Interface for objects need to have timeout before reuse </summary>
-            <remarks> Used in <see cref="T:AInq.Background.Services.IConveyor`2" /> and <see cref="T:AInq.Background.Services.IAccessQueue`1" /></remarks>
+            <remarks> Used in <see cref="T:AInq.Background.Services.IConveyor`2" /> and <see cref="T:AInq.Background.Services.IAccessQueue`1" /> </remarks>
         </member>
         <member name="P:AInq.Background.Tasks.IThrottling.Timeout">
             <summary> Timeout duration </summary>

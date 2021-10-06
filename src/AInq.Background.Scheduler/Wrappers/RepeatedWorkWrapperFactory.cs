@@ -24,10 +24,7 @@ public static class RepeatedWorkWrapperFactory
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     public static (IScheduledTaskWrapper, IObservable<Maybe<Exception>>) CreateRepeatedWorkWrapper(IWork work, DateTime startTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
@@ -53,10 +50,7 @@ public static class RepeatedWorkWrapperFactory
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     public static (IScheduledTaskWrapper, IObservable<Try<TResult>>) CreateRepeatedWorkWrapper<TResult>(IWork<TResult> work, DateTime startTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
@@ -81,10 +75,7 @@ public static class RepeatedWorkWrapperFactory
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="asyncWork" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     public static (IScheduledTaskWrapper, IObservable<Maybe<Exception>>) CreateRepeatedWorkWrapper(IAsyncWork asyncWork, DateTime startTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
@@ -110,10 +101,7 @@ public static class RepeatedWorkWrapperFactory
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="asyncWork" /> is NULL </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-    ///     <paramref name="execCount" /> is 0 or less then -1
-    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     public static (IScheduledTaskWrapper, IObservable<Try<TResult>>) CreateRepeatedWorkWrapper<TResult>(IAsyncWork<TResult> asyncWork,
         DateTime startTime, TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)

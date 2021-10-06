@@ -36,9 +36,7 @@ public static class AccessFactory
         where TResource : notnull
         => new Access<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)));
 
-    /// <summary>
-    ///     Create <see cref="IAsyncAccess{TResource}" /> instance from <see cref="Func{TResource, IServiceProvider, CancellationToken, Task}" />
-    /// </summary>
+    /// <summary> Create <see cref="IAsyncAccess{TResource}" /> instance from <see cref="Func{TResource, IServiceProvider, CancellationToken, Task}" /> </summary>
     /// <param name="access"> Access action </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> <see cref="IAsyncAccess{TResource}" /> instance for given action </returns>
@@ -47,10 +45,7 @@ public static class AccessFactory
         where TResource : notnull
         => new AsyncAccess<TResource>(access ?? throw new ArgumentNullException(nameof(access)));
 
-    /// <summary>
-    ///     Create <see cref="IAsyncAccess{TResource, TResult}" /> instance from
-    ///     <see cref="Func{TResource,  CancellationToken, IServiceProvider, TResult}" />
-    /// </summary>
+    /// <summary> Create <see cref="IAsyncAccess{TResource, TResult}" /> instance from <see cref="Func{TResource,  CancellationToken, IServiceProvider, TResult}" /> </summary>
     /// <param name="access"> Access function </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>

@@ -35,7 +35,7 @@ public interface ITaskManager<TArgument, TMetadata>
     /// <summary> Revert uncompleted task to manager </summary>
     /// <param name="task"> Task instance </param>
     /// <param name="metadata"> Task metadata </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="task" /> or <paramref name="metadata" /> is NULL</exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="task" /> or <paramref name="metadata" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="metadata" /> has incorrect value </exception>
     void RevertTask(ITaskWrapper<TArgument> task, TMetadata metadata);
 }

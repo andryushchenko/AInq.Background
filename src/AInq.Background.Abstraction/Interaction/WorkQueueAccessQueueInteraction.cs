@@ -18,11 +18,8 @@ using static AInq.Background.Tasks.WorkFactory;
 
 namespace AInq.Background.Interaction;
 
-/// <summary> <see cref="IWorkQueue" /> and <see cref="IPriorityWorkQueue" /> extensions to run access in background queue  </summary>
-/// <remarks>
-///     <see cref="IPriorityAccessQueue{TResource}" /> or <see cref="IAccessQueue{TResource}" /> service should be registered on host to run queued
-///     access
-/// </remarks>
+/// <summary> <see cref="IWorkQueue" /> and <see cref="IPriorityWorkQueue" /> extensions to run access in background queue </summary>
+/// <remarks> <see cref="IPriorityAccessQueue{TResource}" /> or <see cref="IAccessQueue{TResource}" /> service should be registered on host to run queued access </remarks>
 public static class WorkQueueAccessQueueInteraction
 {
 #region QueueAccess
@@ -33,7 +30,7 @@ public static class WorkQueueAccessQueueInteraction
     /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="queue" /> is NULL </exception>
     public static Task EnqueueAccess<TResource>(this IWorkQueue queue, IAccess<TResource> access, CancellationToken cancellation = default,
@@ -53,7 +50,7 @@ public static class WorkQueueAccessQueueInteraction
     /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="queue" /> is NULL </exception>
@@ -74,7 +71,7 @@ public static class WorkQueueAccessQueueInteraction
     /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="queue" /> is NULL </exception>
     public static Task EnqueueAsyncAccess<TResource>(this IWorkQueue queue, IAsyncAccess<TResource> access, CancellationToken cancellation = default,
@@ -94,7 +91,7 @@ public static class WorkQueueAccessQueueInteraction
     /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="queue" /> is NULL </exception>
@@ -118,7 +115,7 @@ public static class WorkQueueAccessQueueInteraction
     /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if or <paramref name="queue" /> is NULL </exception>
@@ -138,7 +135,7 @@ public static class WorkQueueAccessQueueInteraction
     /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
@@ -159,7 +156,7 @@ public static class WorkQueueAccessQueueInteraction
     /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="queue" /> is NULL </exception>
@@ -179,7 +176,7 @@ public static class WorkQueueAccessQueueInteraction
     /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>

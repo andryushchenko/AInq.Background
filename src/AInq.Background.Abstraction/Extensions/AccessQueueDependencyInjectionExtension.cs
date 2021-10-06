@@ -28,7 +28,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <param name="queue"> Access queue instance </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="queue" /> is NULL </exception>
@@ -45,7 +45,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <param name="queue"> Access queue instance </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
@@ -63,7 +63,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <param name="queue"> Access queue instance </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="queue" /> is NULL </exception>
@@ -80,7 +80,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <param name="queue"> Access queue instance </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
@@ -104,7 +104,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="queue" /> is NULL </exception>
@@ -123,7 +123,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
@@ -143,7 +143,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="queue" /> is NULL </exception>
@@ -162,7 +162,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="priority"> Access action priority </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>

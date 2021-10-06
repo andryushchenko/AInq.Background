@@ -172,7 +172,7 @@ public static class AccessQueueInjection
     /// <summary> Create <see cref="IAccessQueue{TResource}" /> with given shared resources reuse <paramref name="strategy" /> without service registration </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="resourceFactory"> Shared resource factory function </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
@@ -196,7 +196,7 @@ public static class AccessQueueInjection
     /// <summary> Add <see cref="IAccessQueue{TResource}" /> service with given shared resources reuse <paramref name="strategy" /> </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="resourceFactory"> Shared resource factory function </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
@@ -212,13 +212,10 @@ public static class AccessQueueInjection
         return services.AddSingleton(services.CreateAccessQueue(resourceFactory, strategy, maxResourceInstances, maxAttempts));
     }
 
-    /// <summary>
-    ///     Create <see cref="IPriorityAccessQueue{TResource}" /> with given shared resources reuse <paramref name="strategy" /> without service
-    ///     registration
-    /// </summary>
+    /// <summary> Create <see cref="IPriorityAccessQueue{TResource}" /> with given shared resources reuse <paramref name="strategy" /> without service registration </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="resourceFactory"> Shared resource factory function </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
     /// <param name="maxPriority"> Max allowed operation priority </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
@@ -241,13 +238,10 @@ public static class AccessQueueInjection
         return manager;
     }
 
-    /// <summary>
-    ///     Add <see cref="IPriorityAccessQueue{TResource}" /> and <see cref="IAccessQueue{TResource}" /> services with given shared resources reuse
-    ///     <paramref name="strategy" />
-    /// </summary>
+    /// <summary> Add <see cref="IPriorityAccessQueue{TResource}" /> and <see cref="IAccessQueue{TResource}" /> services with given shared resources reuse <paramref name="strategy" /> </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="resourceFactory"> Shared resource factory function </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
     /// <param name="maxPriority"> Max allowed operation priority </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
@@ -268,7 +262,7 @@ public static class AccessQueueInjection
 
     /// <summary> Create <see cref="IAccessQueue{TResource}" /> with given shared resources reuse <paramref name="strategy" /> without service registration </summary>
     /// <param name="services"> Service collection </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
@@ -280,7 +274,7 @@ public static class AccessQueueInjection
 
     /// <summary> Add <see cref="IAccessQueue{TResource}" /> service with given shared resources reuse <paramref name="strategy" /> </summary>
     /// <param name="services"> Service collection </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
@@ -291,12 +285,9 @@ public static class AccessQueueInjection
         where TResource : notnull
         => services.AddAccessQueue(provider => provider.GetRequiredService<TResource>(), strategy, maxResourceInstances, maxAttempts);
 
-    /// <summary>
-    ///     Create <see cref="IPriorityAccessQueue{TResource}" /> with given shared resources reuse <paramref name="strategy" /> without service
-    ///     registration
-    /// </summary>
+    /// <summary> Create <see cref="IPriorityAccessQueue{TResource}" /> with given shared resources reuse <paramref name="strategy" /> without service registration </summary>
     /// <param name="services"> Service collection </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
     /// <param name="maxPriority"> Max allowed operation priority </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
@@ -312,12 +303,9 @@ public static class AccessQueueInjection
             maxPriority,
             maxAttempts);
 
-    /// <summary>
-    ///     Add <see cref="IPriorityAccessQueue{TResource}" /> and <see cref="IAccessQueue{TResource}" /> services with given shared resources reuse
-    ///     <paramref name="strategy" />
-    /// </summary>
+    /// <summary> Add <see cref="IPriorityAccessQueue{TResource}" /> and <see cref="IAccessQueue{TResource}" /> services with given shared resources reuse <paramref name="strategy" /> </summary>
     /// <param name="services"> Service collection </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
     /// <param name="maxPriority"> Max allowed operation priority </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>

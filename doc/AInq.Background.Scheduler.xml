@@ -50,12 +50,12 @@
         </member>
         <member name="M:AInq.Background.WorkSchedulerInjection.CreateWorkScheduler(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Nullable{System.TimeSpan})">
             <summary> Create <see cref="T:AInq.Background.Services.IWorkScheduler" /> without service registration </summary>
-            <param name="services"> Service collection</param>
+            <param name="services"> Service collection </param>
             <param name="horizon"> Time horizon to look for upcoming tasks </param>
         </member>
         <member name="M:AInq.Background.WorkSchedulerInjection.AddWorkScheduler(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Nullable{System.TimeSpan})">
             <summary> Add <see cref="T:AInq.Background.Services.IWorkScheduler" /> service </summary>
-            <param name="services"> Service collection</param>
+            <param name="services"> Service collection </param>
             <param name="horizon"> Time horizon to look for upcoming tasks </param>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
         </member>
@@ -131,10 +131,7 @@
             <param name="cancellation"> Work cancellation token </param>
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">
-                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-                <paramref name="execCount" /> is 0 or less then -1
-            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
             <returns> Wrapper and work result observable </returns>
         </member>
         <member name="M:AInq.Background.Wrappers.RepeatedWorkWrapperFactory.CreateRepeatedWorkWrapper``1(AInq.Background.Tasks.IWork{``0},System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32)">
@@ -146,10 +143,7 @@
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <typeparam name="TResult"> Work result type </typeparam>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">
-                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-                <paramref name="execCount" /> is 0 or less then -1
-            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
             <returns> Wrapper and work result observable </returns>
         </member>
         <member name="M:AInq.Background.Wrappers.RepeatedWorkWrapperFactory.CreateRepeatedWorkWrapper(AInq.Background.Tasks.IAsyncWork,System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32)">
@@ -160,10 +154,7 @@
             <param name="cancellation"> Work cancellation token </param>
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="asyncWork" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">
-                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-                <paramref name="execCount" /> is 0 or less then -1
-            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
             <returns> Wrapper and work result observable </returns>
         </member>
         <member name="M:AInq.Background.Wrappers.RepeatedWorkWrapperFactory.CreateRepeatedWorkWrapper``1(AInq.Background.Tasks.IAsyncWork{``0},System.DateTime,System.TimeSpan,System.Threading.CancellationToken,System.Int32)">
@@ -175,10 +166,7 @@
             <param name="execCount"> Max work execution count (-1 for unlimited) </param>
             <typeparam name="TResult"> Work result type </typeparam>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="asyncWork" /> is NULL </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">
-                Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or
-                <paramref name="execCount" /> is 0 or less then -1
-            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
             <returns> Wrapper and work result observable </returns>
         </member>
         <member name="T:AInq.Background.Wrappers.ScheduledWorkWrapperFactory">

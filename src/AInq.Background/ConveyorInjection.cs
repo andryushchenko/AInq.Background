@@ -80,10 +80,7 @@ public static class ConveyorInjection
         return manager;
     }
 
-    /// <summary>
-    ///     Add <see cref="IPriorityConveyor{TData, TResult}" /> and <see cref="IConveyor{TData, TResult}" /> services with single static conveyor
-    ///     machine
-    /// </summary>
+    /// <summary> Add <see cref="IPriorityConveyor{TData, TResult}" /> and <see cref="IConveyor{TData, TResult}" /> services with single static conveyor machine </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="conveyorMachine"> Conveyor machine instance </param>
     /// <param name="maxPriority"> Max allowed operation priority </param>
@@ -185,13 +182,10 @@ public static class ConveyorInjection
         return services.AddSingleton<IConveyor<TData, TResult>>(conveyor).AddSingleton(conveyor);
     }
 
-    /// <summary>
-    ///     Create <see cref="IConveyor{TData, TResult}" /> with given conveyor machines reuse <paramref name="strategy" /> without service
-    ///     registration
-    /// </summary>
+    /// <summary> Create <see cref="IConveyor{TData, TResult}" /> with given conveyor machines reuse <paramref name="strategy" /> without service registration </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="conveyorMachineFactory"> Conveyor machine factory function </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxParallelMachines"> Max allowed parallel conveyor machines </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TData"> Input data type </typeparam>
@@ -220,7 +214,7 @@ public static class ConveyorInjection
     /// <summary> Add <see cref="IConveyor{TData, TResult}" /> service with given conveyor machines reuse <paramref name="strategy" /> </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="conveyorMachineFactory"> Conveyor machine factory function </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxParallelMachines"> Max allowed parallel conveyor machines </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TData"> Input data type </typeparam>
@@ -238,13 +232,10 @@ public static class ConveyorInjection
         return services.AddSingleton(services.CreateConveyor(conveyorMachineFactory, strategy, maxParallelMachines, maxAttempts));
     }
 
-    /// <summary>
-    ///     Create <see cref="IPriorityConveyor{TData, TResult}" /> with given conveyor machines reuse <paramref name="strategy" /> without service
-    ///     registration
-    /// </summary>
+    /// <summary> Create <see cref="IPriorityConveyor{TData, TResult}" /> with given conveyor machines reuse <paramref name="strategy" /> without service registration </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="conveyorMachineFactory"> Conveyor machine factory function </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxParallelMachines"> Max allowed parallel conveyor machines </param>
     /// <param name="maxPriority"> Max allowed operation priority </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
@@ -271,13 +262,10 @@ public static class ConveyorInjection
         return manager;
     }
 
-    /// <summary>
-    ///     Add <see cref="IPriorityConveyor{TData, TResult}" /> and <see cref="IConveyor{TData, TResult}" /> services with given conveyor machines
-    ///     reuse <paramref name="strategy" />
-    /// </summary>
+    /// <summary> Add <see cref="IPriorityConveyor{TData, TResult}" /> and <see cref="IConveyor{TData, TResult}" /> services with given conveyor machines reuse <paramref name="strategy" /> </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="conveyorMachineFactory"> Conveyor machine factory function </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxParallelMachines"> Max allowed parallel conveyor machines </param>
     /// <param name="maxPriority"> Max allowed operation priority </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
@@ -297,12 +285,9 @@ public static class ConveyorInjection
         return services.AddSingleton<IConveyor<TData, TResult>>(conveyor).AddSingleton(conveyor);
     }
 
-    /// <summary>
-    ///     Create <see cref="IConveyor{TData, TResult}" /> with given conveyor machines reuse <paramref name="strategy" /> without service
-    ///     registration
-    /// </summary>
+    /// <summary> Create <see cref="IConveyor{TData, TResult}" /> with given conveyor machines reuse <paramref name="strategy" /> without service registration </summary>
     /// <param name="services"> Service collection </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxParallelMachines"> Max allowed parallel conveyor machines </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TData"> Input data type </typeparam>
@@ -317,7 +302,7 @@ public static class ConveyorInjection
 
     /// <summary> Add <see cref="IConveyor{TData, TResult}" /> service with given conveyor machines reuse <paramref name="strategy" /> </summary>
     /// <param name="services"> Service collection </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxParallelMachines"> Max allowed parallel conveyor machines </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TData"> Input data type </typeparam>
@@ -331,12 +316,9 @@ public static class ConveyorInjection
         where TConveyorMachine : IConveyorMachine<TData, TResult>
         => services.AddConveyor(provider => provider.GetRequiredService<TConveyorMachine>(), strategy, maxParallelMachines, maxAttempts);
 
-    /// <summary>
-    ///     Create <see cref="IPriorityConveyor{TData, TResult}" /> with given conveyor machines reuse <paramref name="strategy" /> without service
-    ///     registration
-    /// </summary>
+    /// <summary> Create <see cref="IPriorityConveyor{TData, TResult}" /> with given conveyor machines reuse <paramref name="strategy" /> without service registration </summary>
     /// <param name="services"> Service collection </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxParallelMachines"> Max allowed parallel conveyor machines </param>
     /// <param name="maxPriority"> Max allowed operation priority </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
@@ -354,12 +336,9 @@ public static class ConveyorInjection
             maxPriority,
             maxAttempts);
 
-    /// <summary>
-    ///     Add <see cref="IPriorityConveyor{TData, TResult}" /> and <see cref="IConveyor{TData, TResult}" /> services with given conveyor machines
-    ///     reuse <paramref name="strategy" />
-    /// </summary>
+    /// <summary> Add <see cref="IPriorityConveyor{TData, TResult}" /> and <see cref="IConveyor{TData, TResult}" /> services with given conveyor machines reuse <paramref name="strategy" /> </summary>
     /// <param name="services"> Service collection </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /></param>
+    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
     /// <param name="maxParallelMachines"> Max allowed parallel conveyor machines </param>
     /// <param name="maxPriority"> Max allowed operation priority </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>

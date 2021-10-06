@@ -88,9 +88,7 @@ public static class ConveyorEnumerableExtension
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> or <paramref name="data" /> is NULL </exception>
-    /// <exception cref="InvalidOperationException">
-    ///     Thrown if no conveyor for given <typeparamref name="TData" /> and <typeparamref name="TResult" /> is registered
-    /// </exception>
+    /// <exception cref="InvalidOperationException"> Thrown if no conveyor for given <typeparamref name="TData" /> and <typeparamref name="TResult" /> is registered </exception>
     public static IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, IEnumerable<TData> data,
         CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false, int priority = 0)
         where TData : notnull

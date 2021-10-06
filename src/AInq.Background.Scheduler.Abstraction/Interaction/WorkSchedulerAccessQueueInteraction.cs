@@ -16,11 +16,8 @@ using static AInq.Background.Tasks.WorkFactory;
 
 namespace AInq.Background.Interaction;
 
-/// <summary> <see cref="IWorkScheduler" /> extensions to run scheduled access in background queue  </summary>
-/// <remarks>
-///     <see cref="IPriorityAccessQueue{TResource}" /> or <see cref="IAccessQueue{TResource}" /> service should be registered on host to run queued
-///     access
-/// </remarks>
+/// <summary> <see cref="IWorkScheduler" /> extensions to run scheduled access in background queue </summary>
+/// <remarks> <see cref="IPriorityAccessQueue{TResource}" /> or <see cref="IAccessQueue{TResource}" /> service should be registered on host to run queued access </remarks>
 public static class WorkSchedulerAccessQueueInteraction
 {
 #region DelayedAccess
@@ -32,7 +29,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
@@ -54,7 +51,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
@@ -77,7 +74,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater then 00:00:00 </exception>
@@ -99,7 +96,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
@@ -125,7 +122,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
@@ -145,7 +142,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
@@ -166,7 +163,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
@@ -186,7 +183,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
@@ -212,7 +209,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
@@ -234,7 +231,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
@@ -257,7 +254,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater then current time </exception>
@@ -279,7 +276,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
@@ -305,7 +302,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
@@ -325,7 +322,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
@@ -346,7 +343,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
@@ -366,7 +363,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
@@ -393,12 +390,9 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result observable </returns>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="access" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is
-    ///     NULL
-    /// </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     public static IObservable<Maybe<Exception>> AddCronQueueAccess<TResource>(this IWorkScheduler scheduler, IAccess<TResource> access,
         string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
@@ -420,13 +414,10 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result observable </returns>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="access" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is
-    ///     NULL
-    /// </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     public static IObservable<Try<TResult>> AddCronQueueAccess<TResource, TResult>(this IWorkScheduler scheduler, IAccess<TResource, TResult> access,
         string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
@@ -448,12 +439,9 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result observable </returns>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="access" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is
-    ///     NULL
-    /// </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     public static IObservable<Maybe<Exception>> AddCronAsyncQueueAccess<TResource>(this IWorkScheduler scheduler, IAsyncAccess<TResource> access,
         string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
@@ -475,13 +463,10 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result observable </returns>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="access" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is
-    ///     NULL
-    /// </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="cronExpression" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     public static IObservable<Try<TResult>> AddCronAsyncQueueAccess<TResource, TResult>(this IWorkScheduler scheduler,
         IAsyncAccess<TResource, TResult> access, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1,
@@ -507,7 +492,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <returns> Access result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> or <paramref name="scheduler" /> is NULL </exception>
@@ -529,7 +514,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result observable </returns>
@@ -552,7 +537,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <returns> Access result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="cronExpression" /> or <paramref name="scheduler" /> is NULL </exception>
@@ -574,7 +559,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result observable </returns>
@@ -603,7 +588,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00 </exception>
@@ -627,7 +612,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
@@ -652,7 +637,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00 </exception>
@@ -676,7 +661,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
@@ -698,13 +683,13 @@ public static class WorkSchedulerAccessQueueInteraction
 
     /// <summary> Add repeated queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
-    /// <param name="starTime"> Access first execution time</param>
+    /// <param name="starTime"> Access first execution time </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <returns> Access result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
@@ -722,13 +707,13 @@ public static class WorkSchedulerAccessQueueInteraction
 
     /// <summary> Add repeated queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
-    /// <param name="starTime"> Access first execution time</param>
+    /// <param name="starTime"> Access first execution time </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result observable </returns>
@@ -747,13 +732,13 @@ public static class WorkSchedulerAccessQueueInteraction
 
     /// <summary> Add repeated queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
-    /// <param name="starTime"> Access first execution time</param>
+    /// <param name="starTime"> Access first execution time </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <returns> Access result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
@@ -771,13 +756,13 @@ public static class WorkSchedulerAccessQueueInteraction
 
     /// <summary> Add repeated queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
-    /// <param name="starTime"> Access first execution time</param>
+    /// <param name="starTime"> Access first execution time </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result observable </returns>
@@ -808,7 +793,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00 </exception>
@@ -832,7 +817,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
@@ -857,7 +842,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00 </exception>
@@ -881,7 +866,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="scheduler" /> is NULL </exception>
@@ -909,7 +894,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
@@ -933,7 +918,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
@@ -958,7 +943,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="scheduler" /> is NULL </exception>
@@ -983,7 +968,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
-    /// <typeparam name="TResource"> Shared resource type</typeparam>
+    /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>

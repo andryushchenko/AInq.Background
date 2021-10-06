@@ -293,10 +293,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <returns> Work result observable </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="provider" /> is
-    ///     NULL
-    /// </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="provider" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="IWorkScheduler.AddCronWork(IWork, string, CancellationToken, int)" />
     public static IObservable<Maybe<Exception>> AddCronWork(this IServiceProvider provider, IWork work, string cronExpression,
@@ -313,10 +310,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="provider" /> is
-    ///     NULL
-    /// </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="provider" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="IWorkScheduler.AddCronWork{TResult}(IWork{TResult}, string, CancellationToken, int)" />
     public static IObservable<Try<TResult>> AddCronWork<TResult>(this IServiceProvider provider, IWork<TResult> work, string cronExpression,
@@ -332,10 +326,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <returns> Work result observable </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="provider" /> is
-    ///     NULL
-    /// </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="provider" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="IWorkScheduler.AddCronAsyncWork(IAsyncWork, string, CancellationToken, int)" />
     public static IObservable<Maybe<Exception>> AddCronAsyncWork(this IServiceProvider provider, IAsyncWork work, string cronExpression,
@@ -352,10 +343,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no work scheduler is registered </exception>
-    /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="provider" /> is
-    ///     NULL
-    /// </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> or <paramref name="provider" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <seealso cref="IWorkScheduler.AddCronAsyncWork{TResult}(IAsyncWork{TResult}, string, CancellationToken, int)" />
     public static IObservable<Try<TResult>> AddCronAsyncWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work, string cronExpression,
@@ -515,7 +503,7 @@ public static class WorkSchedulerServiceProviderHelper
 
     /// <summary> Add repeated work to registered scheduler </summary>
     /// <param name="provider"> Service provider instance </param>
-    /// <param name="starTime"> Work first execution time</param>
+    /// <param name="starTime"> Work first execution time </param>
     /// <param name="repeatDelay"> Work repeat delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
@@ -532,7 +520,7 @@ public static class WorkSchedulerServiceProviderHelper
 
     /// <summary> Add repeated work to registered scheduler </summary>
     /// <param name="provider"> Service provider instance </param>
-    /// <param name="starTime"> Work first execution time</param>
+    /// <param name="starTime"> Work first execution time </param>
     /// <param name="repeatDelay"> Work repeat delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
@@ -553,7 +541,7 @@ public static class WorkSchedulerServiceProviderHelper
 
     /// <summary> Add repeated asynchronous work to registered scheduler </summary>
     /// <param name="provider"> Service provider instance </param>
-    /// <param name="starTime"> Work first execution time</param>
+    /// <param name="starTime"> Work first execution time </param>
     /// <param name="repeatDelay"> Work repeat delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
@@ -573,7 +561,7 @@ public static class WorkSchedulerServiceProviderHelper
 
     /// <summary> Add repeated asynchronous work to registered scheduler </summary>
     /// <param name="provider"> Service provider instance </param>
-    /// <param name="starTime"> Work first execution time</param>
+    /// <param name="starTime"> Work first execution time </param>
     /// <param name="repeatDelay"> Work repeat delay </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
@@ -582,8 +570,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00 </exception>
-    /// <seealso
-    ///     cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedAsyncWork{TAsyncWork, TResult}(IWorkScheduler,DateTime,TimeSpan,CancellationToken,int)" />
+    /// <seealso cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedAsyncWork{TAsyncWork, TResult}(IWorkScheduler,DateTime,TimeSpan,CancellationToken,int)" />
     public static IObservable<Try<TResult>> AddRepeatedAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork<TResult>
@@ -744,8 +731,7 @@ public static class WorkSchedulerServiceProviderHelper
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00 </exception>
-    /// <seealso
-    ///     cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedAsyncWork{TAsyncWork, TResult}(IWorkScheduler,TimeSpan,TimeSpan,CancellationToken,int)" />
+    /// <seealso cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedAsyncWork{TAsyncWork, TResult}(IWorkScheduler,TimeSpan,TimeSpan,CancellationToken,int)" />
     public static IObservable<Try<TResult>> AddRepeatedAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork<TResult>

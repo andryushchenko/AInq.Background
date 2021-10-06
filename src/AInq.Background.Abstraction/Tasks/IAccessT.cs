@@ -14,10 +14,7 @@
 
 namespace AInq.Background.Tasks;
 
-/// <summary>
-///     Interface for synchronous access to shared resource of type <typeparamref name="TResource" /> with result of type
-///     <typeparamref name="TResult" />
-/// </summary>
+/// <summary> Interface for synchronous access to shared resource of type <typeparamref name="TResource" /> with result of type <typeparamref name="TResult" /> </summary>
 /// <typeparam name="TResource"> Shared resource type </typeparam>
 /// <typeparam name="TResult"> Access action result type </typeparam>
 public interface IAccess<in TResource, out TResult>

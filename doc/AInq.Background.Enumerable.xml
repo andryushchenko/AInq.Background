@@ -36,8 +36,7 @@
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="accessQueue" /> or <paramref name="accesses" /> is NULL </exception>
         </member>
         <member name="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAccess{``0,``1}},AInq.Background.Services.IPriorityAccessQueue{``0},System.Threading.CancellationToken,System.Int32,System.Int32,System.Boolean)">
-            <inheritdoc
-                cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAccess{``0,``1}},System.Int32,System.Threading.CancellationToken,System.Int32,System.Boolean)" />
+            <inheritdoc cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAccess{``0,``1}},System.Int32,System.Threading.CancellationToken,System.Int32,System.Boolean)" />
         </member>
         <member name="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(System.IServiceProvider,System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAccess{``0,``1}},System.Threading.CancellationToken,System.Int32,System.Boolean,System.Int32)">
             <summary> Batch process access actions using registered access queue with giver <paramref name="priority" /> (if supported) </summary>
@@ -82,8 +81,7 @@
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="accessQueue" /> or <paramref name="accesses" /> is NULL </exception>
         </member>
         <member name="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAsyncAccess{``0,``1}},AInq.Background.Services.IPriorityAccessQueue{``0},System.Threading.CancellationToken,System.Int32,System.Int32,System.Boolean)">
-            <inheritdoc
-                cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAsyncAccess{``0,``1}},System.Int32,System.Threading.CancellationToken,System.Int32,System.Boolean)" />
+            <inheritdoc cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAsyncAccess{``0,``1}},System.Int32,System.Threading.CancellationToken,System.Int32,System.Boolean)" />
         </member>
         <member name="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(System.IServiceProvider,System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAsyncAccess{``0,``1}},System.Threading.CancellationToken,System.Int32,System.Boolean,System.Int32)">
             <summary> Batch process asynchronous access actions using registered access queue with giver <paramref name="priority" /> (if supported) </summary>
@@ -106,12 +104,10 @@
             <inheritdoc cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IAccessQueue{``0},System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAccess{``0,``1}},System.Threading.CancellationToken,System.Int32,System.Boolean)" />
         </member>
         <member name="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Collections.Generic.IAsyncEnumerable{AInq.Background.Tasks.IAccess{``0,``1}},System.Int32,System.Threading.CancellationToken,System.Int32)">
-            <inheritdoc
-                cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAccess{``0,``1}},System.Int32,System.Threading.CancellationToken,System.Int32,System.Boolean)" />
+            <inheritdoc cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAccess{``0,``1}},System.Int32,System.Threading.CancellationToken,System.Int32,System.Boolean)" />
         </member>
         <member name="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(System.Collections.Generic.IAsyncEnumerable{AInq.Background.Tasks.IAccess{``0,``1}},AInq.Background.Services.IPriorityAccessQueue{``0},System.Int32,System.Threading.CancellationToken,System.Int32)">
-            <inheritdoc
-                cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAccess{``0,``1}},System.Int32,System.Threading.CancellationToken,System.Int32,System.Boolean)" />
+            <inheritdoc cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAccess{``0,``1}},System.Int32,System.Threading.CancellationToken,System.Int32,System.Boolean)" />
         </member>
         <member name="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(System.IServiceProvider,System.Collections.Generic.IAsyncEnumerable{AInq.Background.Tasks.IAccess{``0,``1}},System.Threading.CancellationToken,System.Int32,System.Int32)">
             <inheritdoc cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(System.IServiceProvider,System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAccess{``0,``1}},System.Threading.CancellationToken,System.Int32,System.Boolean,System.Int32)" />
@@ -123,12 +119,10 @@
             <inheritdoc cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IAccessQueue{``0},System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAsyncAccess{``0,``1}},System.Threading.CancellationToken,System.Int32,System.Boolean)" />
         </member>
         <member name="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Collections.Generic.IAsyncEnumerable{AInq.Background.Tasks.IAsyncAccess{``0,``1}},System.Int32,System.Threading.CancellationToken,System.Int32)">
-            <inheritdoc
-                cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAsyncAccess{``0,``1}},System.Int32,System.Threading.CancellationToken,System.Int32,System.Boolean)" />
+            <inheritdoc cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAsyncAccess{``0,``1}},System.Int32,System.Threading.CancellationToken,System.Int32,System.Boolean)" />
         </member>
         <member name="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(System.Collections.Generic.IAsyncEnumerable{AInq.Background.Tasks.IAsyncAccess{``0,``1}},AInq.Background.Services.IPriorityAccessQueue{``0},System.Int32,System.Threading.CancellationToken,System.Int32)">
-            <inheritdoc
-                cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAsyncAccess{``0,``1}},System.Int32,System.Threading.CancellationToken,System.Int32,System.Boolean)" />
+            <inheritdoc cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(AInq.Background.Services.IPriorityAccessQueue{``0},System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAsyncAccess{``0,``1}},System.Int32,System.Threading.CancellationToken,System.Int32,System.Boolean)" />
         </member>
         <member name="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(System.IServiceProvider,System.Collections.Generic.IAsyncEnumerable{AInq.Background.Tasks.IAsyncAccess{``0,``1}},System.Threading.CancellationToken,System.Int32,System.Int32)">
             <inheritdoc cref="M:AInq.Background.AccessQueueEnumerableExtension.AccessAsync``2(System.IServiceProvider,System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IAsyncAccess{``0,``1}},System.Threading.CancellationToken,System.Int32,System.Boolean,System.Int32)" />
@@ -179,9 +173,7 @@
             <typeparam name="TResult"> Processing result type </typeparam>
             <returns> Processing result task enumeration </returns>
             <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="provider" /> or <paramref name="data" /> is NULL </exception>
-            <exception cref="T:System.InvalidOperationException">
-                Thrown if no conveyor for given <typeparamref name="TData" /> and <typeparamref name="TResult" /> is registered
-            </exception>
+            <exception cref="T:System.InvalidOperationException"> Thrown if no conveyor for given <typeparamref name="TData" /> and <typeparamref name="TResult" /> is registered </exception>
         </member>
         <member name="M:AInq.Background.ConveyorEnumerableExtension.ProcessDataAsync``2(AInq.Background.Services.IConveyor{``0,``1},System.Collections.Generic.IAsyncEnumerable{``0},System.Threading.CancellationToken,System.Int32)">
             <inheritdoc cref="M:AInq.Background.ConveyorEnumerableExtension.ProcessDataAsync``2(AInq.Background.Services.IConveyor{``0,``1},System.Collections.Generic.IEnumerable{``0},System.Threading.CancellationToken,System.Int32,System.Boolean)" />
