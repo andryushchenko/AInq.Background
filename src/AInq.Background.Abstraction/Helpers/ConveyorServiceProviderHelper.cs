@@ -35,7 +35,8 @@ public static class ConveyorServiceProviderHelper
     public static Task<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, TData data, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TData : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider))).Service<IPriorityConveyor<TData, TResult>>()
-                                                                          ?.ProcessDataAsync(data, priority, cancellation, attemptsCount)
+        => (provider ?? throw new ArgumentNullException(nameof(provider)))
+           .Service<IPriorityConveyor<TData, TResult>>()
+           ?.ProcessDataAsync(data, priority, cancellation, attemptsCount)
            ?? provider.RequiredService<IConveyor<TData, TResult>>().ProcessDataAsync(data, cancellation, attemptsCount);
 }

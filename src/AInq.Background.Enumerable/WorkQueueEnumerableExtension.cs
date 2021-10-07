@@ -32,7 +32,9 @@ public static class WorkQueueEnumerableExtension
         [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
-        var results = (works ?? throw new ArgumentNullException(nameof(works))).Select(work => queue.EnqueueWork(work, cancellation, attemptsCount));
+        var results = (works ?? throw new ArgumentNullException(nameof(works)))
+                      .Where(work => work != null)
+                      .Select(work => queue.EnqueueWork(work, cancellation, attemptsCount));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -57,8 +59,9 @@ public static class WorkQueueEnumerableExtension
         int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
-        var results = (works ?? throw new ArgumentNullException(nameof(works))).Select(work
-            => queue.EnqueueWork(work, priority, cancellation, attemptsCount));
+        var results = (works ?? throw new ArgumentNullException(nameof(works)))
+                      .Where(work => work != null)
+                      .Select(work => queue.EnqueueWork(work, priority, cancellation, attemptsCount));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -102,8 +105,9 @@ public static class WorkQueueEnumerableExtension
         [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
-        var results = (works ?? throw new ArgumentNullException(nameof(works))).Select(work
-            => queue.EnqueueAsyncWork(work, cancellation, attemptsCount));
+        var results = (works ?? throw new ArgumentNullException(nameof(works)))
+                      .Where(work => work != null)
+                      .Select(work => queue.EnqueueAsyncWork(work, cancellation, attemptsCount));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -128,8 +132,9 @@ public static class WorkQueueEnumerableExtension
         int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
-        var results = (works ?? throw new ArgumentNullException(nameof(works))).Select(work
-            => queue.EnqueueAsyncWork(work, priority, cancellation, attemptsCount));
+        var results = (works ?? throw new ArgumentNullException(nameof(works)))
+                      .Where(work => work != null)
+                      .Select(work => queue.EnqueueAsyncWork(work, priority, cancellation, attemptsCount));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -169,6 +174,7 @@ public static class WorkQueueEnumerableExtension
         [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
+        _ = works ?? throw new ArgumentNullException(nameof(works));
         var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
         var writer = channel.Writer;
@@ -177,7 +183,8 @@ public static class WorkQueueEnumerableExtension
                 try
                 {
                     await foreach (var work in works.WithCancellation(cancellation).ConfigureAwait(false))
-                        await writer.WriteAsync(queue.EnqueueWork(work, cancellation, attemptsCount), cancellation).ConfigureAwait(false);
+                        if (work != null)
+                            await writer.WriteAsync(queue.EnqueueWork(work, cancellation, attemptsCount), cancellation).ConfigureAwait(false);
                 }
                 catch (OperationCanceledException ex)
                 {
@@ -207,6 +214,7 @@ public static class WorkQueueEnumerableExtension
         int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
+        _ = works ?? throw new ArgumentNullException(nameof(works));
         var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
         var writer = channel.Writer;
@@ -215,7 +223,9 @@ public static class WorkQueueEnumerableExtension
                 try
                 {
                     await foreach (var work in works.WithCancellation(cancellation).ConfigureAwait(false))
-                        await writer.WriteAsync(queue.EnqueueWork(work, priority, cancellation, attemptsCount), cancellation).ConfigureAwait(false);
+                        if (work != null)
+                            await writer.WriteAsync(queue.EnqueueWork(work, priority, cancellation, attemptsCount), cancellation)
+                                        .ConfigureAwait(false);
                 }
                 catch (OperationCanceledException ex)
                 {
@@ -255,6 +265,7 @@ public static class WorkQueueEnumerableExtension
         [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
+        _ = works ?? throw new ArgumentNullException(nameof(works));
         var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
         var writer = channel.Writer;
@@ -263,7 +274,8 @@ public static class WorkQueueEnumerableExtension
                 try
                 {
                     await foreach (var work in works.WithCancellation(cancellation).ConfigureAwait(false))
-                        await writer.WriteAsync(queue.EnqueueAsyncWork(work, cancellation, attemptsCount), cancellation).ConfigureAwait(false);
+                        if (work != null)
+                            await writer.WriteAsync(queue.EnqueueAsyncWork(work, cancellation, attemptsCount), cancellation).ConfigureAwait(false);
                 }
                 catch (OperationCanceledException ex)
                 {
@@ -293,6 +305,7 @@ public static class WorkQueueEnumerableExtension
         int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
+        _ = works ?? throw new ArgumentNullException(nameof(works));
         var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
         var writer = channel.Writer;
@@ -301,8 +314,9 @@ public static class WorkQueueEnumerableExtension
                 try
                 {
                     await foreach (var work in works.WithCancellation(cancellation).ConfigureAwait(false))
-                        await writer.WriteAsync(queue.EnqueueAsyncWork(work, priority, cancellation, attemptsCount), cancellation)
-                                    .ConfigureAwait(false);
+                        if (work != null)
+                            await writer.WriteAsync(queue.EnqueueAsyncWork(work, priority, cancellation, attemptsCount), cancellation)
+                                        .ConfigureAwait(false);
                 }
                 catch (OperationCanceledException ex)
                 {

@@ -34,8 +34,9 @@ public static class ConveyorEnumerableExtension
         where TData : notnull
     {
         _ = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
-        var results = (data ?? throw new ArgumentNullException(nameof(data))).Select(item
-            => conveyor.ProcessDataAsync(item, cancellation, attemptsCount));
+        var results = (data ?? throw new ArgumentNullException(nameof(data)))
+                      .Where(item => item != null)
+                      .Select(item => conveyor.ProcessDataAsync(item, cancellation, attemptsCount));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -64,8 +65,9 @@ public static class ConveyorEnumerableExtension
         where TData : notnull
     {
         _ = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
-        var results = (data ?? throw new ArgumentNullException(nameof(data))).Select(item
-            => conveyor.ProcessDataAsync(item, priority, cancellation, attemptsCount));
+        var results = (data ?? throw new ArgumentNullException(nameof(data)))
+                      .Where(item => item != null)
+                      .Select(item => conveyor.ProcessDataAsync(item, priority, cancellation, attemptsCount));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -109,6 +111,7 @@ public static class ConveyorEnumerableExtension
         where TData : notnull
     {
         _ = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
+        _ = data ?? throw new ArgumentNullException(nameof(data));
         var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
         var writer = channel.Writer;
@@ -117,7 +120,8 @@ public static class ConveyorEnumerableExtension
                 try
                 {
                     await foreach (var item in data.WithCancellation(cancellation).ConfigureAwait(false))
-                        await writer.WriteAsync(conveyor.ProcessDataAsync(item, cancellation, attemptsCount), cancellation).ConfigureAwait(false);
+                        if (item != null)
+                            await writer.WriteAsync(conveyor.ProcessDataAsync(item, cancellation, attemptsCount), cancellation).ConfigureAwait(false);
                 }
                 catch (OperationCanceledException ex)
                 {
@@ -149,6 +153,7 @@ public static class ConveyorEnumerableExtension
         where TData : notnull
     {
         _ = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
+        _ = data ?? throw new ArgumentNullException(nameof(data));
         var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
         var writer = channel.Writer;
@@ -157,8 +162,9 @@ public static class ConveyorEnumerableExtension
                 try
                 {
                     await foreach (var item in data.WithCancellation(cancellation).ConfigureAwait(false))
-                        await writer.WriteAsync(conveyor.ProcessDataAsync(item, priority, cancellation, attemptsCount), cancellation)
-                                    .ConfigureAwait(false);
+                        if (item != null)
+                            await writer.WriteAsync(conveyor.ProcessDataAsync(item, priority, cancellation, attemptsCount), cancellation)
+                                        .ConfigureAwait(false);
                 }
                 catch (OperationCanceledException ex)
                 {

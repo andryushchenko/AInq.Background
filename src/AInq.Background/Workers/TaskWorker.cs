@@ -36,11 +36,10 @@ public sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposab
     /// <param name="processor"> Task processor instance </param>
     public TaskWorker(IServiceProvider provider, ITaskManager<TArgument, TMetadata> manager, ITaskProcessor<TArgument, TMetadata> processor)
     {
-        _provider = provider;
-        _manager = manager;
-        _processor = processor;
-        _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<TaskWorker<TArgument, TMetadata>>()
-                  ?? NullLogger<TaskWorker<TArgument, TMetadata>>.Instance;
+        _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+        _manager = manager ?? throw new ArgumentNullException(nameof(manager));
+        _processor = processor ?? throw new ArgumentNullException(nameof(processor));
+        _logger = provider.GetService<ILogger<TaskWorker<TArgument, TMetadata>>>() ?? NullLogger<TaskWorker<TArgument, TMetadata>>.Instance;
     }
 
     void IDisposable.Dispose()

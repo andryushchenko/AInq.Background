@@ -32,8 +32,7 @@ public static class AccessQueueInjection
         int maxAttempts = int.MaxValue)
         where TResource : notnull
     {
-        if (resource == null)
-            throw new ArgumentNullException(nameof(resource));
+        _ = resource ?? throw new ArgumentNullException(nameof(resource));
         var manager = new AccessQueueManager<TResource>(maxAttempts);
         services.AddHostedService(provider
             => new TaskWorker<TResource, object?>(provider, manager, ProcessorFactory.CreateProcessor<TResource, object?>(resource)));
@@ -66,8 +65,7 @@ public static class AccessQueueInjection
         int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TResource : notnull
     {
-        if (resource == null)
-            throw new ArgumentNullException(nameof(resource));
+        _ = resource ?? throw new ArgumentNullException(nameof(resource));
         var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);
         services.AddHostedService(provider
             => new TaskWorker<TResource, int>(provider, manager, ProcessorFactory.CreateProcessor<TResource, int>(resource)));
@@ -182,8 +180,7 @@ public static class AccessQueueInjection
         Func<IServiceProvider, TResource> resourceFactory, ReuseStrategy strategy, int maxResourceInstances = 1, int maxAttempts = int.MaxValue)
         where TResource : notnull
     {
-        if (resourceFactory == null)
-            throw new ArgumentNullException(nameof(resourceFactory));
+        _ = resourceFactory ?? throw new ArgumentNullException(nameof(resourceFactory));
         if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
             throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
         var manager = new AccessQueueManager<TResource>(maxAttempts);
@@ -227,8 +224,7 @@ public static class AccessQueueInjection
         int maxAttempts = int.MaxValue)
         where TResource : notnull
     {
-        if (resourceFactory == null)
-            throw new ArgumentNullException(nameof(resourceFactory));
+        _ = resourceFactory ?? throw new ArgumentNullException(nameof(resourceFactory));
         if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
             throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
         var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);

@@ -47,9 +47,9 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
         if (horizon > MaxTimeout)
             horizon = MaxTimeout;
         _horizon = horizon ?? DefaultHorizon;
-        _scheduler = scheduler;
-        _provider = provider;
-        _logger = provider.GetService<ILoggerFactory>()?.CreateLogger<SchedulerWorker>() ?? NullLogger<SchedulerWorker>.Instance;
+        _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
+        _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+        _logger = provider.GetService<ILogger<SchedulerWorker>>() ?? NullLogger<SchedulerWorker>.Instance;
     }
 
     void IDisposable.Dispose()

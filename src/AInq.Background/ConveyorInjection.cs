@@ -33,8 +33,7 @@ public static class ConveyorInjection
         IConveyorMachine<TData, TResult> conveyorMachine, int maxAttempts = int.MaxValue)
         where TData : notnull
     {
-        if (conveyorMachine == null)
-            throw new ArgumentNullException(nameof(conveyorMachine));
+        _ = conveyorMachine ?? throw new ArgumentNullException(nameof(conveyorMachine));
         var manager = new ConveyorManager<TData, TResult>(maxAttempts);
         services.AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider,
             manager,
@@ -71,8 +70,7 @@ public static class ConveyorInjection
         IConveyorMachine<TData, TResult> conveyorMachine, int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TData : notnull
     {
-        if (conveyorMachine == null)
-            throw new ArgumentNullException(nameof(conveyorMachine));
+        _ = conveyorMachine ?? throw new ArgumentNullException(nameof(conveyorMachine));
         var manager = new PriorityConveyorManager<TData, TResult>(maxPriority, maxAttempts);
         services.AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider,
             manager,
@@ -197,8 +195,7 @@ public static class ConveyorInjection
         int maxAttempts = int.MaxValue)
         where TData : notnull
     {
-        if (conveyorMachineFactory == null)
-            throw new ArgumentNullException(nameof(conveyorMachineFactory));
+        _ = conveyorMachineFactory ?? throw new ArgumentNullException(nameof(conveyorMachineFactory));
         if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
             throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
         var manager = new ConveyorManager<TData, TResult>(maxAttempts);
@@ -248,8 +245,7 @@ public static class ConveyorInjection
         int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TData : notnull
     {
-        if (conveyorMachineFactory == null)
-            throw new ArgumentNullException(nameof(conveyorMachineFactory));
+        _ = conveyorMachineFactory ?? throw new ArgumentNullException(nameof(conveyorMachineFactory));
         if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
             throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
         var manager = new PriorityConveyorManager<TData, TResult>(maxPriority, maxAttempts);

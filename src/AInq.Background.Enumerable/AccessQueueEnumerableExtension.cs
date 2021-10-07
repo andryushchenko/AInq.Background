@@ -35,8 +35,9 @@ public static class AccessQueueEnumerableExtension
         where TResource : notnull
     {
         _ = accessQueue ?? throw new ArgumentNullException(nameof(accessQueue));
-        var results = (accesses ?? throw new ArgumentNullException(nameof(accesses))).Select(access
-            => accessQueue.EnqueueAccess(access, cancellation, attemptsCount));
+        var results = (accesses ?? throw new ArgumentNullException(nameof(accesses)))
+                      .Where(access => access != null)
+                      .Select(access => accessQueue.EnqueueAccess(access, cancellation, attemptsCount));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -65,8 +66,9 @@ public static class AccessQueueEnumerableExtension
         where TResource : notnull
     {
         _ = accessQueue ?? throw new ArgumentNullException(nameof(accessQueue));
-        var results = (accesses ?? throw new ArgumentNullException(nameof(accesses))).Select(access
-            => accessQueue.EnqueueAccess(access, priority, cancellation, attemptsCount));
+        var results = (accesses ?? throw new ArgumentNullException(nameof(accesses)))
+                      .Where(access => access != null)
+                      .Select(access => accessQueue.EnqueueAccess(access, priority, cancellation, attemptsCount));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -122,8 +124,9 @@ public static class AccessQueueEnumerableExtension
         where TResource : notnull
     {
         _ = accessQueue ?? throw new ArgumentNullException(nameof(accessQueue));
-        var results = (accesses ?? throw new ArgumentNullException(nameof(accesses))).Select(access
-            => accessQueue.EnqueueAsyncAccess(access, cancellation, attemptsCount));
+        var results = (accesses ?? throw new ArgumentNullException(nameof(accesses)))
+                      .Where(access => access != null)
+                      .Select(access => accessQueue.EnqueueAsyncAccess(access, cancellation, attemptsCount));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -152,8 +155,9 @@ public static class AccessQueueEnumerableExtension
         where TResource : notnull
     {
         _ = accessQueue ?? throw new ArgumentNullException(nameof(accessQueue));
-        var results = (accesses ?? throw new ArgumentNullException(nameof(accesses))).Select(access
-            => accessQueue.EnqueueAsyncAccess(access, priority, cancellation, attemptsCount));
+        var results = (accesses ?? throw new ArgumentNullException(nameof(accesses)))
+                      .Where(access => access != null)
+                      .Select(access => accessQueue.EnqueueAsyncAccess(access, priority, cancellation, attemptsCount));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -298,6 +302,7 @@ public static class AccessQueueEnumerableExtension
         where TResource : notnull
     {
         _ = accessQueue ?? throw new ArgumentNullException(nameof(accessQueue));
+        _ = accesses ?? throw new ArgumentNullException(nameof(accesses));
         var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
         var writer = channel.Writer;
@@ -306,8 +311,9 @@ public static class AccessQueueEnumerableExtension
                 try
                 {
                     await foreach (var access in accesses.WithCancellation(cancellation).ConfigureAwait(false))
-                        await writer.WriteAsync(accessQueue.EnqueueAsyncAccess(access, cancellation, attemptsCount), cancellation)
-                                    .ConfigureAwait(false);
+                        if (access != null)
+                            await writer.WriteAsync(accessQueue.EnqueueAsyncAccess(access, cancellation, attemptsCount), cancellation)
+                                        .ConfigureAwait(false);
                 }
                 catch (OperationCanceledException ex)
                 {
@@ -340,6 +346,7 @@ public static class AccessQueueEnumerableExtension
         where TResource : notnull
     {
         _ = accessQueue ?? throw new ArgumentNullException(nameof(accessQueue));
+        _ = accesses ?? throw new ArgumentNullException(nameof(accesses));
         var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
         var writer = channel.Writer;
@@ -348,8 +355,9 @@ public static class AccessQueueEnumerableExtension
                 try
                 {
                     await foreach (var access in accesses.WithCancellation(cancellation).ConfigureAwait(false))
-                        await writer.WriteAsync(accessQueue.EnqueueAsyncAccess(access, priority, cancellation, attemptsCount), cancellation)
-                                    .ConfigureAwait(false);
+                        if (access != null)
+                            await writer.WriteAsync(accessQueue.EnqueueAsyncAccess(access, priority, cancellation, attemptsCount), cancellation)
+                                        .ConfigureAwait(false);
                 }
                 catch (OperationCanceledException ex)
                 {
