@@ -16,6 +16,7 @@
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>Background;Queue;Conveyor;AInq;Enumerable;LINQ</PackageTags>
 		<Description>Background work utilities for .NET Core apps based on Hosted services. Batch processing extension for background work queue, access queue and data coveyor. </Description>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -40,6 +41,10 @@
 		<Using Include="AInq.Background.Tasks" />
 		<Using Include="System.Runtime.CompilerServices" />
 		<Using Include="System.Threading.Channels" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>

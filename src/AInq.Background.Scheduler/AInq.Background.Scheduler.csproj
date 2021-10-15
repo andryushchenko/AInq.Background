@@ -16,6 +16,7 @@
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>Background;Scheduler;Cron;AInq</PackageTags>
 		<Description>Background work utilities for .NET Core apps based on Hosted services. Background work scheduler with cron.</Description>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -39,6 +40,10 @@
 		<Using Include="AInq.Optional" />
 		<Using Include="Microsoft.Extensions.Logging" />
 		<Using Include="System.Reactive.Subjects" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>

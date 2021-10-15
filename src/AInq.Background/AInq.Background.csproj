@@ -15,6 +15,7 @@
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>Background;Queue;Conveyor;AInq</PackageTags>
 		<Description>Background work utilities for .NET Core apps based on Hosted services. Background work queue, shared resource access queue, background data processing conveyor.</Description>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -38,6 +39,10 @@
 		<Using Include="Microsoft.Extensions.Logging" />
 		<Using Include="Nito.AsyncEx" />
 		<Using Include="System.Collections.Concurrent" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>
