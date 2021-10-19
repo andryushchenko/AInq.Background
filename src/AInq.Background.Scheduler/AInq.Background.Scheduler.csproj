@@ -1,22 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-		<Product>AInq.Background</Product>
-		<Authors>Anton Andryushchenko</Authors>
-		<RepositoryUrl>https://github.com/andryushchenko/AInq.Background</RepositoryUrl>
-		<Copyright>Anton Andryushchenko</Copyright>
-		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-		<Version>5.0.0-rc.2</Version>
-		<LangVersion>latest</LangVersion>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<RootNamespace>AInq.Background</RootNamespace>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>Background;Scheduler;Cron;AInq</PackageTags>
 		<Description>Background work utilities for .NET Core apps based on Hosted services. Background work scheduler with cron.</Description>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -40,10 +26,6 @@
 		<Using Include="AInq.Optional" />
 		<Using Include="Microsoft.Extensions.Logging" />
 		<Using Include="System.Reactive.Subjects" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>

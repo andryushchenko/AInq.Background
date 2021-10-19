@@ -75,12 +75,12 @@ public static class ProcessorFactory
             throw new ArgumentNullException(nameof(provider));
         return (strategy, maxArgumentsCount) switch
         {
-            (ReuseStrategy.Static, <=1) => new SingleStaticProcessor<TArgument, TMetadata>(argumentFactory.Invoke(provider!)),
+            (ReuseStrategy.Static, <= 1) => new SingleStaticProcessor<TArgument, TMetadata>(argumentFactory.Invoke(provider!)),
             (ReuseStrategy.Static, _) => new MultipleStaticProcessor<TArgument, TMetadata>(Enumerable.Repeat(0, maxArgumentsCount)
                 .Select(_ => argumentFactory.Invoke(provider!))),
-            (ReuseStrategy.Reuse, <=1) => new SingleReusableProcessor<TArgument, TMetadata>(argumentFactory),
+            (ReuseStrategy.Reuse, <= 1) => new SingleReusableProcessor<TArgument, TMetadata>(argumentFactory),
             (ReuseStrategy.Reuse, _) => new MultipleReusableProcessor<TArgument, TMetadata>(argumentFactory, maxArgumentsCount),
-            (ReuseStrategy.OneTime, <=1) => new SingleOneTimeProcessor<TArgument, TMetadata>(argumentFactory),
+            (ReuseStrategy.OneTime, <= 1) => new SingleOneTimeProcessor<TArgument, TMetadata>(argumentFactory),
             (ReuseStrategy.OneTime, _) => new MultipleOneTimeProcessor<TArgument, TMetadata>(argumentFactory, maxArgumentsCount),
             _ => throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy))
         };
