@@ -4,15 +4,6 @@
 		<OutputType>Exe</OutputType>
 		<IsPackable>false</IsPackable>
 		<TargetFramework>net6.0</TargetFramework>
-		<Authors>Anton Andryushchenko</Authors>
-		<Product>AInq.Background</Product>
-		<Copyright>Anton Andryushchenko</Copyright>
-		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/andryushchenko/AInq.Background</RepositoryUrl>
-		<LangVersion>latest</LangVersion>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
 	<ItemGroup>

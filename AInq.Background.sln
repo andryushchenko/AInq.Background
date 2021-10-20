@@ -8,9 +8,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Background.Abstraction", "src\AInq.Background.Abstraction\AInq.Background.Abstraction.csproj", "{6AEA85F7-4BD2-4757-8DED-CD8BB3A96AE4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{3D6A0C84-C82A-4BDC-8120-6044DB3A6381}"
-	ProjectSection(SolutionItems) = preProject
-		src\Directory.Build.props = src\Directory.Build.props
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{082BA690-9687-41B1-A520-0E81F9DBC7BD}"
 EndProject
@@ -24,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{C00E9781-8
 		AInq.Background.sln.DotSettings = AInq.Background.sln.DotSettings
 		LICENSE = LICENSE
 		README.md = README.md
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Background.Enumerable", "src\AInq.Background.Enumerable\AInq.Background.Enumerable.csproj", "{9815A9CC-F4EC-4C8E-BE60-468BF5BD020E}"
