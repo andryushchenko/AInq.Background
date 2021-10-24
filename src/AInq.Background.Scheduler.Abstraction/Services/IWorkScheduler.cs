@@ -149,8 +149,7 @@ public interface IWorkScheduler
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     IObservable<Maybe<Exception>> AddRepeatedAsyncWork(IAsyncWork work, DateTime startTime, TimeSpan repeatDelay,
-        CancellationToken cancellation = default,
-        int execCount = -1);
+        CancellationToken cancellation = default, int execCount = -1);
 
     /// <summary> Add repeated asynchronous work to scheduler </summary>
     /// <param name="work"> Work instance </param>
