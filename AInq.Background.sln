@@ -7,28 +7,28 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Background", "src\AInq
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Background.Abstraction", "src\AInq.Background.Abstraction\AInq.Background.Abstraction.csproj", "{6AEA85F7-4BD2-4757-8DED-CD8BB3A96AE4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{3D6A0C84-C82A-4BDC-8120-6044DB3A6381}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{3D6A0C84-C82A-4BDC-8120-6044DB3A6381}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{082BA690-9687-41B1-A520-0E81F9DBC7BD}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{082BA690-9687-41B1-A520-0E81F9DBC7BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Background.Test", "test\AInq.Background.Test\AInq.Background.Test.csproj", "{E1BD124B-09A7-4393-933F-501457180009}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Background.Scheduler", "src\AInq.Background.Scheduler\AInq.Background.Scheduler.csproj", "{38C89E67-C73B-4F9D-87FC-3E0047DA4865}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{C00E9781-8563-491A-8195-203F860CC8E7}"
-	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
-		AInq.Background.sln.DotSettings = AInq.Background.sln.DotSettings
-		LICENSE = LICENSE
-		README.md = README.md
-		Directory.Build.props = Directory.Build.props
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Background.Enumerable", "src\AInq.Background.Enumerable\AInq.Background.Enumerable.csproj", "{9815A9CC-F4EC-4C8E-BE60-468BF5BD020E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Background.Scheduler.Abstraction", "src\AInq.Background.Scheduler.Abstraction\AInq.Background.Scheduler.Abstraction.csproj", "{9756727B-8EC4-43C1-A70B-506E6D6B04FB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AInq.Background.Startup", "src\AInq.Background.Startup\AInq.Background.Startup.csproj", "{2E8DD8F4-4329-41D2-BD17-9A2931F887E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{332DB9DE-7EE6-4F14-BC8A-58BA69423158}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		AInq.Background.sln.DotSettings = AInq.Background.sln.DotSettings
+		Directory.Build.props = Directory.Build.props
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
