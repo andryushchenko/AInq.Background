@@ -51,15 +51,14 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
                             _semaphore.Release();
                             return;
                         }
-                        var startStoppable = argument as IStartStoppable;
                         try
                         {
-                            if (startStoppable is {IsActive: false})
+                            if (argument is IStartStoppable {IsActive: false} startStoppable)
                                 await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
                         }
                         catch (Exception ex)
                         {
-                            logger.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
+                            logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
                             manager.RevertTask(task, metadata);
                             _semaphore.Release();
                             return;
@@ -68,16 +67,17 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
                             manager.RevertTask(task, metadata);
                         try
                         {
-                            if (startStoppable is {IsActive: true})
+                            if (argument is IStartStoppable {IsActive: true} startStoppable)
                                 await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
                         }
                         catch (Exception ex)
                         {
-                            logger.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
+                            logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
                         }
                         finally
                         {
                             _semaphore.Release();
+                            (argument as IDisposable)?.Dispose();
                         }
                     },
                     cancellation)

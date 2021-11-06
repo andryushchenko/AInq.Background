@@ -16,27 +16,29 @@ using AInq.Background.Managers;
 
 namespace AInq.Background.Processors;
 
-internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>
+internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>, IDisposable
 {
     private readonly TArgument _argument;
 
     internal SingleStaticProcessor(TArgument argument)
         => _argument = argument;
 
+    void IDisposable.Dispose()
+        => (_argument as IDisposable)?.Dispose();
+
     async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,
         ILogger logger, CancellationToken cancellation)
     {
         if (!manager.HasTask)
             return;
-        var startStoppable = _argument as IStartStoppable;
         try
         {
-            if (startStoppable is {IsActive: false})
+            if (_argument is IStartStoppable {IsActive: false} startStoppable)
                 await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
+            logger.LogError(ex, "Error starting stoppable argument {Argument}", _argument);
             return;
         }
         while (manager.HasTask && !cancellation.IsCancellationRequested)
@@ -49,7 +51,7 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
                 manager.RevertTask(task, metadata);
             try
             {
-                if (manager.HasTask && _argument is IThrottling {Timeout: {Ticks: > 0}} throttling)
+                if (manager.HasTask && _argument is IThrottling {Timeout.Ticks: > 0} throttling)
                     await Task.Delay(throttling.Timeout, cancellation).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
@@ -59,12 +61,12 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
         }
         try
         {
-            if (startStoppable is {IsActive: true})
+            if (_argument is IStartStoppable {IsActive: true} startStoppable)
                 await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
+            logger.LogError(ex, "Error stopping stoppable argument {Argument}", _argument);
         }
     }
 }

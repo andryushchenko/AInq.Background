@@ -67,15 +67,14 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
             }
             currentTasks.AddLast(Task.Run(async () =>
                 {
-                    var startStoppable = argument as IStartStoppable;
                     try
                     {
-                        if (startStoppable is {IsActive: false})
+                        if (argument is IStartStoppable {IsActive: false} startStoppable)
                             await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
-                        logger.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
+                        logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
                         manager.RevertTask(task, metadata);
                         Interlocked.Decrement(ref _currentArgumentCount);
                         _reset.Set();
@@ -85,7 +84,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                         manager.RevertTask(task, metadata);
                     try
                     {
-                        if (manager.HasTask && argument is IThrottling {Timeout: {Ticks: > 0}} throttling)
+                        if (manager.HasTask && argument is IThrottling {Timeout.Ticks: > 0} throttling)
                             await Task.Delay(throttling.Timeout, cancellation).ConfigureAwait(false);
                     }
                     finally
@@ -100,26 +99,29 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
         Task.WhenAll(currentTasks)
             .ContinueWith(task =>
                 {
-                    while (!_reusable.IsEmpty && _reusable.TryTake(out var result))
-                    {
-                        var argument = result;
-                        Interlocked.Decrement(ref _currentArgumentCount);
-                        _reset.Set();
-                        _ = Task.Run(async () =>
-                            {
-                                var startStoppable = argument as IStartStoppable;
-                                try
+                    while (!_reusable.IsEmpty)
+                        if (_reusable.TryTake(out var argument))
+                        {
+                            Interlocked.Decrement(ref _currentArgumentCount);
+                            _reset.Set();
+                            _ = Task.Run(async () =>
                                 {
-                                    if (startStoppable is {IsActive: true})
-                                        await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
-                                }
-                                catch (Exception ex)
-                                {
-                                    logger.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
-                                }
-                            },
-                            cancellation);
-                    }
+                                    try
+                                    {
+                                        if (argument is IStartStoppable {IsActive: true} startStoppable)
+                                            await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
+                                    }
+                                    finally
+                                    {
+                                        (argument as IDisposable)?.Dispose();
+                                    }
+                                },
+                                cancellation);
+                        }
                 },
                 cancellation)
             .Ignore();

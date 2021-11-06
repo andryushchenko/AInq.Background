@@ -45,8 +45,7 @@ public sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposab
     void IDisposable.Dispose()
     {
         _shutdown.Dispose();
-        if (_worker != null && (_worker.IsCompleted || _worker.IsFaulted || _worker.IsCanceled))
-            _worker.Dispose();
+        (_processor as IDisposable)?.Dispose();
     }
 
     Task IHostedService.StartAsync(CancellationToken cancel)

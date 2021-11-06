@@ -43,15 +43,14 @@ internal sealed class SingleOneTimeProcessor<TArgument, TMetadata> : ITaskProces
                 manager.RevertTask(task, metadata);
                 continue;
             }
-            var startStoppable = argument as IStartStoppable;
             try
             {
-                if (startStoppable is {IsActive: false})
+                if (argument is IStartStoppable {IsActive: false} startStoppable)
                     await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error starting stoppable argument {Argument}", startStoppable);
+                logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
                 manager.RevertTask(task, metadata);
                 continue;
             }
@@ -61,12 +60,16 @@ internal sealed class SingleOneTimeProcessor<TArgument, TMetadata> : ITaskProces
                     {
                         try
                         {
-                            if (startStoppable is {IsActive: true})
+                            if (argument is IStartStoppable {IsActive: true} startStoppable)
                                 await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
                         }
                         catch (Exception ex)
                         {
-                            logger.LogError(ex, "Error stopping stoppable argument {Argument}", startStoppable);
+                            logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
+                        }
+                        finally
+                        {
+                            (argument as IDisposable)?.Dispose();
                         }
                     },
                     cancellation)
