@@ -8,7 +8,7 @@
         <Copyright>Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-        <Version>5.0.0-rc.2</Version>
+        <Version>5.0.0</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -16,6 +16,14 @@
         <RootNamespace>AInq.Background</RootNamespace>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+	    <PackageReleaseNotes>[ADD] net6.0 support
+[ADD] netcoreapp3.1 support
+[FIX] Cancellation handling in Enumerable extension
+[FIX] Conveyor chain max attempts calculation
+[FIX] Missed null argument check
+[IMP] Disposable handling in Task Processor
+[IMP] Minor internal improvement
+[UPD] Package references</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
