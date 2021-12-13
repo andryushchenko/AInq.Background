@@ -34,8 +34,7 @@ internal sealed class MultipleNullProcessor<TMetadata> : ITaskProcessor<object?,
             await _semaphore.WaitAsync(cancellation).ConfigureAwait(false);
             Task.Run(async () =>
                     {
-                        using var taskScope = provider.CreateScope();
-                        if (!await task.ExecuteAsync(null, taskScope.ServiceProvider, logger, cancellation).ConfigureAwait(false))
+                        if (!await task.ExecuteAsync(null, provider, logger, cancellation).ConfigureAwait(false))
                             manager.RevertTask(task, metadata);
                         _semaphore.Release();
                     },

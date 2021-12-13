@@ -116,8 +116,7 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
         }
         if (work.IsCanceled)
             return;
-        using var scope = _provider.CreateScope();
-        if (await work.ExecuteAsync(scope.ServiceProvider, _logger, cancellation).ConfigureAwait(false))
+        if (await work.ExecuteAsync(_provider, _logger, cancellation).ConfigureAwait(false))
             _scheduler.RevertTask(work);
     }
 }

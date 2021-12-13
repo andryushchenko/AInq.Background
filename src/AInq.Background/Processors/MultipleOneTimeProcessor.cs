@@ -38,11 +38,10 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
             await _semaphore.WaitAsync(cancellation).ConfigureAwait(false);
             Task.Run(async () =>
                     {
-                        using var taskScope = provider.CreateScope();
                         TArgument argument;
                         try
                         {
-                            argument = _argumentFabric.Invoke(taskScope.ServiceProvider);
+                            argument = _argumentFabric.Invoke(provider);
                         }
                         catch (Exception ex)
                         {
@@ -63,7 +62,7 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
                             _semaphore.Release();
                             return;
                         }
-                        if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation).ConfigureAwait(false))
+                        if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))
                             manager.RevertTask(task, metadata);
                         try
                         {

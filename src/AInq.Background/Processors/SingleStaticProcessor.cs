@@ -46,8 +46,7 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
             var (task, metadata) = manager.GetTask();
             if (task == null)
                 continue;
-            using var taskScope = provider.CreateScope();
-            if (!await task.ExecuteAsync(_argument, taskScope.ServiceProvider, logger, cancellation).ConfigureAwait(false))
+            if (!await task.ExecuteAsync(_argument, provider, logger, cancellation).ConfigureAwait(false))
                 manager.RevertTask(task, metadata);
             try
             {

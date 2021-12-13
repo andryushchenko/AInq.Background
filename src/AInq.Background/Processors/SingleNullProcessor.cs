@@ -26,8 +26,7 @@ internal sealed class SingleNullProcessor<TMetadata> : ITaskProcessor<object?, T
             var (task, metadata) = manager.GetTask();
             if (task == null)
                 continue;
-            using var taskScope = provider.CreateScope();
-            if (!await task.ExecuteAsync(null, taskScope.ServiceProvider, logger, cancellation).ConfigureAwait(false))
+            if (!await task.ExecuteAsync(null, provider, logger, cancellation).ConfigureAwait(false))
                 manager.RevertTask(task, metadata);
         }
     }

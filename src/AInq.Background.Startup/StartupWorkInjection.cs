@@ -18,7 +18,6 @@ using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
-using Nito.AsyncEx;
 using static AInq.Background.Tasks.WorkFactory;
 using static AInq.Background.Wrappers.StartupWorkWrapperFactory;
 
@@ -34,10 +33,7 @@ public static class StartupWorkInjection
     {
         var logger = host.Services.GetService<ILoggerFactory>()?.CreateLogger("Startup work") ?? NullLogger.Instance;
         foreach (var work in host.Services.GetServices<IStartupWorkWrapper>())
-        {
-            using var scope = host.Services.CreateScope();
-            await work.DoWorkAsync(scope.ServiceProvider, logger, cancellation).ConfigureAwait(false);
-        }
+            await work.DoWorkAsync(host.Services, logger, cancellation).ConfigureAwait(false);
     }
 
 #region Work
@@ -117,7 +113,7 @@ public static class StartupWorkInjection
     {
         _ = work ?? throw new ArgumentNullException(nameof(work));
         return services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
-            => provider.EnqueueWork(work, CancellationToken.None, attemptsCount, priority).Ignore())));
+            => _ = provider.EnqueueWork(work, CancellationToken.None, attemptsCount, priority))));
     }
 
     /// <summary> Register queued startup work with given <paramref name="priority" /> (if supported) </summary>
@@ -132,7 +128,7 @@ public static class StartupWorkInjection
     {
         _ = work ?? throw new ArgumentNullException(nameof(work));
         return services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
-            => provider.EnqueueWork(work, CancellationToken.None, attemptsCount, priority).Ignore())));
+            => _ = provider.EnqueueWork(work, CancellationToken.None, attemptsCount, priority))));
     }
 
     /// <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
@@ -146,7 +142,7 @@ public static class StartupWorkInjection
     {
         _ = work ?? throw new ArgumentNullException(nameof(work));
         return services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
-            => provider.EnqueueAsyncWork(work, CancellationToken.None, attemptsCount, priority).Ignore())));
+            => _ = provider.EnqueueAsyncWork(work, CancellationToken.None, attemptsCount, priority))));
     }
 
     /// <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
@@ -161,7 +157,7 @@ public static class StartupWorkInjection
     {
         _ = work ?? throw new ArgumentNullException(nameof(work));
         return services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
-            => provider.EnqueueAsyncWork(work, CancellationToken.None, attemptsCount, priority).Ignore())));
+            => _ = provider.EnqueueAsyncWork(work, CancellationToken.None, attemptsCount, priority))));
     }
 
 #endregion
@@ -177,7 +173,7 @@ public static class StartupWorkInjection
     public static IServiceCollection AddStartupQueuedWork<TWork>(this IServiceCollection services, int attemptsCount = 1, int priority = 0)
         where TWork : IWork
         => services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
-            => provider.EnqueueWork<TWork>(CancellationToken.None, attemptsCount, priority).Ignore())));
+            => _ = provider.EnqueueWork<TWork>(CancellationToken.None, attemptsCount, priority))));
 
     /// <summary> Register queued startup work with given <paramref name="priority" /> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
@@ -189,7 +185,7 @@ public static class StartupWorkInjection
     public static IServiceCollection AddStartupQueuedWork<TWork, TResult>(this IServiceCollection services, int attemptsCount = 1, int priority = 0)
         where TWork : IWork<TResult>
         => services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
-            => provider.EnqueueWork<TWork, TResult>(CancellationToken.None, attemptsCount, priority).Ignore())));
+            => _ = provider.EnqueueWork<TWork, TResult>(CancellationToken.None, attemptsCount, priority))));
 
     /// <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
@@ -200,7 +196,7 @@ public static class StartupWorkInjection
     public static IServiceCollection AddStartupAsyncQueuedWork<TAsyncWork>(this IServiceCollection services, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork
         => services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
-            => provider.EnqueueAsyncWork<TAsyncWork>(CancellationToken.None, attemptsCount, priority).Ignore())));
+            => _ = provider.EnqueueAsyncWork<TAsyncWork>(CancellationToken.None, attemptsCount, priority))));
 
     /// <summary> Register asynchronous queued startup work with given <paramref name="priority" /> (if supported) </summary>
     /// <remarks> <see cref="IPriorityWorkQueue" /> or <see cref="IWorkQueue" /> service should be registered on host to run queued work </remarks>
@@ -213,7 +209,7 @@ public static class StartupWorkInjection
         int priority = 0)
         where TAsyncWork : IAsyncWork<TResult>
         => services.AddSingleton(CreateStartupWorkWrapper(CreateWork(provider
-            => provider.EnqueueAsyncWork<TAsyncWork, TResult>(CancellationToken.None, attemptsCount, priority).Ignore())));
+            => _ = provider.EnqueueAsyncWork<TAsyncWork, TResult>(CancellationToken.None, attemptsCount, priority))));
 
 #endregion
 }

@@ -31,11 +31,10 @@ internal sealed class SingleOneTimeProcessor<TArgument, TMetadata> : ITaskProces
             var (task, metadata) = manager.GetTask();
             if (task == null)
                 continue;
-            using var taskScope = provider.CreateScope();
             TArgument argument;
             try
             {
-                argument = _argumentFabric.Invoke(taskScope.ServiceProvider);
+                argument = _argumentFabric.Invoke(provider);
             }
             catch (Exception ex)
             {
@@ -54,7 +53,7 @@ internal sealed class SingleOneTimeProcessor<TArgument, TMetadata> : ITaskProces
                 manager.RevertTask(task, metadata);
                 continue;
             }
-            if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation).ConfigureAwait(false))
+            if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))
                 manager.RevertTask(task, metadata);
             Task.Run(async () =>
                     {

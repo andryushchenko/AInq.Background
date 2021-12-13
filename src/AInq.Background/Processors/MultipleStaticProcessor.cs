@@ -72,8 +72,7 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
                         _reset.Set();
                         return;
                     }
-                    using var taskScope = provider.CreateScope();
-                    if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation).ConfigureAwait(false))
+                    if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))
                         manager.RevertTask(task, metadata);
                     try
                     {

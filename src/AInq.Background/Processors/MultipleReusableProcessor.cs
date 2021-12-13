@@ -36,14 +36,13 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
         var currentTasks = new LinkedList<Task>();
         while (manager.HasTask && !cancellation.IsCancellationRequested)
         {
-            var taskScope = provider.CreateScope();
             if (!_reusable.TryTake(out var argument))
             {
                 if (_currentArgumentCount < _maxArgumentCount)
                 {
                     try
                     {
-                        argument = _argumentFabric.Invoke(taskScope.ServiceProvider);
+                        argument = _argumentFabric.Invoke(provider);
                     }
                     catch (Exception ex)
                     {
@@ -80,7 +79,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                         _reset.Set();
                         return;
                     }
-                    if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation).ConfigureAwait(false))
+                    if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))
                         manager.RevertTask(task, metadata);
                     try
                     {
@@ -91,7 +90,6 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                     {
                         _reusable.Add(argument);
                         _reset.Set();
-                        taskScope.Dispose();
                     }
                 },
                 cancellation));

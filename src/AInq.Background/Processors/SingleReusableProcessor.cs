@@ -53,8 +53,7 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
             var (task, metadata) = manager.GetTask();
             if (task == null)
                 continue;
-            using var taskScope = provider.CreateScope();
-            if (!await task.ExecuteAsync(argument, taskScope.ServiceProvider, logger, cancellation).ConfigureAwait(false))
+            if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))
                 manager.RevertTask(task, metadata);
             try
             {
