@@ -10,7 +10,7 @@
         <Copyright>Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-        <Version>5.2.0</Version>
+        <Version>5.2.1</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -19,9 +19,7 @@
         <DebugType>portable</DebugType>
         <RootNamespace>AInq.Background</RootNamespace>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageReleaseNotes>[DEL] Remove scopes in Task Processors and Sheduler Worker
-[IMP] Remove unused references
-[UPD] Package references</PackageReleaseNotes>
+        <PackageReleaseNotes>[UPD] Package references</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
