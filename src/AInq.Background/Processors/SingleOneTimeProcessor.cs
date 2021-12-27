@@ -26,11 +26,13 @@ internal sealed class SingleOneTimeProcessor<TArgument, TMetadata> : ITaskProces
     async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,
         ILogger logger, CancellationToken cancellation)
     {
+        _ = manager ?? throw new ArgumentNullException(nameof(manager));
+        _ = provider ?? throw new ArgumentNullException(nameof(provider));
+        _ = logger ?? throw new ArgumentNullException(nameof(logger));
         while (manager.HasTask && !cancellation.IsCancellationRequested)
         {
             var (task, metadata) = manager.GetTask();
-            if (task == null)
-                continue;
+            if (task == null) continue;
             TArgument argument;
             try
             {

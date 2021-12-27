@@ -26,11 +26,13 @@ internal sealed class MultipleNullProcessor<TMetadata> : ITaskProcessor<object?,
     async Task ITaskProcessor<object?, TMetadata>.ProcessPendingTasksAsync(ITaskManager<object?, TMetadata> manager, IServiceProvider provider,
         ILogger logger, CancellationToken cancellation)
     {
+        _ = manager ?? throw new ArgumentNullException(nameof(manager));
+        _ = provider ?? throw new ArgumentNullException(nameof(provider));
+        _ = logger ?? throw new ArgumentNullException(nameof(logger));
         while (manager.HasTask && !cancellation.IsCancellationRequested)
         {
             var (task, metadata) = manager.GetTask();
-            if (task == null)
-                continue;
+            if (task == null) continue;
             await _semaphore.WaitAsync(cancellation).ConfigureAwait(false);
             Task.Run(async () =>
                     {

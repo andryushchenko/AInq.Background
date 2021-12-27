@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AInq.Optional" Version="3.0.1" />
+        <PackageReference Include="AInq.Optional" Version="3.0.3" />
     </ItemGroup>
 
     <ItemGroup>

@@ -32,10 +32,8 @@ public class TaskManager<TArgument> : ITaskManager<TArgument, object?>
     {
         while (true)
         {
-            if (!_queue.TryDequeue(out var task))
-                return (null, null);
-            if (!task.IsCanceled)
-                return (task, null);
+            if (!_queue.TryDequeue(out var task)) return (null, null);
+            if (!task.IsCanceled) return (task, null);
         }
     }
 
@@ -47,8 +45,7 @@ public class TaskManager<TArgument> : ITaskManager<TArgument, object?>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="task" /> is NULL </exception>
     protected void AddTask(ITaskWrapper<TArgument> task)
     {
-        if (task.IsCanceled || task.IsCompleted || task.IsFaulted)
-            return;
+        if (task.IsCanceled || task.IsCompleted || task.IsFaulted) return;
         _queue.Enqueue(task ?? throw new ArgumentNullException(nameof(task)));
         _newDataEvent.Set();
     }

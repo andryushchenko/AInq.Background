@@ -25,6 +25,7 @@ public static class CronHelper
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     public static CronExpression ParseCron(this string cronExpression)
     {
+        _ = cronExpression ?? throw new ArgumentNullException(nameof(cronExpression));
         try
         {
             return cronExpression.Trim().Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries).Length switch

@@ -45,10 +45,8 @@ public class PriorityTaskManager<TArgument> : ITaskManager<TArgument, int>
         while (true)
         {
             var pendingQueue = _queues.LastOrDefault(queue => !queue.IsEmpty);
-            if (pendingQueue == null || !pendingQueue.TryDequeue(out var task))
-                return (null, -1);
-            if (!task.IsCanceled)
-                return (task, _queues.IndexOf(pendingQueue));
+            if (pendingQueue == null || !pendingQueue.TryDequeue(out var task)) return (null, -1);
+            if (!task.IsCanceled) return (task, _queues.IndexOf(pendingQueue));
         }
     }
 
@@ -61,8 +59,7 @@ public class PriorityTaskManager<TArgument> : ITaskManager<TArgument, int>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="task" /> is NULL </exception>
     protected void AddTask(ITaskWrapper<TArgument> task, int priority)
     {
-        if (task.IsCanceled || task.IsCompleted || task.IsFaulted)
-            return;
+        if (task.IsCanceled || task.IsCompleted || task.IsFaulted) return;
         _queues[FixPriority(priority)].Enqueue(task ?? throw new ArgumentNullException(nameof(task)));
         _newDataEvent.Set();
     }

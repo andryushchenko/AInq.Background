@@ -27,6 +27,7 @@ public static class WorkSchedulerInjection
     /// <param name="horizon"> Time horizon to look for upcoming tasks </param>
     public static IWorkScheduler CreateWorkScheduler(this IServiceCollection services, TimeSpan? horizon = null)
     {
+        _ = services ?? throw new ArgumentNullException(nameof(services));
         var scheduler = new WorkSchedulerManager();
         services.AddHostedService(provider => new SchedulerWorker(scheduler, provider, horizon));
         return scheduler;
@@ -38,6 +39,7 @@ public static class WorkSchedulerInjection
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     public static IServiceCollection AddWorkScheduler(this IServiceCollection services, TimeSpan? horizon = null)
     {
+        _ = services ?? throw new ArgumentNullException(nameof(services));
         if (services.Any(service => service.ImplementationType == typeof(IWorkScheduler)))
             throw new InvalidOperationException("Service already exists");
         return services.AddSingleton(services.CreateWorkScheduler(horizon));

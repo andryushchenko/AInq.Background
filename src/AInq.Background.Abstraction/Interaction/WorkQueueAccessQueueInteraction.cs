@@ -32,7 +32,6 @@ public static class WorkQueueAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="queue" /> is NULL </exception>
     public static Task EnqueueAccess<TResource>(this IWorkQueue queue, IAccess<TResource> access, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -53,7 +52,6 @@ public static class WorkQueueAccessQueueInteraction
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="queue" /> is NULL </exception>
     public static Task<TResult> EnqueueAccess<TResource, TResult>(this IWorkQueue queue, IAccess<TResource, TResult> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -73,7 +71,6 @@ public static class WorkQueueAccessQueueInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="queue" /> is NULL </exception>
     public static Task EnqueueAsyncAccess<TResource>(this IWorkQueue queue, IAsyncAccess<TResource> access, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -94,7 +91,6 @@ public static class WorkQueueAccessQueueInteraction
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="queue" /> is NULL </exception>
     public static Task<TResult> EnqueueAsyncAccess<TResource, TResult>(this IWorkQueue queue, IAsyncAccess<TResource, TResult> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -118,7 +114,6 @@ public static class WorkQueueAccessQueueInteraction
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if or <paramref name="queue" /> is NULL </exception>
     public static Task EnqueueAccess<TResource, TAccess>(this IWorkQueue queue, CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0)
         where TResource : notnull
@@ -139,7 +134,6 @@ public static class WorkQueueAccessQueueInteraction
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if or <paramref name="queue" /> is NULL </exception>
     public static Task<TResult> EnqueueAccess<TResource, TAccess, TResult>(this IWorkQueue queue, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -159,7 +153,6 @@ public static class WorkQueueAccessQueueInteraction
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="queue" /> is NULL </exception>
     public static Task EnqueueAsyncAccess<TResource, TAsyncAccess>(this IWorkQueue queue, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -180,7 +173,6 @@ public static class WorkQueueAccessQueueInteraction
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="queue" /> is NULL </exception>
     public static Task<TResult> EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(this IWorkQueue queue, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull

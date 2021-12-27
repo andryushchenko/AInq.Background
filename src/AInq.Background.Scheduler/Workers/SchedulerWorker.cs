@@ -102,8 +102,7 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
 
     private async Task ProcessWork(IScheduledTaskWrapper work, TimeSpan delay, CancellationToken cancellation)
     {
-        if (work.IsCanceled)
-            return;
+        if (work.IsCanceled) return;
         try
         {
             if (delay > TimeSpan.Zero)
@@ -114,8 +113,7 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
             _scheduler.RevertTask(work);
             return;
         }
-        if (work.IsCanceled)
-            return;
+        if (work.IsCanceled) return;
         if (await work.ExecuteAsync(_provider, _logger, cancellation).ConfigureAwait(false))
             _scheduler.RevertTask(work);
     }

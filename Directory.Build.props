@@ -10,16 +10,18 @@
         <Copyright>Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-        <Version>5.2.1</Version>
+        <Version>5.2.2</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <DebugType>portable</DebugType>
         <RootNamespace>AInq.Background</RootNamespace>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageReleaseNotes>[UPD] Package references</PackageReleaseNotes>
+        <PackageReleaseNotes>[FIX] Missed argument NULL check
+[FIX] Documentation
+[UPD] DebugType Embedded
+[UPD] Package references</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>

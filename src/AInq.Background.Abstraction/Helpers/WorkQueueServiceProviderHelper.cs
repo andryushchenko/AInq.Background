@@ -32,14 +32,13 @@ public static class WorkQueueServiceProviderHelper
     /// <param name="priority"> Work priority </param>
     /// <returns> Work completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="IPriorityWorkQueue.EnqueueWork(IWork, int, CancellationToken, int)" />
     public static Task EnqueueWork(this IServiceProvider provider, IWork work, CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .Service<IPriorityWorkQueue>()
-           ?.EnqueueWork(work, priority, cancellation, attemptsCount)
-           ?? provider.RequiredService<IWorkQueue>().EnqueueWork(work, cancellation, attemptsCount);
+           ?.EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), priority, cancellation, attemptsCount)
+           ?? provider.RequiredService<IWorkQueue>().EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), cancellation, attemptsCount);
 
     /// <summary> Enqueue background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -50,14 +49,13 @@ public static class WorkQueueServiceProviderHelper
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="IPriorityWorkQueue.EnqueueWork{TResult}(IWork{TResult}, int, CancellationToken, int)" />
     public static Task<TResult> EnqueueWork<TResult>(this IServiceProvider provider, IWork<TResult> work, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .Service<IPriorityWorkQueue>()
-           ?.EnqueueWork(work, priority, cancellation, attemptsCount)
-           ?? provider.RequiredService<IWorkQueue>().EnqueueWork(work, cancellation, attemptsCount);
+           ?.EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), priority, cancellation, attemptsCount)
+           ?? provider.RequiredService<IWorkQueue>().EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), cancellation, attemptsCount);
 
     /// <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -67,14 +65,14 @@ public static class WorkQueueServiceProviderHelper
     /// <param name="priority"> Work priority </param>
     /// <returns> Work completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="IPriorityWorkQueue.EnqueueAsyncWork(IAsyncWork, int, CancellationToken, int)" />
     public static Task EnqueueAsyncWork(this IServiceProvider provider, IAsyncWork work, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .Service<IPriorityWorkQueue>()
-           ?.EnqueueAsyncWork(work, priority, cancellation, attemptsCount)
-           ?? provider.RequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, attemptsCount);
+           ?.EnqueueAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), priority, cancellation, attemptsCount)
+           ?? provider.RequiredService<IWorkQueue>()
+                      .EnqueueAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), cancellation, attemptsCount);
 
     /// <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -85,14 +83,14 @@ public static class WorkQueueServiceProviderHelper
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="IPriorityWorkQueue.EnqueueAsyncWork{TResult}(IAsyncWork{TResult}, int, CancellationToken, int)" />
     public static Task<TResult> EnqueueAsyncWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .Service<IPriorityWorkQueue>()
-           ?.EnqueueAsyncWork(work, priority, cancellation, attemptsCount)
-           ?? provider.RequiredService<IWorkQueue>().EnqueueAsyncWork(work, cancellation, attemptsCount);
+           ?.EnqueueAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), priority, cancellation, attemptsCount)
+           ?? provider.RequiredService<IWorkQueue>()
+                      .EnqueueAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), cancellation, attemptsCount);
 
 #endregion
 
@@ -106,7 +104,6 @@ public static class WorkQueueServiceProviderHelper
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <returns> Work completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="WorkQueueDependencyInjectionExtension.EnqueueWork{TWork}(IPriorityWorkQueue,int, CancellationToken, int)" />
     public static Task EnqueueWork<TWork>(this IServiceProvider provider, CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0)
@@ -125,7 +122,6 @@ public static class WorkQueueServiceProviderHelper
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="WorkQueueDependencyInjectionExtension.EnqueueWork{TWork, TResult}(IPriorityWorkQueue,int, CancellationToken, int)" />
     public static Task<TResult> EnqueueWork<TWork, TResult>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
@@ -143,7 +139,6 @@ public static class WorkQueueServiceProviderHelper
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <returns> Work completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="WorkQueueDependencyInjectionExtension.EnqueueAsyncWork{TAsyncWork}(IPriorityWorkQueue,int, CancellationToken, int)" />
     public static Task EnqueueAsyncWork<TAsyncWork>(this IServiceProvider provider, CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0)
@@ -162,7 +157,6 @@ public static class WorkQueueServiceProviderHelper
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="WorkQueueDependencyInjectionExtension.EnqueueWork{TAsyncWork, TResult}(IPriorityWorkQueue,int, CancellationToken, int)" />
     public static Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)

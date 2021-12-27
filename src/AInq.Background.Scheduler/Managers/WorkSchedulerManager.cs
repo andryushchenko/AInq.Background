@@ -75,7 +75,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     {
         time = time.ToLocalTime();
         var (wrapper, task) = CreateScheduledWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time") : time,
+            time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater than current time") : time,
             cancellation);
         _works.Add(wrapper);
         _newWorkEvent.Set();
@@ -86,7 +86,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     {
         time = time.ToLocalTime();
         var (wrapper, task) = CreateScheduledWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time") : time,
+            time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater than current time") : time,
             cancellation);
         _works.Add(wrapper);
         _newWorkEvent.Set();
@@ -97,7 +97,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     {
         time = time.ToLocalTime();
         var (wrapper, task) = CreateScheduledWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time") : time,
+            time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater than current time") : time,
             cancellation);
         _works.Add(wrapper);
         _newWorkEvent.Set();
@@ -108,7 +108,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     {
         time = time.ToLocalTime();
         var (wrapper, task) = CreateScheduledWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
-            time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater then current time") : time,
+            time <= DateTime.Now ? throw new ArgumentOutOfRangeException(nameof(time), time, "Must be greater than current time") : time,
             cancellation);
         _works.Add(wrapper);
         _newWorkEvent.Set();
@@ -126,7 +126,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
             cancellation,
             execCount is > 0 or -1
                 ? execCount
-                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater than 0 or -1 for unlimited repeat"));
         _works.Add(wrapper);
         _newWorkEvent.Set();
         return observable;
@@ -140,7 +140,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
             cancellation,
             execCount is > 0 or -1
                 ? execCount
-                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater than 0 or -1 for unlimited repeat"));
         _works.Add(wrapper);
         _newWorkEvent.Set();
         return observable;
@@ -154,7 +154,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
             cancellation,
             execCount is > 0 or -1
                 ? execCount
-                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater than 0 or -1 for unlimited repeat"));
         _works.Add(wrapper);
         _newWorkEvent.Set();
         return observable;
@@ -169,7 +169,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
             cancellation,
             execCount is > 0 or -1
                 ? execCount
-                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater than 0 or -1 for unlimited repeat"));
         _works.Add(wrapper);
         _newWorkEvent.Set();
         return observable;
@@ -184,13 +184,13 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     {
         var (wrapper, observable) = CreateRepeatedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             startTime,
-            repeatDelay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater then 00:00:00.000")
-                : repeatDelay,
+            repeatDelay > TimeSpan.Zero
+                ? repeatDelay
+                : throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater than 00:00:00.000"),
             cancellation,
             execCount is > 0 or -1
                 ? execCount
-                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater than 0 or -1 for unlimited repeat"));
         _works.Add(wrapper);
         _newWorkEvent.Set();
         return observable;
@@ -201,13 +201,13 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     {
         var (wrapper, observable) = CreateRepeatedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             startTime,
-            repeatDelay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater then 00:00:00.000")
-                : repeatDelay,
+            repeatDelay > TimeSpan.Zero
+                ? repeatDelay
+                : throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater than 00:00:00.000"),
             cancellation,
             execCount is > 0 or -1
                 ? execCount
-                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater than 0 or -1 for unlimited repeat"));
         _works.Add(wrapper);
         _newWorkEvent.Set();
         return observable;
@@ -218,13 +218,13 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     {
         var (wrapper, observable) = CreateRepeatedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             startTime,
-            repeatDelay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater then 00:00:00.000")
-                : repeatDelay,
+            repeatDelay > TimeSpan.Zero
+                ? repeatDelay
+                : throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater than 00:00:00.000"),
             cancellation,
             execCount is > 0 or -1
                 ? execCount
-                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater than 0 or -1 for unlimited repeat"));
         _works.Add(wrapper);
         _newWorkEvent.Set();
         return observable;
@@ -235,13 +235,13 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     {
         var (wrapper, observable) = CreateRepeatedWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)),
             startTime,
-            repeatDelay <= TimeSpan.Zero
-                ? throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater then 00:00:00.000")
-                : repeatDelay,
+            repeatDelay > TimeSpan.Zero
+                ? repeatDelay
+                : throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater than 00:00:00.000"),
             cancellation,
             execCount is > 0 or -1
                 ? execCount
-                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater than 0 or -1 for unlimited repeat"));
         _works.Add(wrapper);
         _newWorkEvent.Set();
         return observable;

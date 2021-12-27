@@ -32,14 +32,13 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource}(IWorkQueue,IAccess{TResource},CancellationToken,int,int)" />
     public static Task EnqueueAccess<TResource>(this IServiceProvider provider, IAccess<TResource> access, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkQueue>()
-           .EnqueueAccess(access, cancellation, attemptsCount, priority);
+           .EnqueueAccess(access ?? throw new ArgumentNullException(nameof(access)), cancellation, attemptsCount, priority);
 
     /// <summary> Enqueue access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -50,14 +49,13 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource, TResult}(IWorkQueue,IAccess{TResource, TResult},CancellationToken,int,int)" />
     public static Task<TResult> EnqueueAccess<TResource, TResult>(this IServiceProvider provider, IAccess<TResource, TResult> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkQueue>()
-           .EnqueueAccess(access, cancellation, attemptsCount, priority);
+           .EnqueueAccess(access ?? throw new ArgumentNullException(nameof(access)), cancellation, attemptsCount, priority);
 
     /// <summary> Enqueue asynchronous access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -67,14 +65,13 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource}(IWorkQueue,IAsyncAccess{TResource},CancellationToken,int,int)" />
     public static Task EnqueueAsyncAccess<TResource>(this IServiceProvider provider, IAsyncAccess<TResource> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkQueue>()
-           .EnqueueAsyncAccess(access, cancellation, attemptsCount, priority);
+           .EnqueueAsyncAccess(access ?? throw new ArgumentNullException(nameof(access)), cancellation, attemptsCount, priority);
 
     /// <summary> Enqueue asynchronous access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="provider"> Service provider instance </param>
@@ -85,14 +82,13 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> or <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource, TResult}(IWorkQueue,IAsyncAccess{TResource, TResult},CancellationToken,int,int)" />
     public static Task<TResult> EnqueueAsyncAccess<TResource, TResult>(this IServiceProvider provider, IAsyncAccess<TResource, TResult> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkQueue>()
-           .EnqueueAsyncAccess(access, cancellation, attemptsCount, priority);
+           .EnqueueAsyncAccess(access ?? throw new ArgumentNullException(nameof(access)), cancellation, attemptsCount, priority);
 
 #endregion
 
@@ -106,7 +102,6 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource, TAccess}(IWorkQueue,CancellationToken,int,int)" />
     public static Task EnqueueAccess<TResource, TAccess>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
@@ -125,7 +120,6 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource, TAccess, TResult}(IWorkQueue,CancellationToken,int,int)" />
     public static Task<TResult> EnqueueAccess<TResource, TAccess, TResult>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
@@ -143,7 +137,6 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource, TAsyncAccess}(IWorkQueue,CancellationToken,int,int)" />
     public static Task EnqueueAsyncAccess<TResource, TAsyncAccess>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
@@ -162,7 +155,6 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> is NULL </exception>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource, TAsyncAccess, TResult}(IWorkQueue,CancellationToken,int,int)" />
     public static Task<TResult> EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(this IServiceProvider provider,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)

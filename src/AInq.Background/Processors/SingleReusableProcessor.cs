@@ -26,8 +26,10 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
     async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,
         ILogger logger, CancellationToken cancellation)
     {
-        if (!manager.HasTask)
-            return;
+        _ = manager ?? throw new ArgumentNullException(nameof(manager));
+        _ = provider ?? throw new ArgumentNullException(nameof(provider));
+        _ = logger ?? throw new ArgumentNullException(nameof(logger));
+        if (!manager.HasTask) return;
         TArgument argument;
         try
         {
@@ -51,8 +53,7 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
         while (manager.HasTask && !cancellation.IsCancellationRequested)
         {
             var (task, metadata) = manager.GetTask();
-            if (task == null)
-                continue;
+            if (task == null) continue;
             if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))
                 manager.RevertTask(task, metadata);
             try

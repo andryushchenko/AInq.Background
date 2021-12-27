@@ -13,8 +13,8 @@
 // limitations under the License.
 
 using AInq.Background.Managers;
-using AInq.Background.Processors;
 using AInq.Background.Workers;
+using static AInq.Background.Processors.ProcessorFactory;
 
 namespace AInq.Background;
 
@@ -27,9 +27,9 @@ public static class WorkQueueInjection
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     public static IWorkQueue CreateWorkQueue(this IServiceCollection services, int maxParallelWorks = 1, int maxAttempts = int.MaxValue)
     {
+        _ = services ?? throw new ArgumentNullException(nameof(services));
         var manager = new WorkQueueManager(maxAttempts);
-        services.AddHostedService(provider
-            => new TaskWorker<object?, object?>(provider, manager, ProcessorFactory.CreateNullProcessor<object?>(maxParallelWorks)));
+        services.AddHostedService(provider => new TaskWorker<object?, object?>(provider, manager, CreateNullProcessor<object?>(maxParallelWorks)));
         return manager;
     }
 
@@ -40,6 +40,7 @@ public static class WorkQueueInjection
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     public static IServiceCollection AddWorkQueue(this IServiceCollection services, int maxParallelWorks = 1, int maxAttempts = int.MaxValue)
     {
+        _ = services ?? throw new ArgumentNullException(nameof(services));
         if (services.Any(service => service.ImplementationType == typeof(IWorkQueue)))
             throw new InvalidOperationException("Service already exists");
         return services.AddSingleton(services.CreateWorkQueue(maxParallelWorks, maxAttempts));
@@ -53,9 +54,9 @@ public static class WorkQueueInjection
     public static IPriorityWorkQueue CreatePriorityWorkQueue(this IServiceCollection services, int maxPriority = 100, int maxParallelWorks = 1,
         int maxAttempts = int.MaxValue)
     {
+        _ = services ?? throw new ArgumentNullException(nameof(services));
         var manager = new PriorityWorkQueueManager(maxPriority, maxAttempts);
-        services.AddHostedService(provider
-            => new TaskWorker<object?, int>(provider, manager, ProcessorFactory.CreateNullProcessor<int>(maxParallelWorks)));
+        services.AddHostedService(provider => new TaskWorker<object?, int>(provider, manager, CreateNullProcessor<int>(maxParallelWorks)));
         return manager;
     }
 
@@ -68,6 +69,7 @@ public static class WorkQueueInjection
     public static IServiceCollection AddPriorityWorkQueue(this IServiceCollection services, int maxPriority = 100, int maxParallelWorks = 1,
         int maxAttempts = int.MaxValue)
     {
+        _ = services ?? throw new ArgumentNullException(nameof(services));
         if (services.Any(service => service.ImplementationType == typeof(IWorkQueue)))
             throw new InvalidOperationException("Service already exists");
         var queue = services.CreatePriorityWorkQueue(maxPriority, maxParallelWorks, maxAttempts);

@@ -45,7 +45,7 @@ public class PriorityConveyorChain<TData, TIntermediate, TResult> : IPriorityCon
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="first" /> or <paramref name="second" /> is NULL </exception>
     public PriorityConveyorChain(IConveyor<TData, TIntermediate> first, IPriorityConveyor<TIntermediate, TResult> second)
     {
-        _first = new PriorityConveyorEmulator<TData, TIntermediate>(first);
+        _first = new PriorityConveyorEmulator<TData, TIntermediate>(first ?? throw new ArgumentNullException(nameof(first)));
         _second = second ?? throw new ArgumentNullException(nameof(second));
         _maxPriority = Math.Max(_first.MaxPriority, _second.MaxPriority);
         _maxAttempts = Math.Max(_first.MaxAttempts, _second.MaxAttempts);
@@ -57,7 +57,7 @@ public class PriorityConveyorChain<TData, TIntermediate, TResult> : IPriorityCon
     public PriorityConveyorChain(IPriorityConveyor<TData, TIntermediate> first, IConveyor<TIntermediate, TResult> second)
     {
         _first = first ?? throw new ArgumentNullException(nameof(first));
-        _second = new PriorityConveyorEmulator<TIntermediate, TResult>(second);
+        _second = new PriorityConveyorEmulator<TIntermediate, TResult>(second ?? throw new ArgumentNullException(nameof(second)));
         _maxPriority = Math.Max(_first.MaxPriority, _second.MaxPriority);
         _maxAttempts = Math.Max(_first.MaxAttempts, _second.MaxAttempts);
     }

@@ -69,10 +69,8 @@ public static class ProcessorFactory
     public static ITaskProcessor<TArgument, TMetadata> CreateProcessor<TArgument, TMetadata>(Func<IServiceProvider, TArgument> argumentFactory,
         ReuseStrategy strategy, IServiceProvider? provider = null, int maxArgumentsCount = 1)
     {
-        if (argumentFactory == null)
-            throw new ArgumentNullException(nameof(argumentFactory));
-        if (strategy == ReuseStrategy.Static && provider == null)
-            throw new ArgumentNullException(nameof(provider));
+        if (argumentFactory == null) throw new ArgumentNullException(nameof(argumentFactory));
+        if (strategy == ReuseStrategy.Static && provider == null) throw new ArgumentNullException(nameof(provider));
         return (strategy, maxArgumentsCount) switch
         {
             (ReuseStrategy.Static, <= 1) => new SingleStaticProcessor<TArgument, TMetadata>(argumentFactory.Invoke(provider!)),

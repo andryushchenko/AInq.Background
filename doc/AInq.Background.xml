@@ -13,7 +13,6 @@
             <param name="resource"> Shared resource instance </param>
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="resource" /> is NULL </exception>
         </member>
         <member name="M:AInq.Background.AccessQueueInjection.AddAccessQueue``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,``0,System.Int32)">
             <summary> Add <see cref="T:AInq.Background.Services.IAccessQueue`1" /> service with single static shared resource </summary>
@@ -22,7 +21,6 @@
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="resource" /> is NULL </exception>
         </member>
         <member name="M:AInq.Background.AccessQueueInjection.CreatePriorityAccessQueue``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,``0,System.Int32,System.Int32)">
             <summary> Create <see cref="T:AInq.Background.Services.IPriorityAccessQueue`1" /> with single static shared resource without service registration </summary>
@@ -31,7 +29,6 @@
             <param name="maxPriority"> Max allowed operation priority </param>
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="resource" /> is NULL </exception>
         </member>
         <member name="M:AInq.Background.AccessQueueInjection.AddPriorityAccessQueue``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,``0,System.Int32,System.Int32)">
             <summary> Add <see cref="T:AInq.Background.Services.IPriorityAccessQueue`1" /> and <see cref="T:AInq.Background.Services.IAccessQueue`1" /> services with single static shared resource </summary>
@@ -41,7 +38,6 @@
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="resource" /> is NULL </exception>
         </member>
         <member name="M:AInq.Background.AccessQueueInjection.CreateAccessQueue``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Collections.Generic.IEnumerable{``0},System.Int32)">
             <summary> Create <see cref="T:AInq.Background.Services.IAccessQueue`1" /> with static shared resources without service registration </summary>
@@ -49,7 +45,6 @@
             <param name="resources"> Shared resources collection </param>
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="resources" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
         </member>
         <member name="M:AInq.Background.AccessQueueInjection.AddAccessQueue``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Collections.Generic.IEnumerable{``0},System.Int32)">
@@ -59,7 +54,6 @@
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="resources" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
         </member>
         <member name="M:AInq.Background.AccessQueueInjection.CreatePriorityAccessQueue``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Collections.Generic.IEnumerable{``0},System.Int32,System.Int32)">
@@ -69,7 +63,6 @@
             <param name="maxPriority"> Max allowed operation priority </param>
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="resources" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
         </member>
         <member name="M:AInq.Background.AccessQueueInjection.AddPriorityAccessQueue``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Collections.Generic.IEnumerable{``0},System.Int32,System.Int32)">
@@ -80,7 +73,6 @@
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="resources" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
         </member>
         <member name="M:AInq.Background.AccessQueueInjection.CreateAccessQueue``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Func{System.IServiceProvider,``0},AInq.Background.ReuseStrategy,System.Int32,System.Int32)">
@@ -91,7 +83,6 @@
             <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="resourceFactory" /> is NULL </exception>
             <exception cref="T:System.ComponentModel.InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
         </member>
         <member name="M:AInq.Background.AccessQueueInjection.AddAccessQueue``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Func{System.IServiceProvider,``0},AInq.Background.ReuseStrategy,System.Int32,System.Int32)">
@@ -103,7 +94,6 @@
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="resourceFactory" /> is NULL </exception>
             <exception cref="T:System.ComponentModel.InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
         </member>
         <member name="M:AInq.Background.AccessQueueInjection.CreatePriorityAccessQueue``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Func{System.IServiceProvider,``0},AInq.Background.ReuseStrategy,System.Int32,System.Int32,System.Int32)">
@@ -115,7 +105,6 @@
             <param name="maxPriority"> Max allowed operation priority </param>
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="resourceFactory" /> is NULL </exception>
             <exception cref="T:System.ComponentModel.InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
         </member>
         <member name="M:AInq.Background.AccessQueueInjection.AddPriorityAccessQueue``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Func{System.IServiceProvider,``0},AInq.Background.ReuseStrategy,System.Int32,System.Int32,System.Int32)">
@@ -128,7 +117,6 @@
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TResource"> Shared resource type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="resourceFactory" /> is NULL </exception>
             <exception cref="T:System.ComponentModel.InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
         </member>
         <member name="M:AInq.Background.AccessQueueInjection.CreateAccessQueue``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.ReuseStrategy,System.Int32,System.Int32)">
@@ -182,7 +170,6 @@
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TData"> Input data type </typeparam>
             <typeparam name="TResult"> Processing result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="conveyorMachine" /> is NULL </exception>
         </member>
         <member name="M:AInq.Background.ConveyorInjection.AddConveyor``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IConveyorMachine{``0,``1},System.Int32)">
             <summary> Add <see cref="T:AInq.Background.Services.IConveyor`2" /> service with single static conveyor machine </summary>
@@ -192,7 +179,6 @@
             <typeparam name="TData"> Input data type </typeparam>
             <typeparam name="TResult"> Processing result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="conveyorMachine" /> is NULL </exception>
         </member>
         <member name="M:AInq.Background.ConveyorInjection.CreatePriorityConveyor``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IConveyorMachine{``0,``1},System.Int32,System.Int32)">
             <summary> Create <see cref="T:AInq.Background.Services.IPriorityConveyor`2" /> with single static conveyor machine without service registration </summary>
@@ -202,7 +188,6 @@
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TData"> Input data type </typeparam>
             <typeparam name="TResult"> Processing result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="conveyorMachine" /> is NULL </exception>
         </member>
         <member name="M:AInq.Background.ConveyorInjection.AddPriorityConveyor``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.Tasks.IConveyorMachine{``0,``1},System.Int32,System.Int32)">
             <summary> Add <see cref="T:AInq.Background.Services.IPriorityConveyor`2" /> and <see cref="T:AInq.Background.Services.IConveyor`2" /> services with single static conveyor machine </summary>
@@ -213,7 +198,6 @@
             <typeparam name="TData"> Input data type </typeparam>
             <typeparam name="TResult"> Processing result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="conveyorMachine" /> is NULL </exception>
         </member>
         <member name="M:AInq.Background.ConveyorInjection.CreateConveyor``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IConveyorMachine{``0,``1}},System.Int32)">
             <summary> Create <see cref="T:AInq.Background.Services.IConveyor`2" /> with static conveyor machines without service registration </summary>
@@ -222,7 +206,6 @@
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TData"> Input data type </typeparam>
             <typeparam name="TResult"> Processing result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="conveyorMachines" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="conveyorMachines" /> collection is empty </exception>
         </member>
         <member name="M:AInq.Background.ConveyorInjection.AddConveyor``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IConveyorMachine{``0,``1}},System.Int32)">
@@ -233,7 +216,6 @@
             <typeparam name="TData"> Input data type </typeparam>
             <typeparam name="TResult"> Processing result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="conveyorMachines" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="conveyorMachines" /> collection is empty </exception>
         </member>
         <member name="M:AInq.Background.ConveyorInjection.CreatePriorityConveyor``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IConveyorMachine{``0,``1}},System.Int32,System.Int32)">
@@ -244,7 +226,6 @@
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TData"> Input data type </typeparam>
             <typeparam name="TResult"> Processing result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="conveyorMachines" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="conveyorMachines" /> collection is empty </exception>
         </member>
         <member name="M:AInq.Background.ConveyorInjection.AddPriorityConveyor``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Collections.Generic.IEnumerable{AInq.Background.Tasks.IConveyorMachine{``0,``1}},System.Int32,System.Int32)">
@@ -256,7 +237,6 @@
             <typeparam name="TData"> Input data type </typeparam>
             <typeparam name="TResult"> Processing result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="conveyorMachines" /> is NULL </exception>
             <exception cref="T:System.ArgumentException"> Thrown if <paramref name="conveyorMachines" /> collection is empty </exception>
         </member>
         <member name="M:AInq.Background.ConveyorInjection.CreateConveyor``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Func{System.IServiceProvider,AInq.Background.Tasks.IConveyorMachine{``0,``1}},AInq.Background.ReuseStrategy,System.Int32,System.Int32)">
@@ -268,7 +248,6 @@
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TData"> Input data type </typeparam>
             <typeparam name="TResult"> Processing result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="conveyorMachineFactory" /> is NULL </exception>
             <exception cref="T:System.ComponentModel.InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
         </member>
         <member name="M:AInq.Background.ConveyorInjection.AddConveyor``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Func{System.IServiceProvider,AInq.Background.Tasks.IConveyorMachine{``0,``1}},AInq.Background.ReuseStrategy,System.Int32,System.Int32)">
@@ -281,7 +260,6 @@
             <typeparam name="TData"> Input data type </typeparam>
             <typeparam name="TResult"> Processing result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="conveyorMachineFactory" /> is NULL </exception>
             <exception cref="T:System.ComponentModel.InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
         </member>
         <member name="M:AInq.Background.ConveyorInjection.CreatePriorityConveyor``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Func{System.IServiceProvider,AInq.Background.Tasks.IConveyorMachine{``0,``1}},AInq.Background.ReuseStrategy,System.Int32,System.Int32,System.Int32)">
@@ -294,7 +272,6 @@
             <param name="maxAttempts"> Max allowed retry on fail attempts </param>
             <typeparam name="TData"> Input data type </typeparam>
             <typeparam name="TResult"> Processing result type </typeparam>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="conveyorMachineFactory" /> is NULL </exception>
             <exception cref="T:System.ComponentModel.InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
         </member>
         <member name="M:AInq.Background.ConveyorInjection.AddPriorityConveyor``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Func{System.IServiceProvider,AInq.Background.Tasks.IConveyorMachine{``0,``1}},AInq.Background.ReuseStrategy,System.Int32,System.Int32,System.Int32)">
@@ -308,7 +285,6 @@
             <typeparam name="TData"> Input data type </typeparam>
             <typeparam name="TResult"> Processing result type </typeparam>
             <exception cref="T:System.InvalidOperationException"> Thrown if service already exists </exception>
-            <exception cref="T:System.ArgumentNullException"> Thrown if <paramref name="conveyorMachineFactory" /> is NULL </exception>
             <exception cref="T:System.ComponentModel.InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
         </member>
         <member name="M:AInq.Background.ConveyorInjection.CreateConveyor``3(Microsoft.Extensions.DependencyInjection.IServiceCollection,AInq.Background.ReuseStrategy,System.Int32,System.Int32)">
