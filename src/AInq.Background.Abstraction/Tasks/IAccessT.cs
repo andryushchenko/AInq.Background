@@ -24,5 +24,6 @@ public interface IAccess<in TResource, out TResult>
     /// <param name="resource"> Shared resource instance </param>
     /// <param name="serviceProvider"> Service provider instance </param>
     /// <returns> Access action result </returns>
+    [PublicAPI]
     TResult Access(TResource resource, IServiceProvider serviceProvider);
 }

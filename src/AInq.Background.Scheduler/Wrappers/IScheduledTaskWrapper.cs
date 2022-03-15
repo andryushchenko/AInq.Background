@@ -18,9 +18,11 @@ namespace AInq.Background.Wrappers;
 public interface IScheduledTaskWrapper
 {
     /// <summary> Next scheduled time </summary>
+    [PublicAPI]
     DateTime? NextScheduledTime { get; }
 
     /// <summary> Check if task is cancelled </summary>
+    [PublicAPI]
     bool IsCanceled { get; }
 
     /// <summary> Execute task asynchronously </summary>
@@ -28,5 +30,6 @@ public interface IScheduledTaskWrapper
     /// <param name="logger"> Logger instance </param>
     /// <param name="cancellation"> Cancellation token </param>
     /// <returns> If task should be reverted to scheduler </returns>
+    [PublicAPI]
     Task<bool> ExecuteAsync(IServiceProvider provider, ILogger logger, CancellationToken cancellation = default);
 }

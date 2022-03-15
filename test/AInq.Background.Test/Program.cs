@@ -34,12 +34,12 @@ var host = Host.CreateDefaultBuilder(args)
 var cancellationSource = new CancellationTokenSource();
 var work = host.DoStartupWorkAsync(cancellationSource.Token)
                .ContinueWith(_ => Console.WriteLine($"{DateTime.Now}\t Starting host"))
-               .ContinueWith(async _ => await host.RunAsync(cancellationSource.Token), cancellationSource.Token)
+               .ContinueWith(async _ => await host.RunAsync(cancellationSource.Token).ConfigureAwait(false), cancellationSource.Token)
                .Unwrap();
 Console.ReadLine();
 cancellationSource.Cancel();
 Console.WriteLine($"{DateTime.Now:T}\tGeneral stop requested");
-await work;
+await work.ConfigureAwait(false);
 Console.WriteLine($"{DateTime.Now:T}\tStopped");
 
 void StartupWork(IServiceProvider provider)
@@ -65,20 +65,20 @@ async Task DelayedWorkTestAsync(IServiceProvider provider, CancellationToken can
     var test = provider.EnqueueWork(WorkFactory.CreateWork(_ => $"{DateTime.Now:T}\tDelayed work test"), cancellation);
     try
     {
-        await provider.EnqueueWork(WorkFactory.CreateWork(_ => true), source.Token);
+        await provider.EnqueueWork(WorkFactory.CreateWork(_ => true), source.Token).ConfigureAwait(false);
     }
     catch (Exception)
     {
         Console.WriteLine($"{DateTime.Now:T}\tWork cancellation test");
     }
-    Console.WriteLine(await test);
+    Console.WriteLine(await test.ConfigureAwait(false));
 }
 
 async Task EnumeratorTestAsync(IServiceProvider provider, CancellationToken cancellation)
 {
     var conveyor = provider.GetRequiredService<IConveyor<int, int>>();
     conveyor = new ConveyorChain<int, int, int>(conveyor, conveyor);
-    await foreach (var result in conveyor.ProcessDataAsync(Enumerable.Range(1, 10).ToAsyncEnumerable(), cancellation))
+    await foreach (var result in conveyor.ProcessDataAsync(Enumerable.Range(1, 10).ToAsyncEnumerable(), cancellation).ConfigureAwait(false))
         Console.WriteLine($"{DateTime.Now:T}\tEnumerator test {result}");
 }
 
@@ -91,7 +91,7 @@ async Task ConveyorTestAsync(IServiceProvider provider, CancellationToken cancel
                           .ToList();
     try
     {
-        await Task.WhenAll(tasks);
+        await Task.WhenAll(tasks).ConfigureAwait(false);
     }
     catch (Exception ex)
     {

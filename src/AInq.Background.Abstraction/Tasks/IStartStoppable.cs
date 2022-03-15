@@ -21,15 +21,18 @@ namespace AInq.Background.Tasks;
 public interface IStartStoppable
 {
     /// <summary> Shows if object is active now </summary>
+    [PublicAPI]
     bool IsActive { get; }
 
     /// <summary> Activate object asynchronously </summary>
     /// <param name="cancellation"> Activation cancellation token </param>
     /// <returns> Activation completion task </returns>
+    [PublicAPI]
     Task ActivateAsync(CancellationToken cancellation = default);
 
     /// <summary> Deactivate object asynchronously </summary>
     /// <param name="cancellation"> Deactivation cancellation token </param>
     /// <returns> Deactivation completion task </returns>
+    [PublicAPI]
     Task DeactivateAsync(CancellationToken cancellation = default);
 }

@@ -21,5 +21,6 @@ public interface IAsyncWork
     /// <param name="serviceProvider"> Service provider instance </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <returns> Work completion task </returns>
+    [PublicAPI]
     Task DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation = default);
 }

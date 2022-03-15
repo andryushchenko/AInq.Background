@@ -27,5 +27,6 @@ public interface IConveyorMachine<in TData, TResult>
     /// <param name="provider"> Service provider instance </param>
     /// <param name="cancellation"> Processing cancellation token </param>
     /// <returns> Processing result task </returns>
+    [PublicAPI]
     Task<TResult> ProcessDataAsync(TData data, IServiceProvider provider, CancellationToken cancellation = default);
 }

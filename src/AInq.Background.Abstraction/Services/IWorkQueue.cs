@@ -20,6 +20,7 @@ namespace AInq.Background.Services;
 public interface IWorkQueue
 {
     /// <summary> Max allowed retry on fail attempts </summary>
+    [PublicAPI]
     int MaxAttempts { get; }
 
     /// <summary> Enqueue background work </summary>
@@ -28,6 +29,7 @@ public interface IWorkQueue
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <returns> Work completion task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    [PublicAPI]
     Task EnqueueWork(IWork work, CancellationToken cancellation = default, int attemptsCount = 1);
 
     /// <summary> Enqueue background work </summary>
@@ -37,6 +39,7 @@ public interface IWorkQueue
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    [PublicAPI]
     Task<TResult> EnqueueWork<TResult>(IWork<TResult> work, CancellationToken cancellation = default, int attemptsCount = 1);
 
     /// <summary> Enqueue asynchronous background work </summary>
@@ -45,6 +48,7 @@ public interface IWorkQueue
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <returns> Work completion task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    [PublicAPI]
     Task EnqueueAsyncWork(IAsyncWork work, CancellationToken cancellation = default, int attemptsCount = 1);
 
     /// <summary> Enqueue asynchronous background work </summary>
@@ -54,5 +58,6 @@ public interface IWorkQueue
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
+    [PublicAPI]
     Task<TResult> EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, CancellationToken cancellation = default, int attemptsCount = 1);
 }

@@ -25,6 +25,7 @@ public static class WorkSchedulerInjection
     /// <summary> Create <see cref="IWorkScheduler" /> without service registration </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="horizon"> Time horizon to look for upcoming tasks </param>
+    [PublicAPI]
     public static IWorkScheduler CreateWorkScheduler(this IServiceCollection services, TimeSpan? horizon = null)
     {
         _ = services ?? throw new ArgumentNullException(nameof(services));
@@ -37,6 +38,7 @@ public static class WorkSchedulerInjection
     /// <param name="services"> Service collection </param>
     /// <param name="horizon"> Time horizon to look for upcoming tasks </param>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+    [PublicAPI]
     public static IServiceCollection AddWorkScheduler(this IServiceCollection services, TimeSpan? horizon = null)
     {
         _ = services ?? throw new ArgumentNullException(nameof(services));

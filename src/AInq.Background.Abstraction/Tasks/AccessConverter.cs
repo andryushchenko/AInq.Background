@@ -22,6 +22,7 @@ public static class AccessConverter
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> <see cref="IAsyncAccess{TResource}" /> wrapper instance </returns>
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
+    [PublicAPI]
     public static IAsyncAccess<TResource> AsAsync<TResource>(this IAccess<TResource> access)
         where TResource : notnull
         => new AsyncAccess<TResource>(access ?? throw new NullReferenceException(nameof(access)));
@@ -32,6 +33,7 @@ public static class AccessConverter
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> <see cref="IAsyncAccess{TResource, TResult}" /> wrapper instance </returns>
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
+    [PublicAPI]
     public static IAsyncAccess<TResource, TResult> AsAsync<TResource, TResult>(this IAccess<TResource, TResult> access)
         where TResource : notnull
         => new AsyncAccess<TResource, TResult>(access ?? throw new NullReferenceException(nameof(access)));

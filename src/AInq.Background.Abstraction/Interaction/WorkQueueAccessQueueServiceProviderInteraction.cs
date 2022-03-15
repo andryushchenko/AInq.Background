@@ -33,6 +33,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource}(IWorkQueue,IAccess{TResource},CancellationToken,int,int)" />
+    [PublicAPI]
     public static Task EnqueueAccess<TResource>(this IServiceProvider provider, IAccess<TResource> access, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -50,6 +51,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource, TResult}(IWorkQueue,IAccess{TResource, TResult},CancellationToken,int,int)" />
+    [PublicAPI]
     public static Task<TResult> EnqueueAccess<TResource, TResult>(this IServiceProvider provider, IAccess<TResource, TResult> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -66,6 +68,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource}(IWorkQueue,IAsyncAccess{TResource},CancellationToken,int,int)" />
+    [PublicAPI]
     public static Task EnqueueAsyncAccess<TResource>(this IServiceProvider provider, IAsyncAccess<TResource> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -83,6 +86,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource, TResult}(IWorkQueue,IAsyncAccess{TResource, TResult},CancellationToken,int,int)" />
+    [PublicAPI]
     public static Task<TResult> EnqueueAsyncAccess<TResource, TResult>(this IServiceProvider provider, IAsyncAccess<TResource, TResult> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -103,6 +107,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource, TAccess}(IWorkQueue,CancellationToken,int,int)" />
+    [PublicAPI]
     public static Task EnqueueAccess<TResource, TAccess>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -121,6 +126,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource, TAccess, TResult}(IWorkQueue,CancellationToken,int,int)" />
+    [PublicAPI]
     public static Task<TResult> EnqueueAccess<TResource, TAccess, TResult>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -138,6 +144,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource, TAsyncAccess}(IWorkQueue,CancellationToken,int,int)" />
+    [PublicAPI]
     public static Task EnqueueAsyncAccess<TResource, TAsyncAccess>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -156,6 +163,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
     /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource, TAsyncAccess, TResult}(IWorkQueue,CancellationToken,int,int)" />
+    [PublicAPI]
     public static Task<TResult> EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(this IServiceProvider provider,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull

@@ -24,6 +24,7 @@ public static class ScheduledWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Wrapper and work result task </returns>
+    [PublicAPI]
     public static (IScheduledTaskWrapper, Task) CreateScheduledWorkWrapper(IWork work, DateTime time, CancellationToken cancellation = default)
     {
         time = time.ToLocalTime();
@@ -41,6 +42,7 @@ public static class ScheduledWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Wrapper and work result task </returns>
+    [PublicAPI]
     public static (IScheduledTaskWrapper, Task<TResult>) CreateScheduledWorkWrapper<TResult>(IWork<TResult> work, DateTime time,
         CancellationToken cancellation = default)
     {
@@ -58,6 +60,7 @@ public static class ScheduledWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="asyncWork" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Wrapper and work result task </returns>
+    [PublicAPI]
     public static (IScheduledTaskWrapper, Task) CreateScheduledWorkWrapper(IAsyncWork asyncWork, DateTime time,
         CancellationToken cancellation = default)
     {
@@ -76,6 +79,7 @@ public static class ScheduledWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="asyncWork" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Wrapper and work result task </returns>
+    [PublicAPI]
     public static (IScheduledTaskWrapper, Task<TResult>) CreateScheduledWorkWrapper<TResult>(IAsyncWork<TResult> asyncWork, DateTime time,
         CancellationToken cancellation = default)
     {

@@ -23,6 +23,7 @@ public static class CronHelper
     /// <param name="cronExpression"> Cron string </param>
     /// <returns> <see cref="CronExpression" /> instance </returns>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
+    [PublicAPI]
     public static CronExpression ParseCron(this string cronExpression)
     {
         _ = cronExpression ?? throw new ArgumentNullException(nameof(cronExpression));

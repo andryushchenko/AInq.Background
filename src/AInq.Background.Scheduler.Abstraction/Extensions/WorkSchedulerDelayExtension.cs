@@ -26,6 +26,7 @@ public static class WorkSchedulerDelayExtension
     /// <param name="cancellation"> Work cancellation token </param>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00.000 </exception>
+    [PublicAPI]
     public static Task AddScheduledWork(this IWorkScheduler scheduler, IWork work, TimeSpan delay, CancellationToken cancellation = default)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
             .AddScheduledWork(work ?? throw new ArgumentNullException(nameof(work)),
@@ -42,6 +43,7 @@ public static class WorkSchedulerDelayExtension
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00.000 </exception>
+    [PublicAPI]
     public static Task<TResult> AddScheduledWork<TResult>(this IWorkScheduler scheduler, IWork<TResult> work, TimeSpan delay,
         CancellationToken cancellation = default)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
@@ -58,6 +60,7 @@ public static class WorkSchedulerDelayExtension
     /// <param name="cancellation"> Work cancellation token </param>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00.000 </exception>
+    [PublicAPI]
     public static Task AddScheduledAsyncWork(this IWorkScheduler scheduler, IAsyncWork work, TimeSpan delay, CancellationToken cancellation = default)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
             .AddScheduledAsyncWork(work ?? throw new ArgumentNullException(nameof(work)),
@@ -74,6 +77,7 @@ public static class WorkSchedulerDelayExtension
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00.000 </exception>
+    [PublicAPI]
     public static Task<TResult> AddScheduledAsyncWork<TResult>(this IWorkScheduler scheduler, IAsyncWork<TResult> work, TimeSpan delay,
         CancellationToken cancellation = default)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
@@ -96,6 +100,7 @@ public static class WorkSchedulerDelayExtension
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00.000 or <paramref name="execCount" /> is 0 or less than -1 </exception>
+    [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedWork(this IWorkScheduler scheduler, IWork work, TimeSpan startDelay, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
@@ -115,6 +120,7 @@ public static class WorkSchedulerDelayExtension
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00.000 or <paramref name="execCount" /> is 0 or less than -1 </exception>
+    [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedWork<TResult>(this IWorkScheduler scheduler, IWork<TResult> work, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
@@ -133,6 +139,7 @@ public static class WorkSchedulerDelayExtension
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00.000 or <paramref name="execCount" /> is 0 or less than -1 </exception>
+    [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncWork(this IWorkScheduler scheduler, IAsyncWork work, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
@@ -152,6 +159,7 @@ public static class WorkSchedulerDelayExtension
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00.000 or <paramref name="execCount" /> is 0 or less than -1 </exception>
+    [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedAsyncWork<TResult>(this IWorkScheduler scheduler, IAsyncWork<TResult> work,
         TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))

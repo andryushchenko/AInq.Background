@@ -27,6 +27,7 @@ public static class CronWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
+    [PublicAPI]
     public static (IScheduledTaskWrapper, IObservable<Maybe<Exception>>) CreateCronWorkWrapper(IWork work, CronExpression cron,
         CancellationToken cancellation = default, int execCount = -1)
     {
@@ -48,6 +49,7 @@ public static class CronWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
+    [PublicAPI]
     public static (IScheduledTaskWrapper, IObservable<Try<TResult>>) CreateCronWorkWrapper<TResult>(IWork<TResult> work, CronExpression cron,
         CancellationToken cancellation = default, int execCount = -1)
     {
@@ -68,6 +70,7 @@ public static class CronWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
+    [PublicAPI]
     public static (IScheduledTaskWrapper, IObservable<Maybe<Exception>>) CreateCronWorkWrapper(IAsyncWork work, CronExpression cron,
         CancellationToken cancellation = default, int execCount = -1)
     {
@@ -89,6 +92,7 @@ public static class CronWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
+    [PublicAPI]
     public static (IScheduledTaskWrapper, IObservable<Try<TResult>>) CreateCronWorkWrapper<TResult>(IAsyncWork<TResult> work, CronExpression cron,
         CancellationToken cancellation = default, int execCount = -1)
     {

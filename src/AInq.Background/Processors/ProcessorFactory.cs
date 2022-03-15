@@ -24,6 +24,7 @@ public static class ProcessorFactory
     /// <param name="maxParallelTasks"> Max allowed parallel tasks </param>
     /// <typeparam name="TMetadata"> Task metadata type </typeparam>
     /// <returns> Task processor instance </returns>
+    [PublicAPI]
     public static ITaskProcessor<object?, TMetadata> CreateNullProcessor<TMetadata>(int maxParallelTasks = 1)
         => maxParallelTasks <= 1
             ? new SingleNullProcessor<TMetadata>()
@@ -35,6 +36,7 @@ public static class ProcessorFactory
     /// <typeparam name="TMetadata"> Task metadata type </typeparam>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="argument" /> is NULL </exception>
     /// <returns> Task processor instance </returns>
+    [PublicAPI]
     public static ITaskProcessor<TArgument, TMetadata> CreateProcessor<TArgument, TMetadata>(TArgument argument)
         => new SingleStaticProcessor<TArgument, TMetadata>(argument ?? throw new ArgumentNullException(nameof(argument)));
 
@@ -45,6 +47,7 @@ public static class ProcessorFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="arguments" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="arguments" /> is empty collection </exception>
     /// <returns> Task processor instance </returns>
+    [PublicAPI]
     public static ITaskProcessor<TArgument, TMetadata> CreateProcessor<TArgument, TMetadata>(IEnumerable<TArgument> arguments)
     {
         var args = (arguments ?? throw new ArgumentNullException(nameof(arguments))).Where(argument => argument != null).ToList();
@@ -66,6 +69,7 @@ public static class ProcessorFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="argumentFactory" /> or <paramref name="provider" /> (if used) is NULL </exception>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
     /// <returns> Task processor instance </returns>
+    [PublicAPI]
     public static ITaskProcessor<TArgument, TMetadata> CreateProcessor<TArgument, TMetadata>(Func<IServiceProvider, TArgument> argumentFactory,
         ReuseStrategy strategy, IServiceProvider? provider = null, int maxArgumentsCount = 1)
     {

@@ -25,6 +25,7 @@ public static class WorkQueueInjection
     /// <param name="services"> Service collection </param>
     /// <param name="maxParallelWorks"> Max parallel works allowed </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+    [PublicAPI]
     public static IWorkQueue CreateWorkQueue(this IServiceCollection services, int maxParallelWorks = 1, int maxAttempts = int.MaxValue)
     {
         _ = services ?? throw new ArgumentNullException(nameof(services));
@@ -38,6 +39,7 @@ public static class WorkQueueInjection
     /// <param name="maxParallelWorks"> Max parallel works allowed </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+    [PublicAPI]
     public static IServiceCollection AddWorkQueue(this IServiceCollection services, int maxParallelWorks = 1, int maxAttempts = int.MaxValue)
     {
         _ = services ?? throw new ArgumentNullException(nameof(services));
@@ -51,6 +53,7 @@ public static class WorkQueueInjection
     /// <param name="maxPriority"> Max allowed work priority </param>
     /// <param name="maxParallelWorks"> Max allowed parallel works </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+    [PublicAPI]
     public static IPriorityWorkQueue CreatePriorityWorkQueue(this IServiceCollection services, int maxPriority = 100, int maxParallelWorks = 1,
         int maxAttempts = int.MaxValue)
     {
@@ -66,6 +69,7 @@ public static class WorkQueueInjection
     /// <param name="maxParallelWorks"> Max allowed parallel works </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+    [PublicAPI]
     public static IServiceCollection AddPriorityWorkQueue(this IServiceCollection services, int maxPriority = 100, int maxParallelWorks = 1,
         int maxAttempts = int.MaxValue)
     {

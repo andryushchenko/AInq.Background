@@ -21,5 +21,6 @@ public interface IWork<out TResult>
     /// <summary> Work action </summary>
     /// <param name="serviceProvider"> Service provider instance </param>
     /// <returns> Work result </returns>
+    [PublicAPI]
     TResult DoWork(IServiceProvider serviceProvider);
 }

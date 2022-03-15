@@ -22,6 +22,7 @@ public static class AccessFactory
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> <see cref="IAccess{TResource}" /> instance for given action </returns>
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
+    [PublicAPI]
     public static IAccess<TResource> CreateAccess<TResource>(Action<TResource, IServiceProvider> access)
         where TResource : notnull
         => new Access<TResource>(access ?? throw new ArgumentNullException(nameof(access)));
@@ -32,6 +33,7 @@ public static class AccessFactory
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> <see cref="IAccess{TResource, TResult}" /> instance for given function </returns>
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
+    [PublicAPI]
     public static IAccess<TResource, TResult> CreateAccess<TResource, TResult>(Func<TResource, IServiceProvider, TResult> access)
         where TResource : notnull
         => new Access<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)));
@@ -41,6 +43,7 @@ public static class AccessFactory
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> <see cref="IAsyncAccess{TResource}" /> instance for given action </returns>
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
+    [PublicAPI]
     public static IAsyncAccess<TResource> CreateAsyncAccess<TResource>(Func<TResource, IServiceProvider, CancellationToken, Task> access)
         where TResource : notnull
         => new AsyncAccess<TResource>(access ?? throw new ArgumentNullException(nameof(access)));
@@ -51,6 +54,7 @@ public static class AccessFactory
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> <see cref="IAsyncAccess{TResource, TResult}" /> instance for given function </returns>
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="access" /> is NULL </exception>
+    [PublicAPI]
     public static IAsyncAccess<TResource, TResult> CreateAsyncAccess<TResource, TResult>(
         Func<TResource, IServiceProvider, CancellationToken, Task<TResult>> access)
         where TResource : notnull

@@ -31,6 +31,7 @@ public static class ConveyorServiceProviderHelper
     /// <returns> Processing result task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no conveyor for given <typeparamref name="TData" /> and <typeparamref name="TResult" /> is registered </exception>
     /// <seealso cref="IPriorityConveyor{TData,TResult}.ProcessDataAsync(TData, int, CancellationToken, int)" />
+    [PublicAPI]
     public static Task<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, TData data, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TData : notnull

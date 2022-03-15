@@ -27,6 +27,7 @@ public static class AccessQueueInjection
     /// <param name="resource"> Shared resource instance </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
+    [PublicAPI]
     public static IAccessQueue<TResource> CreateAccessQueue<TResource>(this IServiceCollection services, TResource resource,
         int maxAttempts = int.MaxValue)
         where TResource : notnull
@@ -44,6 +45,7 @@ public static class AccessQueueInjection
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+    [PublicAPI]
     public static IServiceCollection AddAccessQueue<TResource>(this IServiceCollection services, TResource resource, int maxAttempts = int.MaxValue)
         where TResource : notnull
     {
@@ -59,6 +61,7 @@ public static class AccessQueueInjection
     /// <param name="maxPriority"> Max allowed operation priority </param>
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
+    [PublicAPI]
     public static IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(this IServiceCollection services, TResource resource,
         int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TResource : notnull
@@ -77,6 +80,7 @@ public static class AccessQueueInjection
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+    [PublicAPI]
     public static IServiceCollection AddPriorityAccessQueue<TResource>(this IServiceCollection services, TResource resource, int maxPriority = 100,
         int maxAttempts = int.MaxValue)
         where TResource : notnull
@@ -94,6 +98,7 @@ public static class AccessQueueInjection
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
+    [PublicAPI]
     public static IAccessQueue<TResource> CreateAccessQueue<TResource>(this IServiceCollection services, IEnumerable<TResource> resources,
         int maxAttempts = int.MaxValue)
         where TResource : notnull
@@ -113,6 +118,7 @@ public static class AccessQueueInjection
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
+    [PublicAPI]
     public static IServiceCollection AddAccessQueue<TResource>(this IServiceCollection services, IEnumerable<TResource> resources,
         int maxAttempts = int.MaxValue)
         where TResource : notnull
@@ -130,6 +136,7 @@ public static class AccessQueueInjection
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
+    [PublicAPI]
     public static IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(this IServiceCollection services,
         IEnumerable<TResource> resources, int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TResource : notnull
@@ -150,6 +157,7 @@ public static class AccessQueueInjection
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
+    [PublicAPI]
     public static IServiceCollection AddPriorityAccessQueue<TResource>(this IServiceCollection services, IEnumerable<TResource> resources,
         int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TResource : notnull
@@ -169,6 +177,7 @@ public static class AccessQueueInjection
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IAccessQueue<TResource> CreateAccessQueue<TResource>(this IServiceCollection services,
         Func<IServiceProvider, TResource> resourceFactory, ReuseStrategy strategy, int maxResourceInstances = 1, int maxAttempts = int.MaxValue)
         where TResource : notnull
@@ -193,6 +202,7 @@ public static class AccessQueueInjection
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IServiceCollection AddAccessQueue<TResource>(this IServiceCollection services, Func<IServiceProvider, TResource> resourceFactory,
         ReuseStrategy strategy, int maxResourceInstances = 1, int maxAttempts = int.MaxValue)
         where TResource : notnull
@@ -212,6 +222,7 @@ public static class AccessQueueInjection
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(this IServiceCollection services,
         Func<IServiceProvider, TResource> resourceFactory, ReuseStrategy strategy, int maxResourceInstances = 1, int maxPriority = 100,
         int maxAttempts = int.MaxValue)
@@ -238,6 +249,7 @@ public static class AccessQueueInjection
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IServiceCollection AddPriorityAccessQueue<TResource>(this IServiceCollection services,
         Func<IServiceProvider, TResource> resourceFactory, ReuseStrategy strategy, int maxResourceInstances = 1, int maxPriority = 100,
         int maxAttempts = int.MaxValue)
@@ -257,6 +269,7 @@ public static class AccessQueueInjection
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IAccessQueue<TResource> CreateAccessQueue<TResource>(this IServiceCollection services, ReuseStrategy strategy,
         int maxResourceInstances = 1, int maxAttempts = int.MaxValue)
         where TResource : notnull
@@ -271,6 +284,7 @@ public static class AccessQueueInjection
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IServiceCollection AddAccessQueue<TResource>(this IServiceCollection services, ReuseStrategy strategy, int maxResourceInstances = 1,
         int maxAttempts = int.MaxValue)
         where TResource : notnull
@@ -286,6 +300,7 @@ public static class AccessQueueInjection
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(this IServiceCollection services, ReuseStrategy strategy,
         int maxResourceInstances = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TResource : notnull
@@ -305,6 +320,7 @@ public static class AccessQueueInjection
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IServiceCollection AddPriorityAccessQueue<TResource>(this IServiceCollection services, ReuseStrategy strategy,
         int maxResourceInstances = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TResource : notnull

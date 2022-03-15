@@ -29,6 +29,7 @@ public static class AccessQueueEnumerableExtension
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="accesses" /> or <paramref name="accesses" /> is NULL </exception>
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAccessQueue<TResource> accessQueue,
         IEnumerable<IAccess<TResource, TResult>> accesses, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1,
         bool enqueueAll = false)
@@ -44,6 +45,7 @@ public static class AccessQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IEnumerable<IAccess<TResource, TResult>> accesses,
         IAccessQueue<TResource> accessQueue, CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
         where TResource : notnull
@@ -60,6 +62,7 @@ public static class AccessQueueEnumerableExtension
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="accessQueue" /> or <paramref name="accesses" /> is NULL </exception>
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IPriorityAccessQueue<TResource> accessQueue,
         IEnumerable<IAccess<TResource, TResult>> accesses, int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default,
         int attemptsCount = 1, bool enqueueAll = false)
@@ -75,6 +78,7 @@ public static class AccessQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IEnumerable<IAccess<TResource, TResult>> accesses,
         IPriorityAccessQueue<TResource> accessQueue, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         bool enqueueAll = false)
@@ -97,6 +101,7 @@ public static class AccessQueueEnumerableExtension
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> or <paramref name="accesses" /> is NULL </exception>
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IServiceProvider provider,
         IEnumerable<IAccess<TResource, TResult>> accesses, CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false,
         int priority = 0)
@@ -118,6 +123,7 @@ public static class AccessQueueEnumerableExtension
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="accessQueue" /> or <paramref name="accesses" /> is NULL </exception>
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAccessQueue<TResource> accessQueue,
         IEnumerable<IAsyncAccess<TResource, TResult>> accesses, [EnumeratorCancellation] CancellationToken cancellation = default,
         int attemptsCount = 1, bool enqueueAll = false)
@@ -133,6 +139,7 @@ public static class AccessQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IEnumerable<IAsyncAccess<TResource, TResult>> accesses,
         IAccessQueue<TResource> accessQueue, CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
         where TResource : notnull
@@ -149,6 +156,7 @@ public static class AccessQueueEnumerableExtension
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="accessQueue" /> or <paramref name="accesses" /> is NULL </exception>
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IPriorityAccessQueue<TResource> accessQueue,
         IEnumerable<IAsyncAccess<TResource, TResult>> accesses, int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default,
         int attemptsCount = 1, bool enqueueAll = false)
@@ -164,6 +172,7 @@ public static class AccessQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IEnumerable<IAsyncAccess<TResource, TResult>> accesses,
         IPriorityAccessQueue<TResource> accessQueue, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         bool enqueueAll = false)
@@ -186,6 +195,7 @@ public static class AccessQueueEnumerableExtension
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> or <paramref name="accesses" /> is NULL </exception>
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IServiceProvider provider,
         IEnumerable<IAsyncAccess<TResource, TResult>> accesses, CancellationToken cancellation = default, int attemptsCount = 1,
         bool enqueueAll = false, int priority = 0)
@@ -202,6 +212,7 @@ public static class AccessQueueEnumerableExtension
 #region AsyncEnumerable
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},CancellationToken,int,bool)" />
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAccessQueue<TResource> accessQueue,
         IAsyncEnumerable<IAccess<TResource, TResult>> accesses, [EnumeratorCancellation] CancellationToken cancellation = default,
         int attemptsCount = 1)
@@ -237,12 +248,14 @@ public static class AccessQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAsyncEnumerable<IAccess<TResource, TResult>> accesses,
         IAccessQueue<TResource> accessQueue, CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull
         => accessQueue.AccessAsync(accesses, cancellation, attemptsCount);
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IPriorityAccessQueue<TResource> accessQueue,
         IAsyncEnumerable<IAccess<TResource, TResult>> accesses, int priority, [EnumeratorCancellation] CancellationToken cancellation = default,
         int attemptsCount = 1)
@@ -279,12 +292,14 @@ public static class AccessQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAsyncEnumerable<IAccess<TResource, TResult>> accesses,
         IPriorityAccessQueue<TResource> accessQueue, int priority, CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull
         => accessQueue.AccessAsync(accesses, priority, cancellation, attemptsCount);
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IServiceProvider,IEnumerable{IAccess{TResource,TResult}},CancellationToken,int,bool,int)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IServiceProvider provider,
         IAsyncEnumerable<IAccess<TResource, TResult>> accesses, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -296,6 +311,7 @@ public static class AccessQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},CancellationToken,int,bool)" />
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAccessQueue<TResource> accessQueue,
         IAsyncEnumerable<IAsyncAccess<TResource, TResult>> accesses, [EnumeratorCancellation] CancellationToken cancellation = default,
         int attemptsCount = 1)
@@ -334,12 +350,14 @@ public static class AccessQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAsyncEnumerable<IAsyncAccess<TResource, TResult>> accesses,
         IAccessQueue<TResource> accessQueue, CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull
         => accessQueue.AccessAsync(accesses, cancellation, attemptsCount);
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IPriorityAccessQueue<TResource> accessQueue,
         IAsyncEnumerable<IAsyncAccess<TResource, TResult>> accesses, int priority, [EnumeratorCancellation] CancellationToken cancellation = default,
         int attemptsCount = 1)
@@ -378,12 +396,14 @@ public static class AccessQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IPriorityAccessQueue{TResource},IEnumerable{IAsyncAccess{TResource,TResult}},int,CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IAsyncEnumerable<IAsyncAccess<TResource, TResult>> accesses,
         IPriorityAccessQueue<TResource> accessQueue, int priority, CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull
         => accessQueue.AccessAsync(accesses, priority, cancellation, attemptsCount);
 
     /// <inheritdoc cref="AccessAsync{TResource,TResult}(IServiceProvider,IEnumerable{IAsyncAccess{TResource,TResult}},CancellationToken,int,bool,int)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> AccessAsync<TResource, TResult>(this IServiceProvider provider,
         IAsyncEnumerable<IAsyncAccess<TResource, TResult>> accesses, CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0)
