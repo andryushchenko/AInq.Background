@@ -16,7 +16,6 @@ using AInq.Background;
 using AInq.Background.Helpers;
 using AInq.Background.Interaction;
 using AInq.Background.Services;
-using AInq.Background.Tasks;
 using AInq.Background.Test;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

@@ -5,10 +5,6 @@
         <Description>Background work utilities for .NET Core apps based on Hosted services. Batch processing extension for background work queue, access queue and data coveyor. </Description>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DocumentationFile>..\..\doc\AInq.Background.Enumerable.xml</DocumentationFile>
-    </PropertyGroup>
-
     <ItemGroup>
         <PackageReference Include="System.Threading.Channels" Version="6.0.0" />
     </ItemGroup>

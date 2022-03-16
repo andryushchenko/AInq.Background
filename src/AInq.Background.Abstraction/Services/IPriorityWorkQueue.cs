@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Tasks;
-
 namespace AInq.Background.Services;
 
 /// <summary> Interface for background work queue with prioritization </summary>

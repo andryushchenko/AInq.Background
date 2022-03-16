@@ -5,12 +5,8 @@
         <Description>Background work utilities for .NET Core apps based on Hosted services. Work scheduler interfaces and helpers.</Description>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DocumentationFile>..\..\doc\AInq.Background.Scheduler.Abstraction.xml</DocumentationFile>
-    </PropertyGroup>
-
     <ItemGroup>
-        <PackageReference Include="AInq.Optional" Version="3.0.3" />
+        <PackageReference Include="AInq.Optional" Version="3.1.0-rc.2" />
     </ItemGroup>
 
     <ItemGroup>
@@ -21,7 +17,6 @@
         <Using Include="AInq.Background.Extensions" />
         <Using Include="AInq.Background.Helpers" />
         <Using Include="AInq.Background.Services" />
-        <Using Include="AInq.Background.Tasks" />
         <Using Include="AInq.Optional" />
     </ItemGroup>
 

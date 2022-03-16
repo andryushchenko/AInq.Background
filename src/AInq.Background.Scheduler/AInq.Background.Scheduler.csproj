@@ -5,10 +5,6 @@
         <Description>Background work utilities for .NET Core apps based on Hosted services. Background work scheduler with cron.</Description>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DocumentationFile>..\..\doc\AInq.Background.Scheduler.xml</DocumentationFile>
-    </PropertyGroup>
-
     <ItemGroup>
         <PackageReference Include="Cronos" Version="0.7.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
@@ -22,7 +18,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="AInq.Background.Tasks" />
         <Using Include="AInq.Optional" />
         <Using Include="Microsoft.Extensions.Logging" />
         <Using Include="System.Reactive.Subjects" />

@@ -14,7 +14,6 @@
 
 using AInq.Background.Helpers;
 using AInq.Background.Services;
-using AInq.Background.Tasks;
 
 namespace AInq.Background.Interaction;
 
