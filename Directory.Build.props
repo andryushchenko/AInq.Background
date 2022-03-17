@@ -10,7 +10,7 @@
         <Copyright>Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-        <Version>5.3.0-rc.1</Version>
+        <Version>5.3.0-rc.2</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
