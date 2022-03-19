@@ -20,6 +20,7 @@ namespace AInq.Background.Helpers;
 /// <typeparam name="TData"> Input data type </typeparam>
 /// <typeparam name="TIntermediate"> Intermediate result type </typeparam>
 /// <typeparam name="TResult"> Processing result type </typeparam>
+[PublicAPI]
 public class ConveyorChain<TData, TIntermediate, TResult> : IConveyor<TData, TResult>
     where TData : notnull
     where TIntermediate : notnull

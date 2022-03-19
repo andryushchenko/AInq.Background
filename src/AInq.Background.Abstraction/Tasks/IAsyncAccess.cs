@@ -24,5 +24,6 @@ public interface IAsyncAccess<in TResource>
     /// <param name="serviceProvider"> Service provider instance </param>
     /// <param name="cancellation"> Access action cancellation token </param>
     /// <returns> Access action completion task </returns>
+    [PublicAPI]
     Task AccessAsync(TResource resource, IServiceProvider serviceProvider, CancellationToken cancellation = default);
 }

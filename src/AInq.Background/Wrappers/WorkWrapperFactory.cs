@@ -22,6 +22,7 @@ public static class WorkWrapperFactory
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <returns> Wrapper and asyncWork completion task </returns>
+    [PublicAPI]
     public static (ITaskWrapper<object?> Work, Task Task) CreateWorkWrapper(IWork work, int attemptsCount = 1,
         CancellationToken cancellation = default)
     {
@@ -35,6 +36,7 @@ public static class WorkWrapperFactory
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Wrapper and asyncWork result task </returns>
+    [PublicAPI]
     public static (ITaskWrapper<object?> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IWork<TResult> work, int attemptsCount = 1,
         CancellationToken cancellation = default)
     {
@@ -47,6 +49,7 @@ public static class WorkWrapperFactory
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <returns> Wrapper and asyncWork completion task </returns>
+    [PublicAPI]
     public static (ITaskWrapper<object?> Work, Task Task) CreateWorkWrapper(IAsyncWork asyncWork, int attemptsCount = 1,
         CancellationToken cancellation = default)
     {
@@ -60,6 +63,7 @@ public static class WorkWrapperFactory
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Wrapper and asyncWork result task </returns>
+    [PublicAPI]
     public static (ITaskWrapper<object?> Work, Task<TResult> Task) CreateWorkWrapper<TResult>(IAsyncWork<TResult> asyncWork, int attemptsCount = 1,
         CancellationToken cancellation = default)
     {

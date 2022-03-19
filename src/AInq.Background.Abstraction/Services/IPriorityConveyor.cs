@@ -21,6 +21,7 @@ public interface IPriorityConveyor<in TData, TResult> : IConveyor<TData, TResult
     where TData : notnull
 {
     /// <summary> Max allowed operation priority </summary>
+    [PublicAPI]
     int MaxPriority { get; }
 
     /// <summary> Process data asynchronously in queue with given <paramref name="priority" /> </summary>
@@ -30,5 +31,6 @@ public interface IPriorityConveyor<in TData, TResult> : IConveyor<TData, TResult
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <returns> Processing result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="data" /> is NULL </exception>
+    [PublicAPI]
     Task<TResult> ProcessDataAsync(TData data, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
 }

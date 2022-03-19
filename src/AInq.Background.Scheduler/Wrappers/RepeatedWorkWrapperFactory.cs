@@ -26,6 +26,7 @@ public static class RepeatedWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
+    [PublicAPI]
     public static (IScheduledTaskWrapper, IObservable<Maybe<Exception>>) CreateRepeatedWorkWrapper(IWork work, DateTime startTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
     {
@@ -52,6 +53,7 @@ public static class RepeatedWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
+    [PublicAPI]
     public static (IScheduledTaskWrapper, IObservable<Try<TResult>>) CreateRepeatedWorkWrapper<TResult>(IWork<TResult> work, DateTime startTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
     {
@@ -77,6 +79,7 @@ public static class RepeatedWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="asyncWork" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
+    [PublicAPI]
     public static (IScheduledTaskWrapper, IObservable<Maybe<Exception>>) CreateRepeatedWorkWrapper(IAsyncWork asyncWork, DateTime startTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
     {
@@ -103,6 +106,7 @@ public static class RepeatedWorkWrapperFactory
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="asyncWork" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
+    [PublicAPI]
     public static (IScheduledTaskWrapper, IObservable<Try<TResult>>) CreateRepeatedWorkWrapper<TResult>(IAsyncWork<TResult> asyncWork,
         DateTime startTime, TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
     {

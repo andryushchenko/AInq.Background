@@ -14,7 +14,6 @@
 
 using AInq.Background.Helpers;
 using AInq.Background.Services;
-using AInq.Background.Tasks;
 using static AInq.Background.Tasks.AccessFactory;
 
 namespace AInq.Background.Extensions;
@@ -31,6 +30,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
+    [PublicAPI]
     public static Task EnqueueAccess<TResource, TAccess>(this IAccessQueue<TResource> queue, CancellationToken cancellation = default,
         int attemptsCount = 1)
         where TResource : notnull
@@ -48,6 +48,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
+    [PublicAPI]
     public static Task<TResult> EnqueueAccess<TResource, TAccess, TResult>(this IAccessQueue<TResource> queue,
         CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull
@@ -64,6 +65,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
+    [PublicAPI]
     public static Task EnqueueAsyncAccess<TResource, TAsyncAccess>(this IAccessQueue<TResource> queue, CancellationToken cancellation = default,
         int attemptsCount = 1)
         where TResource : notnull
@@ -81,6 +83,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
+    [PublicAPI]
     public static Task<TResult> EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(this IAccessQueue<TResource> queue,
         CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull
@@ -103,6 +106,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
+    [PublicAPI]
     public static Task EnqueueAccess<TResource, TAccess>(this IPriorityAccessQueue<TResource> queue, int priority,
         CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull
@@ -122,6 +126,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
+    [PublicAPI]
     public static Task<TResult> EnqueueAccess<TResource, TAccess, TResult>(this IPriorityAccessQueue<TResource> queue, int priority,
         CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull
@@ -140,6 +145,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
+    [PublicAPI]
     public static Task EnqueueAsyncAccess<TResource, TAsyncAccess>(this IPriorityAccessQueue<TResource> queue, int priority,
         CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull
@@ -159,6 +165,7 @@ public static class AccessQueueDependencyInjectionExtension
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
+    [PublicAPI]
     public static Task<TResult> EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(this IPriorityAccessQueue<TResource> queue, int priority,
         CancellationToken cancellation = default, int attemptsCount = 1)
         where TResource : notnull

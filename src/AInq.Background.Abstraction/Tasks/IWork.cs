@@ -19,5 +19,6 @@ public interface IWork
 {
     /// <summary> Work action </summary>
     /// <param name="serviceProvider"> Service provider instance </param>
+    [PublicAPI]
     void DoWork(IServiceProvider serviceProvider);
 }

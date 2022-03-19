@@ -5,8 +5,4 @@
         <Description>Background work utilities for .NET Core apps based on Hosted services. Basis interfaces and helpers.</Description>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DocumentationFile>..\..\doc\AInq.Background.Abstraction.xml</DocumentationFile>
-    </PropertyGroup>
-
 </Project>

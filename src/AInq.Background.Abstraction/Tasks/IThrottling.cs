@@ -21,5 +21,6 @@ namespace AInq.Background.Tasks;
 public interface IThrottling
 {
     /// <summary> Timeout duration </summary>
+    [PublicAPI]
     TimeSpan Timeout { get; }
 }

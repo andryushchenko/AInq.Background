@@ -29,6 +29,7 @@ public static class ConveyorEnumerableExtension
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyor" /> or <paramref name="data" /> is NULL </exception>
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IConveyor<TData, TResult> conveyor, IEnumerable<TData> data,
         [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
         where TData : notnull
@@ -43,6 +44,7 @@ public static class ConveyorEnumerableExtension
     }
 
     /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IConveyor{TData,TResult},IEnumerable{TData},CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IEnumerable<TData> data, IConveyor<TData, TResult> conveyor,
         CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
         where TData : notnull
@@ -59,6 +61,7 @@ public static class ConveyorEnumerableExtension
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyor" /> or <paramref name="data" /> is NULL </exception>
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IPriorityConveyor<TData, TResult> conveyor,
         IEnumerable<TData> data, int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1,
         bool enqueueAll = false)
@@ -74,6 +77,7 @@ public static class ConveyorEnumerableExtension
     }
 
     /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IPriorityConveyor{TData,TResult},IEnumerable{TData},int,CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IEnumerable<TData> data, IPriorityConveyor<TData, TResult> conveyor,
         int priority = 0, CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
         where TData : notnull
@@ -91,6 +95,7 @@ public static class ConveyorEnumerableExtension
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> or <paramref name="data" /> is NULL </exception>
     /// <exception cref="InvalidOperationException"> Thrown if no conveyor for given <typeparamref name="TData" /> and <typeparamref name="TResult" /> is registered </exception>
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, IEnumerable<TData> data,
         CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false, int priority = 0)
         where TData : notnull
@@ -106,6 +111,7 @@ public static class ConveyorEnumerableExtension
 #region AsyncEnumerable
 
     /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IConveyor{TData,TResult},IEnumerable{TData},CancellationToken,int,bool)" />
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IConveyor<TData, TResult> conveyor,
         IAsyncEnumerable<TData> data, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
         where TData : notnull
@@ -142,12 +148,14 @@ public static class ConveyorEnumerableExtension
     }
 
     /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IConveyor{TData,TResult},IEnumerable{TData},CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IAsyncEnumerable<TData> data, IConveyor<TData, TResult> conveyor,
         CancellationToken cancellation = default, int attemptsCount = 1)
         where TData : notnull
         => (conveyor ?? throw new ArgumentNullException(nameof(conveyor))).ProcessDataAsync(data, cancellation, attemptsCount);
 
     /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IPriorityConveyor{TData,TResult},IEnumerable{TData},int,CancellationToken,int,bool)" />
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IPriorityConveyor<TData, TResult> conveyor,
         IAsyncEnumerable<TData> data, int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
         where TData : notnull
@@ -185,12 +193,14 @@ public static class ConveyorEnumerableExtension
     }
 
     /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IPriorityConveyor{TData,TResult},IEnumerable{TData},int,CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IAsyncEnumerable<TData> data,
         IPriorityConveyor<TData, TResult> conveyor, int priority = 0, CancellationToken cancellation = default, int attemptsCount = 1)
         where TData : notnull
         => (conveyor ?? throw new ArgumentNullException(nameof(conveyor))).ProcessDataAsync(data, priority, cancellation, attemptsCount);
 
     /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IServiceProvider,IEnumerable{TData},CancellationToken,int,bool,int)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, IAsyncEnumerable<TData> data,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TData : notnull

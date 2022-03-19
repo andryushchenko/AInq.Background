@@ -28,6 +28,7 @@ public static class ConveyorInjection
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TData"> Input data type </typeparam>
     /// <typeparam name="TResult"> Processing result type </typeparam>
+    [PublicAPI]
     public static IConveyor<TData, TResult> CreateConveyor<TData, TResult>(this IServiceCollection services,
         IConveyorMachine<TData, TResult> conveyorMachine, int maxAttempts = int.MaxValue)
         where TData : notnull
@@ -48,6 +49,7 @@ public static class ConveyorInjection
     /// <typeparam name="TData"> Input data type </typeparam>
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+    [PublicAPI]
     public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services, IConveyorMachine<TData, TResult> conveyorMachine,
         int maxAttempts = int.MaxValue)
         where TData : notnull
@@ -65,6 +67,7 @@ public static class ConveyorInjection
     /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
     /// <typeparam name="TData"> Input data type </typeparam>
     /// <typeparam name="TResult"> Processing result type </typeparam>
+    [PublicAPI]
     public static IPriorityConveyor<TData, TResult> CreatePriorityConveyor<TData, TResult>(this IServiceCollection services,
         IConveyorMachine<TData, TResult> conveyorMachine, int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TData : notnull
@@ -86,6 +89,7 @@ public static class ConveyorInjection
     /// <typeparam name="TData"> Input data type </typeparam>
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+    [PublicAPI]
     public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services,
         IConveyorMachine<TData, TResult> conveyorMachine, int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TData : notnull
@@ -104,6 +108,7 @@ public static class ConveyorInjection
     /// <typeparam name="TData"> Input data type </typeparam>
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="conveyorMachines" /> collection is empty </exception>
+    [PublicAPI]
     public static IConveyor<TData, TResult> CreateConveyor<TData, TResult>(this IServiceCollection services,
         IEnumerable<IConveyorMachine<TData, TResult>> conveyorMachines, int maxAttempts = int.MaxValue)
         where TData : notnull
@@ -126,6 +131,7 @@ public static class ConveyorInjection
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="conveyorMachines" /> collection is empty </exception>
+    [PublicAPI]
     public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services,
         IEnumerable<IConveyorMachine<TData, TResult>> conveyorMachines, int maxAttempts = int.MaxValue)
         where TData : notnull
@@ -144,6 +150,7 @@ public static class ConveyorInjection
     /// <typeparam name="TData"> Input data type </typeparam>
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="conveyorMachines" /> collection is empty </exception>
+    [PublicAPI]
     public static IPriorityConveyor<TData, TResult> CreatePriorityConveyor<TData, TResult>(this IServiceCollection services,
         IEnumerable<IConveyorMachine<TData, TResult>> conveyorMachines, int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TData : notnull
@@ -167,6 +174,7 @@ public static class ConveyorInjection
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="conveyorMachines" /> collection is empty </exception>
+    [PublicAPI]
     public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services,
         IEnumerable<IConveyorMachine<TData, TResult>> conveyorMachines, int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TData : notnull
@@ -187,6 +195,7 @@ public static class ConveyorInjection
     /// <typeparam name="TData"> Input data type </typeparam>
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IConveyor<TData, TResult> CreateConveyor<TData, TResult>(this IServiceCollection services,
         Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFactory, ReuseStrategy strategy, int maxParallelMachines = 1,
         int maxAttempts = int.MaxValue)
@@ -213,6 +222,7 @@ public static class ConveyorInjection
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IServiceCollection AddConveyor<TData, TResult>(this IServiceCollection services,
         Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFactory, ReuseStrategy strategy, int maxParallelMachines = 1,
         int maxAttempts = int.MaxValue)
@@ -234,6 +244,7 @@ public static class ConveyorInjection
     /// <typeparam name="TData"> Input data type </typeparam>
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IPriorityConveyor<TData, TResult> CreatePriorityConveyor<TData, TResult>(this IServiceCollection services,
         Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFactory, ReuseStrategy strategy, int maxParallelMachines = 1,
         int maxPriority = 100, int maxAttempts = int.MaxValue)
@@ -261,6 +272,7 @@ public static class ConveyorInjection
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IServiceCollection AddPriorityConveyor<TData, TResult>(this IServiceCollection services,
         Func<IServiceProvider, IConveyorMachine<TData, TResult>> conveyorMachineFactory, ReuseStrategy strategy, int maxParallelMachines = 1,
         int maxPriority = 100, int maxAttempts = int.MaxValue)
@@ -282,6 +294,7 @@ public static class ConveyorInjection
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <typeparam name="TConveyorMachine"> Conveyor machine type </typeparam>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IConveyor<TData, TResult> CreateConveyor<TData, TResult, TConveyorMachine>(this IServiceCollection services, ReuseStrategy strategy,
         int maxParallelMachines = 1, int maxAttempts = int.MaxValue)
         where TData : notnull
@@ -299,6 +312,7 @@ public static class ConveyorInjection
     /// <typeparam name="TConveyorMachine"> Conveyor machine type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IServiceCollection AddConveyor<TData, TResult, TConveyorMachine>(this IServiceCollection services, ReuseStrategy strategy,
         int maxParallelMachines = 1, int maxAttempts = int.MaxValue)
         where TData : notnull
@@ -316,6 +330,7 @@ public static class ConveyorInjection
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <typeparam name="TConveyorMachine"> Conveyor machine type </typeparam>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IPriorityConveyor<TData, TResult> CreatePriorityConveyor<TData, TResult, TConveyorMachine>(this IServiceCollection services,
         ReuseStrategy strategy, int maxParallelMachines = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TData : notnull
@@ -338,6 +353,7 @@ public static class ConveyorInjection
     /// <typeparam name="TConveyorMachine"> Conveyor machine type </typeparam>
     /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+    [PublicAPI]
     public static IServiceCollection AddPriorityConveyor<TData, TResult, TConveyorMachine>(this IServiceCollection services, ReuseStrategy strategy,
         int maxParallelMachines = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
         where TData : notnull

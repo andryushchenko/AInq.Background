@@ -29,6 +29,7 @@ public static class StartupWorkInjection
     /// <summary> Run registered startup works asynchronously </summary>
     /// <param name="host"> Current host </param>
     /// <param name="cancellation"> Startup work cancellation token </param>
+    [PublicAPI]
     public static async Task DoStartupWorkAsync(this IHost host, CancellationToken cancellation = default)
     {
         var logger = (host ?? throw new ArgumentNullException(nameof(host))).Services.GetService<ILoggerFactory>()?.CreateLogger("Startup work")
@@ -42,6 +43,7 @@ public static class StartupWorkInjection
     /// <summary> Register startup work </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="work"> Work instance </param>
+    [PublicAPI]
     public static IServiceCollection AddStartupWork(this IServiceCollection services, IWork work)
         => (services ?? throw new ArgumentNullException(nameof(services)))
             .AddSingleton(CreateStartupWorkWrapper(work ?? throw new ArgumentNullException(nameof(work))));
@@ -50,6 +52,7 @@ public static class StartupWorkInjection
     /// <param name="services"> Service collection </param>
     /// <param name="work"> Work instance </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
+    [PublicAPI]
     public static IServiceCollection AddStartupWork<TResult>(this IServiceCollection services, IWork<TResult> work)
         => (services ?? throw new ArgumentNullException(nameof(services)))
             .AddSingleton(CreateStartupWorkWrapper(work ?? throw new ArgumentNullException(nameof(work))));
@@ -57,6 +60,7 @@ public static class StartupWorkInjection
     /// <summary> Register asynchronous startup work </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="work"> Work instance </param>
+    [PublicAPI]
     public static IServiceCollection AddStartupAsyncWork(this IServiceCollection services, IAsyncWork work)
         => (services ?? throw new ArgumentNullException(nameof(services)))
             .AddSingleton(CreateStartupWorkWrapper(work ?? throw new ArgumentNullException(nameof(work))));
@@ -64,6 +68,7 @@ public static class StartupWorkInjection
     /// <summary> Register asynchronous startup work </summary>
     /// <param name="services"> Service collection </param>
     /// <param name="work"> Work instance </param>
+    [PublicAPI]
     public static IServiceCollection AddStartupAsyncWork<TResult>(this IServiceCollection services, IAsyncWork<TResult> work)
         => (services ?? throw new ArgumentNullException(nameof(services)))
             .AddSingleton(CreateStartupWorkWrapper(work ?? throw new ArgumentNullException(nameof(work))));
@@ -75,6 +80,7 @@ public static class StartupWorkInjection
     /// <summary> Register startup work </summary>
     /// <param name="services"> Service collection </param>
     /// <typeparam name="TWork"> Work type </typeparam>
+    [PublicAPI]
     public static IServiceCollection AddStartupWork<TWork>(this IServiceCollection services)
         where TWork : IWork
         => (services ?? throw new ArgumentNullException(nameof(services)))
@@ -84,6 +90,7 @@ public static class StartupWorkInjection
     /// <param name="services"> Service collection </param>
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
+    [PublicAPI]
     public static IServiceCollection AddStartupWork<TWork, TResult>(this IServiceCollection services)
         where TWork : IWork<TResult>
         => (services ?? throw new ArgumentNullException(nameof(services)))
@@ -92,6 +99,7 @@ public static class StartupWorkInjection
     /// <summary> Register asynchronous startup work </summary>
     /// <param name="services"> Service collection </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
+    [PublicAPI]
     public static IServiceCollection AddStartupAsyncWork<TAsyncWork>(this IServiceCollection services)
         where TAsyncWork : IAsyncWork
         => (services ?? throw new ArgumentNullException(nameof(services)))
@@ -102,6 +110,7 @@ public static class StartupWorkInjection
     /// <param name="services"> Service collection </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
+    [PublicAPI]
     public static IServiceCollection AddStartupAsyncWork<TAsyncWork, TResult>(this IServiceCollection services)
         where TAsyncWork : IAsyncWork<TResult>
         => (services ?? throw new ArgumentNullException(nameof(services)))
@@ -118,6 +127,7 @@ public static class StartupWorkInjection
     /// <param name="work"> Work instance </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Work priority </param>
+    [PublicAPI]
     public static IServiceCollection AddStartupQueuedWork(this IServiceCollection services, IWork work, int attemptsCount = 1, int priority = 0)
     {
         _ = services ?? throw new ArgumentNullException(nameof(services));
@@ -133,6 +143,7 @@ public static class StartupWorkInjection
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Work priority </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
+    [PublicAPI]
     public static IServiceCollection AddStartupQueuedWork<TResult>(this IServiceCollection services, IWork<TResult> work, int attemptsCount = 1,
         int priority = 0)
     {
@@ -148,6 +159,7 @@ public static class StartupWorkInjection
     /// <param name="work"> Work instance </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Work priority </param>
+    [PublicAPI]
     public static IServiceCollection AddStartupAsyncQueuedWork(this IServiceCollection services, IAsyncWork work, int attemptsCount = 1,
         int priority = 0)
     {
@@ -164,6 +176,7 @@ public static class StartupWorkInjection
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Work priority </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
+    [PublicAPI]
     public static IServiceCollection AddStartupAsyncQueuedWork<TResult>(this IServiceCollection services, IAsyncWork<TResult> work,
         int attemptsCount = 1, int priority = 0)
     {
@@ -183,6 +196,7 @@ public static class StartupWorkInjection
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Work priority </param>
     /// <typeparam name="TWork"> Work type </typeparam>
+    [PublicAPI]
     public static IServiceCollection AddStartupQueuedWork<TWork>(this IServiceCollection services, int attemptsCount = 1, int priority = 0)
         where TWork : IWork
         => (services ?? throw new ArgumentNullException(nameof(services)))
@@ -196,6 +210,7 @@ public static class StartupWorkInjection
     /// <param name="priority"> Work priority </param>
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
+    [PublicAPI]
     public static IServiceCollection AddStartupQueuedWork<TWork, TResult>(this IServiceCollection services, int attemptsCount = 1, int priority = 0)
         where TWork : IWork<TResult>
         => (services ?? throw new ArgumentNullException(nameof(services)))
@@ -208,6 +223,7 @@ public static class StartupWorkInjection
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Work priority </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
+    [PublicAPI]
     public static IServiceCollection AddStartupAsyncQueuedWork<TAsyncWork>(this IServiceCollection services, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork
         => (services ?? throw new ArgumentNullException(nameof(services)))
@@ -221,6 +237,7 @@ public static class StartupWorkInjection
     /// <param name="priority"> Work priority </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
+    [PublicAPI]
     public static IServiceCollection AddStartupAsyncQueuedWork<TAsyncWork, TResult>(this IServiceCollection services, int attemptsCount = 1,
         int priority = 0)
         where TAsyncWork : IAsyncWork<TResult>

@@ -21,6 +21,7 @@ public static class WorkFactory
     /// <param name="work"> Work action </param>
     /// <returns> <see cref="IWork" /> instance for given action </returns>
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="work" /> is NULL </exception>
+    [PublicAPI]
     public static IWork CreateWork(Action<IServiceProvider> work)
         => new Work(work ?? throw new ArgumentNullException(nameof(work)));
 
@@ -29,6 +30,7 @@ public static class WorkFactory
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> <see cref="IWork{TResult}" /> instance for given function </returns>
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="work" /> is NULL </exception>
+    [PublicAPI]
     public static IWork<TResult> CreateWork<TResult>(Func<IServiceProvider, TResult> work)
         => new Work<TResult>(work ?? throw new ArgumentNullException(nameof(work)));
 
@@ -36,6 +38,7 @@ public static class WorkFactory
     /// <param name="work"> Work action </param>
     /// <returns> <see cref="IAsyncWork" /> instance for given action </returns>
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="work" /> is NULL </exception>
+    [PublicAPI]
     public static IAsyncWork CreateAsyncWork(Func<IServiceProvider, CancellationToken, Task> work)
         => new AsyncWork(work ?? throw new ArgumentNullException(nameof(work)));
 
@@ -44,6 +47,7 @@ public static class WorkFactory
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> <see cref="IAsyncWork{TResult}" /> instance for given function </returns>
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="work" /> is NULL </exception>
+    [PublicAPI]
     public static IAsyncWork<TResult> CreateAsyncWork<TResult>(Func<IServiceProvider, CancellationToken, Task<TResult>> work)
         => new AsyncWork<TResult>(work ?? throw new ArgumentNullException(nameof(work)));
 

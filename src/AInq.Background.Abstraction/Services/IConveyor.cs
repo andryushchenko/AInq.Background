@@ -21,6 +21,7 @@ public interface IConveyor<in TData, TResult>
     where TData : notnull
 {
     /// <summary> Max allowed retry on fail attempts </summary>
+    [PublicAPI]
     int MaxAttempts { get; }
 
     /// <summary> Process data asynchronously in queue </summary>
@@ -29,5 +30,6 @@ public interface IConveyor<in TData, TResult>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <returns> Processing result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="data" /> is NULL </exception>
+    [PublicAPI]
     Task<TResult> ProcessDataAsync(TData data, CancellationToken cancellation = default, int attemptsCount = 1);
 }

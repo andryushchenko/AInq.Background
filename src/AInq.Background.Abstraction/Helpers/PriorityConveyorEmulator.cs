@@ -19,6 +19,7 @@ namespace AInq.Background.Helpers;
 /// <summary> Wrapper around <see cref="IConveyor{TData,TResult}" /> to emulate <see cref="IPriorityConveyor{TData,TResult}" /> </summary>
 /// <typeparam name="TData"> Input data type </typeparam>
 /// <typeparam name="TResult"> Processing result type </typeparam>
+[PublicAPI]
 public class PriorityConveyorEmulator<TData, TResult> : IPriorityConveyor<TData, TResult>
     where TData : notnull
 {

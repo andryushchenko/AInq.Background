@@ -16,7 +16,7 @@ using AInq.Optional;
 
 namespace AInq.Background.Test;
 
-public class TestObserver<T> : IObserver<Try<T>>
+internal sealed class TestObserver<T> : IObserver<Try<T>>
 {
     public void OnCompleted()
         => Console.WriteLine($"{DateTime.Now:T}\tObservation completed");

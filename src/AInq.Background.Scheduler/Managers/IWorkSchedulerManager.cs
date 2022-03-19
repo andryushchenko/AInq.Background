@@ -21,19 +21,23 @@ public interface IWorkSchedulerManager
 {
     /// <summary> Asynchronously wait for new scheduled task </summary>
     /// <param name="cancellation"> Wait cancellation token </param>
+    [PublicAPI]
     Task WaitForNewTaskAsync(CancellationToken cancellation);
 
     /// <summary> Get next scheduled task execution time </summary>
     /// <returns> Time or NULL if no tasks </returns>
+    [PublicAPI]
     DateTime? GetNextTaskTime();
 
     /// <summary> Get upcoming scheduled tasks within given <paramref name="horizon" /> </summary>
     /// <param name="horizon"> Upcoming task search horizon </param>
     /// <returns> Task wrappers collection grouped by time </returns>
+    [PublicAPI]
     ILookup<DateTime, IScheduledTaskWrapper> GetUpcomingTasks(TimeSpan horizon);
 
     /// <summary> Revert task to scheduler </summary>
     /// <param name="task"> Task instance </param>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="task" /> is NULL </exception>
+    [PublicAPI]
     void RevertTask(IScheduledTaskWrapper task);
 }

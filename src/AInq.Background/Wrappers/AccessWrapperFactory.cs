@@ -23,6 +23,7 @@ public static class AccessWrapperFactory
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Wrapper and asyncAccess action completion task </returns>
+    [PublicAPI]
     public static (ITaskWrapper<TResource> Access, Task Task) CreateAccessWrapper<TResource>(IAccess<TResource> access, int attemptsCount = 1,
         CancellationToken cancellation = default)
         where TResource : notnull
@@ -40,6 +41,7 @@ public static class AccessWrapperFactory
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Wrapper and asyncAccess action result task </returns>
+    [PublicAPI]
     public static (ITaskWrapper<TResource> Access, Task<TResult> Task) CreateAccessWrapper<TResource, TResult>(IAccess<TResource, TResult> access,
         int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
@@ -56,6 +58,7 @@ public static class AccessWrapperFactory
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Wrapper and asyncAccess action completion task </returns>
+    [PublicAPI]
     public static (ITaskWrapper<TResource> Access, Task Task) CreateAccessWrapper<TResource>(IAsyncAccess<TResource> asyncAccess,
         int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
@@ -73,6 +76,7 @@ public static class AccessWrapperFactory
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Wrapper and asyncAccess action result task </returns>
+    [PublicAPI]
     public static (ITaskWrapper<TResource> Access, Task<TResult> Task) CreateAccessWrapper<TResource, TResult>(
         IAsyncAccess<TResource, TResult> asyncAccess, int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull

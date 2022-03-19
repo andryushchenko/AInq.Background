@@ -28,6 +28,7 @@ public static class WorkQueueEnumerableExtension
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="queue" /> or <paramref name="works" /> is NULL </exception>
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IWorkQueue queue, IEnumerable<IWork<TResult>> works,
         [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
     {
@@ -41,6 +42,7 @@ public static class WorkQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IWorkQueue,IEnumerable{IWork{TResult}},CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IEnumerable<IWork<TResult>> works, IWorkQueue queue,
         CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
         => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, cancellation, attemptsCount, enqueueAll);
@@ -55,6 +57,7 @@ public static class WorkQueueEnumerableExtension
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="queue" /> or <paramref name="works" /> is NULL </exception>
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IPriorityWorkQueue queue, IEnumerable<IWork<TResult>> works,
         int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
     {
@@ -68,6 +71,7 @@ public static class WorkQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IWork{TResult}},int,CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IEnumerable<IWork<TResult>> works, IPriorityWorkQueue queue, int priority = 0,
         CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
         => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, priority, cancellation, attemptsCount, enqueueAll);
@@ -83,6 +87,7 @@ public static class WorkQueueEnumerableExtension
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> or <paramref name="works" /> is NULL </exception>
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IServiceProvider provider, IEnumerable<IWork<TResult>> works,
         CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false, int priority = 0)
     {
@@ -101,6 +106,7 @@ public static class WorkQueueEnumerableExtension
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="queue" /> or <paramref name="works" /> is NULL </exception>
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IWorkQueue queue, IEnumerable<IAsyncWork<TResult>> works,
         [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
     {
@@ -114,6 +120,7 @@ public static class WorkQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IWorkQueue,IEnumerable{IAsyncWork{TResult}},CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IEnumerable<IAsyncWork<TResult>> works, IWorkQueue queue,
         CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
         => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, cancellation, attemptsCount, enqueueAll);
@@ -128,6 +135,7 @@ public static class WorkQueueEnumerableExtension
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="queue" /> or <paramref name="works" /> is NULL </exception>
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IPriorityWorkQueue queue, IEnumerable<IAsyncWork<TResult>> works,
         int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
     {
@@ -141,6 +149,7 @@ public static class WorkQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IAsyncWork{TResult}},int,CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IEnumerable<IAsyncWork<TResult>> works, IPriorityWorkQueue queue,
         int priority = 0, CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
         => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, priority, cancellation, attemptsCount, enqueueAll);
@@ -156,6 +165,7 @@ public static class WorkQueueEnumerableExtension
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> or <paramref name="works" /> is NULL </exception>
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IServiceProvider provider, IEnumerable<IAsyncWork<TResult>> works,
         CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false, int priority = 0)
     {
@@ -170,6 +180,7 @@ public static class WorkQueueEnumerableExtension
 #region AsyncEnumerable
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IWorkQueue,IEnumerable{IWork{TResult}},CancellationToken,int,bool)" />
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IWorkQueue queue, IAsyncEnumerable<IWork<TResult>> works,
         [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
     {
@@ -205,11 +216,13 @@ public static class WorkQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IWorkQueue,IEnumerable{IWork{TResult}},CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IAsyncEnumerable<IWork<TResult>> works, IWorkQueue queue,
         CancellationToken cancellation = default, int attemptsCount = 1)
         => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, cancellation, attemptsCount);
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IWork{TResult}},int,CancellationToken,int,bool)" />
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IPriorityWorkQueue queue, IAsyncEnumerable<IWork<TResult>> works,
         int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
     {
@@ -246,11 +259,13 @@ public static class WorkQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IWork{TResult}},int,CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IAsyncEnumerable<IWork<TResult>> works, IPriorityWorkQueue queue,
         int priority = 0, CancellationToken cancellation = default, int attemptsCount = 1)
         => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, priority, cancellation, attemptsCount);
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IServiceProvider,IEnumerable{IWork{TResult}},CancellationToken,int,bool,int)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IServiceProvider provider, IAsyncEnumerable<IWork<TResult>> works,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
     {
@@ -261,6 +276,7 @@ public static class WorkQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IWorkQueue,IEnumerable{IAsyncWork{TResult}},CancellationToken,int,bool)" />
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IWorkQueue queue, IAsyncEnumerable<IAsyncWork<TResult>> works,
         [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
     {
@@ -296,11 +312,13 @@ public static class WorkQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IWorkQueue,IEnumerable{IAsyncWork{TResult}},CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IAsyncEnumerable<IAsyncWork<TResult>> works, IWorkQueue queue,
         CancellationToken cancellation = default, int attemptsCount = 1)
         => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, cancellation, attemptsCount);
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IAsyncWork{TResult}},int,CancellationToken,int,bool)" />
+    [PublicAPI]
     public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IPriorityWorkQueue queue, IAsyncEnumerable<IAsyncWork<TResult>> works,
         int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
     {
@@ -337,11 +355,13 @@ public static class WorkQueueEnumerableExtension
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IAsyncWork{TResult}},int,CancellationToken,int,bool)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IAsyncEnumerable<IAsyncWork<TResult>> works, IPriorityWorkQueue queue,
         int priority = 0, CancellationToken cancellation = default, int attemptsCount = 1)
         => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, priority, cancellation, attemptsCount);
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IServiceProvider,IEnumerable{IAsyncWork{TResult}},CancellationToken,int,bool,int)" />
+    [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IServiceProvider provider, IAsyncEnumerable<IAsyncWork<TResult>> works,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
     {

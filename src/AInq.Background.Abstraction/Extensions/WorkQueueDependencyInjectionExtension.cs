@@ -14,7 +14,6 @@
 
 using AInq.Background.Helpers;
 using AInq.Background.Services;
-using AInq.Background.Tasks;
 using static AInq.Background.Tasks.WorkFactory;
 
 namespace AInq.Background.Extensions;
@@ -30,6 +29,7 @@ public static class WorkQueueDependencyInjectionExtension
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <returns> Work completion task </returns>
+    [PublicAPI]
     public static Task EnqueueWork<TWork>(this IWorkQueue queue, CancellationToken cancellation = default, int attemptsCount = 1)
         where TWork : IWork
         => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueWork(
@@ -44,6 +44,7 @@ public static class WorkQueueDependencyInjectionExtension
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
+    [PublicAPI]
     public static Task<TResult> EnqueueWork<TWork, TResult>(this IWorkQueue queue, CancellationToken cancellation = default, int attemptsCount = 1)
         where TWork : IWork<TResult>
         => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueWork(
@@ -57,6 +58,7 @@ public static class WorkQueueDependencyInjectionExtension
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <returns> Work completion task </returns>
+    [PublicAPI]
     public static Task EnqueueAsyncWork<TAsyncWork>(this IWorkQueue queue, CancellationToken cancellation = default, int attemptsCount = 1)
         where TAsyncWork : IAsyncWork
         => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncWork(
@@ -71,6 +73,7 @@ public static class WorkQueueDependencyInjectionExtension
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
+    [PublicAPI]
     public static Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(this IWorkQueue queue, CancellationToken cancellation = default,
         int attemptsCount = 1)
         where TAsyncWork : IAsyncWork<TResult>
@@ -90,6 +93,7 @@ public static class WorkQueueDependencyInjectionExtension
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <returns> Work completion task </returns>
+    [PublicAPI]
     public static Task EnqueueWork<TWork>(this IPriorityWorkQueue queue, int priority, CancellationToken cancellation = default,
         int attemptsCount = 1)
         where TWork : IWork
@@ -107,6 +111,7 @@ public static class WorkQueueDependencyInjectionExtension
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
+    [PublicAPI]
     public static Task<TResult> EnqueueWork<TWork, TResult>(this IPriorityWorkQueue queue, int priority, CancellationToken cancellation = default,
         int attemptsCount = 1)
         where TWork : IWork<TResult>
@@ -123,6 +128,7 @@ public static class WorkQueueDependencyInjectionExtension
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <returns> Work completion task </returns>
+    [PublicAPI]
     public static Task EnqueueAsyncWork<TAsyncWork>(this IPriorityWorkQueue queue, int priority, CancellationToken cancellation = default,
         int attemptsCount = 1)
         where TAsyncWork : IAsyncWork
@@ -140,6 +146,7 @@ public static class WorkQueueDependencyInjectionExtension
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work completion task </returns>
+    [PublicAPI]
     public static Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(this IPriorityWorkQueue queue, int priority,
         CancellationToken cancellation = default, int attemptsCount = 1)
         where TAsyncWork : IAsyncWork<TResult>

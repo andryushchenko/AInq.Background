@@ -12,11 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Tasks;
-
 namespace AInq.Background.Test;
 
-public class TestMachine : IConveyorMachine<int, int>, IStartStoppable
+internal sealed class TestMachine : IConveyorMachine<int, int>, IStartStoppable
 {
     private readonly string _name;
     private bool _isRunning;

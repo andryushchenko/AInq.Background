@@ -19,12 +19,15 @@ namespace AInq.Background.Wrappers;
 public interface ITaskWrapper<in TArgument>
 {
     /// <summary> Check if task is cancelled </summary>
+    [PublicAPI]
     bool IsCanceled { get; }
 
     /// <summary> Check if task is completed </summary>
+    [PublicAPI]
     bool IsCompleted { get; }
 
     /// <summary> Check if task is faulted </summary>
+    [PublicAPI]
     bool IsFaulted { get; }
 
     /// <summary> Execute task asynchronously </summary>
@@ -33,5 +36,6 @@ public interface ITaskWrapper<in TArgument>
     /// <param name="logger"> Logger instance </param>
     /// <param name="cancellation"> Cancellation token </param>
     /// <returns> If task is completed or should be reverted to queue/conveyor </returns>
+    [PublicAPI]
     Task<bool> ExecuteAsync(TArgument argument, IServiceProvider provider, ILogger logger, CancellationToken cancellation = default);
 }

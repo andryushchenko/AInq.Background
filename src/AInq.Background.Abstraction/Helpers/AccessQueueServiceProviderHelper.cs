@@ -14,7 +14,6 @@
 
 using AInq.Background.Extensions;
 using AInq.Background.Services;
-using AInq.Background.Tasks;
 
 namespace AInq.Background.Helpers;
 
@@ -34,6 +33,7 @@ public static class AccessQueueServiceProviderHelper
     /// <returns> Access action completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
     /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAccess(IAccess{TResource}, int, CancellationToken, int)" />
+    [PublicAPI]
     public static Task EnqueueAccess<TResource>(this IServiceProvider provider, IAccess<TResource> access, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -54,6 +54,7 @@ public static class AccessQueueServiceProviderHelper
     /// <returns> Access action result task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
     /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAccess{TResult}(IAccess{TResource, TResult}, int, CancellationToken, int)" />
+    [PublicAPI]
     public static Task<TResult> EnqueueAccess<TResource, TResult>(this IServiceProvider provider, IAccess<TResource, TResult> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -73,6 +74,7 @@ public static class AccessQueueServiceProviderHelper
     /// <returns> Access action completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
     /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAsyncAccess(IAsyncAccess{TResource}, int, CancellationToken, int)" />
+    [PublicAPI]
     public static Task EnqueueAsyncAccess<TResource>(this IServiceProvider provider, IAsyncAccess<TResource> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -93,6 +95,7 @@ public static class AccessQueueServiceProviderHelper
     /// <returns> Access action result task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
     /// <seealso cref="IPriorityAccessQueue{TResource}.EnqueueAsyncAccess{TResult}(IAsyncAccess{TResource, TResult}, int, CancellationToken, int)" />
+    [PublicAPI]
     public static Task<TResult> EnqueueAsyncAccess<TResource, TResult>(this IServiceProvider provider, IAsyncAccess<TResource, TResult> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -116,6 +119,7 @@ public static class AccessQueueServiceProviderHelper
     /// <returns> Access action completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
     /// <seealso cref="AccessQueueDependencyInjectionExtension.EnqueueAccess{TResource,TAccess}(IPriorityAccessQueue{TResource},int, CancellationToken, int)" />
+    [PublicAPI]
     public static Task EnqueueAccess<TResource, TAccess>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -136,6 +140,7 @@ public static class AccessQueueServiceProviderHelper
     /// <returns> Access action result task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
     /// <seealso cref="AccessQueueDependencyInjectionExtension.EnqueueAccess{TResource,TAccess, TResult}(IPriorityAccessQueue{TResource},int, CancellationToken, int)" />
+    [PublicAPI]
     public static Task<TResult> EnqueueAccess<TResource, TAccess, TResult>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -155,6 +160,7 @@ public static class AccessQueueServiceProviderHelper
     /// <returns> Access action completion task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
     /// <seealso cref="AccessQueueDependencyInjectionExtension.EnqueueAsyncAccess{TResource,TAsyncAccess}(IPriorityAccessQueue{TResource},int, CancellationToken, int)" />
+    [PublicAPI]
     public static Task EnqueueAsyncAccess<TResource, TAsyncAccess>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
@@ -175,6 +181,7 @@ public static class AccessQueueServiceProviderHelper
     /// <returns> Access action result task </returns>
     /// <exception cref="InvalidOperationException"> Thrown if no access queue for <typeparamref name="TResource" /> is registered </exception>
     /// <seealso cref="AccessQueueDependencyInjectionExtension.EnqueueAsyncAccess{TResource,TAsyncAccess, TResult}(IPriorityAccessQueue{TResource},int, CancellationToken, int)" />
+    [PublicAPI]
     public static Task<TResult> EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(this IServiceProvider provider,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull

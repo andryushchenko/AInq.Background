@@ -24,6 +24,7 @@ public static class ConveyorDataWrapperFactory
     /// <typeparam name="TData"> Conveyor input data type </typeparam>
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Wrapper and processing result task </returns>
+    [PublicAPI]
     public static (ITaskWrapper<IConveyorMachine<TData, TResult>>, Task<TResult>) CreateConveyorDataWrapper<TData, TResult>(TData data,
         int attemptsCount = 1, CancellationToken cancellation = default)
         where TData : notnull

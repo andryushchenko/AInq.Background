@@ -21,6 +21,7 @@ public static class WorkConverter
     /// <param name="work"> Work instance </param>
     /// <returns> <see cref="IAsyncWork{TResult}" /> wrapper instance </returns>
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="work" /> is NULL </exception>
+    [PublicAPI]
     public static IAsyncWork AsAsync(this IWork work)
         => new AsyncWork(work ?? throw new NullReferenceException(nameof(work)));
 
@@ -29,6 +30,7 @@ public static class WorkConverter
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> <see cref="IAsyncWork{TResult}" /> wrapper instance </returns>
     /// <exception cref="ArgumentNullException"> Thrown when <paramref name="work" /> is NULL </exception>
+    [PublicAPI]
     public static IAsyncWork<TResult> AsAsync<TResult>(this IWork<TResult> work)
         => new AsyncWork<TResult>(work ?? throw new NullReferenceException(nameof(work)));
 
