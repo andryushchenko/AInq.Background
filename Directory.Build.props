@@ -10,7 +10,7 @@
         <Copyright>Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-        <Version>5.3.0-rc.2</Version>
+        <Version>5.3.0-rc.3</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -19,7 +19,8 @@
         <RootNamespace>AInq.Background</RootNamespace>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <PackageReleaseNotes>[ADD] JetBrains.Annotations for ReSharper
+        <PackageReleaseNotes>[OPT] Reduce internal lambda usage
+[ADD] JetBrains.Annotations for ReSharper
 [UPD] Package references
 [FIX] Minor internal fix</PackageReleaseNotes>
     </PropertyGroup>

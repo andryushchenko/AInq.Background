@@ -12,4 +12,8 @@
         <Compile Include="..\..\src\Shared\QueuedAccessFactory.cs" Link="Tasks\QueuedAccessFactory.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Using Include="AInq.Background.Helpers" />
+    </ItemGroup>
+
 </Project>
