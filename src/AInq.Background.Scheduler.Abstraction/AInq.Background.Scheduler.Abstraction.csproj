@@ -14,10 +14,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Include="..\..\src\Shared\ServiceProviderHelper.cs" Link="Helpers\ServiceProviderHelper.cs" />
-        <Compile Include="..\..\src\Shared\InjectedWorkFactory.cs" Link="Tasks\InjectedWorkFactory.cs" />
-        <Compile Include="..\..\src\Shared\QueuedAccessFactory.cs" Link="Tasks\QueuedAccessFactory.cs" />
-        <Compile Include="..\..\src\Shared\QueuedWorkFactory.cs" Link="Tasks\QueuedWorkFactory.cs" />
+        <Compile Include="..\Shared\ServiceProviderHelper.cs" Link="Helpers\ServiceProviderHelper.cs" />
+        <Compile Include="..\Shared\InjectedWorkFactory.cs" Link="Tasks\InjectedWorkFactory.cs" />
+        <Compile Include="..\Shared\QueuedAccessFactory.cs" Link="Tasks\QueuedAccessFactory.cs" />
+        <Compile Include="..\Shared\QueuedWorkFactory.cs" Link="Tasks\QueuedWorkFactory.cs" />
     </ItemGroup>
 
     <ItemGroup>
