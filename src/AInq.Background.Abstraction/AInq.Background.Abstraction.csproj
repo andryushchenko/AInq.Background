@@ -5,4 +5,11 @@
         <Description>Background work utilities for .NET Core apps based on Hosted services. Basis interfaces and helpers.</Description>
     </PropertyGroup>
 
+    <ItemGroup>
+        <Compile Include="..\..\src\Shared\ServiceProviderHelper.cs" Link="Helpers\ServiceProviderHelper.cs" />
+        <Compile Include="..\..\src\Shared\InjectedWorkFactory.cs" Link="Tasks\InjectedWorkFactory.cs" />
+        <Compile Include="..\..\src\Shared\InjectedAccessFactory.cs" Link="Tasks\InjectedAccessFactory.cs" />
+        <Compile Include="..\..\src\Shared\QueuedAccessFactory.cs" Link="Tasks\QueuedAccessFactory.cs" />
+    </ItemGroup>
+
 </Project>

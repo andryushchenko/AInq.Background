@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using static AInq.Background.Tasks.WorkFactory;
+using static AInq.Background.Tasks.QueuedAccessFactory;
 
 namespace AInq.Background.Interaction;
 
@@ -36,13 +36,10 @@ public static class WorkSchedulerAccessQueueInteraction
     public static Task AddScheduledQueueAccess<TResource>(this IWorkScheduler scheduler, IAccess<TResource> access, TimeSpan delay,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
+            CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
             delay,
             cancellation);
-    }
 
     /// <summary> Add delayed queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
@@ -59,17 +56,14 @@ public static class WorkSchedulerAccessQueueInteraction
     public static Task<TResult> AddScheduledQueueAccess<TResource, TResult>(this IWorkScheduler scheduler, IAccess<TResource, TResult> access,
         TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
+            CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
             delay,
             cancellation);
-    }
 
     /// <summary> Add delayed queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
-    /// <param name="access"> Access instance </param>
+    /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="delay"> Access execution delay </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -78,20 +72,17 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
-    public static Task AddScheduledAsyncQueueAccess<TResource>(this IWorkScheduler scheduler, IAsyncAccess<TResource> access, TimeSpan delay,
+    public static Task AddScheduledAsyncQueueAccess<TResource>(this IWorkScheduler scheduler, IAsyncAccess<TResource> asyncAccess, TimeSpan delay,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
+            CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
             delay,
             cancellation);
-    }
 
     /// <summary> Add delayed queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
-    /// <param name="access"> Access instance </param>
+    /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="delay"> Access execution delay </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -102,15 +93,13 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static Task<TResult> AddScheduledAsyncQueueAccess<TResource, TResult>(this IWorkScheduler scheduler,
-        IAsyncAccess<TResource, TResult> access, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+        IAsyncAccess<TResource, TResult> asyncAccess, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1,
+        int priority = 0)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
+            CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
             delay,
             cancellation);
-    }
 
 #endregion
 
@@ -132,7 +121,7 @@ public static class WorkSchedulerAccessQueueInteraction
         where TResource : notnull
         where TAccess : IAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess<TResource, TAccess>(cancel, attemptsCount, priority)),
+            CreateQueuedInjectedAccess<TResource, TAccess>(attemptsCount, priority),
             delay,
             cancellation);
 
@@ -153,7 +142,7 @@ public static class WorkSchedulerAccessQueueInteraction
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess<TResource, TAccess, TResult>(cancel, attemptsCount, priority)),
+            CreateQueuedInjectedAccess<TResource, TAccess, TResult>(attemptsCount, priority),
             delay,
             cancellation);
 
@@ -173,7 +162,7 @@ public static class WorkSchedulerAccessQueueInteraction
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess<TResource, TAsyncAccess>(cancel, attemptsCount, priority)),
+            CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess>(attemptsCount, priority),
             delay,
             cancellation);
 
@@ -193,8 +182,8 @@ public static class WorkSchedulerAccessQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(CreateAsyncWork((provider, cancel)
-                => provider.EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
+            CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(attemptsCount, priority),
             delay,
             cancellation);
 
@@ -216,13 +205,10 @@ public static class WorkSchedulerAccessQueueInteraction
     public static Task AddScheduledQueueAccess<TResource>(this IWorkScheduler scheduler, IAccess<TResource> access, DateTime time,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
+            CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
             time,
             cancellation);
-    }
 
     /// <summary> Add scheduled queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
@@ -239,17 +225,14 @@ public static class WorkSchedulerAccessQueueInteraction
     public static Task<TResult> AddScheduledQueueAccess<TResource, TResult>(this IWorkScheduler scheduler, IAccess<TResource, TResult> access,
         DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
+            CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
             time,
             cancellation);
-    }
 
     /// <summary> Add scheduled asynchronous queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
-    /// <param name="access"> Access instance </param>
+    /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="time"> Access execution time </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -258,20 +241,17 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater than current time </exception>
     [PublicAPI]
-    public static Task AddScheduledAsyncQueueAccess<TResource>(this IWorkScheduler scheduler, IAsyncAccess<TResource> access, DateTime time,
+    public static Task AddScheduledAsyncQueueAccess<TResource>(this IWorkScheduler scheduler, IAsyncAccess<TResource> asyncAccess, DateTime time,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
+            CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
             time,
             cancellation);
-    }
 
     /// <summary> Add scheduled asynchronous queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
-    /// <param name="access"> Access instance </param>
+    /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="time"> Access execution time </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -282,15 +262,13 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater than current time </exception>
     [PublicAPI]
     public static Task<TResult> AddScheduledAsyncQueueAccess<TResource, TResult>(this IWorkScheduler scheduler,
-        IAsyncAccess<TResource, TResult> access, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+        IAsyncAccess<TResource, TResult> asyncAccess, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1,
+        int priority = 0)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
+            CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
             time,
             cancellation);
-    }
 
 #endregion
 
@@ -312,7 +290,7 @@ public static class WorkSchedulerAccessQueueInteraction
         where TResource : notnull
         where TAccess : IAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess<TResource, TAccess>(cancel, attemptsCount, priority)),
+            CreateQueuedInjectedAccess<TResource, TAccess>(attemptsCount, priority),
             time,
             cancellation);
 
@@ -333,7 +311,7 @@ public static class WorkSchedulerAccessQueueInteraction
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess<TResource, TAccess, TResult>(cancel, attemptsCount, priority)),
+            CreateQueuedInjectedAccess<TResource, TAccess, TResult>(attemptsCount, priority),
             time,
             cancellation);
 
@@ -353,7 +331,7 @@ public static class WorkSchedulerAccessQueueInteraction
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess<TResource, TAsyncAccess>(cancel, attemptsCount, priority)),
+            CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess>(attemptsCount, priority),
             time,
             cancellation);
 
@@ -373,8 +351,8 @@ public static class WorkSchedulerAccessQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(CreateAsyncWork((provider, cancel)
-                => provider.EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
+            CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(attemptsCount, priority),
             time,
             cancellation);
 
@@ -397,15 +375,11 @@ public static class WorkSchedulerAccessQueueInteraction
     public static IObservable<Maybe<Exception>> AddCronQueueAccess<TResource>(this IWorkScheduler scheduler, IAccess<TResource> access,
         string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        _ = cronExpression ?? throw new ArgumentNullException(nameof(cronExpression));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess(access, cancel, attemptsCount, priority)),
-            cronExpression,
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
+            CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
+            cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
-    }
 
     /// <summary> Add CRON-scheduled queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
@@ -423,19 +397,15 @@ public static class WorkSchedulerAccessQueueInteraction
     public static IObservable<Try<TResult>> AddCronQueueAccess<TResource, TResult>(this IWorkScheduler scheduler, IAccess<TResource, TResult> access,
         string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        _ = cronExpression ?? throw new ArgumentNullException(nameof(cronExpression));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess(access, cancel, attemptsCount, priority)),
-            cronExpression,
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
+            CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
+            cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
-    }
 
     /// <summary> Add CRON-scheduled queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
-    /// <param name="access"> Access instance </param>
+    /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="cronExpression"> Access CRON-based execution schedule </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -445,22 +415,18 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <returns> Access result observable </returns>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     [PublicAPI]
-    public static IObservable<Maybe<Exception>> AddCronAsyncQueueAccess<TResource>(this IWorkScheduler scheduler, IAsyncAccess<TResource> access,
+    public static IObservable<Maybe<Exception>> AddCronAsyncQueueAccess<TResource>(this IWorkScheduler scheduler, IAsyncAccess<TResource> asyncAccess,
         string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        _ = cronExpression ?? throw new ArgumentNullException(nameof(cronExpression));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess(access, cancel, attemptsCount, priority)),
-            cronExpression,
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
+            CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
+            cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
-    }
 
     /// <summary> Add CRON-scheduled queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
-    /// <param name="access"> Access instance </param>
+    /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="cronExpression"> Access CRON-based execution schedule </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -472,18 +438,14 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     [PublicAPI]
     public static IObservable<Try<TResult>> AddCronAsyncQueueAccess<TResource, TResult>(this IWorkScheduler scheduler,
-        IAsyncAccess<TResource, TResult> access, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1,
+        IAsyncAccess<TResource, TResult> asyncAccess, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0, int execCount = -1)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        _ = cronExpression ?? throw new ArgumentNullException(nameof(cronExpression));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess(access, cancel, attemptsCount, priority)),
-            cronExpression,
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
+            CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
+            cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
-    }
 
 #endregion
 
@@ -505,14 +467,11 @@ public static class WorkSchedulerAccessQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
         where TAccess : IAccess<TResource>
-    {
-        _ = cronExpression ?? throw new ArgumentNullException(nameof(cronExpression));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess<TResource, TAccess>(cancel, attemptsCount, priority)),
-            cronExpression,
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
+            CreateQueuedInjectedAccess<TResource, TAccess>(attemptsCount, priority),
+            cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
-    }
 
     /// <summary> Add CRON-scheduled queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
@@ -531,14 +490,11 @@ public static class WorkSchedulerAccessQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
-    {
-        _ = cronExpression ?? throw new ArgumentNullException(nameof(cronExpression));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess<TResource, TAccess, TResult>(cancel, attemptsCount, priority)),
-            cronExpression,
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
+            CreateQueuedInjectedAccess<TResource, TAccess, TResult>(attemptsCount, priority),
+            cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
-    }
 
     /// <summary> Add CRON-scheduled queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
@@ -556,14 +512,11 @@ public static class WorkSchedulerAccessQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
-    {
-        _ = cronExpression ?? throw new ArgumentNullException(nameof(cronExpression));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess<TResource, TAsyncAccess>(cancel, attemptsCount, priority)),
-            cronExpression,
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
+            CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess>(attemptsCount, priority),
+            cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
-    }
 
     /// <summary> Add CRON-scheduled queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
@@ -582,14 +535,11 @@ public static class WorkSchedulerAccessQueueInteraction
         string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
-    {
-        _ = cronExpression ?? throw new ArgumentNullException(nameof(cronExpression));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(cancel, attemptsCount, priority)),
-            cronExpression,
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
+            CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(attemptsCount, priority),
+            cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
-    }
 
 #endregion
 
@@ -612,15 +562,12 @@ public static class WorkSchedulerAccessQueueInteraction
         DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         int execCount = -1)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
+            CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
             starTime,
             repeatDelay,
             cancellation,
             execCount);
-    }
 
     /// <summary> Add repeated queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
@@ -640,19 +587,16 @@ public static class WorkSchedulerAccessQueueInteraction
         IAccess<TResource, TResult> access, DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0, int execCount = -1)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
+            CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
             starTime,
             repeatDelay,
             cancellation,
             execCount);
-    }
 
     /// <summary> Add repeated queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
-    /// <param name="access"> Access instance </param>
+    /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="starTime"> Access first execution time </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
     /// <param name="cancellation"> Access cancellation token </param>
@@ -663,23 +607,20 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
-    public static IObservable<Maybe<Exception>> AddRepeatedAsyncQueueAccess<TResource>(this IWorkScheduler scheduler, IAsyncAccess<TResource> access,
-        DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
-        int execCount = -1)
+    public static IObservable<Maybe<Exception>> AddRepeatedAsyncQueueAccess<TResource>(this IWorkScheduler scheduler,
+        IAsyncAccess<TResource> asyncAccess, DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1,
+        int priority = 0, int execCount = -1)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
+            CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
             starTime,
             repeatDelay,
             cancellation,
             execCount);
-    }
 
     /// <summary> Add repeated queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
-    /// <param name="access"> Access instance </param>
+    /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="starTime"> Access first execution time </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
     /// <param name="cancellation"> Access cancellation token </param>
@@ -692,18 +633,15 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedAsyncQueueAccess<TResource, TResult>(this IWorkScheduler scheduler,
-        IAsyncAccess<TResource, TResult> access, DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default,
+        IAsyncAccess<TResource, TResult> asyncAccess, DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
+            CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
             starTime,
             repeatDelay,
             cancellation,
             execCount);
-    }
 
 #endregion
 
@@ -727,7 +665,7 @@ public static class WorkSchedulerAccessQueueInteraction
         where TResource : notnull
         where TAccess : IAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess<TResource, TAccess>(cancel, attemptsCount, priority)),
+            CreateQueuedInjectedAccess<TResource, TAccess>(attemptsCount, priority),
             starTime,
             repeatDelay,
             cancellation,
@@ -752,7 +690,7 @@ public static class WorkSchedulerAccessQueueInteraction
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess<TResource, TAccess, TResult>(cancel, attemptsCount, priority)),
+            CreateQueuedInjectedAccess<TResource, TAccess, TResult>(attemptsCount, priority),
             starTime,
             repeatDelay,
             cancellation,
@@ -776,7 +714,7 @@ public static class WorkSchedulerAccessQueueInteraction
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess<TResource, TAsyncAccess>(cancel, attemptsCount, priority)),
+            CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess>(attemptsCount, priority),
             starTime,
             repeatDelay,
             cancellation,
@@ -802,7 +740,7 @@ public static class WorkSchedulerAccessQueueInteraction
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(cancel, attemptsCount, priority)),
+            CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(attemptsCount, priority),
             starTime,
             repeatDelay,
             cancellation,
@@ -829,15 +767,12 @@ public static class WorkSchedulerAccessQueueInteraction
         TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         int execCount = -1)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
+            CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
             startDelay,
             repeatDelay,
             cancellation,
             execCount);
-    }
 
     /// <summary> Add repeated queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
@@ -857,19 +792,16 @@ public static class WorkSchedulerAccessQueueInteraction
         IAccess<TResource, TResult> access, TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
+            CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
             startDelay,
             repeatDelay,
             cancellation,
             execCount);
-    }
 
     /// <summary> Add repeated queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
-    /// <param name="access"> Access instance </param>
+    /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="startDelay"> Access first execution delay </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
     /// <param name="cancellation"> Access cancellation token </param>
@@ -880,23 +812,20 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
-    public static IObservable<Maybe<Exception>> AddRepeatedAsyncQueueAccess<TResource>(this IWorkScheduler scheduler, IAsyncAccess<TResource> access,
-        TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
-        int execCount = -1)
+    public static IObservable<Maybe<Exception>> AddRepeatedAsyncQueueAccess<TResource>(this IWorkScheduler scheduler,
+        IAsyncAccess<TResource> asyncAccess, TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default,
+        int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
+            CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
             startDelay,
             repeatDelay,
             cancellation,
             execCount);
-    }
 
     /// <summary> Add repeated queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
-    /// <param name="access"> Access instance </param>
+    /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="startDelay"> Access first execution delay </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
     /// <param name="cancellation"> Access cancellation token </param>
@@ -909,18 +838,15 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedAsyncQueueAccess<TResource, TResult>(this IWorkScheduler scheduler,
-        IAsyncAccess<TResource, TResult> access, TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default,
+        IAsyncAccess<TResource, TResult> asyncAccess, TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TResource : notnull
-    {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        return (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess(access, cancel, attemptsCount, priority)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
+            CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
             startDelay,
             repeatDelay,
             cancellation,
             execCount);
-    }
 
 #endregion
 
@@ -944,7 +870,7 @@ public static class WorkSchedulerAccessQueueInteraction
         where TResource : notnull
         where TAccess : IAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess<TResource, TAccess>(cancel, attemptsCount, priority)),
+            CreateQueuedInjectedAccess<TResource, TAccess>(attemptsCount, priority),
             startDelay,
             repeatDelay,
             cancellation,
@@ -969,7 +895,7 @@ public static class WorkSchedulerAccessQueueInteraction
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAccess<TResource, TAccess, TResult>(cancel, attemptsCount, priority)),
+            CreateQueuedInjectedAccess<TResource, TAccess, TResult>(attemptsCount, priority),
             startDelay,
             repeatDelay,
             cancellation,
@@ -994,7 +920,7 @@ public static class WorkSchedulerAccessQueueInteraction
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess<TResource, TAsyncAccess>(cancel, attemptsCount, priority)),
+            CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess>(attemptsCount, priority),
             startDelay,
             repeatDelay,
             cancellation,
@@ -1020,7 +946,7 @@ public static class WorkSchedulerAccessQueueInteraction
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(cancel, attemptsCount, priority)),
+            CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(attemptsCount, priority),
             startDelay,
             repeatDelay,
             cancellation,

@@ -92,8 +92,8 @@ public static class AccessFactory
         internal AsyncAccess(Func<TResource, IServiceProvider, CancellationToken, Task> access)
             => _access = access ?? throw new ArgumentNullException(nameof(access));
 
-        async Task IAsyncAccess<TResource>.AccessAsync(TResource resource, IServiceProvider serviceProvider, CancellationToken cancellation)
-            => await _access.Invoke(resource, serviceProvider, cancellation).ConfigureAwait(false);
+        Task IAsyncAccess<TResource>.AccessAsync(TResource resource, IServiceProvider serviceProvider, CancellationToken cancellation)
+            => _access.Invoke(resource, serviceProvider, cancellation);
     }
 
     private class AsyncAccess<TResource, TResult> : IAsyncAccess<TResource, TResult>
@@ -104,8 +104,8 @@ public static class AccessFactory
         internal AsyncAccess(Func<TResource, IServiceProvider, CancellationToken, Task<TResult>> access)
             => _access = access ?? throw new ArgumentNullException(nameof(access));
 
-        async Task<TResult> IAsyncAccess<TResource, TResult>.AccessAsync(TResource resource, IServiceProvider serviceProvider,
+        Task<TResult> IAsyncAccess<TResource, TResult>.AccessAsync(TResource resource, IServiceProvider serviceProvider,
             CancellationToken cancellation)
-            => await _access.Invoke(resource, serviceProvider, cancellation).ConfigureAwait(false);
+            => _access.Invoke(resource, serviceProvider, cancellation);
     }
 }

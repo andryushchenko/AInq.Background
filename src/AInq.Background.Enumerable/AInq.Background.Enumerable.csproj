@@ -9,12 +9,17 @@
         <PackageReference Include="System.Threading.Channels" Version="6.0.0" />
     </ItemGroup>
 
+    <!-- ReSharper disable UnknownProperty -->
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
         <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\AInq.Background.Abstraction\AInq.Background.Abstraction.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="..\..\src\Shared\ServiceProviderHelper.cs" Link="Helpers\ServiceProviderHelper.cs" />
     </ItemGroup>
 
     <ItemGroup>

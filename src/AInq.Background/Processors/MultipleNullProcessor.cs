@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using AInq.Background.Managers;
+using AInq.Background.Wrappers;
 
 namespace AInq.Background.Processors;
 
@@ -34,14 +35,15 @@ internal sealed class MultipleNullProcessor<TMetadata> : ITaskProcessor<object?,
             var (task, metadata) = manager.GetTask();
             if (task == null) continue;
             await _semaphore.WaitAsync(cancellation).ConfigureAwait(false);
-            Task.Run(async () =>
-                    {
-                        if (!await task.ExecuteAsync(null, provider, logger, cancellation).ConfigureAwait(false))
-                            manager.RevertTask(task, metadata);
-                        _semaphore.Release();
-                    },
-                    cancellation)
-                .Ignore();
+            Execute(task, metadata, manager, provider, logger, cancellation);
         }
+    }
+
+    private async void Execute(ITaskWrapper<object?> task, TMetadata metadata, ITaskManager<object?, TMetadata> manager, IServiceProvider provider,
+        ILogger logger, CancellationToken cancellation)
+    {
+        if (!await task.ExecuteAsync(null, provider, logger, cancellation).ConfigureAwait(false))
+            manager.RevertTask(task, metadata);
+        _semaphore.Release();
     }
 }

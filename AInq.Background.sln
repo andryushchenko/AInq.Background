@@ -27,9 +27,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		AInq.Background.sln.DotSettings = AInq.Background.sln.DotSettings
 		.github\workflows\cleanup.yml = .github\workflows\cleanup.yml
 		Directory.Build.props = Directory.Build.props
-		src\Shared\JetBrains.Annotations.cs = src\Shared\JetBrains.Annotations.cs
 		LICENSE = LICENSE
 		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{014AF3B5-C0F7-403A-BC90-2E2A28A5E710}"
+	ProjectSection(SolutionItems) = preProject
+		src\Shared\InjectedAccessFactory.cs = src\Shared\InjectedAccessFactory.cs
+		src\Shared\InjectedWorkFactory.cs = src\Shared\InjectedWorkFactory.cs
+		src\Shared\JetBrains.Annotations.cs = src\Shared\JetBrains.Annotations.cs
+		src\Shared\QueuedAccessFactory.cs = src\Shared\QueuedAccessFactory.cs
+		src\Shared\QueuedWorkFactory.cs = src\Shared\QueuedWorkFactory.cs
+		src\Shared\ServiceProviderHelper.cs = src\Shared\ServiceProviderHelper.cs
 	EndProjectSection
 EndProject
 Global
@@ -78,6 +87,7 @@ Global
 		{9815A9CC-F4EC-4C8E-BE60-468BF5BD020E} = {3D6A0C84-C82A-4BDC-8120-6044DB3A6381}
 		{9756727B-8EC4-43C1-A70B-506E6D6B04FB} = {3D6A0C84-C82A-4BDC-8120-6044DB3A6381}
 		{2E8DD8F4-4329-41D2-BD17-9A2931F887E1} = {3D6A0C84-C82A-4BDC-8120-6044DB3A6381}
+		{014AF3B5-C0F7-403A-BC90-2E2A28A5E710} = {332DB9DE-7EE6-4F14-BC8A-58BA69423158}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6F7DC389-4ECD-430D-8BE6-C057AF7470F9}

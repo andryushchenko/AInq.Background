@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using AInq.Background.Managers;
+using AInq.Background.Wrappers;
 
 namespace AInq.Background.Processors;
 
@@ -38,51 +39,52 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
             var (task, metadata) = manager.GetTask();
             if (task == null) continue;
             await _semaphore.WaitAsync(cancellation).ConfigureAwait(false);
-            Task.Run(async () =>
-                    {
-                        TArgument argument;
-                        try
-                        {
-                            argument = _argumentFabric.Invoke(provider);
-                        }
-                        catch (Exception ex)
-                        {
-                            logger.LogError(ex, "Error creating argument {Type} with {Fabric}", typeof(TArgument), _argumentFabric);
-                            manager.RevertTask(task, metadata);
-                            _semaphore.Release();
-                            return;
-                        }
-                        try
-                        {
-                            if (argument is IStartStoppable {IsActive: false} startStoppable)
-                                await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
-                        }
-                        catch (Exception ex)
-                        {
-                            logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
-                            manager.RevertTask(task, metadata);
-                            _semaphore.Release();
-                            return;
-                        }
-                        if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))
-                            manager.RevertTask(task, metadata);
-                        try
-                        {
-                            if (argument is IStartStoppable {IsActive: true} startStoppable)
-                                await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
-                        }
-                        catch (Exception ex)
-                        {
-                            logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
-                        }
-                        finally
-                        {
-                            _semaphore.Release();
-                            (argument as IDisposable)?.Dispose();
-                        }
-                    },
-                    cancellation)
-                .Ignore();
+            Execute(task, metadata, manager, provider, logger, cancellation);
+        }
+    }
+
+    private async void Execute(ITaskWrapper<TArgument> task, TMetadata metadata, ITaskManager<TArgument, TMetadata> manager,
+        IServiceProvider provider, ILogger logger, CancellationToken cancellation)
+    {
+        TArgument argument;
+        try
+        {
+            argument = _argumentFabric.Invoke(provider);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error creating argument {Type} with {Fabric}", typeof(TArgument), _argumentFabric);
+            manager.RevertTask(task, metadata);
+            _semaphore.Release();
+            return;
+        }
+        try
+        {
+            if (argument is IStartStoppable {IsActive: false} startStoppable)
+                await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
+            manager.RevertTask(task, metadata);
+            _semaphore.Release();
+            return;
+        }
+        if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))
+            manager.RevertTask(task, metadata);
+        try
+        {
+            if (argument is IStartStoppable {IsActive: true} startStoppable)
+                await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
+        }
+        finally
+        {
+            _semaphore.Release();
+            (argument as IDisposable)?.Dispose();
         }
     }
 }
