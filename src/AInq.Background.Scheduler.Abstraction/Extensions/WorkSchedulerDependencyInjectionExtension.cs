@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using static AInq.Background.Tasks.WorkFactory;
+using static AInq.Background.Tasks.InjectedWorkFactory;
 
 namespace AInq.Background.Extensions;
 
@@ -31,10 +31,7 @@ public static class WorkSchedulerDependencyInjectionExtension
     [PublicAPI]
     public static Task AddScheduledWork<TWork>(this IWorkScheduler scheduler, DateTime time, CancellationToken cancellation = default)
         where TWork : IWork
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledWork(
-            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
-            time,
-            cancellation);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledWork(CreateInjectedWork<TWork>(), time, cancellation);
 
     /// <summary> Add scheduled work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -48,10 +45,8 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static Task<TResult> AddScheduledWork<TWork, TResult>(this IWorkScheduler scheduler, DateTime time,
         CancellationToken cancellation = default)
         where TWork : IWork<TResult>
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledWork(
-            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
-            time,
-            cancellation);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
+            .AddScheduledWork(CreateInjectedWork<TWork, TResult>(), time, cancellation);
 
     /// <summary> Add scheduled asynchronous work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -63,10 +58,8 @@ public static class WorkSchedulerDependencyInjectionExtension
     [PublicAPI]
     public static Task AddScheduledAsyncWork<TAsyncWork>(this IWorkScheduler scheduler, DateTime time, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
-            time,
-            cancellation);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
+            .AddScheduledAsyncWork(CreateInjectedAsyncWork<TAsyncWork>(), time, cancellation);
 
     /// <summary> Add scheduled asynchronous work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -80,10 +73,8 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static Task<TResult> AddScheduledAsyncWork<TAsyncWork, TResult>(this IWorkScheduler scheduler, DateTime time,
         CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork<TResult>
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
-            time,
-            cancellation);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
+            .AddScheduledAsyncWork(CreateInjectedAsyncWork<TAsyncWork, TResult>(), time, cancellation);
 
 #endregion
 
@@ -99,10 +90,7 @@ public static class WorkSchedulerDependencyInjectionExtension
     [PublicAPI]
     public static Task AddScheduledWork<TWork>(this IWorkScheduler scheduler, TimeSpan delay, CancellationToken cancellation = default)
         where TWork : IWork
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledWork<TWork>(DateTime.Now.Add(delay > TimeSpan.Zero
-                ? delay
-                : throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater than 00:00:00.000")),
-            cancellation);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledWork(CreateInjectedWork<TWork>(), delay, cancellation);
 
     /// <summary> Add delayed work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -116,10 +104,8 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static Task<TResult> AddScheduledWork<TWork, TResult>(this IWorkScheduler scheduler, TimeSpan delay,
         CancellationToken cancellation = default)
         where TWork : IWork<TResult>
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledWork<TWork, TResult>(DateTime.Now.Add(delay > TimeSpan.Zero
-                ? delay
-                : throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater than 00:00:00.000")),
-            cancellation);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
+            .AddScheduledWork(CreateInjectedWork<TWork, TResult>(), delay, cancellation);
 
     /// <summary> Add delayed asynchronous work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -131,10 +117,8 @@ public static class WorkSchedulerDependencyInjectionExtension
     [PublicAPI]
     public static Task AddScheduledAsyncWork<TAsyncWork>(this IWorkScheduler scheduler, TimeSpan delay, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork<TAsyncWork>(DateTime.Now.Add(delay > TimeSpan.Zero
-                ? delay
-                : throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater than 00:00:00.000")),
-            cancellation);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
+            .AddScheduledAsyncWork(CreateInjectedAsyncWork<TAsyncWork>(), delay, cancellation);
 
     /// <summary> Add delayed asynchronous work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -148,11 +132,8 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static Task<TResult> AddScheduledAsyncWork<TAsyncWork, TResult>(this IWorkScheduler scheduler, TimeSpan delay,
         CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork<TResult>
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork<TAsyncWork, TResult>(DateTime.Now.Add(
-                delay > TimeSpan.Zero
-                    ? delay
-                    : throw new ArgumentOutOfRangeException(nameof(delay), delay, "Must be greater than 00:00:00.000")),
-            cancellation);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
+            .AddScheduledAsyncWork(CreateInjectedAsyncWork<TAsyncWork, TResult>(), delay, cancellation);
 
 #endregion
 
@@ -171,8 +152,7 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static IObservable<Maybe<Exception>> AddCronWork<TWork>(this IWorkScheduler scheduler, string cronExpression,
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronWork(
-            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronWork(CreateInjectedWork<TWork>(),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
@@ -191,8 +171,7 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static IObservable<Try<TResult>> AddCronWork<TWork, TResult>(this IWorkScheduler scheduler, string cronExpression,
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork<TResult>
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronWork(
-            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronWork(CreateInjectedWork<TWork, TResult>(),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
@@ -210,8 +189,7 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static IObservable<Maybe<Exception>> AddCronAsyncWork<TAsyncWork>(this IWorkScheduler scheduler, string cronExpression,
         CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(CreateInjectedAsyncWork<TAsyncWork>(),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
@@ -230,8 +208,7 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static IObservable<Try<TResult>> AddCronAsyncWork<TAsyncWork, TResult>(this IWorkScheduler scheduler, string cronExpression,
         CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork<TResult>
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(CreateInjectedAsyncWork<TAsyncWork, TResult>(),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
@@ -253,12 +230,8 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static IObservable<Maybe<Exception>> AddRepeatedWork<TWork>(this IWorkScheduler scheduler, DateTime starTime, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedWork(
-            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
-            starTime,
-            repeatDelay,
-            cancellation,
-            execCount);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
+            .AddRepeatedWork(CreateInjectedWork<TWork>(), starTime, repeatDelay, cancellation, execCount);
 
     /// <summary> Add repeated work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -274,12 +247,8 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static IObservable<Try<TResult>> AddRepeatedWork<TWork, TResult>(this IWorkScheduler scheduler, DateTime starTime, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork<TResult>
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedWork(
-            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
-            starTime,
-            repeatDelay,
-            cancellation,
-            execCount);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
+            .AddRepeatedWork(CreateInjectedWork<TWork, TResult>(), starTime, repeatDelay, cancellation, execCount);
 
     /// <summary> Add repeated asynchronous work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -294,12 +263,8 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncWork<TAsyncWork>(this IWorkScheduler scheduler, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
-            starTime,
-            repeatDelay,
-            cancellation,
-            execCount);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
+            .AddRepeatedAsyncWork(CreateInjectedAsyncWork<TAsyncWork>(), starTime, repeatDelay, cancellation, execCount);
 
     /// <summary> Add repeated asynchronous work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -315,12 +280,8 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static IObservable<Try<TResult>> AddRepeatedAsyncWork<TAsyncWork, TResult>(this IWorkScheduler scheduler, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork<TResult>
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
-            starTime,
-            repeatDelay,
-            cancellation,
-            execCount);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
+            .AddRepeatedAsyncWork(CreateInjectedAsyncWork<TAsyncWork, TResult>(), starTime, repeatDelay, cancellation, execCount);
 
 #endregion
 
@@ -339,10 +300,8 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static IObservable<Maybe<Exception>> AddRepeatedWork<TWork>(this IWorkScheduler scheduler, TimeSpan startDelay, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedWork<TWork>(DateTime.Now.Add(startDelay),
-            repeatDelay,
-            cancellation,
-            execCount);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
+            .AddRepeatedWork<TWork>(DateTime.Now.Add(startDelay), repeatDelay, cancellation, execCount);
 
     /// <summary> Add repeated work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -358,10 +317,8 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static IObservable<Try<TResult>> AddRepeatedWork<TWork, TResult>(this IWorkScheduler scheduler, TimeSpan startDelay, TimeSpan repeatDelay,
         CancellationToken cancellation = default, int execCount = -1)
         where TWork : IWork<TResult>
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedWork<TWork, TResult>(DateTime.Now.Add(startDelay),
-            repeatDelay,
-            cancellation,
-            execCount);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
+            .AddRepeatedWork<TWork, TResult>(DateTime.Now.Add(startDelay), repeatDelay, cancellation, execCount);
 
     /// <summary> Add repeated asynchronous work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -376,10 +333,8 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncWork<TAsyncWork>(this IWorkScheduler scheduler, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork<TAsyncWork>(DateTime.Now.Add(startDelay),
-            repeatDelay,
-            cancellation,
-            execCount);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
+            .AddRepeatedAsyncWork<TAsyncWork>(DateTime.Now.Add(startDelay), repeatDelay, cancellation, execCount);
 
     /// <summary> Add repeated asynchronous work to scheduler </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -395,10 +350,8 @@ public static class WorkSchedulerDependencyInjectionExtension
     public static IObservable<Try<TResult>> AddRepeatedAsyncWork<TAsyncWork, TResult>(this IWorkScheduler scheduler, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
         where TAsyncWork : IAsyncWork<TResult>
-        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork<TAsyncWork, TResult>(DateTime.Now.Add(startDelay),
-            repeatDelay,
-            cancellation,
-            execCount);
+        => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
+            .AddRepeatedAsyncWork<TAsyncWork, TResult>(DateTime.Now.Add(startDelay), repeatDelay, cancellation, execCount);
 
 #endregion
 }

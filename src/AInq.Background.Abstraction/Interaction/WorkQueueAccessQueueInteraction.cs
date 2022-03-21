@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using AInq.Background.Services;
-using static AInq.Background.Tasks.WorkFactory;
+using static AInq.Background.Tasks.QueuedAccessFactory;
 
 namespace AInq.Background.Interaction;
 
@@ -36,8 +36,7 @@ public static class WorkQueueAccessQueueInteraction
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
     {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        var work = CreateAsyncWork((provider, cancel) => provider.EnqueueAccess(access, cancel, attemptsCount, priority));
+        var work = CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
             ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
             : queue.EnqueueAsyncWork(work, cancellation);
@@ -57,8 +56,7 @@ public static class WorkQueueAccessQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
     {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        var work = CreateAsyncWork((provider, cancel) => provider.EnqueueAccess(access, cancel, attemptsCount, priority));
+        var work = CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
             ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
             : queue.EnqueueAsyncWork(work, cancellation);
@@ -66,19 +64,19 @@ public static class WorkQueueAccessQueueInteraction
 
     /// <summary> Enqueue asynchronous access action into work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="queue"> Work queue instance </param>
-    /// <param name="access"> Access action instance </param>
+    /// <param name="asyncAccess"> Access action instance </param>
     /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access action completion task </returns>
     [PublicAPI]
-    public static Task EnqueueAsyncAccess<TResource>(this IWorkQueue queue, IAsyncAccess<TResource> access, CancellationToken cancellation = default,
+    public static Task EnqueueAsyncAccess<TResource>(this IWorkQueue queue, IAsyncAccess<TResource> asyncAccess,
+        CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         where TResource : notnull
     {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        var work = CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess(access, cancel, attemptsCount, priority));
+        var work = CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
             ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
             : queue.EnqueueAsyncWork(work, cancellation);
@@ -86,7 +84,7 @@ public static class WorkQueueAccessQueueInteraction
 
     /// <summary> Enqueue asynchronous access action into work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="queue"> Work queue instance </param>
-    /// <param name="access"> Access action instance </param>
+    /// <param name="asyncAccess"> Access action instance </param>
     /// <param name="priority"> Access action priority </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -94,12 +92,11 @@ public static class WorkQueueAccessQueueInteraction
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
     [PublicAPI]
-    public static Task<TResult> EnqueueAsyncAccess<TResource, TResult>(this IWorkQueue queue, IAsyncAccess<TResource, TResult> access,
+    public static Task<TResult> EnqueueAsyncAccess<TResource, TResult>(this IWorkQueue queue, IAsyncAccess<TResource, TResult> asyncAccess,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TResource : notnull
     {
-        _ = access ?? throw new ArgumentNullException(nameof(access));
-        var work = CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess(access, cancel, attemptsCount, priority));
+        var work = CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
             ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
             : queue.EnqueueAsyncWork(work, cancellation);
@@ -123,7 +120,7 @@ public static class WorkQueueAccessQueueInteraction
         where TResource : notnull
         where TAccess : IAccess<TResource>
     {
-        var work = CreateAsyncWork((provider, cancel) => provider.EnqueueAccess<TResource, TAccess>(cancel, attemptsCount, priority));
+        var work = CreateQueuedInjectedAccess<TResource, TAccess>(attemptsCount, priority);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
             ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
             : queue.EnqueueAsyncWork(work, cancellation);
@@ -144,7 +141,7 @@ public static class WorkQueueAccessQueueInteraction
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
     {
-        var work = CreateAsyncWork((provider, cancel) => provider.EnqueueAccess<TResource, TAccess, TResult>(cancel, attemptsCount, priority));
+        var work = CreateQueuedInjectedAccess<TResource, TAccess, TResult>(attemptsCount, priority);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
             ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
             : queue.EnqueueAsyncWork(work, cancellation);
@@ -164,7 +161,7 @@ public static class WorkQueueAccessQueueInteraction
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
     {
-        var work = CreateAsyncWork((provider, cancel) => provider.EnqueueAsyncAccess<TResource, TAsyncAccess>(cancel, attemptsCount, priority));
+        var work = CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess>(attemptsCount, priority);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
             ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
             : queue.EnqueueAsyncWork(work, cancellation);
@@ -185,8 +182,7 @@ public static class WorkQueueAccessQueueInteraction
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
     {
-        var work = CreateAsyncWork((provider, cancel)
-            => provider.EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(cancel, attemptsCount, priority));
+        var work = CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(attemptsCount, priority);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
             ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
             : queue.EnqueueAsyncWork(work, cancellation);

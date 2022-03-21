@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Helpers;
 using AInq.Background.Services;
-using static AInq.Background.Tasks.WorkFactory;
+using static AInq.Background.Tasks.InjectedWorkFactory;
 
 namespace AInq.Background.Extensions;
 
@@ -32,10 +31,8 @@ public static class WorkQueueDependencyInjectionExtension
     [PublicAPI]
     public static Task EnqueueWork<TWork>(this IWorkQueue queue, CancellationToken cancellation = default, int attemptsCount = 1)
         where TWork : IWork
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueWork(
-            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
-            cancellation,
-            attemptsCount);
+        => (queue ?? throw new ArgumentNullException(nameof(queue)))
+            .EnqueueWork(CreateInjectedWork<TWork>(), cancellation, attemptsCount);
 
     /// <summary> Enqueue background work </summary>
     /// <param name="queue"> Work queue instance </param>
@@ -47,10 +44,8 @@ public static class WorkQueueDependencyInjectionExtension
     [PublicAPI]
     public static Task<TResult> EnqueueWork<TWork, TResult>(this IWorkQueue queue, CancellationToken cancellation = default, int attemptsCount = 1)
         where TWork : IWork<TResult>
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueWork(
-            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
-            cancellation,
-            attemptsCount);
+        => (queue ?? throw new ArgumentNullException(nameof(queue)))
+            .EnqueueWork(CreateInjectedWork<TWork, TResult>(), cancellation, attemptsCount);
 
     /// <summary> Enqueue asynchronous background work </summary>
     /// <param name="queue"> Work queue instance </param>
@@ -61,10 +56,8 @@ public static class WorkQueueDependencyInjectionExtension
     [PublicAPI]
     public static Task EnqueueAsyncWork<TAsyncWork>(this IWorkQueue queue, CancellationToken cancellation = default, int attemptsCount = 1)
         where TAsyncWork : IAsyncWork
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
-            cancellation,
-            attemptsCount);
+        => (queue ?? throw new ArgumentNullException(nameof(queue)))
+            .EnqueueAsyncWork(CreateInjectedAsyncWork<TAsyncWork>(), cancellation, attemptsCount);
 
     /// <summary> Enqueue asynchronous background work </summary>
     /// <param name="queue"> Work queue instance </param>
@@ -77,10 +70,8 @@ public static class WorkQueueDependencyInjectionExtension
     public static Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(this IWorkQueue queue, CancellationToken cancellation = default,
         int attemptsCount = 1)
         where TAsyncWork : IAsyncWork<TResult>
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
-            cancellation,
-            attemptsCount);
+        => (queue ?? throw new ArgumentNullException(nameof(queue)))
+            .EnqueueAsyncWork(CreateInjectedAsyncWork<TAsyncWork, TResult>(), cancellation, attemptsCount);
 
 #endregion
 
@@ -97,11 +88,8 @@ public static class WorkQueueDependencyInjectionExtension
     public static Task EnqueueWork<TWork>(this IPriorityWorkQueue queue, int priority, CancellationToken cancellation = default,
         int attemptsCount = 1)
         where TWork : IWork
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueWork(
-            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
-            priority,
-            cancellation,
-            attemptsCount);
+        => (queue ?? throw new ArgumentNullException(nameof(queue)))
+            .EnqueueWork(CreateInjectedWork<TWork>(), priority, cancellation, attemptsCount);
 
     /// <summary> Enqueue background work with given <paramref name="priority" /> </summary>
     /// <param name="queue"> Work queue instance </param>
@@ -115,11 +103,8 @@ public static class WorkQueueDependencyInjectionExtension
     public static Task<TResult> EnqueueWork<TWork, TResult>(this IPriorityWorkQueue queue, int priority, CancellationToken cancellation = default,
         int attemptsCount = 1)
         where TWork : IWork<TResult>
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueWork(
-            CreateWork(provider => provider.RequiredService<TWork>().DoWork(provider)),
-            priority,
-            cancellation,
-            attemptsCount);
+        => (queue ?? throw new ArgumentNullException(nameof(queue)))
+            .EnqueueWork(CreateInjectedWork<TWork, TResult>(), priority, cancellation, attemptsCount);
 
     /// <summary> Enqueue asynchronous background work with given <paramref name="priority" /> </summary>
     /// <param name="queue"> Work queue instance </param>
@@ -132,11 +117,8 @@ public static class WorkQueueDependencyInjectionExtension
     public static Task EnqueueAsyncWork<TAsyncWork>(this IPriorityWorkQueue queue, int priority, CancellationToken cancellation = default,
         int attemptsCount = 1)
         where TAsyncWork : IAsyncWork
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
-            priority,
-            cancellation,
-            attemptsCount);
+        => (queue ?? throw new ArgumentNullException(nameof(queue)))
+            .EnqueueAsyncWork(CreateInjectedAsyncWork<TAsyncWork>(), priority, cancellation, attemptsCount);
 
     /// <summary> Enqueue asynchronous background work with given <paramref name="priority" /> </summary>
     /// <param name="queue"> Work queue instance </param>
@@ -150,11 +132,8 @@ public static class WorkQueueDependencyInjectionExtension
     public static Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(this IPriorityWorkQueue queue, int priority,
         CancellationToken cancellation = default, int attemptsCount = 1)
         where TAsyncWork : IAsyncWork<TResult>
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncWork(
-            CreateAsyncWork((provider, cancel) => provider.RequiredService<TAsyncWork>().DoWorkAsync(provider, cancel)),
-            priority,
-            cancellation,
-            attemptsCount);
+        => (queue ?? throw new ArgumentNullException(nameof(queue)))
+            .EnqueueAsyncWork(CreateInjectedAsyncWork<TAsyncWork, TResult>(), priority, cancellation, attemptsCount);
 
 #endregion
 }

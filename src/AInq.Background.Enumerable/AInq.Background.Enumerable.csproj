@@ -18,6 +18,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Compile Include="..\Shared\ServiceProviderHelper.cs" Link="Helpers\ServiceProviderHelper.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Using Include="AInq.Background.Helpers" />
         <Using Include="AInq.Background.Services" />
         <Using Include="AInq.Background.Tasks" />

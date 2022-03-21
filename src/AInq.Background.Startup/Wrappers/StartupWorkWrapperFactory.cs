@@ -52,7 +52,7 @@ internal static class StartupWorkWrapperFactory
             {
                 if (_asyncWork == null)
                     _work!.DoWork(provider);
-                else await _asyncWork.DoWorkAsync(provider, cancellation);
+                else await _asyncWork.DoWorkAsync(provider, cancellation).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -89,7 +89,7 @@ internal static class StartupWorkWrapperFactory
             {
                 if (_asyncWork == null)
                     _work!.DoWork(provider);
-                else await _asyncWork.DoWorkAsync(provider, cancellation);
+                else await _asyncWork.DoWorkAsync(provider, cancellation).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {

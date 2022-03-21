@@ -80,8 +80,8 @@ public static class WorkFactory
         internal AsyncWork(Func<IServiceProvider, CancellationToken, Task> work)
             => _work = work ?? throw new ArgumentNullException(nameof(work));
 
-        async Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => await _work.Invoke(serviceProvider, cancellation).ConfigureAwait(false);
+        Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
+            => _work.Invoke(serviceProvider, cancellation);
     }
 
     private class AsyncWork<TResult> : IAsyncWork<TResult>
@@ -91,7 +91,7 @@ public static class WorkFactory
         internal AsyncWork(Func<IServiceProvider, CancellationToken, Task<TResult>> work)
             => _work = work ?? throw new ArgumentNullException(nameof(work));
 
-        async Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => await _work.Invoke(serviceProvider, cancellation).ConfigureAwait(false);
+        Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
+            => _work.Invoke(serviceProvider, cancellation);
     }
 }

@@ -66,23 +66,23 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
                 break;
             }
         }
-        Task.Run(async () =>
-                {
-                    try
-                    {
-                        if (argument is IStartStoppable {IsActive: true} startStoppable)
-                            await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
-                    }
-                    finally
-                    {
-                        (argument as IDisposable)?.Dispose();
-                    }
-                },
-                cancellation)
-            .Ignore();
+        UtilizeArgument(argument, logger, cancellation);
+    }
+
+    private static async void UtilizeArgument(TArgument argument, ILogger logger, CancellationToken cancellation)
+    {
+        try
+        {
+            if (argument is IStartStoppable {IsActive: true} startStoppable)
+                await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
+        }
+        finally
+        {
+            (argument as IDisposable)?.Dispose();
+        }
     }
 }

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using AInq.Background.Managers;
+using AInq.Background.Wrappers;
 
 namespace AInq.Background.Processors;
 
@@ -67,64 +68,67 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                 _reusable.Add(argument);
                 continue;
             }
-            currentTasks.AddLast(Task.Run(async () =>
-                {
-                    try
-                    {
-                        if (argument is IStartStoppable {IsActive: false} startStoppable)
-                            await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
-                        manager.RevertTask(task, metadata);
-                        Interlocked.Decrement(ref _currentArgumentCount);
-                        _reset.Set();
-                        return;
-                    }
-                    if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))
-                        manager.RevertTask(task, metadata);
-                    try
-                    {
-                        if (manager.HasTask && argument is IThrottling {Timeout.Ticks: > 0} throttling)
-                            await Task.Delay(throttling.Timeout, cancellation).ConfigureAwait(false);
-                    }
-                    finally
-                    {
-                        _reusable.Add(argument);
-                        _reset.Set();
-                    }
-                },
-                cancellation));
+            currentTasks.AddLast(Execute(argument, task, metadata, manager, provider, logger, cancellation));
         }
-        Task.WhenAll(currentTasks)
-            .ContinueWith(task =>
-                {
-                    while (!_reusable.IsEmpty)
-                        if (_reusable.TryTake(out var argument))
-                        {
-                            Interlocked.Decrement(ref _currentArgumentCount);
-                            _reset.Set();
-                            _ = Task.Run(async () =>
-                                {
-                                    try
-                                    {
-                                        if (argument is IStartStoppable {IsActive: true} startStoppable)
-                                            await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
-                                    }
-                                    finally
-                                    {
-                                        (argument as IDisposable)?.Dispose();
-                                    }
-                                },
-                                cancellation);
-                        }
-                },
-                cancellation)
-            .Ignore();
+        UtilizeArguments(Task.WhenAll(currentTasks), logger, cancellation);
+    }
+
+    private async Task Execute(TArgument argument, ITaskWrapper<TArgument> task, TMetadata metadata, ITaskManager<TArgument, TMetadata> manager,
+        IServiceProvider provider, ILogger logger, CancellationToken cancellation)
+    {
+        try
+        {
+            if (argument is IStartStoppable {IsActive: false} startStoppable)
+                await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
+            manager.RevertTask(task, metadata);
+            Interlocked.Decrement(ref _currentArgumentCount);
+            _reset.Set();
+            return;
+        }
+        if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))
+            manager.RevertTask(task, metadata);
+        try
+        {
+            if (manager.HasTask && argument is IThrottling {Timeout.Ticks: > 0} throttling)
+                await Task.Delay(throttling.Timeout, cancellation).ConfigureAwait(false);
+        }
+        finally
+        {
+            _reusable.Add(argument);
+            _reset.Set();
+        }
+    }
+
+    private async void UtilizeArguments(Task finishTask, ILogger logger, CancellationToken cancellation)
+    {
+        await finishTask.ConfigureAwait(false);
+        while (!_reusable.IsEmpty)
+            if (_reusable.TryTake(out var argument))
+            {
+                Interlocked.Decrement(ref _currentArgumentCount);
+                _reset.Set();
+                UtilizeArgument(argument, logger, cancellation);
+            }
+    }
+
+    private static async void UtilizeArgument(TArgument argument, ILogger logger, CancellationToken cancellation)
+    {
+        try
+        {
+            if (argument is IStartStoppable {IsActive: true} startStoppable)
+                await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
+        }
+        finally
+        {
+            (argument as IDisposable)?.Dispose();
+        }
     }
 }

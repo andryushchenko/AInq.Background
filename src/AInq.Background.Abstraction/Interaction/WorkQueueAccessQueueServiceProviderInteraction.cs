@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AInq.Background.Helpers;
 using AInq.Background.Services;
 
 namespace AInq.Background.Interaction;

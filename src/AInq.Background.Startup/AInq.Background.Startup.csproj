@@ -15,7 +15,14 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Compile Include="..\Shared\ServiceProviderHelper.cs" Link="Helpers\ServiceProviderHelper.cs" />
+        <Compile Include="..\Shared\InjectedWorkFactory.cs" Link="Tasks\InjectedWorkFactory.cs" />
+        <Compile Include="..\Shared\QueuedWorkFactory.cs" Link="Tasks\QueuedWorkFactory.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Using Include="Microsoft.Extensions.Logging" />
+        <Using Include="AInq.Background.Helpers" />
     </ItemGroup>
 
 </Project>
