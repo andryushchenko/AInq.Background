@@ -2,6 +2,8 @@
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/andryushchenko/AInq.Background)](https://github.com/andryushchenko/AInq.Background/releases) [![GitHub](https://img.shields.io/github/license/andryushchenko/AInq.Background)](LICENSE)
 
+![AInq](https://raw.githubusercontent.com/andryushchenko/AInq.Background/main/AInq.png)
+
 ## What is it?
 
 Background work utilities for .NET Core apps based on Hosted services. Originally designed for accessing API with strict request-per-second limit.

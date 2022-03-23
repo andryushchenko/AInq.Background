@@ -7,10 +7,10 @@
         <Product>AInq.Background</Product>
         <Authors>Anton Andryushchenko</Authors>
         <RepositoryUrl>https://github.com/andryushchenko/AInq.Background</RepositoryUrl>
-        <Copyright>Anton Andryushchenko</Copyright>
+        <Copyright>Copyright (c) Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-        <Version>5.3.0-rc.3</Version>
+        <Version>5.3.0</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -18,15 +18,16 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <RootNamespace>AInq.Background</RootNamespace>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>AInq.png</PackageIcon>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>[OPT] Reduce internal lambda usage
-[ADD] JetBrains.Annotations for ReSharper
 [UPD] Package references
 [FIX] Minor internal fix</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
         <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\..\AInq.png" Pack="true" PackagePath="\" />
         <Compile Include="..\..\src\Shared\JetBrains.Annotations.cs" />
     </ItemGroup>
 
