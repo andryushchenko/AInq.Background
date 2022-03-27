@@ -45,10 +45,11 @@ public static class WorkQueueEnumerableExtension
     [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IEnumerable<IWork<TResult>> works, IWorkQueue queue,
         CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, cancellation, attemptsCount, enqueueAll);
+        => (queue ?? throw new ArgumentNullException(nameof(queue)))
+            .DoWorkAsync(works ?? throw new ArgumentNullException(nameof(works)), cancellation, attemptsCount, enqueueAll);
 
     /// <summary> Batch process works with giver <paramref name="priority" /> </summary>
-    /// <param name="queue"> Work Queue instance </param>
+    /// <param name="priorityQueue"> Work Queue instance </param>
     /// <param name="works"> Works to process </param>
     /// <param name="cancellation"> Processing cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
@@ -56,15 +57,15 @@ public static class WorkQueueEnumerableExtension
     /// <param name="enqueueAll"> Option to enqueue all data first </param>
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="queue" /> or <paramref name="works" /> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="priorityQueue" /> or <paramref name="works" /> is NULL </exception>
     [PublicAPI]
-    public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IPriorityWorkQueue queue, IEnumerable<IWork<TResult>> works,
+    public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IPriorityWorkQueue priorityQueue, IEnumerable<IWork<TResult>> works,
         int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
     {
-        _ = queue ?? throw new ArgumentNullException(nameof(queue));
+        _ = priorityQueue ?? throw new ArgumentNullException(nameof(priorityQueue));
         var results = (works ?? throw new ArgumentNullException(nameof(works)))
                       .Where(work => work != null)
-                      .Select(work => queue.EnqueueWork(work, priority, cancellation, attemptsCount));
+                      .Select(work => priorityQueue.EnqueueWork(work, priority, cancellation, attemptsCount));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -72,46 +73,37 @@ public static class WorkQueueEnumerableExtension
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IWork{TResult}},int,CancellationToken,int,bool)" />
     [PublicAPI]
-    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IEnumerable<IWork<TResult>> works, IPriorityWorkQueue queue, int priority = 0,
-        CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, priority, cancellation, attemptsCount, enqueueAll);
+    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IEnumerable<IWork<TResult>> works, IPriorityWorkQueue priorityQueue,
+        int priority = 0, CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
+        => (priorityQueue ?? throw new ArgumentNullException(nameof(priorityQueue)))
+            .DoWorkAsync(works ?? throw new ArgumentNullException(nameof(works)), priority, cancellation, attemptsCount, enqueueAll);
 
-    /// <summary> Batch process works using registered work queue with giver <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="works"> Works to process </param>
-    /// <param name="cancellation"> Processing cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Operation priority </param>
-    /// <param name="enqueueAll"> Option to enqueue all data first </param>
-    /// <typeparam name="TResult"> Processing result type </typeparam>
-    /// <returns> Processing result task enumeration </returns>
-    /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> or <paramref name="works" /> is NULL </exception>
+    /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IWork{TResult}},int,CancellationToken,int,bool)" />
     [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IServiceProvider provider, IEnumerable<IWork<TResult>> works,
         CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false, int priority = 0)
     {
         var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>();
         return queue is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.DoWorkAsync(works, priority, cancellation, attemptsCount, enqueueAll)
-            : queue.DoWorkAsync(works, cancellation, attemptsCount, enqueueAll);
+            ? priorityQueue.DoWorkAsync(works ?? throw new ArgumentNullException(nameof(works)), priority, cancellation, attemptsCount, enqueueAll)
+            : queue.DoWorkAsync(works ?? throw new ArgumentNullException(nameof(works)), cancellation, attemptsCount, enqueueAll);
     }
 
     /// <summary> Batch process asynchronous works </summary>
     /// <param name="queue"> Work Queue instance </param>
-    /// <param name="works"> Works to process </param>
+    /// <param name="asyncWorks"> Works to process </param>
     /// <param name="cancellation"> Processing cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="enqueueAll"> Option to enqueue all data first </param>
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="queue" /> or <paramref name="works" /> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="queue" /> or <paramref name="asyncWorks" /> is NULL </exception>
     [PublicAPI]
-    public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IWorkQueue queue, IEnumerable<IAsyncWork<TResult>> works,
+    public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IWorkQueue queue, IEnumerable<IAsyncWork<TResult>> asyncWorks,
         [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
-        var results = (works ?? throw new ArgumentNullException(nameof(works)))
+        var results = (asyncWorks ?? throw new ArgumentNullException(nameof(asyncWorks)))
                       .Where(work => work != null)
                       .Select(work => queue.EnqueueAsyncWork(work, cancellation, attemptsCount));
         if (enqueueAll) results = results.ToList();
@@ -121,28 +113,30 @@ public static class WorkQueueEnumerableExtension
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IWorkQueue,IEnumerable{IAsyncWork{TResult}},CancellationToken,int,bool)" />
     [PublicAPI]
-    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IEnumerable<IAsyncWork<TResult>> works, IWorkQueue queue,
+    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IEnumerable<IAsyncWork<TResult>> asyncWorks, IWorkQueue queue,
         CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, cancellation, attemptsCount, enqueueAll);
+        => (queue ?? throw new ArgumentNullException(nameof(queue)))
+            .DoWorkAsync(asyncWorks ?? throw new ArgumentNullException(nameof(asyncWorks)), cancellation, attemptsCount, enqueueAll);
 
     /// <summary> Batch process works asynchronous with giver <paramref name="priority" /> </summary>
-    /// <param name="queue"> Work Queue instance </param>
-    /// <param name="works"> Works to process </param>
+    /// <param name="priorityQueue"> Work Queue instance </param>
+    /// <param name="asyncWorks"> Works to process </param>
     /// <param name="cancellation"> Processing cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Operation priority </param>
     /// <param name="enqueueAll"> Option to enqueue all data first </param>
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="queue" /> or <paramref name="works" /> is NULL </exception>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="priorityQueue" /> or <paramref name="asyncWorks" /> is NULL </exception>
     [PublicAPI]
-    public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IPriorityWorkQueue queue, IEnumerable<IAsyncWork<TResult>> works,
-        int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
+    public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IPriorityWorkQueue priorityQueue,
+        IEnumerable<IAsyncWork<TResult>> asyncWorks, int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default,
+        int attemptsCount = 1, bool enqueueAll = false)
     {
-        _ = queue ?? throw new ArgumentNullException(nameof(queue));
-        var results = (works ?? throw new ArgumentNullException(nameof(works)))
+        _ = priorityQueue ?? throw new ArgumentNullException(nameof(priorityQueue));
+        var results = (asyncWorks ?? throw new ArgumentNullException(nameof(asyncWorks)))
                       .Where(work => work != null)
-                      .Select(work => queue.EnqueueAsyncWork(work, priority, cancellation, attemptsCount));
+                      .Select(work => priorityQueue.EnqueueAsyncWork(work, priority, cancellation, attemptsCount));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -150,34 +144,52 @@ public static class WorkQueueEnumerableExtension
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IAsyncWork{TResult}},int,CancellationToken,int,bool)" />
     [PublicAPI]
-    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IEnumerable<IAsyncWork<TResult>> works, IPriorityWorkQueue queue,
+    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IEnumerable<IAsyncWork<TResult>> asyncWorks, IPriorityWorkQueue priorityQueue,
         int priority = 0, CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, priority, cancellation, attemptsCount, enqueueAll);
+        => (priorityQueue ?? throw new ArgumentNullException(nameof(priorityQueue)))
+            .DoWorkAsync(asyncWorks ?? throw new ArgumentNullException(nameof(asyncWorks)), priority, cancellation, attemptsCount, enqueueAll);
 
-    /// <summary> Batch process asynchronous works using registered work queue with giver <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="works"> Works to process </param>
-    /// <param name="cancellation"> Processing cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Operation priority </param>
-    /// <param name="enqueueAll"> Option to enqueue all data first </param>
-    /// <typeparam name="TResult"> Processing result type </typeparam>
-    /// <returns> Processing result task enumeration </returns>
-    /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="provider" /> or <paramref name="works" /> is NULL </exception>
+    /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IAsyncWork{TResult}},int,CancellationToken,int,bool)" />
     [PublicAPI]
-    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IServiceProvider provider, IEnumerable<IAsyncWork<TResult>> works,
+    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IServiceProvider provider, IEnumerable<IAsyncWork<TResult>> asyncWorks,
         CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false, int priority = 0)
     {
         var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>();
         return queue is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.DoWorkAsync(works, priority, cancellation, attemptsCount, enqueueAll)
-            : queue.DoWorkAsync(works, cancellation, attemptsCount, enqueueAll);
+            ? priorityQueue.DoWorkAsync(asyncWorks ?? throw new ArgumentNullException(nameof(asyncWorks)),
+                priority,
+                cancellation,
+                attemptsCount,
+                enqueueAll)
+            : queue.DoWorkAsync(asyncWorks ?? throw new ArgumentNullException(nameof(asyncWorks)), cancellation, attemptsCount, enqueueAll);
     }
 
 #endregion
 
 #region AsyncEnumerable
+
+    private static async void PushWorks<TResult>(ChannelWriter<Task<TResult>> writer, IWorkQueue queue, IAsyncEnumerable<IWork<TResult>> works,
+        CancellationToken cancellation, int attemptsCount)
+    {
+        try
+        {
+            await foreach (var work in works.WithCancellation(cancellation).ConfigureAwait(false))
+                if (work != null)
+                    await writer.WriteAsync(queue.EnqueueWork(work, cancellation, attemptsCount), cancellation).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException ex)
+        {
+            await writer.WriteAsync(Task.FromCanceled<TResult>(ex.CancellationToken), CancellationToken.None).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
+        }
+        finally
+        {
+            writer.Complete();
+        }
+    }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IWorkQueue,IEnumerable{IWork{TResult}},CancellationToken,int,bool)" />
     [PublicAPI]
@@ -188,29 +200,7 @@ public static class WorkQueueEnumerableExtension
         _ = works ?? throw new ArgumentNullException(nameof(works));
         var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
-        var writer = channel.Writer;
-        _ = Task.Run(async () =>
-            {
-                try
-                {
-                    await foreach (var work in works.WithCancellation(cancellation).ConfigureAwait(false))
-                        if (work != null)
-                            await writer.WriteAsync(queue.EnqueueWork(work, cancellation, attemptsCount), cancellation).ConfigureAwait(false);
-                }
-                catch (OperationCanceledException ex)
-                {
-                    await writer.WriteAsync(Task.FromCanceled<TResult>(ex.CancellationToken), CancellationToken.None).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
-                }
-                finally
-                {
-                    writer.Complete();
-                }
-            },
-            cancellation);
+        PushWorks(channel.Writer, queue, works, cancellation, attemptsCount);
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
     }
@@ -219,156 +209,164 @@ public static class WorkQueueEnumerableExtension
     [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IAsyncEnumerable<IWork<TResult>> works, IWorkQueue queue,
         CancellationToken cancellation = default, int attemptsCount = 1)
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, cancellation, attemptsCount);
+        => (queue ?? throw new ArgumentNullException(nameof(queue)))
+            .DoWorkAsync(works ?? throw new ArgumentNullException(nameof(works)), cancellation, attemptsCount);
+
+    private static async void PushWorks<TResult>(ChannelWriter<Task<TResult>> writer, IPriorityWorkQueue priorityQueue,
+        IAsyncEnumerable<IWork<TResult>> works, int priority, CancellationToken cancellation, int attemptsCount)
+    {
+        try
+        {
+            await foreach (var work in works.WithCancellation(cancellation).ConfigureAwait(false))
+                if (work != null)
+                    await writer.WriteAsync(priorityQueue.EnqueueWork(work, priority, cancellation, attemptsCount), cancellation)
+                                .ConfigureAwait(false);
+        }
+        catch (OperationCanceledException ex)
+        {
+            await writer.WriteAsync(Task.FromCanceled<TResult>(ex.CancellationToken), CancellationToken.None).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
+        }
+        finally
+        {
+            writer.Complete();
+        }
+    }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IWork{TResult}},int,CancellationToken,int,bool)" />
     [PublicAPI]
-    public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IPriorityWorkQueue queue, IAsyncEnumerable<IWork<TResult>> works,
+    public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IPriorityWorkQueue priorityQueue, IAsyncEnumerable<IWork<TResult>> works,
         int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
     {
-        _ = queue ?? throw new ArgumentNullException(nameof(queue));
+        _ = priorityQueue ?? throw new ArgumentNullException(nameof(priorityQueue));
         _ = works ?? throw new ArgumentNullException(nameof(works));
         var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
-        var writer = channel.Writer;
-        _ = Task.Run(async () =>
-            {
-                try
-                {
-                    await foreach (var work in works.WithCancellation(cancellation).ConfigureAwait(false))
-                        if (work != null)
-                            await writer.WriteAsync(queue.EnqueueWork(work, priority, cancellation, attemptsCount), cancellation)
-                                        .ConfigureAwait(false);
-                }
-                catch (OperationCanceledException ex)
-                {
-                    await writer.WriteAsync(Task.FromCanceled<TResult>(ex.CancellationToken), CancellationToken.None).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
-                }
-                finally
-                {
-                    writer.Complete();
-                }
-            },
-            cancellation);
+        PushWorks(channel.Writer, priorityQueue, works, priority, cancellation, attemptsCount);
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IWork{TResult}},int,CancellationToken,int,bool)" />
     [PublicAPI]
-    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IAsyncEnumerable<IWork<TResult>> works, IPriorityWorkQueue queue,
+    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IAsyncEnumerable<IWork<TResult>> works, IPriorityWorkQueue priorityQueue,
         int priority = 0, CancellationToken cancellation = default, int attemptsCount = 1)
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, priority, cancellation, attemptsCount);
+        => (priorityQueue ?? throw new ArgumentNullException(nameof(priorityQueue)))
+            .DoWorkAsync(works ?? throw new ArgumentNullException(nameof(works)), priority, cancellation, attemptsCount);
 
-    /// <inheritdoc cref="DoWorkAsync{TResult}(IServiceProvider,IEnumerable{IWork{TResult}},CancellationToken,int,bool,int)" />
+    /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IWork{TResult}},int,CancellationToken,int,bool)" />
     [PublicAPI]
     public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IServiceProvider provider, IAsyncEnumerable<IWork<TResult>> works,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
     {
         var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>();
         return queue is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.DoWorkAsync(works, priority, cancellation, attemptsCount)
-            : queue.DoWorkAsync(works, cancellation, attemptsCount);
+            ? priorityQueue.DoWorkAsync(works ?? throw new ArgumentNullException(nameof(works)), priority, cancellation, attemptsCount)
+            : queue.DoWorkAsync(works ?? throw new ArgumentNullException(nameof(works)), cancellation, attemptsCount);
+    }
+
+    private static async void PushAsyncWorks<TResult>(ChannelWriter<Task<TResult>> writer, IWorkQueue queue,
+        IAsyncEnumerable<IAsyncWork<TResult>> asyncWorks, CancellationToken cancellation, int attemptsCount)
+    {
+        try
+        {
+            await foreach (var work in asyncWorks.WithCancellation(cancellation).ConfigureAwait(false))
+                if (work != null)
+                    await writer.WriteAsync(queue.EnqueueAsyncWork(work, cancellation, attemptsCount), cancellation).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException ex)
+        {
+            await writer.WriteAsync(Task.FromCanceled<TResult>(ex.CancellationToken), CancellationToken.None).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
+        }
+        finally
+        {
+            writer.Complete();
+        }
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IWorkQueue,IEnumerable{IAsyncWork{TResult}},CancellationToken,int,bool)" />
     [PublicAPI]
-    public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IWorkQueue queue, IAsyncEnumerable<IAsyncWork<TResult>> works,
+    public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IWorkQueue queue, IAsyncEnumerable<IAsyncWork<TResult>> asyncWorks,
         [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
-        _ = works ?? throw new ArgumentNullException(nameof(works));
+        _ = asyncWorks ?? throw new ArgumentNullException(nameof(asyncWorks));
         var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
-        var writer = channel.Writer;
-        _ = Task.Run(async () =>
-            {
-                try
-                {
-                    await foreach (var work in works.WithCancellation(cancellation).ConfigureAwait(false))
-                        if (work != null)
-                            await writer.WriteAsync(queue.EnqueueAsyncWork(work, cancellation, attemptsCount), cancellation).ConfigureAwait(false);
-                }
-                catch (OperationCanceledException ex)
-                {
-                    await writer.WriteAsync(Task.FromCanceled<TResult>(ex.CancellationToken), CancellationToken.None).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
-                }
-                finally
-                {
-                    writer.Complete();
-                }
-            },
-            cancellation);
+        PushAsyncWorks(channel.Writer, queue, asyncWorks, cancellation, attemptsCount);
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IWorkQueue,IEnumerable{IAsyncWork{TResult}},CancellationToken,int,bool)" />
     [PublicAPI]
-    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IAsyncEnumerable<IAsyncWork<TResult>> works, IWorkQueue queue,
+    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IAsyncEnumerable<IAsyncWork<TResult>> asyncWorks, IWorkQueue queue,
         CancellationToken cancellation = default, int attemptsCount = 1)
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, cancellation, attemptsCount);
+        => (queue ?? throw new ArgumentNullException(nameof(queue)))
+            .DoWorkAsync(asyncWorks ?? throw new ArgumentNullException(nameof(asyncWorks)), cancellation, attemptsCount);
+
+    private static async void PushAsyncWorks<TResult>(ChannelWriter<Task<TResult>> writer, IPriorityWorkQueue priorityQueue,
+        IAsyncEnumerable<IAsyncWork<TResult>> asyncWorks, int priority, CancellationToken cancellation, int attemptsCount)
+    {
+        try
+        {
+            await foreach (var work in asyncWorks.WithCancellation(cancellation).ConfigureAwait(false))
+                if (work != null)
+                    await writer.WriteAsync(priorityQueue.EnqueueAsyncWork(work, priority, cancellation, attemptsCount), cancellation)
+                                .ConfigureAwait(false);
+        }
+        catch (OperationCanceledException ex)
+        {
+            await writer.WriteAsync(Task.FromCanceled<TResult>(ex.CancellationToken), CancellationToken.None).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
+        }
+        finally
+        {
+            writer.Complete();
+        }
+    }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IAsyncWork{TResult}},int,CancellationToken,int,bool)" />
     [PublicAPI]
-    public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IPriorityWorkQueue queue, IAsyncEnumerable<IAsyncWork<TResult>> works,
-        int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
+    public static async IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IPriorityWorkQueue priorityQueue,
+        IAsyncEnumerable<IAsyncWork<TResult>> asyncWorks, int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default,
+        int attemptsCount = 1)
     {
-        _ = queue ?? throw new ArgumentNullException(nameof(queue));
-        _ = works ?? throw new ArgumentNullException(nameof(works));
+        _ = priorityQueue ?? throw new ArgumentNullException(nameof(priorityQueue));
+        _ = asyncWorks ?? throw new ArgumentNullException(nameof(asyncWorks));
         var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
-        var writer = channel.Writer;
-        _ = Task.Run(async () =>
-            {
-                try
-                {
-                    await foreach (var work in works.WithCancellation(cancellation).ConfigureAwait(false))
-                        if (work != null)
-                            await writer.WriteAsync(queue.EnqueueAsyncWork(work, priority, cancellation, attemptsCount), cancellation)
-                                        .ConfigureAwait(false);
-                }
-                catch (OperationCanceledException ex)
-                {
-                    await writer.WriteAsync(Task.FromCanceled<TResult>(ex.CancellationToken), CancellationToken.None).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    await writer.WriteAsync(Task.FromException<TResult>(ex), CancellationToken.None).ConfigureAwait(false);
-                }
-                finally
-                {
-                    writer.Complete();
-                }
-            },
-            cancellation);
+        PushAsyncWorks(channel.Writer, priorityQueue, asyncWorks, priority, cancellation, attemptsCount);
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
     }
 
     /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IAsyncWork{TResult}},int,CancellationToken,int,bool)" />
     [PublicAPI]
-    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IAsyncEnumerable<IAsyncWork<TResult>> works, IPriorityWorkQueue queue,
-        int priority = 0, CancellationToken cancellation = default, int attemptsCount = 1)
-        => (queue ?? throw new ArgumentNullException(nameof(queue))).DoWorkAsync(works, priority, cancellation, attemptsCount);
+    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IAsyncEnumerable<IAsyncWork<TResult>> asyncWorks,
+        IPriorityWorkQueue priorityQueue, int priority = 0, CancellationToken cancellation = default, int attemptsCount = 1)
+        => (priorityQueue ?? throw new ArgumentNullException(nameof(priorityQueue)))
+            .DoWorkAsync(asyncWorks ?? throw new ArgumentNullException(nameof(asyncWorks)), priority, cancellation, attemptsCount);
 
-    /// <inheritdoc cref="DoWorkAsync{TResult}(IServiceProvider,IEnumerable{IAsyncWork{TResult}},CancellationToken,int,bool,int)" />
+    /// <inheritdoc cref="DoWorkAsync{TResult}(IPriorityWorkQueue,IEnumerable{IAsyncWork{TResult}},int,CancellationToken,int,bool)" />
     [PublicAPI]
-    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IServiceProvider provider, IAsyncEnumerable<IAsyncWork<TResult>> works,
+    public static IAsyncEnumerable<TResult> DoWorkAsync<TResult>(this IServiceProvider provider, IAsyncEnumerable<IAsyncWork<TResult>> asyncWorks,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
     {
         var queue = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>();
         return queue is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.DoWorkAsync(works, priority, cancellation, attemptsCount)
-            : queue.DoWorkAsync(works, cancellation, attemptsCount);
+            ? priorityQueue.DoWorkAsync(asyncWorks ?? throw new ArgumentNullException(nameof(asyncWorks)), priority, cancellation, attemptsCount)
+            : queue.DoWorkAsync(asyncWorks ?? throw new ArgumentNullException(nameof(asyncWorks)), cancellation, attemptsCount);
     }
 
 #endregion

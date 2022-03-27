@@ -22,15 +22,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
 {
 #region QueueAccess
 
-    /// <summary> Enqueue access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="access"> Access action instance </param>
-    /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <returns> Access action completion task </returns>
-    /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource}(IWorkQueue,IAccess{TResource},CancellationToken,int,int)" />
+    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource}(IWorkQueue,IAccess{TResource},CancellationToken,int,int)" />
     [PublicAPI]
     public static Task EnqueueAccess<TResource>(this IServiceProvider provider, IAccess<TResource> access, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
@@ -39,16 +31,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
            .RequiredService<IWorkQueue>()
            .EnqueueAccess(access ?? throw new ArgumentNullException(nameof(access)), cancellation, attemptsCount, priority);
 
-    /// <summary> Enqueue access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="access"> Access action instance </param>
-    /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TResult"> Access action result type </typeparam>
-    /// <returns> Access action completion task </returns>
-    /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource, TResult}(IWorkQueue,IAccess{TResource, TResult},CancellationToken,int,int)" />
+    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource, TResult}(IWorkQueue,IAccess{TResource, TResult},CancellationToken,int,int)" />
     [PublicAPI]
     public static Task<TResult> EnqueueAccess<TResource, TResult>(this IServiceProvider provider, IAccess<TResource, TResult> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
@@ -57,15 +40,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
            .RequiredService<IWorkQueue>()
            .EnqueueAccess(access ?? throw new ArgumentNullException(nameof(access)), cancellation, attemptsCount, priority);
 
-    /// <summary> Enqueue asynchronous access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="access"> Access action instance </param>
-    /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <returns> Access action completion task </returns>
-    /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource}(IWorkQueue,IAsyncAccess{TResource},CancellationToken,int,int)" />
+    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource}(IWorkQueue,IAsyncAccess{TResource},CancellationToken,int,int)" />
     [PublicAPI]
     public static Task EnqueueAsyncAccess<TResource>(this IServiceProvider provider, IAsyncAccess<TResource> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
@@ -74,16 +49,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
            .RequiredService<IWorkQueue>()
            .EnqueueAsyncAccess(access ?? throw new ArgumentNullException(nameof(access)), cancellation, attemptsCount, priority);
 
-    /// <summary> Enqueue asynchronous access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="access"> Access action instance </param>
-    /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TResult"> Access action result type </typeparam>
-    /// <returns> Access action completion task </returns>
-    /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource, TResult}(IWorkQueue,IAsyncAccess{TResource, TResult},CancellationToken,int,int)" />
+    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource, TResult}(IWorkQueue,IAsyncAccess{TResource, TResult},CancellationToken,int,int)" />
     [PublicAPI]
     public static Task<TResult> EnqueueAsyncAccess<TResource, TResult>(this IServiceProvider provider, IAsyncAccess<TResource, TResult> access,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
@@ -96,15 +62,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
 
 #region QueueAccessDI
 
-    /// <summary> Enqueue access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TAccess"> Access action type </typeparam>
-    /// <returns> Access action completion task </returns>
-    /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource, TAccess}(IWorkQueue,CancellationToken,int,int)" />
+    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource, TAccess}(IWorkQueue,CancellationToken,int,int)" />
     [PublicAPI]
     public static Task EnqueueAccess<TResource, TAccess>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
@@ -114,16 +72,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
            .RequiredService<IWorkQueue>()
            .EnqueueAccess<TResource, TAccess>(cancellation, attemptsCount, priority);
 
-    /// <summary> Enqueue access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TAccess"> Access action type </typeparam>
-    /// <typeparam name="TResult"> Access action result type </typeparam>
-    /// <returns> Access action completion task </returns>
-    /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource, TAccess, TResult}(IWorkQueue,CancellationToken,int,int)" />
+    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource, TAccess, TResult}(IWorkQueue,CancellationToken,int,int)" />
     [PublicAPI]
     public static Task<TResult> EnqueueAccess<TResource, TAccess, TResult>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
@@ -133,15 +82,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
            .RequiredService<IWorkQueue>()
            .EnqueueAccess<TResource, TAccess, TResult>(cancellation, attemptsCount, priority);
 
-    /// <summary> Enqueue asynchronous access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
-    /// <returns> Access action completion task </returns>
-    /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource, TAsyncAccess}(IWorkQueue,CancellationToken,int,int)" />
+    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource, TAsyncAccess}(IWorkQueue,CancellationToken,int,int)" />
     [PublicAPI]
     public static Task EnqueueAsyncAccess<TResource, TAsyncAccess>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
@@ -151,16 +92,7 @@ public static class WorkQueueAccessQueueServiceProviderInteraction
            .RequiredService<IWorkQueue>()
            .EnqueueAsyncAccess<TResource, TAsyncAccess>(cancellation, attemptsCount, priority);
 
-    /// <summary> Enqueue asynchronous access action into registered work queue with given <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
-    /// <typeparam name="TResult"> Access action result type </typeparam>
-    /// <returns> Access action completion task </returns>
-    /// <seealso cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource, TAsyncAccess, TResult}(IWorkQueue,CancellationToken,int,int)" />
+    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource, TAsyncAccess, TResult}(IWorkQueue,CancellationToken,int,int)" />
     [PublicAPI]
     public static Task<TResult> EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(this IServiceProvider provider,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)

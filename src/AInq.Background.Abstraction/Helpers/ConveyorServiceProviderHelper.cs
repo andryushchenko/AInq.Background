@@ -20,17 +20,7 @@ namespace AInq.Background.Helpers;
 /// <remarks> <see cref="IConveyor{TData,TResult}" /> or <see cref="IPriorityConveyor{TData,TResult}" /> should be registered on host </remarks>
 public static class ConveyorServiceProviderHelper
 {
-    /// <summary> Process data using registered conveyor with giver <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="data"> Data to process </param>
-    /// <param name="cancellation"> Processing cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Operation priority </param>
-    /// <typeparam name="TData"> Input data type </typeparam>
-    /// <typeparam name="TResult"> Processing result type </typeparam>
-    /// <returns> Processing result task </returns>
-    /// <exception cref="InvalidOperationException"> Thrown if no conveyor for given <typeparamref name="TData" /> and <typeparamref name="TResult" /> is registered </exception>
-    /// <seealso cref="IPriorityConveyor{TData,TResult}.ProcessDataAsync(TData, int, CancellationToken, int)" />
+    /// <inheritdoc cref="IPriorityConveyor{TData,TResult}.ProcessDataAsync(TData, int, CancellationToken, int)" />
     [PublicAPI]
     public static Task<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, TData data, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)

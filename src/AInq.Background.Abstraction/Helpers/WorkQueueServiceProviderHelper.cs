@@ -23,15 +23,7 @@ public static class WorkQueueServiceProviderHelper
 {
 #region Queue
 
-    /// <summary> Enqueue background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="work"> Work instance </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Work priority </param>
-    /// <returns> Work completion task </returns>
-    /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <seealso cref="IPriorityWorkQueue.EnqueueWork(IWork, int, CancellationToken, int)" />
+    /// <inheritdoc cref="IPriorityWorkQueue.EnqueueWork(IWork, int, CancellationToken, int)" />
     [PublicAPI]
     public static Task EnqueueWork(this IServiceProvider provider, IWork work, CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0)
@@ -40,16 +32,7 @@ public static class WorkQueueServiceProviderHelper
            ?.EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), priority, cancellation, attemptsCount)
            ?? provider.RequiredService<IWorkQueue>().EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), cancellation, attemptsCount);
 
-    /// <summary> Enqueue background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="work"> Work instance </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Work priority </param>
-    /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <returns> Work completion task </returns>
-    /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <seealso cref="IPriorityWorkQueue.EnqueueWork{TResult}(IWork{TResult}, int, CancellationToken, int)" />
+    /// <inheritdoc cref="IPriorityWorkQueue.EnqueueWork{TResult}(IWork{TResult}, int, CancellationToken, int)" />
     [PublicAPI]
     public static Task<TResult> EnqueueWork<TResult>(this IServiceProvider provider, IWork<TResult> work, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
@@ -58,15 +41,7 @@ public static class WorkQueueServiceProviderHelper
            ?.EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), priority, cancellation, attemptsCount)
            ?? provider.RequiredService<IWorkQueue>().EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), cancellation, attemptsCount);
 
-    /// <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="work"> Work instance </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Work priority </param>
-    /// <returns> Work completion task </returns>
-    /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <seealso cref="IPriorityWorkQueue.EnqueueAsyncWork(IAsyncWork, int, CancellationToken, int)" />
+    /// <inheritdoc cref="IPriorityWorkQueue.EnqueueAsyncWork(IAsyncWork, int, CancellationToken, int)" />
     [PublicAPI]
     public static Task EnqueueAsyncWork(this IServiceProvider provider, IAsyncWork work, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
@@ -76,16 +51,7 @@ public static class WorkQueueServiceProviderHelper
            ?? provider.RequiredService<IWorkQueue>()
                       .EnqueueAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), cancellation, attemptsCount);
 
-    /// <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="work"> Work instance </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Work priority </param>
-    /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <returns> Work completion task </returns>
-    /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <seealso cref="IPriorityWorkQueue.EnqueueAsyncWork{TResult}(IAsyncWork{TResult}, int, CancellationToken, int)" />
+    /// <inheritdoc cref="IPriorityWorkQueue.EnqueueAsyncWork{TResult}(IAsyncWork{TResult}, int, CancellationToken, int)" />
     [PublicAPI]
     public static Task<TResult> EnqueueAsyncWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
@@ -99,15 +65,7 @@ public static class WorkQueueServiceProviderHelper
 
 #region QueueDI
 
-    /// <summary> Enqueue background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Work priority </param>
-    /// <typeparam name="TWork"> Work type </typeparam>
-    /// <returns> Work completion task </returns>
-    /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <seealso cref="WorkQueueDependencyInjectionExtension.EnqueueWork{TWork}(IPriorityWorkQueue,int, CancellationToken, int)" />
+    /// <inheritdoc cref="WorkQueueDependencyInjectionExtension.EnqueueWork{TWork}(IPriorityWorkQueue,int, CancellationToken, int)" />
     [PublicAPI]
     public static Task EnqueueWork<TWork>(this IServiceProvider provider, CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0)
@@ -117,16 +75,7 @@ public static class WorkQueueServiceProviderHelper
            ?.EnqueueWork<TWork>(priority, cancellation, attemptsCount)
            ?? provider.RequiredService<IWorkQueue>().EnqueueWork<TWork>(cancellation, attemptsCount);
 
-    /// <summary> Enqueue background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Work priority </param>
-    /// <typeparam name="TWork"> Work type </typeparam>
-    /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <returns> Work completion task </returns>
-    /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <seealso cref="WorkQueueDependencyInjectionExtension.EnqueueWork{TWork, TResult}(IPriorityWorkQueue,int, CancellationToken, int)" />
+    /// <inheritdoc cref="WorkQueueDependencyInjectionExtension.EnqueueWork{TWork, TResult}(IPriorityWorkQueue,int, CancellationToken, int)" />
     [PublicAPI]
     public static Task<TResult> EnqueueWork<TWork, TResult>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
@@ -136,15 +85,7 @@ public static class WorkQueueServiceProviderHelper
            ?.EnqueueWork<TWork, TResult>(priority, cancellation, attemptsCount)
            ?? provider.RequiredService<IWorkQueue>().EnqueueWork<TWork, TResult>(cancellation, attemptsCount);
 
-    /// <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Work priority </param>
-    /// <typeparam name="TAsyncWork"> Work type </typeparam>
-    /// <returns> Work completion task </returns>
-    /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <seealso cref="WorkQueueDependencyInjectionExtension.EnqueueAsyncWork{TAsyncWork}(IPriorityWorkQueue,int, CancellationToken, int)" />
+    /// <inheritdoc cref="WorkQueueDependencyInjectionExtension.EnqueueAsyncWork{TAsyncWork}(IPriorityWorkQueue,int, CancellationToken, int)" />
     [PublicAPI]
     public static Task EnqueueAsyncWork<TAsyncWork>(this IServiceProvider provider, CancellationToken cancellation = default, int attemptsCount = 1,
         int priority = 0)
@@ -154,16 +95,7 @@ public static class WorkQueueServiceProviderHelper
            ?.EnqueueAsyncWork<TAsyncWork>(priority, cancellation, attemptsCount)
            ?? provider.RequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork>(cancellation, attemptsCount);
 
-    /// <summary> Enqueue asynchronous background work into registered queue with giver <paramref name="priority" /> (if supported) </summary>
-    /// <param name="provider"> Service provider instance </param>
-    /// <param name="cancellation"> Work cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="priority"> Work priority </param>
-    /// <typeparam name="TAsyncWork"> Work type </typeparam>
-    /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <returns> Work completion task </returns>
-    /// <exception cref="InvalidOperationException"> Thrown if no work queue is registered </exception>
-    /// <seealso cref="WorkQueueDependencyInjectionExtension.EnqueueWork{TAsyncWork, TResult}(IPriorityWorkQueue,int, CancellationToken, int)" />
+    /// <inheritdoc cref="WorkQueueDependencyInjectionExtension.EnqueueWork{TAsyncWork, TResult}(IPriorityWorkQueue,int, CancellationToken, int)" />
     [PublicAPI]
     public static Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
