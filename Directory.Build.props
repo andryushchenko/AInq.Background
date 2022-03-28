@@ -10,7 +10,6 @@
         <Copyright>Copyright (c) Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-        <Version>5.3.1</Version>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -20,10 +19,6 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>AInq.png</PackageIcon>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <PackageReleaseNotes>[OPT] Reduce internal lambda usage
-[FIX] Missed null checks
-[UPD] Package references
-[OPT] Remove duplicated docs</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
