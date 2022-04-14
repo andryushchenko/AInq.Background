@@ -15,10 +15,11 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
         <RootNamespace>AInq.Background</RootNamespace>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>AInq.png</PackageIcon>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
