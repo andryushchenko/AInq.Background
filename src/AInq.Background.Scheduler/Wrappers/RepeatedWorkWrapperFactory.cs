@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Helpers;
+
 namespace AInq.Background.Wrappers;
 
 /// <summary> Factory class for creating <see cref="IScheduledTaskWrapper" /> for repeated work </summary>
