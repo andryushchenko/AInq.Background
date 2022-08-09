@@ -189,7 +189,7 @@ public static class RepeatedWorkWrapperFactory
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
-                _subject.OnNext(Maybe.Value(ex));
+                _subject.OnNext(ex);
                 _nextScheduledTime += _repeatDelay;
                 if (_execCount != -1) _execCount--;
             }
@@ -255,7 +255,7 @@ public static class RepeatedWorkWrapperFactory
                 var result = _asyncWork == null
                     ? _work!.DoWork(provider)
                     : await _asyncWork.DoWorkAsync(provider, aggregateCancellation.Token).ConfigureAwait(false);
-                _subject.OnNext(Try.Value(result));
+                _subject.OnNext(result);
                 _nextScheduledTime += _repeatDelay;
                 if (_execCount != -1) _execCount--;
             }
@@ -267,7 +267,7 @@ public static class RepeatedWorkWrapperFactory
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
-                _subject.OnNext(Try.Error<TResult>(ex));
+                _subject.OnNext(ex);
                 _nextScheduledTime += _repeatDelay;
                 if (_execCount != -1) _execCount--;
             }

@@ -164,7 +164,7 @@ public static class CronWorkWrapperFactory
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
-                _subject.OnNext(Maybe.Value(ex));
+                _subject.OnNext(ex);
                 if (_execCount != -1) _execCount--;
             }
             if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue && _execCount != 0)
@@ -223,7 +223,7 @@ public static class CronWorkWrapperFactory
                 var result = _asyncWork == null
                     ? _work!.DoWork(provider)
                     : await _asyncWork.DoWorkAsync(provider, aggregateCancellation.Token).ConfigureAwait(false);
-                _subject.OnNext(Try.Value(result));
+                _subject.OnNext(result);
                 if (_execCount != -1) _execCount--;
             }
             catch (OperationCanceledException)
@@ -234,7 +234,7 @@ public static class CronWorkWrapperFactory
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
-                _subject.OnNext(Try.Error<TResult>(ex));
+                _subject.OnNext(ex);
                 if (_execCount != -1) _execCount--;
             }
             if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue && _execCount != 0)

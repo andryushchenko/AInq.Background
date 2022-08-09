@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AInq.Optional" Version="3.3.0" />
+        <PackageReference Include="AInq.Optional" Version="3.3.1" />
     </ItemGroup>
 
     <ItemGroup>
