@@ -114,7 +114,9 @@ public static class ConveyorInjection
         where TData : notnull
     {
         _ = services ?? throw new ArgumentNullException(nameof(services));
-        var arguments = (conveyorMachines ?? throw new ArgumentNullException(nameof(conveyorMachines))).Where(machine => machine != null).ToList();
+        var arguments = (conveyorMachines ?? throw new ArgumentNullException(nameof(conveyorMachines)))
+                        .Select(machine => machine ?? throw new ArgumentNullException(nameof(machine)))
+                        .ToList();
         if (arguments.Count == 0) throw new ArgumentException("Empty collection", nameof(conveyorMachines));
         var manager = new ConveyorManager<TData, TResult>(maxAttempts);
         services.AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider,
@@ -156,7 +158,9 @@ public static class ConveyorInjection
         where TData : notnull
     {
         _ = services ?? throw new ArgumentNullException(nameof(services));
-        var arguments = (conveyorMachines ?? throw new ArgumentNullException(nameof(conveyorMachines))).Where(machine => machine != null).ToList();
+        var arguments = (conveyorMachines ?? throw new ArgumentNullException(nameof(conveyorMachines)))
+                        .Select(machine => machine ?? throw new ArgumentNullException(nameof(machine)))
+                        .ToList();
         if (arguments.Count == 0) throw new ArgumentException("Empty collection", nameof(conveyorMachines));
         var manager = new PriorityConveyorManager<TData, TResult>(maxPriority, maxAttempts);
         services.AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider,

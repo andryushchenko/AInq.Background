@@ -104,7 +104,9 @@ public static class AccessQueueInjection
         where TResource : notnull
     {
         _ = services ?? throw new ArgumentNullException(nameof(services));
-        var arguments = (resources ?? throw new ArgumentNullException(nameof(resources))).Where(resource => resource != null).ToList();
+        var arguments = (resources ?? throw new ArgumentNullException(nameof(resources)))
+                        .Select(resource => resource ?? throw new ArgumentNullException(nameof(resource)))
+                        .ToList();
         if (arguments.Count == 0) throw new ArgumentException("Empty collection", nameof(resources));
         var manager = new AccessQueueManager<TResource>(maxAttempts);
         services.AddHostedService(provider => new TaskWorker<TResource, object?>(provider, manager, CreateProcessor<TResource, object?>(arguments)));
@@ -142,7 +144,9 @@ public static class AccessQueueInjection
         where TResource : notnull
     {
         _ = services ?? throw new ArgumentNullException(nameof(services));
-        var arguments = (resources ?? throw new ArgumentNullException(nameof(resources))).Where(resource => resource != null).ToList();
+        var arguments = (resources ?? throw new ArgumentNullException(nameof(resources)))
+                        .Select(resource => resource ?? throw new ArgumentNullException(nameof(resource)))
+                        .ToList();
         if (arguments.Count == 0) throw new ArgumentException("Empty collection", nameof(resources));
         var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);
         services.AddHostedService(provider => new TaskWorker<TResource, int>(provider, manager, CreateProcessor<TResource, int>(arguments)));

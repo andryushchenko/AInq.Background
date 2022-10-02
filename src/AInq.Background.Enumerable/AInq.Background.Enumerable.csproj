@@ -5,12 +5,16 @@
         <Description>Background work utilities for .NET Core apps based on Hosted services. Batch processing extension for background work queue, access queue and data coveyor. </Description>
     </PropertyGroup>
 
-    <ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
         <PackageReference Include="System.Threading.Channels" Version="6.0.0" />
     </ItemGroup>
 
+    <ItemGroup Condition="'$(TargetFramework)'!='netcoreapp3.1'">
+        <PackageReference Include="System.Threading.Channels" Version="7.0.0-rc.1.22426.10" />
+    </ItemGroup>
+
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0-rc.1.22426.10" />
     </ItemGroup>
 
     <ItemGroup>
