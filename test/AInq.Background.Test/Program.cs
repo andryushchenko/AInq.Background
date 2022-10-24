@@ -21,20 +21,26 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+IWorkQueue? parallelQueue = null;
 var host = Host.CreateDefaultBuilder(args)
                .ConfigureLogging(logging => logging.ClearProviders().AddDebug())
-               .ConfigureServices(services
-                   => services.AddTransient<TestMachine>()
-                              .AddPriorityConveyor<int, int, TestMachine>(ReuseStrategy.Reuse, 3)
-                              .AddWorkScheduler()
-                              .AddWorkQueue()
-                              .AddStartupWork(WorkFactory.CreateWork(StartupWork)))
+               .ConfigureServices(services =>
+               {
+                   services.AddTransient<TestMachine>()
+                           .AddPriorityConveyor<int, int, TestMachine>(ReuseStrategy.Reuse, 3)
+                           .AddWorkScheduler()
+                           .AddWorkQueue()
+                           .AddStartupWork(WorkFactory.CreateWork(StartupWork));
+                   parallelQueue = services.CreateWorkQueue();
+               })
                .Build();
 var cancellationSource = new CancellationTokenSource();
 var work = host.DoStartupWorkAsync(cancellationSource.Token)
                .ContinueWith(_ => Console.WriteLine($"{DateTime.Now}\t Starting host"))
                .ContinueWith(async _ => await host.RunAsync(cancellationSource.Token).ConfigureAwait(false), cancellationSource.Token)
                .Unwrap();
+Console.ReadLine();
+await (parallelQueue?.EnqueueWork(WorkFactory.CreateWork(_ => Console.WriteLine($"{DateTime.Now:T}\tParallel queue test"))) ?? Task.CompletedTask).ConfigureAwait(false);
 Console.ReadLine();
 cancellationSource.Cancel();
 Console.WriteLine($"{DateTime.Now:T}\tGeneral stop requested");

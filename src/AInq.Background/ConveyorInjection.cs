@@ -14,6 +14,7 @@
 
 using AInq.Background.Managers;
 using AInq.Background.Workers;
+using Microsoft.Extensions.Hosting;
 using System.ComponentModel;
 using static AInq.Background.Processors.ProcessorFactory;
 
@@ -36,7 +37,7 @@ public static class ConveyorInjection
         _ = services ?? throw new ArgumentNullException(nameof(services));
         _ = conveyorMachine ?? throw new ArgumentNullException(nameof(conveyorMachine));
         var manager = new ConveyorManager<TData, TResult>(maxAttempts);
-        services.AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider,
+        services.AddSingleton<IHostedService>(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider,
             manager,
             CreateProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachine)));
         return manager;
@@ -75,7 +76,7 @@ public static class ConveyorInjection
         _ = services ?? throw new ArgumentNullException(nameof(services));
         _ = conveyorMachine ?? throw new ArgumentNullException(nameof(conveyorMachine));
         var manager = new PriorityConveyorManager<TData, TResult>(maxPriority, maxAttempts);
-        services.AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider,
+        services.AddSingleton<IHostedService>(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider,
             manager,
             CreateProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachine)));
         return manager;
@@ -119,7 +120,7 @@ public static class ConveyorInjection
                         .ToList();
         if (arguments.Count == 0) throw new ArgumentException("Empty collection", nameof(conveyorMachines));
         var manager = new ConveyorManager<TData, TResult>(maxAttempts);
-        services.AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider,
+        services.AddSingleton<IHostedService>(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider,
             manager,
             CreateProcessor<IConveyorMachine<TData, TResult>, object?>(arguments)));
         return manager;
@@ -163,7 +164,7 @@ public static class ConveyorInjection
                         .ToList();
         if (arguments.Count == 0) throw new ArgumentException("Empty collection", nameof(conveyorMachines));
         var manager = new PriorityConveyorManager<TData, TResult>(maxPriority, maxAttempts);
-        services.AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider,
+        services.AddSingleton<IHostedService>(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider,
             manager,
             CreateProcessor<IConveyorMachine<TData, TResult>, int>(arguments)));
         return manager;
@@ -210,7 +211,7 @@ public static class ConveyorInjection
         if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
             throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
         var manager = new ConveyorManager<TData, TResult>(maxAttempts);
-        services.AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider,
+        services.AddSingleton<IHostedService>(provider => new TaskWorker<IConveyorMachine<TData, TResult>, object?>(provider,
             manager,
             CreateProcessor<IConveyorMachine<TData, TResult>, object?>(conveyorMachineFactory, strategy, provider, maxParallelMachines)));
         return manager;
@@ -259,7 +260,7 @@ public static class ConveyorInjection
         if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
             throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
         var manager = new PriorityConveyorManager<TData, TResult>(maxPriority, maxAttempts);
-        services.AddHostedService(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider,
+        services.AddSingleton<IHostedService>(provider => new TaskWorker<IConveyorMachine<TData, TResult>, int>(provider,
             manager,
             CreateProcessor<IConveyorMachine<TData, TResult>, int>(conveyorMachineFactory, strategy, provider, maxParallelMachines)));
         return manager;

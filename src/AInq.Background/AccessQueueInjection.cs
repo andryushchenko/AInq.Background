@@ -14,6 +14,7 @@
 
 using AInq.Background.Managers;
 using AInq.Background.Workers;
+using Microsoft.Extensions.Hosting;
 using System.ComponentModel;
 using static AInq.Background.Processors.ProcessorFactory;
 
@@ -35,7 +36,7 @@ public static class AccessQueueInjection
         _ = services ?? throw new ArgumentNullException(nameof(services));
         _ = resource ?? throw new ArgumentNullException(nameof(resource));
         var manager = new AccessQueueManager<TResource>(maxAttempts);
-        services.AddHostedService(provider => new TaskWorker<TResource, object?>(provider, manager, CreateProcessor<TResource, object?>(resource)));
+        services.AddSingleton<IHostedService>(provider => new TaskWorker<TResource, object?>(provider, manager, CreateProcessor<TResource, object?>(resource)));
         return manager;
     }
 
@@ -69,7 +70,7 @@ public static class AccessQueueInjection
         _ = services ?? throw new ArgumentNullException(nameof(services));
         _ = resource ?? throw new ArgumentNullException(nameof(resource));
         var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);
-        services.AddHostedService(provider => new TaskWorker<TResource, int>(provider, manager, CreateProcessor<TResource, int>(resource)));
+        services.AddSingleton<IHostedService>(provider => new TaskWorker<TResource, int>(provider, manager, CreateProcessor<TResource, int>(resource)));
         return manager;
     }
 
@@ -109,7 +110,7 @@ public static class AccessQueueInjection
                         .ToList();
         if (arguments.Count == 0) throw new ArgumentException("Empty collection", nameof(resources));
         var manager = new AccessQueueManager<TResource>(maxAttempts);
-        services.AddHostedService(provider => new TaskWorker<TResource, object?>(provider, manager, CreateProcessor<TResource, object?>(arguments)));
+        services.AddSingleton<IHostedService>(provider => new TaskWorker<TResource, object?>(provider, manager, CreateProcessor<TResource, object?>(arguments)));
         return manager;
     }
 
@@ -149,7 +150,7 @@ public static class AccessQueueInjection
                         .ToList();
         if (arguments.Count == 0) throw new ArgumentException("Empty collection", nameof(resources));
         var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);
-        services.AddHostedService(provider => new TaskWorker<TResource, int>(provider, manager, CreateProcessor<TResource, int>(arguments)));
+        services.AddSingleton<IHostedService>(provider => new TaskWorker<TResource, int>(provider, manager, CreateProcessor<TResource, int>(arguments)));
         return manager;
     }
 
@@ -191,7 +192,7 @@ public static class AccessQueueInjection
         if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
             throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
         var manager = new AccessQueueManager<TResource>(maxAttempts);
-        services.AddHostedService(provider => new TaskWorker<TResource, object?>(provider,
+        services.AddSingleton<IHostedService>(provider => new TaskWorker<TResource, object?>(provider,
             manager,
             CreateProcessor<TResource, object?>(resourceFactory, strategy, provider, maxResourceInstances)));
         return manager;
@@ -237,7 +238,7 @@ public static class AccessQueueInjection
         if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
             throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
         var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);
-        services.AddHostedService(provider => new TaskWorker<TResource, int>(provider,
+        services.AddSingleton<IHostedService>(provider => new TaskWorker<TResource, int>(provider,
             manager,
             CreateProcessor<TResource, int>(resourceFactory, strategy, provider, maxResourceInstances)));
         return manager;

@@ -16,6 +16,7 @@ using AInq.Background.Managers;
 using AInq.Background.Services;
 using AInq.Background.Workers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace AInq.Background;
 
@@ -30,7 +31,7 @@ public static class WorkSchedulerInjection
     {
         _ = services ?? throw new ArgumentNullException(nameof(services));
         var scheduler = new WorkSchedulerManager();
-        services.AddHostedService(provider => new SchedulerWorker(scheduler, provider, horizon));
+        services.AddSingleton<IHostedService>(provider => new SchedulerWorker(scheduler, provider, horizon));
         return scheduler;
     }
 
