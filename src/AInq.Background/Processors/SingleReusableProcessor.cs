@@ -52,6 +52,7 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
         }
         while (manager.HasTask && !cancellation.IsCancellationRequested)
         {
+            if (argument is IStartStoppable {IsActive: false}) break;
             var (task, metadata) = manager.GetTask();
             if (task == null) continue;
             if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))

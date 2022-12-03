@@ -5,18 +5,10 @@
         <Description>Background work utilities for .NET Core apps based on Hosted services. Background work queue, shared resource access queue, background data processing conveyor.</Description>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)'!='netcoreapp3.1'">
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-    </ItemGroup>
-
     <ItemGroup>
-        <PackageReference Include="Nito.AsyncEx.Coordination" Version="5.1.2" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+        <PackageReference Include="Nito.AsyncEx.Coordination" />
     </ItemGroup>
 
     <ItemGroup>

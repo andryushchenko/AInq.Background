@@ -5,19 +5,11 @@
         <Description>Background work utilities for .NET Core apps based on Hosted services. Background work scheduler with cron.</Description>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)'!='netcoreapp3.1'">
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-    </ItemGroup>
-
     <ItemGroup>
-        <PackageReference Include="Cronos" Version="0.7.1" />
-        <PackageReference Include="Nito.AsyncEx.Coordination" Version="5.1.2" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+        <PackageReference Include="Cronos" />
+        <PackageReference Include="Nito.AsyncEx.Coordination" />
     </ItemGroup>
 
     <ItemGroup>
