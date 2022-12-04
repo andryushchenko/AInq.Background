@@ -31,7 +31,8 @@ public static class WorkQueueInjection
     {
         _ = services ?? throw new ArgumentNullException(nameof(services));
         var manager = new WorkQueueManager(maxAttempts);
-        services.AddSingleton<IHostedService>(provider => new TaskWorker<object?, object?>(provider, manager, CreateNullProcessor<object?>(maxParallelWorks)));
+        services.AddSingleton<IHostedService>(provider
+            => new TaskWorker<object?, object?>(provider, manager, CreateNullProcessor<object?>(maxParallelWorks)));
         return manager;
     }
 
@@ -60,7 +61,8 @@ public static class WorkQueueInjection
     {
         _ = services ?? throw new ArgumentNullException(nameof(services));
         var manager = new PriorityWorkQueueManager(maxPriority, maxAttempts);
-        services.AddSingleton<IHostedService>(provider => new TaskWorker<object?, int>(provider, manager, CreateNullProcessor<int>(maxParallelWorks)));
+        services.AddSingleton<IHostedService>(provider
+            => new TaskWorker<object?, int>(provider, manager, CreateNullProcessor<int>(maxParallelWorks)));
         return manager;
     }
 

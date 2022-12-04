@@ -40,7 +40,8 @@ var work = host.DoStartupWorkAsync(cancellationSource.Token)
                .ContinueWith(async _ => await host.RunAsync(cancellationSource.Token).ConfigureAwait(false), cancellationSource.Token)
                .Unwrap();
 Console.ReadLine();
-await (parallelQueue?.EnqueueWork(WorkFactory.CreateWork(_ => Console.WriteLine($"{DateTime.Now:T}\tParallel queue test"))) ?? Task.CompletedTask).ConfigureAwait(false);
+await (parallelQueue?.EnqueueWork(WorkFactory.CreateWork(_ => Console.WriteLine($"{DateTime.Now:T}\tParallel queue test"))) ?? Task.CompletedTask)
+    .ConfigureAwait(false);
 Console.ReadLine();
 cancellationSource.Cancel();
 Console.WriteLine($"{DateTime.Now:T}\tGeneral stop requested");
