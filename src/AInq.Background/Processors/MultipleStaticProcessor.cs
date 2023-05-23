@@ -84,7 +84,7 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
             manager.RevertTask(task, metadata);
         try
         {
-            if (manager.HasTask && argument is IThrottling {Timeout.Ticks: > 0} throttling)
+            if (argument is IThrottling {Timeout.Ticks: > 0} throttling)
                 await Task.Delay(throttling.Timeout, cancellation).ConfigureAwait(false);
         }
         finally

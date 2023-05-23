@@ -48,6 +48,7 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
         catch (Exception ex)
         {
             logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
+            (argument as IDisposable)?.Dispose();
             return;
         }
         while (manager.HasTask && !cancellation.IsCancellationRequested)
@@ -59,7 +60,7 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
                 manager.RevertTask(task, metadata);
             try
             {
-                if (manager.HasTask && argument is IThrottling {Timeout.Ticks: > 0} throttling)
+                if (argument is IThrottling {Timeout.Ticks: > 0} throttling)
                     await Task.Delay(throttling.Timeout, cancellation).ConfigureAwait(false);
             }
             catch (OperationCanceledException)

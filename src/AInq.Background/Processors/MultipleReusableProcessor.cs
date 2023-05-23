@@ -87,13 +87,14 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
             manager.RevertTask(task, metadata);
             Interlocked.Decrement(ref _currentArgumentCount);
             _reset.Set();
+            (argument as IDisposable)?.Dispose();
             return;
         }
         if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))
             manager.RevertTask(task, metadata);
         try
         {
-            if (manager.HasTask && argument is IThrottling {Timeout.Ticks: > 0} throttling)
+            if (argument is IThrottling {Timeout.Ticks: > 0} throttling)
                 await Task.Delay(throttling.Timeout, cancellation).ConfigureAwait(false);
         }
         finally

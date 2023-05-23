@@ -68,6 +68,7 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
             logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
             manager.RevertTask(task, metadata);
             _semaphore.Release();
+            (argument as IDisposable)?.Dispose();
             return;
         }
         if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))

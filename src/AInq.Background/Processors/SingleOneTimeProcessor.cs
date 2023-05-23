@@ -53,6 +53,7 @@ internal sealed class SingleOneTimeProcessor<TArgument, TMetadata> : ITaskProces
             {
                 logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
                 manager.RevertTask(task, metadata);
+                (argument as IDisposable)?.Dispose();
                 continue;
             }
             if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))
