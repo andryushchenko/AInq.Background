@@ -5,6 +5,7 @@
         <IsPackable>false</IsPackable>
         <TargetFrameworks>net8.0</TargetFrameworks>
         <RootNamespace>AInq.Background.Test</RootNamespace>
+        <PublishAot>true</PublishAot>
     </PropertyGroup>
 
     <ItemGroup>

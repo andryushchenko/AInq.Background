@@ -12,6 +12,7 @@
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
+        <IsAotCompatible>true</IsAotCompatible>
         <ImplicitUsings>enable</ImplicitUsings>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
