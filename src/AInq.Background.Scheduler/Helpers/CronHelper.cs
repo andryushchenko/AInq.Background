@@ -19,6 +19,8 @@ namespace AInq.Background.Helpers;
 /// <summary> Cron expression parsing utility </summary>
 public static class CronHelper
 {
+    private static readonly char[] Separators = {' '};
+
     /// <summary> Parse cron string with format auto detection </summary>
     /// <param name="cronExpression"> Cron string </param>
     /// <returns> <see cref="CronExpression" /> instance </returns>
@@ -29,7 +31,7 @@ public static class CronHelper
         _ = cronExpression ?? throw new ArgumentNullException(nameof(cronExpression));
         try
         {
-            return cronExpression.Trim().Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries).Length switch
+            return cronExpression.Trim().Split(Separators, StringSplitOptions.RemoveEmptyEntries).Length switch
             {
                 5 => CronExpression.Parse(cronExpression, CronFormat.Standard),
                 6 => CronExpression.Parse(cronExpression, CronFormat.IncludeSeconds),

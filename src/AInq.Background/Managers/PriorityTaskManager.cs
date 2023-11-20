@@ -21,7 +21,7 @@ namespace AInq.Background.Managers;
 public class PriorityTaskManager<TArgument> : ITaskManager<TArgument, int>
 {
     private readonly AsyncAutoResetEvent _newDataEvent = new(false);
-    private readonly IList<ConcurrentQueue<ITaskWrapper<TArgument>>> _queues;
+    private readonly ConcurrentQueue<ITaskWrapper<TArgument>>[] _queues;
 
     /// <param name="maxPriority"> Max allowed priority </param>
     protected PriorityTaskManager(int maxPriority = 100)
@@ -46,7 +46,7 @@ public class PriorityTaskManager<TArgument> : ITaskManager<TArgument, int>
         {
             var pendingQueue = _queues.LastOrDefault(queue => !queue.IsEmpty);
             if (pendingQueue == null || !pendingQueue.TryDequeue(out var task)) return (null, -1);
-            if (!task.IsCanceled) return (task, _queues.IndexOf(pendingQueue));
+            if (!task.IsCanceled) return (task, Array.IndexOf(_queues, pendingQueue));
         }
     }
 
