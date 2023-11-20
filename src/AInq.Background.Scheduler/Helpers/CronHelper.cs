@@ -33,9 +33,9 @@ public static class CronHelper
         {
             return cronExpression.Trim().Split(Separators, StringSplitOptions.RemoveEmptyEntries).Length switch
             {
-                5 => CronExpression.Parse(cronExpression, CronFormat.Standard),
+                5 => CronExpression.Parse(cronExpression),
                 6 => CronExpression.Parse(cronExpression, CronFormat.IncludeSeconds),
-                _ => throw new CronFormatException("Unknown format")
+                _ => cronExpression.StartsWith("@") ? CronExpression.Parse(cronExpression) : throw new CronFormatException("Unknown format")
             };
         }
         catch (Exception ex)
