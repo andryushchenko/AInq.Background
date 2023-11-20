@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Helpers;
 using AInq.Background.Managers;
 
 namespace AInq.Background.Processors;
@@ -53,7 +54,7 @@ internal sealed class SingleOneTimeProcessor<TArgument, TMetadata> : ITaskProces
             {
                 logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
                 manager.RevertTask(task, metadata);
-                (argument as IDisposable)?.Dispose();
+                await argument.TryDisposeAsync().ConfigureAwait(false);
                 continue;
             }
             if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))
@@ -75,7 +76,7 @@ internal sealed class SingleOneTimeProcessor<TArgument, TMetadata> : ITaskProces
         }
         finally
         {
-            (argument as IDisposable)?.Dispose();
+            await argument.TryDisposeAsync().ConfigureAwait(false);
         }
     }
 }

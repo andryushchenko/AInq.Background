@@ -35,7 +35,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static Task AddScheduledQueueWork(this IWorkScheduler scheduler, IWork work, TimeSpan delay, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, priority),
+            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount),
             delay,
             cancellation);
 
@@ -53,7 +53,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static Task<TResult> AddScheduledQueueWork<TResult>(this IWorkScheduler scheduler, IWork<TResult> work, TimeSpan delay,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, priority),
+            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount),
             delay,
             cancellation);
 
@@ -70,7 +70,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static Task AddScheduledAsyncQueueWork(this IWorkScheduler scheduler, IAsyncWork asyncWork, TimeSpan delay,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), attemptsCount, priority),
+            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), priority, attemptsCount),
             delay,
             cancellation);
 
@@ -88,7 +88,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static Task<TResult> AddScheduledAsyncQueueWork<TResult>(this IWorkScheduler scheduler, IAsyncWork<TResult> asyncWork, TimeSpan delay,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), attemptsCount, priority),
+            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), priority, attemptsCount),
             delay,
             cancellation);
 
@@ -110,7 +110,7 @@ public static class WorkSchedulerWorkQueueInteraction
         int attemptsCount = 1, int priority = 0)
         where TWork : IWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
-            .AddScheduledAsyncWork(CreateQueuedInjectedWork<TWork>(attemptsCount, priority), delay, cancellation);
+            .AddScheduledAsyncWork(CreateQueuedInjectedWork<TWork>(priority, attemptsCount), delay, cancellation);
 
     /// <summary> Add delayed queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work scheduler instance </param>
@@ -127,7 +127,7 @@ public static class WorkSchedulerWorkQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TWork : IWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
-            .AddScheduledAsyncWork(CreateQueuedInjectedWork<TWork, TResult>(attemptsCount, priority), delay, cancellation);
+            .AddScheduledAsyncWork(CreateQueuedInjectedWork<TWork, TResult>(priority, attemptsCount), delay, cancellation);
 
     /// <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work scheduler instance </param>
@@ -143,7 +143,7 @@ public static class WorkSchedulerWorkQueueInteraction
         int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
-            .AddScheduledAsyncWork(CreateQueuedInjectedAsyncWork<TAsyncWork>(attemptsCount, priority), delay, cancellation);
+            .AddScheduledAsyncWork(CreateQueuedInjectedAsyncWork<TAsyncWork>(priority, attemptsCount), delay, cancellation);
 
     /// <summary> Add delayed queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work scheduler instance </param>
@@ -160,7 +160,7 @@ public static class WorkSchedulerWorkQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
-            .AddScheduledAsyncWork(CreateQueuedInjectedAsyncWork<TAsyncWork, TResult>(attemptsCount, priority), delay, cancellation);
+            .AddScheduledAsyncWork(CreateQueuedInjectedAsyncWork<TAsyncWork, TResult>(priority, attemptsCount), delay, cancellation);
 
 #endregion
 
@@ -179,7 +179,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static Task AddScheduledQueueWork(this IWorkScheduler scheduler, IWork work, DateTime time, CancellationToken cancellation = default,
         int attemptsCount = 1, int priority = 0)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, priority),
+            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount),
             time,
             cancellation);
 
@@ -197,7 +197,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static Task<TResult> AddScheduledQueueWork<TResult>(this IWorkScheduler scheduler, IWork<TResult> work, DateTime time,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, priority),
+            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount),
             time,
             cancellation);
 
@@ -214,7 +214,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static Task AddScheduledAsyncQueueWork(this IWorkScheduler scheduler, IAsyncWork asyncWork, DateTime time,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), attemptsCount, priority),
+            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), priority, attemptsCount),
             time,
             cancellation);
 
@@ -232,7 +232,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static Task<TResult> AddScheduledAsyncQueueWork<TResult>(this IWorkScheduler scheduler, IAsyncWork<TResult> asyncWork, DateTime time,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
-            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), attemptsCount, priority),
+            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), priority, attemptsCount),
             time,
             cancellation);
 
@@ -254,7 +254,7 @@ public static class WorkSchedulerWorkQueueInteraction
         int attemptsCount = 1, int priority = 0)
         where TWork : IWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
-            .AddScheduledAsyncWork(CreateQueuedInjectedWork<TWork>(attemptsCount, priority), time, cancellation);
+            .AddScheduledAsyncWork(CreateQueuedInjectedWork<TWork>(priority, attemptsCount), time, cancellation);
 
     /// <summary> Add scheduled queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work scheduler instance </param>
@@ -271,7 +271,7 @@ public static class WorkSchedulerWorkQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TWork : IWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
-            .AddScheduledAsyncWork(CreateQueuedInjectedWork<TWork, TResult>(attemptsCount, priority), time, cancellation);
+            .AddScheduledAsyncWork(CreateQueuedInjectedWork<TWork, TResult>(priority, attemptsCount), time, cancellation);
 
     /// <summary> Add scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work scheduler instance </param>
@@ -287,7 +287,7 @@ public static class WorkSchedulerWorkQueueInteraction
         int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
-            .AddScheduledAsyncWork(CreateQueuedInjectedAsyncWork<TAsyncWork>(attemptsCount, priority), time, cancellation);
+            .AddScheduledAsyncWork(CreateQueuedInjectedAsyncWork<TAsyncWork>(priority, attemptsCount), time, cancellation);
 
     /// <summary> Add scheduled queued asynchronous work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work scheduler instance </param>
@@ -304,7 +304,7 @@ public static class WorkSchedulerWorkQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
         where TAsyncWork : IAsyncWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
-            .AddScheduledAsyncWork(CreateQueuedInjectedAsyncWork<TAsyncWork, TResult>(attemptsCount, priority), time, cancellation);
+            .AddScheduledAsyncWork(CreateQueuedInjectedAsyncWork<TAsyncWork, TResult>(priority, attemptsCount), time, cancellation);
 
 #endregion
 
@@ -325,7 +325,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static IObservable<Maybe<Exception>> AddCronQueueWork(this IWorkScheduler scheduler, IWork work, string cronExpression,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, priority),
+            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
@@ -346,7 +346,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static IObservable<Try<TResult>> AddCronQueueWork<TResult>(this IWorkScheduler scheduler, IWork<TResult> work, string cronExpression,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, priority),
+            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
@@ -366,7 +366,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static IObservable<Maybe<Exception>> AddCronAsyncQueueWork(this IWorkScheduler scheduler, IAsyncWork asyncWork, string cronExpression,
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), attemptsCount, priority),
+            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), priority, attemptsCount),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
@@ -387,7 +387,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static IObservable<Try<TResult>> AddCronAsyncQueueWork<TResult>(this IWorkScheduler scheduler, IAsyncWork<TResult> asyncWork,
         string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), attemptsCount, priority),
+            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), priority, attemptsCount),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
@@ -412,7 +412,7 @@ public static class WorkSchedulerWorkQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TWork : IWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateQueuedInjectedWork<TWork>(attemptsCount, priority),
+            CreateQueuedInjectedWork<TWork>(priority, attemptsCount),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
@@ -434,7 +434,7 @@ public static class WorkSchedulerWorkQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TWork : IWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateQueuedInjectedWork<TWork, TResult>(attemptsCount, priority),
+            CreateQueuedInjectedWork<TWork, TResult>(priority, attemptsCount),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
@@ -455,7 +455,7 @@ public static class WorkSchedulerWorkQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TAsyncWork : IAsyncWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateQueuedInjectedAsyncWork<TAsyncWork>(attemptsCount, priority),
+            CreateQueuedInjectedAsyncWork<TAsyncWork>(priority, attemptsCount),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
@@ -477,7 +477,7 @@ public static class WorkSchedulerWorkQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TAsyncWork : IAsyncWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
-            CreateQueuedInjectedAsyncWork<TAsyncWork, TResult>(attemptsCount, priority),
+            CreateQueuedInjectedAsyncWork<TAsyncWork, TResult>(priority, attemptsCount),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
             cancellation,
             execCount);
@@ -501,7 +501,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static IObservable<Maybe<Exception>> AddRepeatedQueueWork(this IWorkScheduler scheduler, IWork work, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, priority),
+            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount),
             starTime,
             repeatDelay,
             cancellation,
@@ -523,7 +523,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static IObservable<Try<TResult>> AddRepeatedQueueWork<TResult>(this IWorkScheduler scheduler, IWork<TResult> work, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, priority),
+            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount),
             starTime,
             repeatDelay,
             cancellation,
@@ -544,7 +544,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncQueueWork(this IWorkScheduler scheduler, IAsyncWork asyncWork, DateTime starTime,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), attemptsCount, priority),
+            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), priority, attemptsCount),
             starTime,
             repeatDelay,
             cancellation,
@@ -567,7 +567,7 @@ public static class WorkSchedulerWorkQueueInteraction
         DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), attemptsCount, priority),
+            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), priority, attemptsCount),
             starTime,
             repeatDelay,
             cancellation,
@@ -593,7 +593,7 @@ public static class WorkSchedulerWorkQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TWork : IWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
-            .AddRepeatedAsyncWork(CreateQueuedInjectedWork<TWork>(attemptsCount, priority), starTime, repeatDelay, cancellation, execCount);
+            .AddRepeatedAsyncWork(CreateQueuedInjectedWork<TWork>(priority, attemptsCount), starTime, repeatDelay, cancellation, execCount);
 
     /// <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -612,7 +612,7 @@ public static class WorkSchedulerWorkQueueInteraction
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TWork : IWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateQueuedInjectedWork<TWork, TResult>(attemptsCount, priority),
+            CreateQueuedInjectedWork<TWork, TResult>(priority, attemptsCount),
             starTime,
             repeatDelay,
             cancellation,
@@ -634,7 +634,7 @@ public static class WorkSchedulerWorkQueueInteraction
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TAsyncWork : IAsyncWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateQueuedInjectedAsyncWork<TAsyncWork>(attemptsCount, priority),
+            CreateQueuedInjectedAsyncWork<TAsyncWork>(priority, attemptsCount),
             starTime,
             repeatDelay,
             cancellation,
@@ -657,7 +657,7 @@ public static class WorkSchedulerWorkQueueInteraction
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TAsyncWork : IAsyncWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateQueuedInjectedAsyncWork<TAsyncWork, TResult>(attemptsCount, priority),
+            CreateQueuedInjectedAsyncWork<TAsyncWork, TResult>(priority, attemptsCount),
             starTime,
             repeatDelay,
             cancellation,
@@ -682,7 +682,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static IObservable<Maybe<Exception>> AddRepeatedQueueWork(this IWorkScheduler scheduler, IWork work, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, priority),
+            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount),
             startDelay,
             repeatDelay,
             cancellation,
@@ -704,7 +704,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static IObservable<Try<TResult>> AddRepeatedQueueWork<TResult>(this IWorkScheduler scheduler, IWork<TResult> work, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, priority),
+            CreateQueuedWork(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount),
             startDelay,
             repeatDelay,
             cancellation,
@@ -725,7 +725,7 @@ public static class WorkSchedulerWorkQueueInteraction
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncQueueWork(this IWorkScheduler scheduler, IAsyncWork asyncWork, TimeSpan startDelay,
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), attemptsCount, priority),
+            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), priority, attemptsCount),
             startDelay,
             repeatDelay,
             cancellation,
@@ -748,7 +748,7 @@ public static class WorkSchedulerWorkQueueInteraction
         TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
         int execCount = -1)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), attemptsCount, priority),
+            CreateQueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), priority, attemptsCount),
             startDelay,
             repeatDelay,
             cancellation,
@@ -774,7 +774,7 @@ public static class WorkSchedulerWorkQueueInteraction
         CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TWork : IWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
-            .AddRepeatedAsyncWork(CreateQueuedInjectedWork<TWork>(attemptsCount, priority), startDelay, repeatDelay, cancellation, execCount);
+            .AddRepeatedAsyncWork(CreateQueuedInjectedWork<TWork>(priority, attemptsCount), startDelay, repeatDelay, cancellation, execCount);
 
     /// <summary> Add repeated queued work to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Work Scheduler instance </param>
@@ -793,7 +793,7 @@ public static class WorkSchedulerWorkQueueInteraction
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TWork : IWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateQueuedInjectedWork<TWork, TResult>(attemptsCount, priority),
+            CreateQueuedInjectedWork<TWork, TResult>(priority, attemptsCount),
             startDelay,
             repeatDelay,
             cancellation,
@@ -815,7 +815,7 @@ public static class WorkSchedulerWorkQueueInteraction
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TAsyncWork : IAsyncWork
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateQueuedInjectedAsyncWork<TAsyncWork>(attemptsCount, priority),
+            CreateQueuedInjectedAsyncWork<TAsyncWork>(priority, attemptsCount),
             startDelay,
             repeatDelay,
             cancellation,
@@ -838,7 +838,7 @@ public static class WorkSchedulerWorkQueueInteraction
         TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
         where TAsyncWork : IAsyncWork<TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
-            CreateQueuedInjectedAsyncWork<TAsyncWork, TResult>(attemptsCount, priority),
+            CreateQueuedInjectedAsyncWork<TAsyncWork, TResult>(priority, attemptsCount),
             startDelay,
             repeatDelay,
             cancellation,

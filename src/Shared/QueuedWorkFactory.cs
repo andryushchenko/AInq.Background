@@ -16,34 +16,33 @@ namespace AInq.Background.Tasks;
 
 internal static class QueuedWorkFactory
 {
-    public static IAsyncWork CreateQueuedWork(IWork work, int attemptsCount, int priority)
-        => new QueuedWork(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, priority);
+    public static IAsyncWork CreateQueuedWork(IWork work, int priority, int attemptsCount)
+        => new QueuedWork(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount);
 
-    public static IAsyncWork<TResult> CreateQueuedWork<TResult>(IWork<TResult> work, int attemptsCount, int priority)
-        => new QueuedWork<TResult>(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, priority);
+    public static IAsyncWork<TResult> CreateQueuedWork<TResult>(IWork<TResult> work, int priority, int attemptsCount)
+        => new QueuedWork<TResult>(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount);
 
-    public static IAsyncWork CreateQueuedAsyncWork(IAsyncWork asyncWork, int attemptsCount, int priority)
-        => new QueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), attemptsCount, priority);
+    public static IAsyncWork CreateQueuedAsyncWork(IAsyncWork asyncWork, int priority, int attemptsCount)
+        => new QueuedAsyncWork(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), priority, attemptsCount);
 
-    public static IAsyncWork<TResult> CreateQueuedAsyncWork<TResult>(IAsyncWork<TResult> asyncWork, int attemptsCount,
-        int priority)
-        => new QueuedAsyncWork<TResult>(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), attemptsCount, priority);
+    public static IAsyncWork<TResult> CreateQueuedAsyncWork<TResult>(IAsyncWork<TResult> asyncWork, int priority, int attemptsCount)
+        => new QueuedAsyncWork<TResult>(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)), priority, attemptsCount);
 
-    public static IAsyncWork CreateQueuedInjectedWork<TWork>(int attemptsCount, int priority)
+    public static IAsyncWork CreateQueuedInjectedWork<TWork>(int priority, int attemptsCount)
         where TWork : IWork
-        => new QueuedInjectedWork<TWork>(attemptsCount, priority);
+        => new QueuedInjectedWork<TWork>(priority, attemptsCount);
 
-    public static IAsyncWork<TResult> CreateQueuedInjectedWork<TWork, TResult>(int attemptsCount, int priority)
+    public static IAsyncWork<TResult> CreateQueuedInjectedWork<TWork, TResult>(int priority, int attemptsCount)
         where TWork : IWork<TResult>
-        => new QueuedInjectedWork<TWork, TResult>(attemptsCount, priority);
+        => new QueuedInjectedWork<TWork, TResult>(priority, attemptsCount);
 
-    public static IAsyncWork CreateQueuedInjectedAsyncWork<TAsyncWork>(int attemptsCount, int priority)
+    public static IAsyncWork CreateQueuedInjectedAsyncWork<TAsyncWork>(int priority, int attemptsCount)
         where TAsyncWork : IAsyncWork
-        => new QueuedInjectedAsyncWork<TAsyncWork>(attemptsCount, priority);
+        => new QueuedInjectedAsyncWork<TAsyncWork>(priority, attemptsCount);
 
-    public static IAsyncWork<TResult> CreateQueuedInjectedAsyncWork<TAsyncWork, TResult>(int attemptsCount, int priority)
+    public static IAsyncWork<TResult> CreateQueuedInjectedAsyncWork<TAsyncWork, TResult>(int priority, int attemptsCount)
         where TAsyncWork : IAsyncWork<TResult>
-        => new QueuedInjectedAsyncWork<TAsyncWork, TResult>(attemptsCount, priority);
+        => new QueuedInjectedAsyncWork<TAsyncWork, TResult>(priority, attemptsCount);
 
     private class QueuedWork : IAsyncWork
 
@@ -52,7 +51,7 @@ internal static class QueuedWorkFactory
         private readonly int _priority;
         private readonly IWork _work;
 
-        public QueuedWork(IWork work, int attemptsCount, int priority)
+        public QueuedWork(IWork work, int priority, int attemptsCount)
         {
             _work = work ?? throw new ArgumentNullException(nameof(work));
             _attemptsCount = attemptsCount;
@@ -70,7 +69,7 @@ internal static class QueuedWorkFactory
         private readonly int _priority;
         private readonly IWork<TResult> _work;
 
-        public QueuedWork(IWork<TResult> work, int attemptsCount, int priority)
+        public QueuedWork(IWork<TResult> work, int priority, int attemptsCount)
         {
             _work = work ?? throw new ArgumentNullException(nameof(work));
             _attemptsCount = attemptsCount;
@@ -88,7 +87,7 @@ internal static class QueuedWorkFactory
         private readonly int _attemptsCount;
         private readonly int _priority;
 
-        public QueuedAsyncWork(IAsyncWork asyncWork, int attemptsCount, int priority)
+        public QueuedAsyncWork(IAsyncWork asyncWork, int priority, int attemptsCount)
         {
             _asyncWork = asyncWork ?? throw new ArgumentNullException(nameof(asyncWork));
             _attemptsCount = attemptsCount;
@@ -106,7 +105,7 @@ internal static class QueuedWorkFactory
         private readonly int _attemptsCount;
         private readonly int _priority;
 
-        public QueuedAsyncWork(IAsyncWork<TResult> asyncWork, int attemptsCount, int priority)
+        public QueuedAsyncWork(IAsyncWork<TResult> asyncWork, int priority, int attemptsCount)
         {
             _asyncWork = asyncWork ?? throw new ArgumentNullException(nameof(asyncWork));
             _attemptsCount = attemptsCount;
@@ -123,7 +122,7 @@ internal static class QueuedWorkFactory
         private readonly int _attemptsCount;
         private readonly int _priority;
 
-        public QueuedInjectedWork(int attemptsCount, int priority)
+        public QueuedInjectedWork(int priority, int attemptsCount)
         {
             _attemptsCount = attemptsCount;
             _priority = priority;
@@ -139,7 +138,7 @@ internal static class QueuedWorkFactory
         private readonly int _attemptsCount;
         private readonly int _priority;
 
-        public QueuedInjectedWork(int attemptsCount, int priority)
+        public QueuedInjectedWork(int priority, int attemptsCount)
         {
             _attemptsCount = attemptsCount;
             _priority = priority;
@@ -155,7 +154,7 @@ internal static class QueuedWorkFactory
         private readonly int _attemptsCount;
         private readonly int _priority;
 
-        public QueuedInjectedAsyncWork(int attemptsCount, int priority)
+        public QueuedInjectedAsyncWork(int priority, int attemptsCount)
         {
             _attemptsCount = attemptsCount;
             _priority = priority;
@@ -171,7 +170,7 @@ internal static class QueuedWorkFactory
         private readonly int _attemptsCount;
         private readonly int _priority;
 
-        public QueuedInjectedAsyncWork(int attemptsCount, int priority)
+        public QueuedInjectedAsyncWork(int priority, int attemptsCount)
         {
             _attemptsCount = attemptsCount;
             _priority = priority;

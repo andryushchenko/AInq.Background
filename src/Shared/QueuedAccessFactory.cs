@@ -16,42 +16,42 @@ namespace AInq.Background.Tasks;
 
 internal static class QueuedAccessFactory
 {
-    public static IAsyncWork CreateQueuedAccess<TResource>(IAccess<TResource> access, int attemptsCount, int priority)
+    public static IAsyncWork CreateQueuedAccess<TResource>(IAccess<TResource> access, int priority, int attemptsCount)
         where TResource : notnull
-        => new QueuedAccess<TResource>(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority);
+        => new QueuedAccess<TResource>(access ?? throw new ArgumentNullException(nameof(access)), priority, attemptsCount);
 
-    public static IAsyncWork<TResult> CreateQueuedAccess<TResource, TResult>(IAccess<TResource, TResult> access, int attemptsCount, int priority)
+    public static IAsyncWork<TResult> CreateQueuedAccess<TResource, TResult>(IAccess<TResource, TResult> access, int priority, int attemptsCount)
         where TResource : notnull
-        => new QueuedAccess<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority);
+        => new QueuedAccess<TResource, TResult>(access ?? throw new ArgumentNullException(nameof(access)), priority, attemptsCount);
 
-    public static IAsyncWork CreateQueuedAsyncAccess<TResource>(IAsyncAccess<TResource> asyncAccess, int attemptsCount, int priority)
+    public static IAsyncWork CreateQueuedAsyncAccess<TResource>(IAsyncAccess<TResource> asyncAccess, int priority, int attemptsCount)
         where TResource : notnull
-        => new QueuedAsyncAccess<TResource>(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority);
+        => new QueuedAsyncAccess<TResource>(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), priority, attemptsCount);
 
-    public static IAsyncWork<TResult> CreateQueuedAsyncAccess<TResource, TResult>(IAsyncAccess<TResource, TResult> asyncAccess, int attemptsCount,
-        int priority)
+    public static IAsyncWork<TResult> CreateQueuedAsyncAccess<TResource, TResult>(IAsyncAccess<TResource, TResult> asyncAccess, int priority,
+        int attemptsCount)
         where TResource : notnull
-        => new QueuedAsyncAccess<TResource, TResult>(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority);
+        => new QueuedAsyncAccess<TResource, TResult>(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), priority, attemptsCount);
 
-    public static IAsyncWork CreateQueuedInjectedAccess<TResource, TAccess>(int attemptsCount, int priority)
+    public static IAsyncWork CreateQueuedInjectedAccess<TResource, TAccess>(int priority, int attemptsCount)
         where TResource : notnull
         where TAccess : IAccess<TResource>
-        => new QueuedInjectedAccess<TResource, TAccess>(attemptsCount, priority);
+        => new QueuedInjectedAccess<TResource, TAccess>(priority, attemptsCount);
 
-    public static IAsyncWork<TResult> CreateQueuedInjectedAccess<TResource, TAccess, TResult>(int attemptsCount, int priority)
+    public static IAsyncWork<TResult> CreateQueuedInjectedAccess<TResource, TAccess, TResult>(int priority, int attemptsCount)
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
-        => new QueuedInjectedAccess<TResource, TAccess, TResult>(attemptsCount, priority);
+        => new QueuedInjectedAccess<TResource, TAccess, TResult>(priority, attemptsCount);
 
-    public static IAsyncWork CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess>(int attemptsCount, int priority)
+    public static IAsyncWork CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess>(int priority, int attemptsCount)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
-        => new QueuedInjectedAsyncAccess<TResource, TAsyncAccess>(attemptsCount, priority);
+        => new QueuedInjectedAsyncAccess<TResource, TAsyncAccess>(priority, attemptsCount);
 
-    public static IAsyncWork<TResult> CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(int attemptsCount, int priority)
+    public static IAsyncWork<TResult> CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(int priority, int attemptsCount)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => new QueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(attemptsCount, priority);
+        => new QueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(priority, attemptsCount);
 
     private class QueuedAccess<TResource> : IAsyncWork
         where TResource : notnull
@@ -60,7 +60,7 @@ internal static class QueuedAccessFactory
         private readonly int _attemptsCount;
         private readonly int _priority;
 
-        public QueuedAccess(IAccess<TResource> access, int attemptsCount, int priority)
+        public QueuedAccess(IAccess<TResource> access, int priority, int attemptsCount)
         {
             _access = access ?? throw new ArgumentNullException(nameof(access));
             _attemptsCount = attemptsCount;
@@ -78,7 +78,7 @@ internal static class QueuedAccessFactory
         private readonly int _attemptsCount;
         private readonly int _priority;
 
-        public QueuedAccess(IAccess<TResource, TResult> access, int attemptsCount, int priority)
+        public QueuedAccess(IAccess<TResource, TResult> access, int priority, int attemptsCount)
         {
             _access = access ?? throw new ArgumentNullException(nameof(access));
             _attemptsCount = attemptsCount;
@@ -96,7 +96,7 @@ internal static class QueuedAccessFactory
         private readonly int _attemptsCount;
         private readonly int _priority;
 
-        public QueuedAsyncAccess(IAsyncAccess<TResource> asyncAccess, int attemptsCount, int priority)
+        public QueuedAsyncAccess(IAsyncAccess<TResource> asyncAccess, int priority, int attemptsCount)
         {
             _asyncAccess = asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess));
             _attemptsCount = attemptsCount;
@@ -114,7 +114,7 @@ internal static class QueuedAccessFactory
         private readonly int _attemptsCount;
         private readonly int _priority;
 
-        public QueuedAsyncAccess(IAsyncAccess<TResource, TResult> asyncAccess, int attemptsCount, int priority)
+        public QueuedAsyncAccess(IAsyncAccess<TResource, TResult> asyncAccess, int priority, int attemptsCount)
         {
             _asyncAccess = asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess));
             _attemptsCount = attemptsCount;
@@ -132,7 +132,7 @@ internal static class QueuedAccessFactory
         private readonly int _attemptsCount;
         private readonly int _priority;
 
-        public QueuedInjectedAccess(int attemptsCount, int priority)
+        public QueuedInjectedAccess(int priority, int attemptsCount)
         {
             _attemptsCount = attemptsCount;
             _priority = priority;
@@ -149,7 +149,7 @@ internal static class QueuedAccessFactory
         private readonly int _attemptsCount;
         private readonly int _priority;
 
-        public QueuedInjectedAccess(int attemptsCount, int priority)
+        public QueuedInjectedAccess(int priority, int attemptsCount)
         {
             _attemptsCount = attemptsCount;
             _priority = priority;
@@ -166,7 +166,7 @@ internal static class QueuedAccessFactory
         private readonly int _attemptsCount;
         private readonly int _priority;
 
-        public QueuedInjectedAsyncAccess(int attemptsCount, int priority)
+        public QueuedInjectedAsyncAccess(int priority, int attemptsCount)
         {
             _attemptsCount = attemptsCount;
             _priority = priority;
@@ -183,7 +183,7 @@ internal static class QueuedAccessFactory
         private readonly int _attemptsCount;
         private readonly int _priority;
 
-        public QueuedInjectedAsyncAccess(int attemptsCount, int priority)
+        public QueuedInjectedAsyncAccess(int priority, int attemptsCount)
         {
             _attemptsCount = attemptsCount;
             _priority = priority;

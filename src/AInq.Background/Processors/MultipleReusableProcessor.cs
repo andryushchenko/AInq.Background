@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Helpers;
 using AInq.Background.Managers;
 using AInq.Background.Wrappers;
 
@@ -87,7 +88,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
             manager.RevertTask(task, metadata);
             Interlocked.Decrement(ref _currentArgumentCount);
             _reset.Set();
-            (argument as IDisposable)?.Dispose();
+            await argument.TryDisposeAsync().ConfigureAwait(false);
             return;
         }
         if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))
@@ -129,7 +130,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
         }
         finally
         {
-            (argument as IDisposable)?.Dispose();
+            await argument.TryDisposeAsync().ConfigureAwait(false);
         }
     }
 }

@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Helpers;
 using AInq.Background.Managers;
 using AInq.Background.Wrappers;
 
 namespace AInq.Background.Processors;
 
-internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>, IDisposable
+internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>, IDisposable, IAsyncDisposable
 {
     private readonly ConcurrentBag<TArgument> _active = new();
     private readonly ConcurrentBag<TArgument> _inactive;
@@ -33,6 +34,12 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
     {
         while (_active.TryTake(out var argument) || _inactive.TryTake(out argument))
             (argument as IDisposable)?.Dispose();
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        while (_active.TryTake(out var argument) || _inactive.TryTake(out argument))
+            await argument.TryDisposeAsync().ConfigureAwait(false);
     }
 
     async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,

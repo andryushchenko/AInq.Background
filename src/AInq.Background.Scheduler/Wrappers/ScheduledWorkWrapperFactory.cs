@@ -143,7 +143,11 @@ public static class ScheduledWorkWrapperFactory
                 _completion.TrySetException(ex);
             }
             _nextScheduledTime = null;
-            _cancellationRegistration.Dispose();
+#if NETSTANDARD2_0
+                _cancellationRegistration.Dispose();
+#else
+            await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
+#endif
             _cancellationRegistration = default;
             return false;
         }
@@ -203,7 +207,11 @@ public static class ScheduledWorkWrapperFactory
                 _completion.TrySetException(ex);
             }
             _nextScheduledTime = null;
-            _cancellationRegistration.Dispose();
+#if NETSTANDARD2_0
+                _cancellationRegistration.Dispose();
+#else
+            await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
+#endif
             _cancellationRegistration = default;
             return false;
         }

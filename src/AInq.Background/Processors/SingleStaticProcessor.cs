@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using AInq.Background.Helpers;
 using AInq.Background.Managers;
 
 namespace AInq.Background.Processors;
 
-internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>, IDisposable
+internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>, IDisposable, IAsyncDisposable
 {
     private readonly TArgument _argument;
 
@@ -25,6 +26,9 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
 
     void IDisposable.Dispose()
         => (_argument as IDisposable)?.Dispose();
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+        => await _argument.TryDisposeAsync().ConfigureAwait(false);
 
     async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,
         ILogger logger, CancellationToken cancellation)

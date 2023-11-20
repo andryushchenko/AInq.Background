@@ -37,9 +37,9 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         var works = Interlocked.Exchange(ref _works, new ConcurrentBag<IScheduledTaskWrapper>());
         DateTime? next = null;
         while (!works.IsEmpty)
-            if (works.TryTake(out var work) && !work.IsCanceled && work.NextScheduledTime.HasValue)
+            if (works.TryTake(out var work) && work is {IsCanceled: false, NextScheduledTime: not null})
             {
-                if (next == null || work.NextScheduledTime!.Value < next.Value)
+                if (next == null || work.NextScheduledTime.Value < next.Value)
                     next = work.NextScheduledTime;
                 _works.Add(work);
             }
@@ -52,9 +52,9 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
         var upcoming = new LinkedList<IScheduledTaskWrapper>();
         var time = DateTime.Now.Add(horizon);
         while (!works.IsEmpty)
-            if (works.TryTake(out var work) && !work.IsCanceled && work.NextScheduledTime.HasValue)
+            if (works.TryTake(out var work) && work is {IsCanceled: false, NextScheduledTime: not null})
             {
-                if (work.NextScheduledTime!.Value <= time)
+                if (work.NextScheduledTime.Value <= time)
                     upcoming.AddLast(work);
                 else _works.Add(work);
             }

@@ -146,7 +146,7 @@ public static class RepeatedWorkWrapperFactory
             _repeatDelay = repeatDelay;
             while (_nextScheduledTime < DateTime.Now) _nextScheduledTime += _repeatDelay;
             _execCount = execCount;
-            _cancellationRegistration = _innerCancellation.Register(() => _subject.OnCompleted(), false);
+            _cancellationRegistration = _innerCancellation.Register(_subject.OnCompleted, false);
         }
 
         internal RepeatedTaskWrapper(IWork work, DateTime startTime, TimeSpan repeatDelay, CancellationToken innerCancellation, int execCount)
@@ -158,7 +158,7 @@ public static class RepeatedWorkWrapperFactory
             _repeatDelay = repeatDelay;
             while (_nextScheduledTime < DateTime.Now) _nextScheduledTime += _repeatDelay;
             _execCount = execCount;
-            _cancellationRegistration = _innerCancellation.Register(() => _subject.OnCompleted(), false);
+            _cancellationRegistration = _innerCancellation.Register(_subject.OnCompleted, false);
         }
 
         internal IObservable<Maybe<Exception>> WorkObservable => _subject;
@@ -196,7 +196,11 @@ public static class RepeatedWorkWrapperFactory
             if (_execCount != 0)
                 return true;
             _subject.OnCompleted();
-            _cancellationRegistration.Dispose();
+#if NETSTANDARD2_0
+                _cancellationRegistration.Dispose();
+#else
+            await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
+#endif
             _cancellationRegistration = default;
             return false;
         }
@@ -223,7 +227,7 @@ public static class RepeatedWorkWrapperFactory
             _repeatDelay = repeatDelay;
             while (_nextScheduledTime < DateTime.Now) _nextScheduledTime += _repeatDelay;
             _execCount = execCount;
-            _cancellationRegistration = _innerCancellation.Register(() => _subject.OnCompleted(), false);
+            _cancellationRegistration = _innerCancellation.Register(_subject.OnCompleted, false);
         }
 
         internal RepeatedTaskWrapper(IWork<TResult> work, DateTime startTime, TimeSpan repeatDelay, CancellationToken innerCancellation,
@@ -236,7 +240,7 @@ public static class RepeatedWorkWrapperFactory
             _repeatDelay = repeatDelay;
             while (_nextScheduledTime < DateTime.Now) _nextScheduledTime += _repeatDelay;
             _execCount = execCount;
-            _cancellationRegistration = _innerCancellation.Register(() => _subject.OnCompleted(), false);
+            _cancellationRegistration = _innerCancellation.Register(_subject.OnCompleted, false);
         }
 
         internal IObservable<Try<TResult>> WorkObservable => _subject;
@@ -274,7 +278,11 @@ public static class RepeatedWorkWrapperFactory
             if (_execCount != 0)
                 return true;
             _subject.OnCompleted();
-            _cancellationRegistration.Dispose();
+#if NETSTANDARD2_0
+                _cancellationRegistration.Dispose();
+#else
+            await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
+#endif
             _cancellationRegistration = default;
             return false;
         }

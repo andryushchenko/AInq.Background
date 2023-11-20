@@ -123,7 +123,7 @@ public static class CronWorkWrapperFactory
             _cron = cron;
             _innerCancellation = innerCancellation;
             _execCount = execCount;
-            _cancellationRegistration = _innerCancellation.Register(() => _subject.OnCompleted(), false);
+            _cancellationRegistration = _innerCancellation.Register(_subject.OnCompleted, false);
         }
 
         internal CronTaskWrapper(IWork work, CronExpression cron, CancellationToken innerCancellation, int execCount)
@@ -133,7 +133,7 @@ public static class CronWorkWrapperFactory
             _cron = cron;
             _innerCancellation = innerCancellation;
             _execCount = execCount;
-            _cancellationRegistration = _innerCancellation.Register(() => _subject.OnCompleted(), false);
+            _cancellationRegistration = _innerCancellation.Register(_subject.OnCompleted, false);
         }
 
         internal IObservable<Maybe<Exception>> WorkObservable => _subject;
@@ -170,7 +170,11 @@ public static class CronWorkWrapperFactory
             if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue && _execCount != 0)
                 return true;
             _subject.OnCompleted();
-            _cancellationRegistration.Dispose();
+#if NETSTANDARD2_0
+                _cancellationRegistration.Dispose();
+#else
+            await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
+#endif
             _cancellationRegistration = default;
             return false;
         }
@@ -193,7 +197,7 @@ public static class CronWorkWrapperFactory
             _cron = cron;
             _innerCancellation = innerCancellation;
             _execCount = execCount;
-            _cancellationRegistration = _innerCancellation.Register(() => _subject.OnCompleted(), false);
+            _cancellationRegistration = _innerCancellation.Register(_subject.OnCompleted, false);
         }
 
         internal CronTaskWrapper(IWork<TResult> work, CronExpression cron, CancellationToken innerCancellation, int execCount)
@@ -203,7 +207,7 @@ public static class CronWorkWrapperFactory
             _cron = cron;
             _innerCancellation = innerCancellation;
             _execCount = execCount;
-            _cancellationRegistration = _innerCancellation.Register(() => _subject.OnCompleted(), false);
+            _cancellationRegistration = _innerCancellation.Register(_subject.OnCompleted, false);
         }
 
         internal IObservable<Try<TResult>> WorkObservable => _subject;
@@ -240,7 +244,11 @@ public static class CronWorkWrapperFactory
             if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue && _execCount != 0)
                 return true;
             _subject.OnCompleted();
-            _cancellationRegistration.Dispose();
+#if NETSTANDARD2_0
+                _cancellationRegistration.Dispose();
+#else
+            await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
+#endif
             _cancellationRegistration = default;
             return false;
         }
