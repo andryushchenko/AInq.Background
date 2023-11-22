@@ -88,7 +88,8 @@ public interface IWorkScheduler
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less than -1 </exception>
     [PublicAPI]
-    IObservable<Try<TResult>> AddCronWork<TResult>(IWork<TResult> work, string cronExpression, int execCount = -1, CancellationToken cancellation = default);
+    IObservable<Try<TResult>> AddCronWork<TResult>(IWork<TResult> work, string cronExpression, int execCount = -1,
+        CancellationToken cancellation = default);
 
     /// <summary> Add CRON-scheduled asynchronous work to scheduler </summary>
     /// <param name="work"> Work instance </param>

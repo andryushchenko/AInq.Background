@@ -57,7 +57,7 @@ void StartupWork(IServiceProvider provider)
     provider.AddRepeatedWork(WorkFactory.CreateWork(_ => Console.WriteLine($"{DateTime.Now:T}\tRepeated work test")),
         TimeSpan.FromMinutes(1),
         TimeSpan.FromSeconds(15),
-        execCount: 4);
+        4);
     provider.AddScheduledAsyncQueueWork(WorkFactory.CreateAsyncWork(ConveyorTestAsync), TimeSpan.FromSeconds(20));
     provider.AddScheduledAsyncWork(WorkFactory.CreateAsyncWork(DelayedWorkTestAsync), TimeSpan.FromSeconds(30));
     provider.AddScheduledAsyncWork(WorkFactory.CreateAsyncWork(EnumeratorTestAsync), TimeSpan.FromSeconds(60));

@@ -181,10 +181,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
            .RequiredService<IWorkScheduler>()
            .AddCronQueueWork(work ?? throw new ArgumentNullException(nameof(work)),
                cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddCronQueueWork{TResult}(IWorkScheduler,IWork{TResult},string,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -194,10 +194,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
            .RequiredService<IWorkScheduler>()
            .AddCronQueueWork(work ?? throw new ArgumentNullException(nameof(work)),
                cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddCronAsyncQueueWork" />
     [PublicAPI]
@@ -207,10 +207,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
            .RequiredService<IWorkScheduler>()
            .AddCronAsyncQueueWork(work ?? throw new ArgumentNullException(nameof(work)),
                cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddCronAsyncQueueWork{TResult}(IWorkScheduler,IAsyncWork{TResult},string,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -220,10 +220,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
            .RequiredService<IWorkScheduler>()
            .AddCronAsyncQueueWork(work ?? throw new ArgumentNullException(nameof(work)),
                cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
 #endregion
 
@@ -237,10 +237,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
            .AddCronQueueWork<TWork>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddCronQueueWork{TWork,TResult}" />
     [PublicAPI]
@@ -250,10 +250,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
            .AddCronQueueWork<TWork, TResult>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddCronAsyncQueueWork{TAsyncWork}(IWorkScheduler,string,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -263,10 +263,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
            .AddCronAsyncQueueWork<TAsyncWork>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddCronAsyncQueueWork{TAsyncWork,TResult}" />
     [PublicAPI]
@@ -276,10 +276,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
            .AddCronAsyncQueueWork<TAsyncWork, TResult>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
 #endregion
 
@@ -294,10 +294,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
            .AddRepeatedQueueWork(work ?? throw new ArgumentNullException(nameof(work)),
                starTime,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork{TResult}(IWorkScheduler,IWork{TResult},DateTime,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -308,10 +308,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
            .AddRepeatedQueueWork(work ?? throw new ArgumentNullException(nameof(work)),
                starTime,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork(IWorkScheduler,IAsyncWork,DateTime,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -322,10 +322,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
            .AddRepeatedAsyncQueueWork(work ?? throw new ArgumentNullException(nameof(work)),
                starTime,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork{TResult}(IWorkScheduler,IAsyncWork{TResult},DateTime,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -337,10 +337,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
            .AddRepeatedAsyncQueueWork(work ?? throw new ArgumentNullException(nameof(work)),
                starTime,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
 #endregion
 
@@ -353,7 +353,7 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
         where TWork : IWork
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedQueueWork<TWork>(starTime, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedQueueWork<TWork>(starTime, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork{TWork,TResult}(IWorkScheduler,DateTime,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -362,7 +362,7 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
         where TWork : IWork<TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedQueueWork<TWork, TResult>(starTime, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedQueueWork<TWork, TResult>(starTime, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork{TAsyncWork}(IWorkScheduler,DateTime,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -371,7 +371,7 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
         where TAsyncWork : IAsyncWork
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncQueueWork<TAsyncWork>(starTime, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedAsyncQueueWork<TAsyncWork>(starTime, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork{TAsyncWork,TResult}(IWorkScheduler,DateTime,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -380,7 +380,7 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
         where TAsyncWork : IAsyncWork<TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncQueueWork<TAsyncWork, TResult>(starTime, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedAsyncQueueWork<TAsyncWork, TResult>(starTime, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
 #endregion
 
@@ -395,10 +395,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
            .AddRepeatedQueueWork(work ?? throw new ArgumentNullException(nameof(work)),
                startDelay,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork{TResult}(IWorkScheduler,IWork{TResult},TimeSpan,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -409,10 +409,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
            .AddRepeatedQueueWork(work ?? throw new ArgumentNullException(nameof(work)),
                startDelay,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork(IWorkScheduler,IAsyncWork,TimeSpan,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -423,10 +423,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
            .AddRepeatedAsyncQueueWork(work ?? throw new ArgumentNullException(nameof(work)),
                startDelay,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork{TResult}(IWorkScheduler,IAsyncWork{TResult},TimeSpan,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -438,10 +438,10 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
            .AddRepeatedAsyncQueueWork(work ?? throw new ArgumentNullException(nameof(work)),
                startDelay,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
 #endregion
 
@@ -454,7 +454,7 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
         where TWork : IWork
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedQueueWork<TWork>(startDelay, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedQueueWork<TWork>(startDelay, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddRepeatedQueueWork{TWork,TResult}(IWorkScheduler,TimeSpan,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -463,7 +463,7 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
         where TWork : IWork<TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedQueueWork<TWork, TResult>(startDelay, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedQueueWork<TWork, TResult>(startDelay, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork{TAsyncWork}(IWorkScheduler,TimeSpan,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -472,7 +472,7 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
         where TAsyncWork : IAsyncWork
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncQueueWork<TAsyncWork>(startDelay, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedAsyncQueueWork<TAsyncWork>(startDelay, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
     /// <inheritdoc cref="WorkSchedulerWorkQueueInteraction.AddRepeatedAsyncQueueWork{TAsyncWork,TResult}(IWorkScheduler,TimeSpan,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -481,7 +481,7 @@ public static class WorkSchedulerWorkQueueServiceProviderInteraction
         where TAsyncWork : IAsyncWork<TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncQueueWork<TAsyncWork, TResult>(startDelay, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedAsyncQueueWork<TAsyncWork, TResult>(startDelay, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
 #endregion
 }

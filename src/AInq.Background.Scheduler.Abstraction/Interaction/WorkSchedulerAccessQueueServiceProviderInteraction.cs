@@ -198,10 +198,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
            .RequiredService<IWorkScheduler>()
            .AddCronQueueAccess(access ?? throw new ArgumentNullException(nameof(access)),
                cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddCronQueueAccess{TResource,TResult}(IWorkScheduler,IAccess{TResource,TResult},string,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -212,10 +212,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
            .RequiredService<IWorkScheduler>()
            .AddCronQueueAccess(access ?? throw new ArgumentNullException(nameof(access)),
                cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddCronAsyncQueueAccess{TResource}" />
     [PublicAPI]
@@ -226,10 +226,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
            .RequiredService<IWorkScheduler>()
            .AddCronAsyncQueueAccess(access ?? throw new ArgumentNullException(nameof(access)),
                cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddCronAsyncQueueAccess{TResource,TResult}(IWorkScheduler,IAsyncAccess{TResource,TResult},string,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -241,10 +241,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
            .RequiredService<IWorkScheduler>()
            .AddCronAsyncQueueAccess(access ?? throw new ArgumentNullException(nameof(access)),
                cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
 #endregion
 
@@ -259,10 +259,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
            .AddCronQueueAccess<TResource, TAccess>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddCronQueueAccess{TResource,TAccess,TResult}" />
     [PublicAPI]
@@ -273,10 +273,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
            .AddCronQueueAccess<TResource, TAccess, TResult>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddCronAsyncQueueAccess{TResource,TAsyncAccess}(IWorkScheduler,string,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -287,10 +287,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
            .AddCronAsyncQueueAccess<TResource, TAsyncAccess>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddCronAsyncQueueAccess{TResource,TAsyncAccess,TResult}" />
     [PublicAPI]
@@ -301,10 +301,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
            .AddCronAsyncQueueAccess<TResource, TAsyncAccess, TResult>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
 #endregion
 
@@ -321,10 +321,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
            .AddRepeatedQueueAccess(access ?? throw new ArgumentNullException(nameof(access)),
                starTime,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddRepeatedQueueAccess{TResource,TResult}(IWorkScheduler,IAccess{TResource,TResult},DateTime,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -337,10 +337,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
            .AddRepeatedQueueAccess(access ?? throw new ArgumentNullException(nameof(access)),
                starTime,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddRepeatedAsyncQueueAccess{TResource}(IWorkScheduler,IAsyncAccess{TResource},DateTime,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -353,10 +353,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
            .AddRepeatedAsyncQueueAccess(access ?? throw new ArgumentNullException(nameof(access)),
                starTime,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddRepeatedAsyncQueueAccess{TResource,TResult}(IWorkScheduler,IAsyncAccess{TResource,TResult},DateTime,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -369,10 +369,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
            .AddRepeatedAsyncQueueAccess(access ?? throw new ArgumentNullException(nameof(access)),
                starTime,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
 #endregion
 
@@ -386,7 +386,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         where TAccess : IAccess<TResource>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedQueueAccess<TResource, TAccess>(starTime, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedQueueAccess<TResource, TAccess>(starTime, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddRepeatedQueueAccess{TResource,TAccess,TResult}(IWorkScheduler,DateTime,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -396,7 +396,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         where TAccess : IAccess<TResource, TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedQueueAccess<TResource, TAccess, TResult>(starTime, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedQueueAccess<TResource, TAccess, TResult>(starTime, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddRepeatedAsyncQueueAccess{TResource,TAsyncAccess}(IWorkScheduler,DateTime,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -407,7 +407,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         where TAsyncAccess : IAsyncAccess<TResource>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess>(starTime, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess>(starTime, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddRepeatedAsyncQueueAccess{TResource,TAsyncAccess,TResult}(IWorkScheduler,DateTime,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -418,7 +418,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess, TResult>(starTime, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess, TResult>(starTime, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
 #endregion
 
@@ -435,10 +435,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
            .AddRepeatedQueueAccess(access ?? throw new ArgumentNullException(nameof(access)),
                startDelay,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddRepeatedQueueAccess{TResource,TResult}(IWorkScheduler,IAccess{TResource,TResult},TimeSpan,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -451,10 +451,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
            .AddRepeatedQueueAccess(access ?? throw new ArgumentNullException(nameof(access)),
                startDelay,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddRepeatedAsyncQueueAccess{TResource}(IWorkScheduler,IAsyncAccess{TResource},TimeSpan,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -467,10 +467,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
            .AddRepeatedAsyncQueueAccess(access ?? throw new ArgumentNullException(nameof(access)),
                startDelay,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddRepeatedAsyncQueueAccess{TResource,TResult}(IWorkScheduler,IAsyncAccess{TResource,TResult},TimeSpan,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -483,10 +483,10 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
            .AddRepeatedAsyncQueueAccess(access ?? throw new ArgumentNullException(nameof(access)),
                startDelay,
                repeatDelay,
-               priority: priority,
-               attemptsCount: attemptsCount,
-               execCount: execCount,
-               cancellation: cancellation);
+               priority,
+               attemptsCount,
+               execCount,
+               cancellation);
 
 #endregion
 
@@ -500,7 +500,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         where TAccess : IAccess<TResource>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedQueueAccess<TResource, TAccess>(startDelay, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedQueueAccess<TResource, TAccess>(startDelay, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddRepeatedQueueAccess{TResource,TAccess,TResult}(IWorkScheduler,TimeSpan,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -510,7 +510,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         where TAccess : IAccess<TResource, TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedQueueAccess<TResource, TAccess, TResult>(startDelay, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedQueueAccess<TResource, TAccess, TResult>(startDelay, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddRepeatedAsyncQueueAccess{TResource,TAsyncAccess}(IWorkScheduler,TimeSpan,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -521,7 +521,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         where TAsyncAccess : IAsyncAccess<TResource>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess>(startDelay, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess>(startDelay, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
     /// <inheritdoc cref="WorkSchedulerAccessQueueInteraction.AddRepeatedAsyncQueueAccess{TResource,TAsyncAccess,TResult}(IWorkScheduler,TimeSpan,TimeSpan,int,int,int,CancellationToken)" />
     [PublicAPI]
@@ -532,7 +532,7 @@ public static class WorkSchedulerAccessQueueServiceProviderInteraction
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess, TResult>(startDelay, repeatDelay, priority: priority, attemptsCount: attemptsCount, execCount: execCount, cancellation: cancellation);
+           .AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess, TResult>(startDelay, repeatDelay, priority, attemptsCount, execCount, cancellation);
 
 #endregion
 }

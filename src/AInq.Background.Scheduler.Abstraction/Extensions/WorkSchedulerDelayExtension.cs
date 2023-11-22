@@ -44,7 +44,8 @@ public static class WorkSchedulerDelayExtension
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00.000 </exception>
     [PublicAPI]
-    public static Task<TResult> AddScheduledWork<TResult>(this IWorkScheduler scheduler, IWork<TResult> work, TimeSpan delay, CancellationToken cancellation = default)
+    public static Task<TResult> AddScheduledWork<TResult>(this IWorkScheduler scheduler, IWork<TResult> work, TimeSpan delay,
+        CancellationToken cancellation = default)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
             .AddScheduledWork(work ?? throw new ArgumentNullException(nameof(work)),
                 DateTime.Now.Add(delay > TimeSpan.Zero
@@ -77,7 +78,8 @@ public static class WorkSchedulerDelayExtension
     /// <returns> Work result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00.000 </exception>
     [PublicAPI]
-    public static Task<TResult> AddScheduledAsyncWork<TResult>(this IWorkScheduler scheduler, IAsyncWork<TResult> work, TimeSpan delay, CancellationToken cancellation = default)
+    public static Task<TResult> AddScheduledAsyncWork<TResult>(this IWorkScheduler scheduler, IAsyncWork<TResult> work, TimeSpan delay,
+        CancellationToken cancellation = default)
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler)))
             .AddScheduledAsyncWork(work ?? throw new ArgumentNullException(nameof(work)),
                 DateTime.Now.Add(delay > TimeSpan.Zero
