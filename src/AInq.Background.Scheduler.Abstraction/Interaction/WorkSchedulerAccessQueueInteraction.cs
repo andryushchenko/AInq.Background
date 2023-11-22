@@ -26,15 +26,15 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="access"> Access instance </param>
     /// <param name="delay"> Access execution delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
-    public static Task AddScheduledQueueAccess<TResource>(this IWorkScheduler scheduler, IAccess<TResource> access, TimeSpan delay,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+    public static Task AddScheduledQueueAccess<TResource>(this IWorkScheduler scheduler, IAccess<TResource> access, TimeSpan delay, int priority = 0,
+        int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
             CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
@@ -45,16 +45,16 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="access"> Access instance </param>
     /// <param name="delay"> Access execution delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static Task<TResult> AddScheduledQueueAccess<TResource, TResult>(this IWorkScheduler scheduler, IAccess<TResource, TResult> access,
-        TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+        TimeSpan delay, int priority = 0, int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
             CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
@@ -65,15 +65,15 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="delay"> Access execution delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static Task AddScheduledAsyncQueueAccess<TResource>(this IWorkScheduler scheduler, IAsyncAccess<TResource> asyncAccess, TimeSpan delay,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+        int priority = 0, int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
             CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
@@ -84,17 +84,17 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="delay"> Access execution delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static Task<TResult> AddScheduledAsyncQueueAccess<TResource, TResult>(this IWorkScheduler scheduler,
-        IAsyncAccess<TResource, TResult> asyncAccess, TimeSpan delay, CancellationToken cancellation = default, int attemptsCount = 1,
-        int priority = 0)
+        IAsyncAccess<TResource, TResult> asyncAccess, TimeSpan delay, int priority = 0, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
             CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
@@ -108,16 +108,16 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <summary> Add delayed queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="delay"> Access execution delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
-    public static Task AddScheduledQueueAccess<TResource, TAccess>(this IWorkScheduler scheduler, TimeSpan delay,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+    public static Task AddScheduledQueueAccess<TResource, TAccess>(this IWorkScheduler scheduler, TimeSpan delay, int priority = 0,
+        int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAccess : IAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
@@ -128,17 +128,17 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <summary> Add delayed queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="delay"> Access execution delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
-    public static Task<TResult> AddScheduledQueueAccess<TResource, TAccess, TResult>(this IWorkScheduler scheduler, TimeSpan delay,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+    public static Task<TResult> AddScheduledQueueAccess<TResource, TAccess, TResult>(this IWorkScheduler scheduler, TimeSpan delay, int priority = 0,
+        int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
@@ -149,16 +149,16 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <summary> Add delayed queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="delay"> Access execution delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
-    public static Task AddScheduledAsyncQueueAccess<TResource, TAsyncAccess>(this IWorkScheduler scheduler, TimeSpan delay,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+    public static Task AddScheduledAsyncQueueAccess<TResource, TAsyncAccess>(this IWorkScheduler scheduler, TimeSpan delay, int priority = 0,
+        int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
@@ -169,9 +169,9 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <summary> Add delayed queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="delay"> Access execution delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
@@ -179,7 +179,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="delay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static Task<TResult> AddScheduledAsyncQueueAccess<TResource, TAsyncAccess, TResult>(this IWorkScheduler scheduler, TimeSpan delay,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+        int priority = 0, int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
@@ -195,15 +195,15 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="access"> Access instance </param>
     /// <param name="time"> Access execution time </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater than current time </exception>
     [PublicAPI]
-    public static Task AddScheduledQueueAccess<TResource>(this IWorkScheduler scheduler, IAccess<TResource> access, DateTime time,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+    public static Task AddScheduledQueueAccess<TResource>(this IWorkScheduler scheduler, IAccess<TResource> access, DateTime time, int priority = 0,
+        int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
             CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
@@ -214,16 +214,16 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="access"> Access instance </param>
     /// <param name="time"> Access execution time </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater than current time </exception>
     [PublicAPI]
     public static Task<TResult> AddScheduledQueueAccess<TResource, TResult>(this IWorkScheduler scheduler, IAccess<TResource, TResult> access,
-        DateTime time, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+        DateTime time, int priority = 0, int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
             CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
@@ -234,15 +234,15 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="time"> Access execution time </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater than current time </exception>
     [PublicAPI]
     public static Task AddScheduledAsyncQueueAccess<TResource>(this IWorkScheduler scheduler, IAsyncAccess<TResource> asyncAccess, DateTime time,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+        int priority = 0, int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
             CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
@@ -253,17 +253,17 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="time"> Access execution time </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater than current time </exception>
     [PublicAPI]
     public static Task<TResult> AddScheduledAsyncQueueAccess<TResource, TResult>(this IWorkScheduler scheduler,
-        IAsyncAccess<TResource, TResult> asyncAccess, DateTime time, CancellationToken cancellation = default, int attemptsCount = 1,
-        int priority = 0)
+        IAsyncAccess<TResource, TResult> asyncAccess, DateTime time, int priority = 0, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
             CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
@@ -277,16 +277,16 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <summary> Add scheduled queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="time"> Access execution time </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater than current time </exception>
     [PublicAPI]
-    public static Task AddScheduledQueueAccess<TResource, TAccess>(this IWorkScheduler scheduler, DateTime time,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+    public static Task AddScheduledQueueAccess<TResource, TAccess>(this IWorkScheduler scheduler, DateTime time, int priority = 0,
+        int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAccess : IAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
@@ -297,17 +297,17 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <summary> Add scheduled queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="time"> Access execution time </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater than current time </exception>
     [PublicAPI]
-    public static Task<TResult> AddScheduledQueueAccess<TResource, TAccess, TResult>(this IWorkScheduler scheduler, DateTime time,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+    public static Task<TResult> AddScheduledQueueAccess<TResource, TAccess, TResult>(this IWorkScheduler scheduler, DateTime time, int priority = 0,
+        int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
@@ -318,16 +318,16 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <summary> Add scheduled queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="time"> Access execution time </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater than current time </exception>
     [PublicAPI]
-    public static Task AddScheduledAsyncQueueAccess<TResource, TAsyncAccess>(this IWorkScheduler scheduler, DateTime time,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+    public static Task AddScheduledAsyncQueueAccess<TResource, TAsyncAccess>(this IWorkScheduler scheduler, DateTime time, int priority = 0,
+        int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
@@ -338,9 +338,9 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <summary> Add scheduled queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="time"> Access execution time </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
@@ -348,7 +348,7 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater than current time </exception>
     [PublicAPI]
     public static Task<TResult> AddScheduledAsyncQueueAccess<TResource, TAsyncAccess, TResult>(this IWorkScheduler scheduler, DateTime time,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+        int priority = 0, int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddScheduledAsyncWork(
@@ -364,88 +364,88 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="access"> Access instance </param>
     /// <param name="cronExpression"> Access CRON-based execution schedule </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result observable </returns>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddCronQueueAccess<TResource>(this IWorkScheduler scheduler, IAccess<TResource> access,
-        string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
+        string cronExpression, int priority = 0, int attemptsCount = 1, int execCount = -1, CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
             CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add CRON-scheduled queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="access"> Access instance </param>
     /// <param name="cronExpression"> Access CRON-based execution schedule </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result observable </returns>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     [PublicAPI]
     public static IObservable<Try<TResult>> AddCronQueueAccess<TResource, TResult>(this IWorkScheduler scheduler, IAccess<TResource, TResult> access,
-        string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
+        string cronExpression, int priority = 0, int attemptsCount = 1, int execCount = -1, CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
             CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add CRON-scheduled queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="cronExpression"> Access CRON-based execution schedule </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result observable </returns>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddCronAsyncQueueAccess<TResource>(this IWorkScheduler scheduler, IAsyncAccess<TResource> asyncAccess,
-        string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
+        string cronExpression, int priority = 0, int attemptsCount = 1, int execCount = -1, CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
             CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add CRON-scheduled queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="cronExpression"> Access CRON-based execution schedule </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result observable </returns>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     [PublicAPI]
     public static IObservable<Try<TResult>> AddCronAsyncQueueAccess<TResource, TResult>(this IWorkScheduler scheduler,
-        IAsyncAccess<TResource, TResult> asyncAccess, string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1,
-        int priority = 0, int execCount = -1)
+        IAsyncAccess<TResource, TResult> asyncAccess, string cronExpression, int priority = 0, int attemptsCount = 1, int execCount = -1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
             CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
 #endregion
 
@@ -454,32 +454,32 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <summary> Add CRON-scheduled queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="cronExpression"> Access CRON-based execution schedule </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <returns> Access result observable </returns>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddCronQueueAccess<TResource, TAccess>(this IWorkScheduler scheduler, string cronExpression,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
+        int priority = 0, int attemptsCount = 1, int execCount = -1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAccess : IAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
             CreateQueuedInjectedAccess<TResource, TAccess>(attemptsCount, priority),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add CRON-scheduled queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="cronExpression"> Access CRON-based execution schedule </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
@@ -487,44 +487,44 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     [PublicAPI]
     public static IObservable<Try<TResult>> AddCronQueueAccess<TResource, TAccess, TResult>(this IWorkScheduler scheduler, string cronExpression,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
+        int priority = 0, int attemptsCount = 1, int execCount = -1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
             CreateQueuedInjectedAccess<TResource, TAccess, TResult>(attemptsCount, priority),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add CRON-scheduled queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="cronExpression"> Access CRON-based execution schedule </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <returns> Access result observable </returns>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddCronAsyncQueueAccess<TResource, TAsyncAccess>(this IWorkScheduler scheduler, string cronExpression,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
+        int priority = 0, int attemptsCount = 1, int execCount = -1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
             CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess>(attemptsCount, priority),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add CRON-scheduled queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access scheduler instance </param>
     /// <param name="cronExpression"> Access CRON-based execution schedule </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
@@ -532,14 +532,14 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     [PublicAPI]
     public static IObservable<Try<TResult>> AddCronAsyncQueueAccess<TResource, TAsyncAccess, TResult>(this IWorkScheduler scheduler,
-        string cronExpression, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
+        string cronExpression, int priority = 0, int attemptsCount = 1, int execCount = -1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddCronAsyncWork(
             CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(attemptsCount, priority),
             cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
 #endregion
 
@@ -550,98 +550,98 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="access"> Access instance </param>
     /// <param name="starTime"> Access first execution time </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedQueueAccess<TResource>(this IWorkScheduler scheduler, IAccess<TResource> access,
-        DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
-        int execCount = -1)
+        DateTime starTime, TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1, int execCount = -1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
             starTime,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add repeated queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
     /// <param name="access"> Access instance </param>
     /// <param name="starTime"> Access first execution time </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedQueueAccess<TResource, TResult>(this IWorkScheduler scheduler,
-        IAccess<TResource, TResult> access, DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1,
-        int priority = 0, int execCount = -1)
+        IAccess<TResource, TResult> access, DateTime starTime, TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1, int execCount = -1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
             starTime,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add repeated queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
     /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="starTime"> Access first execution time </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncQueueAccess<TResource>(this IWorkScheduler scheduler,
-        IAsyncAccess<TResource> asyncAccess, DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1,
-        int priority = 0, int execCount = -1)
+        IAsyncAccess<TResource> asyncAccess, DateTime starTime, TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1, int execCount = -1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
             starTime,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add repeated queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
     /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="starTime"> Access first execution time </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedAsyncQueueAccess<TResource, TResult>(this IWorkScheduler scheduler,
-        IAsyncAccess<TResource, TResult> asyncAccess, DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default,
-        int attemptsCount = 1, int priority = 0, int execCount = -1)
+        IAsyncAccess<TResource, TResult> asyncAccess, DateTime starTime, TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1,
+        int execCount = -1, CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
             starTime,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
 #endregion
 
@@ -651,34 +651,34 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="scheduler"> Access Scheduler instance </param>
     /// <param name="starTime"> Access first execution time </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <returns> Access result observable </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedQueueAccess<TResource, TAccess>(this IWorkScheduler scheduler, DateTime starTime,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
+        TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1, int execCount = -1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAccess : IAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedInjectedAccess<TResource, TAccess>(attemptsCount, priority),
             starTime,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add repeated queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
     /// <param name="starTime"> Access first execution time </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
@@ -686,48 +686,48 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedQueueAccess<TResource, TAccess, TResult>(this IWorkScheduler scheduler, DateTime starTime,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
+        TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1, int execCount = -1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedInjectedAccess<TResource, TAccess, TResult>(attemptsCount, priority),
             starTime,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add repeated queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
     /// <param name="starTime"> Access first execution time </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <returns> Access result observable </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess>(this IWorkScheduler scheduler, DateTime starTime,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
+        TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1, int execCount = -1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess>(attemptsCount, priority),
             starTime,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add repeated queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
     /// <param name="starTime"> Access first execution time </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
@@ -735,16 +735,16 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess, TResult>(this IWorkScheduler scheduler,
-        DateTime starTime, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
-        int execCount = -1)
+        DateTime starTime, TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1, int execCount = -1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(attemptsCount, priority),
             starTime,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
 #endregion
 
@@ -755,98 +755,98 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="access"> Access instance </param>
     /// <param name="startDelay"> Access first execution delay </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedQueueAccess<TResource>(this IWorkScheduler scheduler, IAccess<TResource> access,
-        TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
-        int execCount = -1)
+        TimeSpan startDelay, TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1, int execCount = -1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
             startDelay,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add repeated queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
     /// <param name="access"> Access instance </param>
     /// <param name="startDelay"> Access first execution delay </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedQueueAccess<TResource, TResult>(this IWorkScheduler scheduler,
-        IAccess<TResource, TResult> access, TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default,
-        int attemptsCount = 1, int priority = 0, int execCount = -1)
+        IAccess<TResource, TResult> access, TimeSpan startDelay, TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1, int execCount = -1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), attemptsCount, priority),
             startDelay,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add repeated queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
     /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="startDelay"> Access first execution delay </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncQueueAccess<TResource>(this IWorkScheduler scheduler,
-        IAsyncAccess<TResource> asyncAccess, TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default,
-        int attemptsCount = 1, int priority = 0, int execCount = -1)
+        IAsyncAccess<TResource> asyncAccess, TimeSpan startDelay, TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1, int execCount = -1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
             startDelay,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add repeated queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
     /// <param name="asyncAccess"> Async access instance </param>
     /// <param name="startDelay"> Access first execution delay </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedAsyncQueueAccess<TResource, TResult>(this IWorkScheduler scheduler,
-        IAsyncAccess<TResource, TResult> asyncAccess, TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default,
-        int attemptsCount = 1, int priority = 0, int execCount = -1)
+        IAsyncAccess<TResource, TResult> asyncAccess, TimeSpan startDelay, TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1,
+        int execCount = -1, CancellationToken cancellation = default)
         where TResource : notnull
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), attemptsCount, priority),
             startDelay,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
 #endregion
 
@@ -856,34 +856,34 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <param name="scheduler"> Access Scheduler instance </param>
     /// <param name="startDelay"> Access first execution delay </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedQueueAccess<TResource, TAccess>(this IWorkScheduler scheduler, TimeSpan startDelay,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
+        TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1, int execCount = -1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAccess : IAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedInjectedAccess<TResource, TAccess>(attemptsCount, priority),
             startDelay,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add repeated queued access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
     /// <param name="startDelay"> Access first execution delay </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
@@ -891,49 +891,49 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedQueueAccess<TResource, TAccess, TResult>(this IWorkScheduler scheduler, TimeSpan startDelay,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0, int execCount = -1)
+        TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1, int execCount = -1, CancellationToken cancellation = default)
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedInjectedAccess<TResource, TAccess, TResult>(attemptsCount, priority),
             startDelay,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add repeated queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
     /// <param name="startDelay"> Access first execution delay </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <returns> Access result task </returns>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess>(this IWorkScheduler scheduler,
-        TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
-        int execCount = -1)
+        TimeSpan startDelay, TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1, int execCount = -1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess>(attemptsCount, priority),
             startDelay,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
     /// <summary> Add repeated queued asynchronous access to scheduler with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="scheduler"> Access Scheduler instance </param>
     /// <param name="startDelay"> Access first execution delay </param>
     /// <param name="repeatDelay"> Access repeat delay </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Access priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="execCount"> Max access execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access type </typeparam>
     /// <typeparam name="TResult"> Access result type </typeparam>
@@ -941,16 +941,16 @@ public static class WorkSchedulerAccessQueueInteraction
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00 </exception>
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedAsyncQueueAccess<TResource, TAsyncAccess, TResult>(this IWorkScheduler scheduler,
-        TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0,
-        int execCount = -1)
+        TimeSpan startDelay, TimeSpan repeatDelay, int priority = 0, int attemptsCount = 1, int execCount = -1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
         => (scheduler ?? throw new ArgumentNullException(nameof(scheduler))).AddRepeatedAsyncWork(
             CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(attemptsCount, priority),
             startDelay,
             repeatDelay,
-            cancellation,
-            execCount);
+            execCount,
+            cancellation);
 
 #endregion
 }

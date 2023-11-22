@@ -65,26 +65,26 @@ public class PriorityConveyorChain<TData, TIntermediate, TResult> : IPriorityCon
 
     int IConveyor<TData, TResult>.MaxAttempts => _maxAttempts;
 
-    async Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
+    async Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, int attemptsCount, CancellationToken cancellation)
         => await _second
-                 .ProcessDataAsync(await _first.ProcessDataAsync(data, cancellation, Math.Max(1, Math.Min(_first.MaxAttempts, attemptsCount)))
+                 .ProcessDataAsync(await _first.ProcessDataAsync(data, Math.Max(1, Math.Min(_first.MaxAttempts, attemptsCount)), cancellation)
                                                .ConfigureAwait(false),
-                     cancellation,
-                     Math.Max(1, Math.Min(_second.MaxAttempts, attemptsCount)))
+                     Math.Max(1, Math.Min(_second.MaxAttempts, attemptsCount)),
+                     cancellation)
                  .ConfigureAwait(false);
 
     int IPriorityConveyor<TData, TResult>.MaxPriority => _maxPriority;
 
-    async Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, CancellationToken cancellation,
-        int attemptsCount)
+    async Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority,
+        int attemptsCount, CancellationToken cancellation)
         => await _second
                  .ProcessDataAsync(await _first.ProcessDataAsync(data,
                                                    Math.Min(_first.MaxPriority, Math.Max(0, priority)),
-                                                   cancellation,
-                                                   Math.Max(1, Math.Min(_first.MaxAttempts, attemptsCount)))
+                                                   Math.Max(1, Math.Min(_first.MaxAttempts, attemptsCount)),
+                                                   cancellation)
                                                .ConfigureAwait(false),
                      Math.Min(_second.MaxPriority, Math.Max(0, priority)),
-                     cancellation,
-                     Math.Max(1, Math.Min(_second.MaxAttempts, attemptsCount)))
+                     Math.Max(1, Math.Min(_second.MaxAttempts, attemptsCount)),
+                     cancellation)
                  .ConfigureAwait(false);
 }

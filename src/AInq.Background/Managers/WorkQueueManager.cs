@@ -27,28 +27,28 @@ public sealed class WorkQueueManager : TaskManager<object?>, IWorkQueue
 
     int IWorkQueue.MaxAttempts => _maxAttempts;
 
-    Task IWorkQueue.EnqueueWork(IWork work, CancellationToken cancellation, int attemptsCount)
+    Task IWorkQueue.EnqueueWork(IWork work, int attemptsCount, CancellationToken cancellation)
     {
         var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
         AddTask(workWrapper);
         return task;
     }
 
-    Task<TResult> IWorkQueue.EnqueueWork<TResult>(IWork<TResult> work, CancellationToken cancellation, int attemptsCount)
+    Task<TResult> IWorkQueue.EnqueueWork<TResult>(IWork<TResult> work, int attemptsCount, CancellationToken cancellation)
     {
         var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
         AddTask(workWrapper);
         return task;
     }
 
-    Task IWorkQueue.EnqueueAsyncWork(IAsyncWork work, CancellationToken cancellation, int attemptsCount)
+    Task IWorkQueue.EnqueueAsyncWork(IAsyncWork work, int attemptsCount, CancellationToken cancellation)
     {
         var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
         AddTask(workWrapper);
         return task;
     }
 
-    Task<TResult> IWorkQueue.EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, CancellationToken cancellation, int attemptsCount)
+    Task<TResult> IWorkQueue.EnqueueAsyncWork<TResult>(IAsyncWork<TResult> work, int attemptsCount, CancellationToken cancellation)
     {
         var (workWrapper, task) = CreateWorkWrapper(work ?? throw new ArgumentNullException(nameof(work)), FixAttempts(attemptsCount), cancellation);
         AddTask(workWrapper);

@@ -144,7 +144,7 @@ public static class ScheduledWorkWrapperFactory
             }
             _nextScheduledTime = null;
 #if NETSTANDARD2_0
-                _cancellationRegistration.Dispose();
+            _cancellationRegistration.Dispose();
 #else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
 #endif
@@ -208,7 +208,7 @@ public static class ScheduledWorkWrapperFactory
             }
             _nextScheduledTime = null;
 #if NETSTANDARD2_0
-                _cancellationRegistration.Dispose();
+            _cancellationRegistration.Dispose();
 #else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
 #endif

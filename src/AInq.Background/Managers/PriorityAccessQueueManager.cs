@@ -36,7 +36,7 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
 
 #region Base
 
-    Task IAccessQueue<TResource>.EnqueueAccess(IAccess<TResource> access, CancellationToken cancellation, int attemptsCount)
+    Task IAccessQueue<TResource>.EnqueueAccess(IAccess<TResource> access, int attemptsCount, CancellationToken cancellation)
     {
         var (accessWrapper, task) =
             CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
@@ -44,8 +44,8 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
         return task;
     }
 
-    Task<TResult> IAccessQueue<TResource>.EnqueueAccess<TResult>(IAccess<TResource, TResult> access, CancellationToken cancellation,
-        int attemptsCount)
+    Task<TResult> IAccessQueue<TResource>.EnqueueAccess<TResult>(IAccess<TResource, TResult> access, int attemptsCount,
+        CancellationToken cancellation)
     {
         var (accessWrapper, task) =
             CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
@@ -53,7 +53,7 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
         return task;
     }
 
-    Task IAccessQueue<TResource>.EnqueueAsyncAccess(IAsyncAccess<TResource> access, CancellationToken cancellation, int attemptsCount)
+    Task IAccessQueue<TResource>.EnqueueAsyncAccess(IAsyncAccess<TResource> access, int attemptsCount, CancellationToken cancellation)
     {
         var (accessWrapper, task) =
             CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
@@ -61,8 +61,8 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
         return task;
     }
 
-    Task<TResult> IAccessQueue<TResource>.EnqueueAsyncAccess<TResult>(IAsyncAccess<TResource, TResult> access, CancellationToken cancellation,
-        int attemptsCount)
+    Task<TResult> IAccessQueue<TResource>.EnqueueAsyncAccess<TResult>(IAsyncAccess<TResource, TResult> access, int attemptsCount,
+        CancellationToken cancellation)
     {
         var (accessWrapper, task) =
             CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
@@ -74,7 +74,7 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
 
 #region Priority
 
-    Task IPriorityAccessQueue<TResource>.EnqueueAccess(IAccess<TResource> access, int priority, CancellationToken cancellation, int attemptsCount)
+    Task IPriorityAccessQueue<TResource>.EnqueueAccess(IAccess<TResource> access, int priority, int attemptsCount, CancellationToken cancellation)
     {
         var (accessWrapper, task) =
             CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
@@ -82,8 +82,8 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
         return task;
     }
 
-    Task<TResult> IPriorityAccessQueue<TResource>.EnqueueAccess<TResult>(IAccess<TResource, TResult> access, int priority,
-        CancellationToken cancellation, int attemptsCount)
+    Task<TResult> IPriorityAccessQueue<TResource>.EnqueueAccess<TResult>(IAccess<TResource, TResult> access, int priority, int attemptsCount,
+        CancellationToken cancellation)
     {
         var (accessWrapper, task) =
             CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
@@ -91,8 +91,8 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
         return task;
     }
 
-    Task IPriorityAccessQueue<TResource>.EnqueueAsyncAccess(IAsyncAccess<TResource> access, int priority, CancellationToken cancellation,
-        int attemptsCount)
+    Task IPriorityAccessQueue<TResource>.EnqueueAsyncAccess(IAsyncAccess<TResource> access, int priority, int attemptsCount,
+        CancellationToken cancellation)
     {
         var (accessWrapper, task) =
             CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);
@@ -101,7 +101,7 @@ public sealed class PriorityAccessQueueManager<TResource> : PriorityTaskManager<
     }
 
     Task<TResult> IPriorityAccessQueue<TResource>.EnqueueAsyncAccess<TResult>(IAsyncAccess<TResource, TResult> access, int priority,
-        CancellationToken cancellation, int attemptsCount)
+        int attemptsCount, CancellationToken cancellation)
     {
         var (accessWrapper, task) =
             CreateAccessWrapper(access ?? throw new ArgumentNullException(nameof(access)), FixAttempts(attemptsCount), cancellation);

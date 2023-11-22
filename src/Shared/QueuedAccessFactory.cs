@@ -68,7 +68,7 @@ internal static class QueuedAccessFactory
         }
 
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAccess(_access, cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueAccess(_access, _priority, _attemptsCount, cancellation);
     }
 
     private class QueuedAccess<TResource, TResult> : IAsyncWork<TResult>
@@ -86,7 +86,7 @@ internal static class QueuedAccessFactory
         }
 
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAccess(_access, cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueAccess(_access, _priority, _attemptsCount, cancellation);
     }
 
     private class QueuedAsyncAccess<TResource> : IAsyncWork
@@ -104,7 +104,7 @@ internal static class QueuedAccessFactory
         }
 
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncAccess(_asyncAccess, cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueAsyncAccess(_asyncAccess, _priority, _attemptsCount, cancellation);
     }
 
     private class QueuedAsyncAccess<TResource, TResult> : IAsyncWork<TResult>
@@ -122,7 +122,7 @@ internal static class QueuedAccessFactory
         }
 
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncAccess(_asyncAccess, cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueAsyncAccess(_asyncAccess, _priority, _attemptsCount, cancellation);
     }
 
     private class QueuedInjectedAccess<TResource, TAccess> : IAsyncWork
@@ -139,7 +139,7 @@ internal static class QueuedAccessFactory
         }
 
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAccess<TResource, TAccess>(cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueAccess<TResource, TAccess>(_priority, _attemptsCount, cancellation);
     }
 
     private class QueuedInjectedAccess<TResource, TAccess, TResult> : IAsyncWork<TResult>
@@ -156,7 +156,7 @@ internal static class QueuedAccessFactory
         }
 
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAccess<TResource, TAccess, TResult>(cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueAccess<TResource, TAccess, TResult>(_priority, _attemptsCount, cancellation);
     }
 
     private class QueuedInjectedAsyncAccess<TResource, TAsyncAccess> : IAsyncWork
@@ -173,7 +173,7 @@ internal static class QueuedAccessFactory
         }
 
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncAccess<TResource, TAsyncAccess>(cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueAsyncAccess<TResource, TAsyncAccess>(_priority, _attemptsCount, cancellation);
     }
 
     private class QueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult> : IAsyncWork<TResult>
@@ -190,6 +190,6 @@ internal static class QueuedAccessFactory
         }
 
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(_priority, _attemptsCount, cancellation);
     }
 }

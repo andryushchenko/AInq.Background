@@ -165,241 +165,241 @@ public static class WorkSchedulerServiceProviderHelper
 
 #region Cron
 
-    /// <inheritdoc cref="IWorkScheduler.AddCronWork(IWork, string, CancellationToken, int)" />
+    /// <inheritdoc cref="IWorkScheduler.AddCronWork" />
     [PublicAPI]
-    public static IObservable<Maybe<Exception>> AddCronWork(this IServiceProvider provider, IWork work, string cronExpression,
-        CancellationToken cancellation = default, int execCount = -1)
+    public static IObservable<Maybe<Exception>> AddCronWork(this IServiceProvider provider, IWork work, string cronExpression, int execCount = -1,
+        CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
            .AddCronWork(work ?? throw new ArgumentNullException(nameof(work)),
                cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               cancellation,
-               execCount);
+               execCount,
+               cancellation);
 
-    /// <inheritdoc cref="IWorkScheduler.AddCronWork{TResult}(IWork{TResult}, string, CancellationToken, int)" />
+    /// <inheritdoc cref="IWorkScheduler.AddCronWork{TResult}" />
     [PublicAPI]
     public static IObservable<Try<TResult>> AddCronWork<TResult>(this IServiceProvider provider, IWork<TResult> work, string cronExpression,
-        CancellationToken cancellation = default, int execCount = -1)
+        int execCount = -1, CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
            .AddCronWork(work ?? throw new ArgumentNullException(nameof(work)),
                cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               cancellation,
-               execCount);
+               execCount,
+               cancellation);
 
-    /// <inheritdoc cref="IWorkScheduler.AddCronAsyncWork(IAsyncWork, string, CancellationToken, int)" />
+    /// <inheritdoc cref="IWorkScheduler.AddCronAsyncWork" />
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddCronAsyncWork(this IServiceProvider provider, IAsyncWork work, string cronExpression,
-        CancellationToken cancellation = default, int execCount = -1)
+        int execCount = -1, CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
            .AddCronAsyncWork(work ?? throw new ArgumentNullException(nameof(work)),
                cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               cancellation,
-               execCount);
+               execCount,
+               cancellation);
 
-    /// <inheritdoc cref="IWorkScheduler.AddCronAsyncWork{TResult}(IAsyncWork{TResult}, string, CancellationToken, int)" />
+    /// <inheritdoc cref="IWorkScheduler.AddCronAsyncWork{TResult}" />
     [PublicAPI]
     public static IObservable<Try<TResult>> AddCronAsyncWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work, string cronExpression,
-        CancellationToken cancellation = default, int execCount = -1)
+        int execCount = -1, CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
            .AddCronAsyncWork(work ?? throw new ArgumentNullException(nameof(work)),
                cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)),
-               cancellation,
-               execCount);
+               execCount,
+               cancellation);
 
 #endregion
 
 #region CronDI
 
-    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddCronWork{TWork}(IWorkScheduler, string, CancellationToken, int)" />
+    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddCronWork{TWork}" />
     [PublicAPI]
-    public static IObservable<Maybe<Exception>> AddCronWork<TWork>(this IServiceProvider provider, string cronExpression,
-        CancellationToken cancellation = default, int execCount = -1)
+    public static IObservable<Maybe<Exception>> AddCronWork<TWork>(this IServiceProvider provider, string cronExpression, int execCount = -1,
+        CancellationToken cancellation = default)
         where TWork : IWork
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddCronWork<TWork>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)), cancellation, execCount);
+           .AddCronWork<TWork>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)), execCount, cancellation);
 
-    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddCronWork{TWork, TResult}(IWorkScheduler, string, CancellationToken, int)" />
+    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddCronWork{TWork,TResult}" />
     [PublicAPI]
-    public static IObservable<Try<TResult>> AddCronWork<TWork, TResult>(this IServiceProvider provider, string cronExpression,
-        CancellationToken cancellation = default, int execCount = -1)
+    public static IObservable<Try<TResult>> AddCronWork<TWork, TResult>(this IServiceProvider provider, string cronExpression, int execCount = -1,
+        CancellationToken cancellation = default)
         where TWork : IWork<TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddCronWork<TWork, TResult>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)), cancellation, execCount);
+           .AddCronWork<TWork, TResult>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)), execCount, cancellation);
 
-    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddCronAsyncWork{TAsyncWork}(IWorkScheduler, string, CancellationToken, int)" />
+    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddCronAsyncWork{TAsyncWork}" />
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddCronAsyncWork<TAsyncWork>(this IServiceProvider provider, string cronExpression,
-        CancellationToken cancellation = default, int execCount = -1)
+        int execCount = -1, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddCronAsyncWork<TAsyncWork>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)), cancellation, execCount);
+           .AddCronAsyncWork<TAsyncWork>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)), execCount, cancellation);
 
-    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddCronAsyncWork{TAsyncWork, TResult}(IWorkScheduler, string, CancellationToken, int)" />
+    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddCronAsyncWork{TAsyncWork,TResult}" />
     [PublicAPI]
     public static IObservable<Try<TResult>> AddCronAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, string cronExpression,
-        CancellationToken cancellation = default, int execCount = -1)
+        int execCount = -1, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork<TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddCronAsyncWork<TAsyncWork, TResult>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)), cancellation, execCount);
+           .AddCronAsyncWork<TAsyncWork, TResult>(cronExpression ?? throw new ArgumentNullException(nameof(cronExpression)), execCount, cancellation);
 
 #endregion
 
 #region RepeatedScheduled
 
-    /// <inheritdoc cref="IWorkScheduler.AddRepeatedWork(IWork,DateTime,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="IWorkScheduler.AddRepeatedWork" />
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedWork(this IServiceProvider provider, IWork work, DateTime starTime, TimeSpan repeatDelay,
-        CancellationToken cancellation = default, int execCount = -1)
+        int execCount = -1, CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedWork(work ?? throw new ArgumentNullException(nameof(work)), starTime, repeatDelay, cancellation, execCount);
+           .AddRepeatedWork(work ?? throw new ArgumentNullException(nameof(work)), starTime, repeatDelay, execCount, cancellation);
 
-    /// <inheritdoc cref="IWorkScheduler.AddRepeatedWork{TResult}(IWork{TResult},DateTime,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="IWorkScheduler.AddRepeatedWork{TResult}" />
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedWork<TResult>(this IServiceProvider provider, IWork<TResult> work, DateTime starTime,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
+        TimeSpan repeatDelay, int execCount = -1, CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedWork(work ?? throw new ArgumentNullException(nameof(work)), starTime, repeatDelay, cancellation, execCount);
+           .AddRepeatedWork(work ?? throw new ArgumentNullException(nameof(work)), starTime, repeatDelay, execCount, cancellation);
 
-    /// <inheritdoc cref="IWorkScheduler.AddRepeatedAsyncWork(IAsyncWork,DateTime,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="IWorkScheduler.AddRepeatedAsyncWork" />
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncWork(this IServiceProvider provider, IAsyncWork work, DateTime starTime,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
+        TimeSpan repeatDelay, int execCount = -1, CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), starTime, repeatDelay, cancellation, execCount);
+           .AddRepeatedAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), starTime, repeatDelay, execCount, cancellation);
 
-    /// <inheritdoc cref="IWorkScheduler.AddRepeatedAsyncWork{TResult}(IAsyncWork{TResult},DateTime,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="IWorkScheduler.AddRepeatedAsyncWork{TResult}" />
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedAsyncWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work, DateTime starTime,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
+        TimeSpan repeatDelay, int execCount = -1, CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), starTime, repeatDelay, cancellation, execCount);
+           .AddRepeatedAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), starTime, repeatDelay, execCount, cancellation);
 
 #endregion
 
 #region RepeatedScheduledDI
 
-    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedWork{TWork}(IWorkScheduler,DateTime,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedWork{TWork}(IWorkScheduler,DateTime,TimeSpan,int,CancellationToken)" />
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedWork<TWork>(this IServiceProvider provider, DateTime starTime, TimeSpan repeatDelay,
-        CancellationToken cancellation = default, int execCount = -1)
+        int execCount = -1, CancellationToken cancellation = default)
         where TWork : IWork
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedWork<TWork>(starTime, repeatDelay, cancellation, execCount);
+           .AddRepeatedWork<TWork>(starTime, repeatDelay, execCount, cancellation);
 
-    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedWork{TWork, TResult}(IWorkScheduler,DateTime,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedWork{TWork,TResult}(IWorkScheduler,DateTime,TimeSpan,int,CancellationToken)" />
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedWork<TWork, TResult>(this IServiceProvider provider, DateTime starTime, TimeSpan repeatDelay,
-        CancellationToken cancellation = default, int execCount = -1)
+        int execCount = -1, CancellationToken cancellation = default)
         where TWork : IWork<TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedWork<TWork, TResult>(starTime, repeatDelay, cancellation, execCount);
+           .AddRepeatedWork<TWork, TResult>(starTime, repeatDelay, execCount, cancellation);
 
-    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedAsyncWork{TAsyncWork}(IWorkScheduler,DateTime,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedAsyncWork{TAsyncWork}(IWorkScheduler,DateTime,TimeSpan,int,CancellationToken)" />
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncWork<TAsyncWork>(this IServiceProvider provider, DateTime starTime,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
+        TimeSpan repeatDelay, int execCount = -1, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncWork<TAsyncWork>(starTime, repeatDelay, cancellation, execCount);
+           .AddRepeatedAsyncWork<TAsyncWork>(starTime, repeatDelay, execCount, cancellation);
 
-    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedAsyncWork{TAsyncWork, TResult}(IWorkScheduler,DateTime,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedAsyncWork{TAsyncWork,TResult}(IWorkScheduler,DateTime,TimeSpan,int,CancellationToken)" />
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, DateTime starTime,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
+        TimeSpan repeatDelay, int execCount = -1, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork<TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncWork<TAsyncWork, TResult>(starTime, repeatDelay, cancellation, execCount);
+           .AddRepeatedAsyncWork<TAsyncWork, TResult>(starTime, repeatDelay, execCount, cancellation);
 
 #endregion
 
 #region RepeatedDelayed
 
-    /// <inheritdoc cref="WorkSchedulerDelayExtension.AddRepeatedWork(IWorkScheduler,IWork,TimeSpan,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="WorkSchedulerDelayExtension.AddRepeatedWork" />
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedWork(this IServiceProvider provider, IWork work, TimeSpan startDelay, TimeSpan repeatDelay,
-        CancellationToken cancellation = default, int execCount = -1)
+        int execCount = -1, CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedWork(work ?? throw new ArgumentNullException(nameof(work)), startDelay, repeatDelay, cancellation, execCount);
+           .AddRepeatedWork(work ?? throw new ArgumentNullException(nameof(work)), startDelay, repeatDelay, execCount, cancellation);
 
-    /// <inheritdoc cref="WorkSchedulerDelayExtension.AddRepeatedWork{TResult}(IWorkScheduler,IWork{TResult},TimeSpan,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="WorkSchedulerDelayExtension.AddRepeatedWork{TResult}" />
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedWork<TResult>(this IServiceProvider provider, IWork<TResult> work, TimeSpan startDelay,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
+        TimeSpan repeatDelay, int execCount = -1, CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedWork(work ?? throw new ArgumentNullException(nameof(work)), startDelay, repeatDelay, cancellation, execCount);
+           .AddRepeatedWork(work ?? throw new ArgumentNullException(nameof(work)), startDelay, repeatDelay, execCount, cancellation);
 
-    /// <inheritdoc cref="WorkSchedulerDelayExtension.AddRepeatedAsyncWork(IWorkScheduler,IAsyncWork,TimeSpan,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="WorkSchedulerDelayExtension.AddRepeatedAsyncWork" />
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncWork(this IServiceProvider provider, IAsyncWork work, TimeSpan startDelay,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
+        TimeSpan repeatDelay, int execCount = -1, CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), startDelay, repeatDelay, cancellation, execCount);
+           .AddRepeatedAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), startDelay, repeatDelay, execCount, cancellation);
 
-    /// <inheritdoc cref="WorkSchedulerDelayExtension.AddRepeatedAsyncWork{TResult}(IWorkScheduler,IAsyncWork{TResult},TimeSpan,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="WorkSchedulerDelayExtension.AddRepeatedAsyncWork{TResult}" />
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedAsyncWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work,
-        TimeSpan startDelay, TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
+        TimeSpan startDelay, TimeSpan repeatDelay, int execCount = -1, CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), startDelay, repeatDelay, cancellation, execCount);
+           .AddRepeatedAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), startDelay, repeatDelay, execCount, cancellation);
 
 #endregion
 
 #region RepeatedDelayedDI
 
-    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedWork{TWork}(IWorkScheduler,TimeSpan,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedWork{TWork}(IWorkScheduler,TimeSpan,TimeSpan,int,CancellationToken)" />
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedWork<TWork>(this IServiceProvider provider, TimeSpan startDelay, TimeSpan repeatDelay,
-        CancellationToken cancellation = default, int execCount = -1)
+        int execCount = -1, CancellationToken cancellation = default)
         where TWork : IWork
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedWork<TWork>(startDelay, repeatDelay, cancellation, execCount);
+           .AddRepeatedWork<TWork>(startDelay, repeatDelay, execCount, cancellation);
 
-    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedWork{TWork, TResult}(IWorkScheduler,TimeSpan,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedWork{TWork,TResult}(IWorkScheduler,TimeSpan,TimeSpan,int,CancellationToken)" />
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedWork<TWork, TResult>(this IServiceProvider provider, TimeSpan startDelay, TimeSpan repeatDelay,
-        CancellationToken cancellation = default, int execCount = -1)
+        int execCount = -1, CancellationToken cancellation = default)
         where TWork : IWork<TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedWork<TWork, TResult>(startDelay, repeatDelay, cancellation, execCount);
+           .AddRepeatedWork<TWork, TResult>(startDelay, repeatDelay, execCount, cancellation);
 
-    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedAsyncWork{TAsyncWork}(IWorkScheduler,TimeSpan,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedAsyncWork{TAsyncWork}(IWorkScheduler,TimeSpan,TimeSpan,int,CancellationToken)" />
     [PublicAPI]
     public static IObservable<Maybe<Exception>> AddRepeatedAsyncWork<TAsyncWork>(this IServiceProvider provider, TimeSpan startDelay,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
+        TimeSpan repeatDelay, int execCount = -1, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncWork<TAsyncWork>(startDelay, repeatDelay, cancellation, execCount);
+           .AddRepeatedAsyncWork<TAsyncWork>(startDelay, repeatDelay, execCount, cancellation);
 
-    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedAsyncWork{TAsyncWork, TResult}(IWorkScheduler,TimeSpan,TimeSpan,CancellationToken,int)" />
+    /// <inheritdoc cref="WorkSchedulerDependencyInjectionExtension.AddRepeatedAsyncWork{TAsyncWork,TResult}(IWorkScheduler,TimeSpan,TimeSpan,int,CancellationToken)" />
     [PublicAPI]
     public static IObservable<Try<TResult>> AddRepeatedAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, TimeSpan startDelay,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
+        TimeSpan repeatDelay, int execCount = -1, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork<TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .RequiredService<IWorkScheduler>()
-           .AddRepeatedAsyncWork<TAsyncWork, TResult>(startDelay, repeatDelay, cancellation, execCount);
+           .AddRepeatedAsyncWork<TAsyncWork, TResult>(startDelay, repeatDelay, execCount, cancellation);
 
 #endregion
 }

@@ -43,7 +43,7 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
         }
         try
         {
-            if (argument is IStartStoppable { IsActive: false } startStoppable)
+            if (argument is IStartStoppable {IsActive: false} startStoppable)
                 await startStoppable.ActivateAsync(cancellation).ConfigureAwait(false);
         }
         catch (Exception ex)
@@ -54,14 +54,14 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
         }
         while (manager.HasTask && !cancellation.IsCancellationRequested)
         {
-            if (argument is IStartStoppable { IsActive: false }) break;
+            if (argument is IStartStoppable {IsActive: false}) break;
             var (task, metadata) = manager.GetTask();
             if (task == null) continue;
             if (!await task.ExecuteAsync(argument, provider, logger, cancellation).ConfigureAwait(false))
                 manager.RevertTask(task, metadata);
             try
             {
-                if (argument is IThrottling { Timeout.Ticks: > 0 } throttling)
+                if (argument is IThrottling {Timeout.Ticks: > 0} throttling)
                     await Task.Delay(throttling.Timeout, cancellation).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
@@ -76,7 +76,7 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
     {
         try
         {
-            if (argument is IStartStoppable { IsActive: true } startStoppable)
+            if (argument is IStartStoppable {IsActive: true} startStoppable)
                 await startStoppable.DeactivateAsync(cancellation).ConfigureAwait(false);
         }
         catch (Exception ex)

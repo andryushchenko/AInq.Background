@@ -31,7 +31,7 @@ public sealed class PriorityConveyorManager<TData, TResult> : PriorityTaskManage
 
     int IPriorityConveyor<TData, TResult>.MaxPriority => MaxPriority;
 
-    Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, CancellationToken cancellation, int attemptsCount)
+    Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, int attemptsCount, CancellationToken cancellation)
     {
         var (wrapper, result) = CreateConveyorDataWrapper<TData, TResult>(data ?? throw new ArgumentNullException(nameof(data)),
             FixAttempts(attemptsCount),
@@ -42,7 +42,7 @@ public sealed class PriorityConveyorManager<TData, TResult> : PriorityTaskManage
 
     int IConveyor<TData, TResult>.MaxAttempts => _maxAttempts;
 
-    Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
+    Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, int attemptsCount, CancellationToken cancellation)
     {
         var (wrapper, result) = CreateConveyorDataWrapper<TData, TResult>(data ?? throw new ArgumentNullException(nameof(data)),
             FixAttempts(attemptsCount),

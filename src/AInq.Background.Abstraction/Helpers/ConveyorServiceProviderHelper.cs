@@ -20,14 +20,14 @@ namespace AInq.Background.Helpers;
 /// <remarks> <see cref="IConveyor{TData,TResult}" /> or <see cref="IPriorityConveyor{TData,TResult}" /> should be registered on host </remarks>
 public static class ConveyorServiceProviderHelper
 {
-    /// <inheritdoc cref="IPriorityConveyor{TData,TResult}.ProcessDataAsync(TData, int, CancellationToken, int)" />
+    /// <inheritdoc cref="IPriorityConveyor{TData,TResult}.ProcessDataAsync(TData,int,int,CancellationToken)" />
     [PublicAPI]
-    public static Task<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, TData data, CancellationToken cancellation = default,
-        int attemptsCount = 1, int priority = 0)
+    public static Task<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, TData data, int priority = 0, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TData : notnull
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .Service<IPriorityConveyor<TData, TResult>>()
-           ?.ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), priority, cancellation, attemptsCount)
+           ?.ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), priority, attemptsCount, cancellation)
            ?? provider.RequiredService<IConveyor<TData, TResult>>()
-                      .ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), cancellation, attemptsCount);
+                      .ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), attemptsCount, cancellation);
 }

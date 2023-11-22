@@ -52,7 +52,7 @@ void StartupWork(IServiceProvider provider)
 {
     provider.AddCronWork(WorkFactory.CreateWork(_ => DateTime.Now),
                 "0/10 * * * * *",
-                new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token)
+                cancellation: new CancellationTokenSource(TimeSpan.FromMinutes(2)).Token)
             .Subscribe(new TestObserver<DateTime>());
     provider.AddRepeatedWork(WorkFactory.CreateWork(_ => Console.WriteLine($"{DateTime.Now:T}\tRepeated work test")),
         TimeSpan.FromMinutes(1),
@@ -67,11 +67,11 @@ async Task DelayedWorkTestAsync(IServiceProvider provider, CancellationToken can
 {
     using var source = new CancellationTokenSource(TimeSpan.FromSeconds(3));
     Console.WriteLine($"{DateTime.Now:T}\tDelayed start test");
-    _ = provider.EnqueueAsyncWork(WorkFactory.CreateAsyncWork((_, token) => Task.Delay(TimeSpan.FromSeconds(8), token)), cancellation);
-    var test = provider.EnqueueWork(WorkFactory.CreateWork(_ => $"{DateTime.Now:T}\tDelayed work test"), cancellation);
+    _ = provider.EnqueueAsyncWork(WorkFactory.CreateAsyncWork((_, token) => Task.Delay(TimeSpan.FromSeconds(8), token)), cancellation: cancellation);
+    var test = provider.EnqueueWork(WorkFactory.CreateWork(_ => $"{DateTime.Now:T}\tDelayed work test"), cancellation: cancellation);
     try
     {
-        await provider.EnqueueWork(WorkFactory.CreateWork(_ => true), source.Token).ConfigureAwait(false);
+        await provider.EnqueueWork(WorkFactory.CreateWork(_ => true), cancellation: source.Token).ConfigureAwait(false);
     }
     catch (Exception)
     {
@@ -84,7 +84,8 @@ async Task EnumeratorTestAsync(IServiceProvider provider, CancellationToken canc
 {
     var conveyor = provider.GetRequiredService<IConveyor<int, int>>();
     conveyor = new ConveyorChain<int, int, int>(conveyor, conveyor);
-    await foreach (var result in conveyor.ProcessDataAsync(Enumerable.Range(1, 10).ToAsyncEnumerable(), cancellation).ConfigureAwait(false))
+    await foreach (var result in conveyor.ProcessDataAsync(Enumerable.Range(1, 10).ToAsyncEnumerable(), cancellation: cancellation)
+                                         .ConfigureAwait(false))
         Console.WriteLine($"{DateTime.Now:T}\tEnumerator test {result}");
 }
 
@@ -93,7 +94,7 @@ async Task ConveyorTestAsync(IServiceProvider provider, CancellationToken cancel
     using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(5));
     using var cancel = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, cancellation);
     var tasks = Enumerable.Range(1, 10)
-                          .Select(index => provider.ProcessDataAsync<int, int>(index, cancel.Token, priority: 50 + index))
+                          .Select(index => provider.ProcessDataAsync<int, int>(index, cancellation: cancel.Token, priority: 50 + index))
                           .ToList();
     try
     {

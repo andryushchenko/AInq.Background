@@ -30,16 +30,16 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
         if (_inactive.IsEmpty) throw new ArgumentException("Empty collection", nameof(arguments));
     }
 
-    void IDisposable.Dispose()
-    {
-        while (_active.TryTake(out var argument) || _inactive.TryTake(out argument))
-            (argument as IDisposable)?.Dispose();
-    }
-
     async ValueTask IAsyncDisposable.DisposeAsync()
     {
         while (_active.TryTake(out var argument) || _inactive.TryTake(out argument))
             await argument.TryDisposeAsync().ConfigureAwait(false);
+    }
+
+    void IDisposable.Dispose()
+    {
+        while (_active.TryTake(out var argument) || _inactive.TryTake(out argument))
+            (argument as IDisposable)?.Dispose();
     }
 
     async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,

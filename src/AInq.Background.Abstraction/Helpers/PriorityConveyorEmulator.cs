@@ -32,11 +32,11 @@ public class PriorityConveyorEmulator<TData, TResult> : IPriorityConveyor<TData,
 
     int IConveyor<TData, TResult>.MaxAttempts => _conveyor.MaxAttempts;
 
-    Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
-        => _conveyor.ProcessDataAsync(data, cancellation, attemptsCount);
+    Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, int attemptsCount, CancellationToken cancellation)
+        => _conveyor.ProcessDataAsync(data, attemptsCount, cancellation);
 
     int IPriorityConveyor<TData, TResult>.MaxPriority => 0;
 
-    Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, CancellationToken cancellation, int attemptsCount)
-        => _conveyor.ProcessDataAsync(data, cancellation, attemptsCount);
+    Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, int attemptsCount, CancellationToken cancellation)
+        => _conveyor.ProcessDataAsync(data, attemptsCount, cancellation);
 }

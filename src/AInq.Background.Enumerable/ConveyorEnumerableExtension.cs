@@ -22,83 +22,83 @@ public static class ConveyorEnumerableExtension
     /// <summary> Batch process data </summary>
     /// <param name="conveyor"> Conveyor instance </param>
     /// <param name="data"> Data to process </param>
-    /// <param name="cancellation"> Processing cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="enqueueAll"> Option to enqueue all data first </param>
+    /// <param name="cancellation"> Processing cancellation token </param>
     /// <typeparam name="TData"> Input data type </typeparam>
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyor" /> or <paramref name="data" /> is NULL </exception>
     [PublicAPI]
     public static async IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IConveyor<TData, TResult> conveyor, IEnumerable<TData> data,
-        [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
+        int attemptsCount = 1, bool enqueueAll = false, [EnumeratorCancellation] CancellationToken cancellation = default)
         where TData : notnull
     {
         _ = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
         var results = (data ?? throw new ArgumentNullException(nameof(data)))
                       .Where(item => item != null)
-                      .Select(item => conveyor.ProcessDataAsync(item, cancellation, attemptsCount));
+                      .Select(item => conveyor.ProcessDataAsync(item, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IConveyor{TData,TResult},IEnumerable{TData},CancellationToken,int,bool)" />
+    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IConveyor{TData,TResult},IEnumerable{TData},int,bool,CancellationToken)" />
     [PublicAPI]
     public static IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IEnumerable<TData> data, IConveyor<TData, TResult> conveyor,
-        CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
+        int attemptsCount = 1, bool enqueueAll = false, CancellationToken cancellation = default)
         where TData : notnull
         => (conveyor ?? throw new ArgumentNullException(nameof(conveyor)))
-            .ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), cancellation, attemptsCount, enqueueAll);
+            .ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), attemptsCount, enqueueAll, cancellation);
 
     /// <summary> Batch process data with giver <paramref name="priority" /> </summary>
     /// <param name="conveyor"> Conveyor instance </param>
     /// <param name="data"> Data to process </param>
-    /// <param name="cancellation"> Processing cancellation token </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="priority"> Operation priority </param>
+    /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="enqueueAll"> Option to enqueue all data first </param>
+    /// <param name="cancellation"> Processing cancellation token </param>
     /// <typeparam name="TData"> Input data type </typeparam>
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Processing result task enumeration </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyor" /> or <paramref name="data" /> is NULL </exception>
     [PublicAPI]
     public static async IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IPriorityConveyor<TData, TResult> conveyor,
-        IEnumerable<TData> data, int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1,
-        bool enqueueAll = false)
+        IEnumerable<TData> data, int priority = 0, int attemptsCount = 1, bool enqueueAll = false,
+        [EnumeratorCancellation] CancellationToken cancellation = default)
         where TData : notnull
     {
         _ = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
         var results = (data ?? throw new ArgumentNullException(nameof(data)))
                       .Where(item => item != null)
-                      .Select(item => conveyor.ProcessDataAsync(item, priority, cancellation, attemptsCount));
+                      .Select(item => conveyor.ProcessDataAsync(item, priority, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IPriorityConveyor{TData,TResult},IEnumerable{TData},int,CancellationToken,int,bool)" />
+    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IPriorityConveyor{TData,TResult},IEnumerable{TData},int,int,bool,CancellationToken)" />
     [PublicAPI]
     public static IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IEnumerable<TData> data, IPriorityConveyor<TData, TResult> conveyor,
-        int priority = 0, CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false)
+        int priority = 0, int attemptsCount = 1, bool enqueueAll = false, CancellationToken cancellation = default)
         where TData : notnull
         => (conveyor ?? throw new ArgumentNullException(nameof(conveyor)))
-            .ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), priority, cancellation, attemptsCount, enqueueAll);
+            .ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), priority, attemptsCount, enqueueAll, cancellation);
 
-    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IPriorityConveyor{TData,TResult},IEnumerable{TData},int,CancellationToken,int,bool)" />
+    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IPriorityConveyor{TData,TResult},IEnumerable{TData},int,int,bool,CancellationToken)" />
     [PublicAPI]
     public static IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, IEnumerable<TData> data,
-        CancellationToken cancellation = default, int attemptsCount = 1, bool enqueueAll = false, int priority = 0)
+        int priority = 0, int attemptsCount = 1, bool enqueueAll = false, CancellationToken cancellation = default)
         where TData : notnull
     {
         var conveyor = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IConveyor<TData, TResult>>();
         return conveyor is IPriorityConveyor<TData, TResult> priorityConveyor
             ? priorityConveyor.ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)),
                 priority,
-                cancellation,
                 attemptsCount,
-                enqueueAll)
-            : conveyor.ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), cancellation, attemptsCount, enqueueAll);
+                enqueueAll,
+                cancellation)
+            : conveyor.ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), attemptsCount, enqueueAll, cancellation);
     }
 
 #endregion
@@ -106,14 +106,14 @@ public static class ConveyorEnumerableExtension
 #region AsyncEnumerable
 
     private static async void PushData<TData, TResult>(ChannelWriter<Task<TResult>> writer, IConveyor<TData, TResult> conveyor,
-        IAsyncEnumerable<TData> data, CancellationToken cancellation, int attemptsCount)
+        IAsyncEnumerable<TData> data, int attemptsCount, CancellationToken cancellation)
         where TData : notnull
     {
         try
         {
             await foreach (var item in data.WithCancellation(cancellation).ConfigureAwait(false))
                 if (item != null)
-                    await writer.WriteAsync(conveyor.ProcessDataAsync(item, cancellation, attemptsCount), cancellation).ConfigureAwait(false);
+                    await writer.WriteAsync(conveyor.ProcessDataAsync(item, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
         {
@@ -129,38 +129,38 @@ public static class ConveyorEnumerableExtension
         }
     }
 
-    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IConveyor{TData,TResult},IEnumerable{TData},CancellationToken,int,bool)" />
+    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IConveyor{TData,TResult},IEnumerable{TData},int,bool,CancellationToken)" />
     [PublicAPI]
     public static async IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IConveyor<TData, TResult> conveyor,
-        IAsyncEnumerable<TData> data, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
+        IAsyncEnumerable<TData> data, int attemptsCount = 1, [EnumeratorCancellation] CancellationToken cancellation = default)
         where TData : notnull
     {
         _ = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
         _ = data ?? throw new ArgumentNullException(nameof(data));
         var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
-        PushData(channel.Writer, conveyor, data, cancellation, attemptsCount);
+        PushData(channel.Writer, conveyor, data, attemptsCount, cancellation);
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IConveyor{TData,TResult},IEnumerable{TData},CancellationToken,int,bool)" />
+    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IConveyor{TData,TResult},IEnumerable{TData},int,bool,CancellationToken)" />
     [PublicAPI]
     public static IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IAsyncEnumerable<TData> data, IConveyor<TData, TResult> conveyor,
-        CancellationToken cancellation = default, int attemptsCount = 1)
+        int attemptsCount = 1, CancellationToken cancellation = default)
         where TData : notnull
         => (conveyor ?? throw new ArgumentNullException(nameof(conveyor)))
-            .ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), cancellation, attemptsCount);
+            .ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), attemptsCount, cancellation);
 
     private static async void PushData<TData, TResult>(ChannelWriter<Task<TResult>> writer, IPriorityConveyor<TData, TResult> priorityConveyor,
-        IAsyncEnumerable<TData> data, int priority, CancellationToken cancellation, int attemptsCount)
+        IAsyncEnumerable<TData> data, int priority, int attemptsCount, CancellationToken cancellation)
         where TData : notnull
     {
         try
         {
             await foreach (var item in data.WithCancellation(cancellation).ConfigureAwait(false))
                 if (item != null)
-                    await writer.WriteAsync(priorityConveyor.ProcessDataAsync(item, priority, cancellation, attemptsCount), cancellation)
+                    await writer.WriteAsync(priorityConveyor.ProcessDataAsync(item, priority, attemptsCount, cancellation), cancellation)
                                 .ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
@@ -177,39 +177,39 @@ public static class ConveyorEnumerableExtension
         }
     }
 
-    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IPriorityConveyor{TData,TResult},IEnumerable{TData},int,CancellationToken,int,bool)" />
+    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IPriorityConveyor{TData,TResult},IEnumerable{TData},int,int,bool,CancellationToken)" />
     [PublicAPI]
     public static async IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IPriorityConveyor<TData, TResult> priorityConveyor,
-        IAsyncEnumerable<TData> data, int priority = 0, [EnumeratorCancellation] CancellationToken cancellation = default, int attemptsCount = 1)
+        IAsyncEnumerable<TData> data, int priority = 0, int attemptsCount = 1, [EnumeratorCancellation] CancellationToken cancellation = default)
         where TData : notnull
     {
         _ = priorityConveyor ?? throw new ArgumentNullException(nameof(priorityConveyor));
         _ = data ?? throw new ArgumentNullException(nameof(data));
         var channel = Channel.CreateUnbounded<Task<TResult>>(new UnboundedChannelOptions {SingleReader = true, SingleWriter = true});
         var reader = channel.Reader;
-        PushData(channel.Writer, priorityConveyor, data, priority, cancellation, attemptsCount);
+        PushData(channel.Writer, priorityConveyor, data, priority, attemptsCount, cancellation);
         while (await reader.WaitToReadAsync(cancellation).ConfigureAwait(false))
             yield return await (await reader.ReadAsync(cancellation).ConfigureAwait(false)).ConfigureAwait(false);
     }
 
-    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IPriorityConveyor{TData,TResult},IEnumerable{TData},int,CancellationToken,int,bool)" />
+    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IPriorityConveyor{TData,TResult},IEnumerable{TData},int,int,bool,CancellationToken)" />
     [PublicAPI]
     public static IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IAsyncEnumerable<TData> data,
-        IPriorityConveyor<TData, TResult> priorityConveyor, int priority = 0, CancellationToken cancellation = default, int attemptsCount = 1)
+        IPriorityConveyor<TData, TResult> priorityConveyor, int priority = 0, int attemptsCount = 1, CancellationToken cancellation = default)
         where TData : notnull
         => (priorityConveyor ?? throw new ArgumentNullException(nameof(priorityConveyor)))
-            .ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), priority, cancellation, attemptsCount);
+            .ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), priority, attemptsCount, cancellation);
 
-    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IPriorityConveyor{TData,TResult},IEnumerable{TData},int,CancellationToken,int,bool)" />
+    /// <inheritdoc cref="ProcessDataAsync{TData,TResult}(IPriorityConveyor{TData,TResult},IEnumerable{TData},int,int,bool,CancellationToken)" />
     [PublicAPI]
     public static IAsyncEnumerable<TResult> ProcessDataAsync<TData, TResult>(this IServiceProvider provider, IAsyncEnumerable<TData> data,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+        int priority = 0, int attemptsCount = 1, CancellationToken cancellation = default)
         where TData : notnull
     {
         var conveyor = (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IConveyor<TData, TResult>>();
         return conveyor is IPriorityConveyor<TData, TResult> priorityConveyor
-            ? priorityConveyor.ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), priority, cancellation, attemptsCount)
-            : conveyor.ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), cancellation, attemptsCount);
+            ? priorityConveyor.ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), priority, attemptsCount, cancellation)
+            : conveyor.ProcessDataAsync(data ?? throw new ArgumentNullException(nameof(data)), attemptsCount, cancellation);
     }
 
 #endregion

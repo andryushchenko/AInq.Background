@@ -24,11 +24,11 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
     internal SingleStaticProcessor(TArgument argument)
         => _argument = argument;
 
-    void IDisposable.Dispose()
-        => (_argument as IDisposable)?.Dispose();
-
     async ValueTask IAsyncDisposable.DisposeAsync()
         => await _argument.TryDisposeAsync().ConfigureAwait(false);
+
+    void IDisposable.Dispose()
+        => (_argument as IDisposable)?.Dispose();
 
     async Task ITaskProcessor<TArgument, TMetadata>.ProcessPendingTasksAsync(ITaskManager<TArgument, TMetadata> manager, IServiceProvider provider,
         ILogger logger, CancellationToken cancellation)

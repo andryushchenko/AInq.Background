@@ -59,7 +59,7 @@ internal static class QueuedWorkFactory
         }
 
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueWork(_work, cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueWork(_work, _priority, _attemptsCount, cancellation);
     }
 
     private class QueuedWork<TResult> : IAsyncWork<TResult>
@@ -77,7 +77,7 @@ internal static class QueuedWorkFactory
         }
 
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueWork(_work, cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueWork(_work, _priority, _attemptsCount, cancellation);
     }
 
     private class QueuedAsyncWork : IAsyncWork
@@ -95,7 +95,7 @@ internal static class QueuedWorkFactory
         }
 
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncWork(_asyncWork, cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueAsyncWork(_asyncWork, _priority, _attemptsCount, cancellation);
     }
 
     private class QueuedAsyncWork<TResult> : IAsyncWork<TResult>
@@ -113,7 +113,7 @@ internal static class QueuedWorkFactory
         }
 
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncWork(_asyncWork, cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueAsyncWork(_asyncWork, _priority, _attemptsCount, cancellation);
     }
 
     private class QueuedInjectedWork<TWork> : IAsyncWork
@@ -129,7 +129,7 @@ internal static class QueuedWorkFactory
         }
 
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueWork<TWork>(cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueWork<TWork>(_priority, _attemptsCount, cancellation);
     }
 
     private class QueuedInjectedWork<TWork, TResult> : IAsyncWork<TResult>
@@ -145,7 +145,7 @@ internal static class QueuedWorkFactory
         }
 
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueWork<TWork, TResult>(cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueWork<TWork, TResult>(_priority, _attemptsCount, cancellation);
     }
 
     private class QueuedInjectedAsyncWork<TAsyncWork> : IAsyncWork
@@ -161,7 +161,7 @@ internal static class QueuedWorkFactory
         }
 
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncWork<TAsyncWork>(cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueAsyncWork<TAsyncWork>(_priority, _attemptsCount, cancellation);
     }
 
     private class QueuedInjectedAsyncWork<TAsyncWork, TResult> : IAsyncWork<TResult>
@@ -177,6 +177,6 @@ internal static class QueuedWorkFactory
         }
 
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncWork<TAsyncWork, TResult>(cancellation, _attemptsCount, _priority);
+            => serviceProvider.EnqueueAsyncWork<TAsyncWork, TResult>(_priority, _attemptsCount, cancellation);
     }
 }

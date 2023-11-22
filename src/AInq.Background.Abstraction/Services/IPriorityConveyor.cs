@@ -27,10 +27,10 @@ public interface IPriorityConveyor<in TData, TResult> : IConveyor<TData, TResult
     /// <summary> Process data asynchronously in queue with given <paramref name="priority" /> </summary>
     /// <param name="data"> Data to process </param>
     /// <param name="priority"> Operation priority </param>
-    /// <param name="cancellation"> Processing cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Processing cancellation token </param>
     /// <returns> Processing result task </returns>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="data" /> is NULL </exception>
     [PublicAPI]
-    Task<TResult> ProcessDataAsync(TData data, int priority, CancellationToken cancellation = default, int attemptsCount = 1);
+    Task<TResult> ProcessDataAsync(TData data, int priority, int attemptsCount = 1, CancellationToken cancellation = default);
 }

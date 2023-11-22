@@ -47,17 +47,17 @@ public class ConveyorChain<TData, TFirstIntermediate, TSecondIntermediate, TResu
 
     int IConveyor<TData, TResult>.MaxAttempts => _maxAttempts;
 
-    async Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, CancellationToken cancellation, int attemptsCount)
+    async Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, int attemptsCount, CancellationToken cancellation)
         => await _third
                  .ProcessDataAsync(await _second.ProcessDataAsync(await _first
                                                                         .ProcessDataAsync(data,
-                                                                            cancellation,
-                                                                            Math.Max(1, Math.Min(_first.MaxAttempts, attemptsCount)))
+                                                                            Math.Max(1, Math.Min(_first.MaxAttempts, attemptsCount)),
+                                                                            cancellation)
                                                                         .ConfigureAwait(false),
-                                                    cancellation,
-                                                    Math.Max(1, Math.Min(_second.MaxAttempts, attemptsCount)))
+                                                    Math.Max(1, Math.Min(_second.MaxAttempts, attemptsCount)),
+                                                    cancellation)
                                                 .ConfigureAwait(false),
-                     cancellation,
-                     Math.Max(1, Math.Min(_third.MaxAttempts, attemptsCount)))
+                     Math.Max(1, Math.Min(_third.MaxAttempts, attemptsCount)),
+                     cancellation)
                  .ConfigureAwait(false);
 }

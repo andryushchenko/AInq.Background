@@ -23,87 +23,87 @@ public static class WorkQueueServiceProviderHelper
 {
 #region Queue
 
-    /// <inheritdoc cref="IPriorityWorkQueue.EnqueueWork(IWork, int, CancellationToken, int)" />
+    /// <inheritdoc cref="IPriorityWorkQueue.EnqueueWork(IWork,int,int,CancellationToken)" />
     [PublicAPI]
-    public static Task EnqueueWork(this IServiceProvider provider, IWork work, CancellationToken cancellation = default, int attemptsCount = 1,
-        int priority = 0)
+    public static Task EnqueueWork(this IServiceProvider provider, IWork work, int priority = 0, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .Service<IPriorityWorkQueue>()
-           ?.EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), priority, cancellation, attemptsCount)
-           ?? provider.RequiredService<IWorkQueue>().EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), cancellation, attemptsCount);
+           ?.EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount, cancellation)
+           ?? provider.RequiredService<IWorkQueue>().EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
 
-    /// <inheritdoc cref="IPriorityWorkQueue.EnqueueWork{TResult}(IWork{TResult}, int, CancellationToken, int)" />
+    /// <inheritdoc cref="IPriorityWorkQueue.EnqueueWork{TResult}(IWork{TResult},int,int,CancellationToken)" />
     [PublicAPI]
-    public static Task<TResult> EnqueueWork<TResult>(this IServiceProvider provider, IWork<TResult> work, CancellationToken cancellation = default,
-        int attemptsCount = 1, int priority = 0)
+    public static Task<TResult> EnqueueWork<TResult>(this IServiceProvider provider, IWork<TResult> work, int priority = 0, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .Service<IPriorityWorkQueue>()
-           ?.EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), priority, cancellation, attemptsCount)
-           ?? provider.RequiredService<IWorkQueue>().EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), cancellation, attemptsCount);
+           ?.EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount, cancellation)
+           ?? provider.RequiredService<IWorkQueue>().EnqueueWork(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
 
-    /// <inheritdoc cref="IPriorityWorkQueue.EnqueueAsyncWork(IAsyncWork, int, CancellationToken, int)" />
+    /// <inheritdoc cref="IPriorityWorkQueue.EnqueueAsyncWork(IAsyncWork,int,int,CancellationToken)" />
     [PublicAPI]
-    public static Task EnqueueAsyncWork(this IServiceProvider provider, IAsyncWork work, CancellationToken cancellation = default,
-        int attemptsCount = 1, int priority = 0)
+    public static Task EnqueueAsyncWork(this IServiceProvider provider, IAsyncWork work, int priority = 0, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .Service<IPriorityWorkQueue>()
-           ?.EnqueueAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), priority, cancellation, attemptsCount)
+           ?.EnqueueAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount, cancellation)
            ?? provider.RequiredService<IWorkQueue>()
-                      .EnqueueAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), cancellation, attemptsCount);
+                      .EnqueueAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
 
-    /// <inheritdoc cref="IPriorityWorkQueue.EnqueueAsyncWork{TResult}(IAsyncWork{TResult}, int, CancellationToken, int)" />
+    /// <inheritdoc cref="IPriorityWorkQueue.EnqueueAsyncWork{TResult}(IAsyncWork{TResult},int,int,CancellationToken)" />
     [PublicAPI]
-    public static Task<TResult> EnqueueAsyncWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+    public static Task<TResult> EnqueueAsyncWork<TResult>(this IServiceProvider provider, IAsyncWork<TResult> work, int priority = 0,
+        int attemptsCount = 1, CancellationToken cancellation = default)
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .Service<IPriorityWorkQueue>()
-           ?.EnqueueAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), priority, cancellation, attemptsCount)
+           ?.EnqueueAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), priority, attemptsCount, cancellation)
            ?? provider.RequiredService<IWorkQueue>()
-                      .EnqueueAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), cancellation, attemptsCount);
+                      .EnqueueAsyncWork(work ?? throw new ArgumentNullException(nameof(work)), attemptsCount, cancellation);
 
 #endregion
 
 #region QueueDI
 
-    /// <inheritdoc cref="WorkQueueDependencyInjectionExtension.EnqueueWork{TWork}(IPriorityWorkQueue,int, CancellationToken, int)" />
+    /// <inheritdoc cref="WorkQueueDependencyInjectionExtension.EnqueueWork{TWork}(IPriorityWorkQueue,int,int,CancellationToken)" />
     [PublicAPI]
-    public static Task EnqueueWork<TWork>(this IServiceProvider provider, CancellationToken cancellation = default, int attemptsCount = 1,
-        int priority = 0)
+    public static Task EnqueueWork<TWork>(this IServiceProvider provider, int priority = 0, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TWork : IWork
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .Service<IPriorityWorkQueue>()
-           ?.EnqueueWork<TWork>(priority, cancellation, attemptsCount)
-           ?? provider.RequiredService<IWorkQueue>().EnqueueWork<TWork>(cancellation, attemptsCount);
+           ?.EnqueueWork<TWork>(priority, attemptsCount, cancellation)
+           ?? provider.RequiredService<IWorkQueue>().EnqueueWork<TWork>(attemptsCount, cancellation);
 
-    /// <inheritdoc cref="WorkQueueDependencyInjectionExtension.EnqueueWork{TWork, TResult}(IPriorityWorkQueue,int, CancellationToken, int)" />
+    /// <inheritdoc cref="WorkQueueDependencyInjectionExtension.EnqueueWork{TWork,TResult}(IPriorityWorkQueue,int,int,CancellationToken)" />
     [PublicAPI]
-    public static Task<TResult> EnqueueWork<TWork, TResult>(this IServiceProvider provider, CancellationToken cancellation = default,
-        int attemptsCount = 1, int priority = 0)
+    public static Task<TResult> EnqueueWork<TWork, TResult>(this IServiceProvider provider, int priority = 0,
+        int attemptsCount = 1, CancellationToken cancellation = default)
         where TWork : IWork<TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .Service<IPriorityWorkQueue>()
-           ?.EnqueueWork<TWork, TResult>(priority, cancellation, attemptsCount)
-           ?? provider.RequiredService<IWorkQueue>().EnqueueWork<TWork, TResult>(cancellation, attemptsCount);
+           ?.EnqueueWork<TWork, TResult>(priority, attemptsCount, cancellation)
+           ?? provider.RequiredService<IWorkQueue>().EnqueueWork<TWork, TResult>(attemptsCount, cancellation);
 
-    /// <inheritdoc cref="WorkQueueDependencyInjectionExtension.EnqueueAsyncWork{TAsyncWork}(IPriorityWorkQueue,int, CancellationToken, int)" />
+    /// <inheritdoc cref="WorkQueueDependencyInjectionExtension.EnqueueAsyncWork{TAsyncWork}(IPriorityWorkQueue,int,int,CancellationToken)" />
     [PublicAPI]
-    public static Task EnqueueAsyncWork<TAsyncWork>(this IServiceProvider provider, CancellationToken cancellation = default, int attemptsCount = 1,
-        int priority = 0)
+    public static Task EnqueueAsyncWork<TAsyncWork>(this IServiceProvider provider, int priority = 0, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .Service<IPriorityWorkQueue>()
-           ?.EnqueueAsyncWork<TAsyncWork>(priority, cancellation, attemptsCount)
-           ?? provider.RequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork>(cancellation, attemptsCount);
+           ?.EnqueueAsyncWork<TAsyncWork>(priority, attemptsCount, cancellation)
+           ?? provider.RequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork>(attemptsCount, cancellation);
 
-    /// <inheritdoc cref="WorkQueueDependencyInjectionExtension.EnqueueWork{TAsyncWork, TResult}(IPriorityWorkQueue,int, CancellationToken, int)" />
+    /// <inheritdoc cref="WorkQueueDependencyInjectionExtension.EnqueueWork{TWork,TResult}(IPriorityWorkQueue,int,int,CancellationToken)" />
     [PublicAPI]
-    public static Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, CancellationToken cancellation = default,
-        int attemptsCount = 1, int priority = 0)
+    public static Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(this IServiceProvider provider, int priority = 0, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork<TResult>
         => (provider ?? throw new ArgumentNullException(nameof(provider)))
            .Service<IPriorityWorkQueue>()
-           ?.EnqueueAsyncWork<TAsyncWork, TResult>(priority, cancellation, attemptsCount)
-           ?? provider.RequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork, TResult>(cancellation, attemptsCount);
+           ?.EnqueueAsyncWork<TAsyncWork, TResult>(priority, attemptsCount, cancellation)
+           ?? provider.RequiredService<IWorkQueue>().EnqueueAsyncWork<TAsyncWork, TResult>(attemptsCount, cancellation);
 
 #endregion
 }

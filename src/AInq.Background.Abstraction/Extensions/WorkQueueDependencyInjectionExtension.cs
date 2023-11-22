@@ -24,54 +24,54 @@ public static class WorkQueueDependencyInjectionExtension
 
     /// <summary> Enqueue background work </summary>
     /// <param name="queue"> Work queue instance </param>
-    /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <returns> Work completion task </returns>
     [PublicAPI]
-    public static Task EnqueueWork<TWork>(this IWorkQueue queue, CancellationToken cancellation = default, int attemptsCount = 1)
+    public static Task EnqueueWork<TWork>(this IWorkQueue queue, int attemptsCount = 1, CancellationToken cancellation = default)
         where TWork : IWork
         => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueWork(CreateInjectedWork<TWork>(), cancellation, attemptsCount);
+            .EnqueueWork(CreateInjectedWork<TWork>(), attemptsCount, cancellation);
 
     /// <summary> Enqueue background work </summary>
     /// <param name="queue"> Work queue instance </param>
-    /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
     [PublicAPI]
-    public static Task<TResult> EnqueueWork<TWork, TResult>(this IWorkQueue queue, CancellationToken cancellation = default, int attemptsCount = 1)
+    public static Task<TResult> EnqueueWork<TWork, TResult>(this IWorkQueue queue, int attemptsCount = 1, CancellationToken cancellation = default)
         where TWork : IWork<TResult>
         => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueWork(CreateInjectedWork<TWork, TResult>(), cancellation, attemptsCount);
+            .EnqueueWork(CreateInjectedWork<TWork, TResult>(), attemptsCount, cancellation);
 
     /// <summary> Enqueue asynchronous background work </summary>
     /// <param name="queue"> Work queue instance </param>
-    /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <returns> Work completion task </returns>
     [PublicAPI]
-    public static Task EnqueueAsyncWork<TAsyncWork>(this IWorkQueue queue, CancellationToken cancellation = default, int attemptsCount = 1)
+    public static Task EnqueueAsyncWork<TAsyncWork>(this IWorkQueue queue, int attemptsCount = 1, CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork
         => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueAsyncWork(CreateInjectedAsyncWork<TAsyncWork>(), cancellation, attemptsCount);
+            .EnqueueAsyncWork(CreateInjectedAsyncWork<TAsyncWork>(), attemptsCount, cancellation);
 
     /// <summary> Enqueue asynchronous background work </summary>
     /// <param name="queue"> Work queue instance </param>
-    /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
     [PublicAPI]
-    public static Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(this IWorkQueue queue, CancellationToken cancellation = default,
-        int attemptsCount = 1)
+    public static Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(this IWorkQueue queue, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork<TResult>
         => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueAsyncWork(CreateInjectedAsyncWork<TAsyncWork, TResult>(), cancellation, attemptsCount);
+            .EnqueueAsyncWork(CreateInjectedAsyncWork<TAsyncWork, TResult>(), attemptsCount, cancellation);
 
 #endregion
 
@@ -80,60 +80,60 @@ public static class WorkQueueDependencyInjectionExtension
     /// <summary> Enqueue background work with given <paramref name="priority" /> </summary>
     /// <param name="queue"> Work queue instance </param>
     /// <param name="priority"> Work priority </param>
-    /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <returns> Work completion task </returns>
     [PublicAPI]
-    public static Task EnqueueWork<TWork>(this IPriorityWorkQueue queue, int priority, CancellationToken cancellation = default,
-        int attemptsCount = 1)
+    public static Task EnqueueWork<TWork>(this IPriorityWorkQueue queue, int priority, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TWork : IWork
         => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueWork(CreateInjectedWork<TWork>(), priority, cancellation, attemptsCount);
+            .EnqueueWork(CreateInjectedWork<TWork>(), priority, attemptsCount, cancellation);
 
     /// <summary> Enqueue background work with given <paramref name="priority" /> </summary>
     /// <param name="queue"> Work queue instance </param>
     /// <param name="priority"> Work priority </param>
-    /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
     [PublicAPI]
-    public static Task<TResult> EnqueueWork<TWork, TResult>(this IPriorityWorkQueue queue, int priority, CancellationToken cancellation = default,
-        int attemptsCount = 1)
+    public static Task<TResult> EnqueueWork<TWork, TResult>(this IPriorityWorkQueue queue, int priority, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TWork : IWork<TResult>
         => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueWork(CreateInjectedWork<TWork, TResult>(), priority, cancellation, attemptsCount);
+            .EnqueueWork(CreateInjectedWork<TWork, TResult>(), priority, attemptsCount, cancellation);
 
     /// <summary> Enqueue asynchronous background work with given <paramref name="priority" /> </summary>
     /// <param name="queue"> Work queue instance </param>
     /// <param name="priority"> Work priority </param>
-    /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <returns> Work completion task </returns>
     [PublicAPI]
-    public static Task EnqueueAsyncWork<TAsyncWork>(this IPriorityWorkQueue queue, int priority, CancellationToken cancellation = default,
-        int attemptsCount = 1)
+    public static Task EnqueueAsyncWork<TAsyncWork>(this IPriorityWorkQueue queue, int priority, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork
         => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueAsyncWork(CreateInjectedAsyncWork<TAsyncWork>(), priority, cancellation, attemptsCount);
+            .EnqueueAsyncWork(CreateInjectedAsyncWork<TAsyncWork>(), priority, attemptsCount, cancellation);
 
     /// <summary> Enqueue asynchronous background work with given <paramref name="priority" /> </summary>
     /// <param name="queue"> Work queue instance </param>
     /// <param name="priority"> Work priority </param>
-    /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TAsyncWork"> Work type </typeparam>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work completion task </returns>
     [PublicAPI]
-    public static Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(this IPriorityWorkQueue queue, int priority,
-        CancellationToken cancellation = default, int attemptsCount = 1)
+    public static Task<TResult> EnqueueAsyncWork<TAsyncWork, TResult>(this IPriorityWorkQueue queue, int priority, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TAsyncWork : IAsyncWork<TResult>
         => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueAsyncWork(CreateInjectedAsyncWork<TAsyncWork, TResult>(), priority, cancellation, attemptsCount);
+            .EnqueueAsyncWork(CreateInjectedAsyncWork<TAsyncWork, TResult>(), priority, attemptsCount, cancellation);
 
 #endregion
 }

@@ -27,79 +27,78 @@ public static class WorkQueueAccessQueueInteraction
     /// <param name="queue"> Work queue instance </param>
     /// <param name="access"> Access action instance </param>
     /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access action completion task </returns>
     [PublicAPI]
-    public static Task EnqueueAccess<TResource>(this IWorkQueue queue, IAccess<TResource> access, CancellationToken cancellation = default,
-        int attemptsCount = 1, int priority = 0)
+    public static Task EnqueueAccess<TResource>(this IWorkQueue queue, IAccess<TResource> access, int priority = 0, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TResource : notnull
     {
         var work = CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
-            : queue.EnqueueAsyncWork(work, cancellation);
+            ? priorityQueue.EnqueueAsyncWork(work, priority, 1, cancellation)
+            : queue.EnqueueAsyncWork(work, 1, cancellation);
     }
 
     /// <summary> Enqueue access action into work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="queue"> Work queue instance </param>
     /// <param name="access"> Access action instance </param>
     /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
     [PublicAPI]
-    public static Task<TResult> EnqueueAccess<TResource, TResult>(this IWorkQueue queue, IAccess<TResource, TResult> access,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+    public static Task<TResult> EnqueueAccess<TResource, TResult>(this IWorkQueue queue, IAccess<TResource, TResult> access, int priority = 0,
+        int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
     {
         var work = CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
-            : queue.EnqueueAsyncWork(work, cancellation);
+            ? priorityQueue.EnqueueAsyncWork(work, priority, 1, cancellation)
+            : queue.EnqueueAsyncWork(work, 1, cancellation);
     }
 
     /// <summary> Enqueue asynchronous access action into work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="queue"> Work queue instance </param>
     /// <param name="asyncAccess"> Access action instance </param>
     /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <returns> Access action completion task </returns>
     [PublicAPI]
-    public static Task EnqueueAsyncAccess<TResource>(this IWorkQueue queue, IAsyncAccess<TResource> asyncAccess,
-        CancellationToken cancellation = default,
-        int attemptsCount = 1, int priority = 0)
+    public static Task EnqueueAsyncAccess<TResource>(this IWorkQueue queue, IAsyncAccess<TResource> asyncAccess, int priority = 0,
+        int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
     {
         var work = CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
-            : queue.EnqueueAsyncWork(work, cancellation);
+            ? priorityQueue.EnqueueAsyncWork(work, priority, 1, cancellation)
+            : queue.EnqueueAsyncWork(work, 1, cancellation);
     }
 
     /// <summary> Enqueue asynchronous access action into work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="queue"> Work queue instance </param>
     /// <param name="asyncAccess"> Access action instance </param>
     /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
     [PublicAPI]
     public static Task<TResult> EnqueueAsyncAccess<TResource, TResult>(this IWorkQueue queue, IAsyncAccess<TResource, TResult> asyncAccess,
-        CancellationToken cancellation = default, int attemptsCount = 1, int priority = 0)
+        int priority = 0, int attemptsCount = 1, CancellationToken cancellation = default)
         where TResource : notnull
     {
         var work = CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
-            : queue.EnqueueAsyncWork(work, cancellation);
+            ? priorityQueue.EnqueueAsyncWork(work, priority, 1, cancellation)
+            : queue.EnqueueAsyncWork(work, 1, cancellation);
     }
 
 #endregion
@@ -109,83 +108,83 @@ public static class WorkQueueAccessQueueInteraction
     /// <summary> Enqueue access action into work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="queue"> Work queue instance </param>
     /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
     [PublicAPI]
-    public static Task EnqueueAccess<TResource, TAccess>(this IWorkQueue queue, CancellationToken cancellation = default, int attemptsCount = 1,
-        int priority = 0)
+    public static Task EnqueueAccess<TResource, TAccess>(this IWorkQueue queue, int priority = 0, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         where TAccess : IAccess<TResource>
     {
         var work = CreateQueuedInjectedAccess<TResource, TAccess>(priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
-            : queue.EnqueueAsyncWork(work, cancellation);
+            ? priorityQueue.EnqueueAsyncWork(work, priority, 1, cancellation)
+            : queue.EnqueueAsyncWork(work, 1, cancellation);
     }
 
     /// <summary> Enqueue access action into work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="queue"> Work queue instance </param>
     /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
     [PublicAPI]
-    public static Task<TResult> EnqueueAccess<TResource, TAccess, TResult>(this IWorkQueue queue, CancellationToken cancellation = default,
-        int attemptsCount = 1, int priority = 0)
+    public static Task<TResult> EnqueueAccess<TResource, TAccess, TResult>(this IWorkQueue queue, int priority = 0, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
     {
         var work = CreateQueuedInjectedAccess<TResource, TAccess, TResult>(priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
-            : queue.EnqueueAsyncWork(work, cancellation);
+            ? priorityQueue.EnqueueAsyncWork(work, priority, 1, cancellation)
+            : queue.EnqueueAsyncWork(work, 1, cancellation);
     }
 
     /// <summary> Enqueue asynchronous access action into work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="queue"> Work queue instance </param>
     /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <returns> Access action completion task </returns>
     [PublicAPI]
-    public static Task EnqueueAsyncAccess<TResource, TAsyncAccess>(this IWorkQueue queue, CancellationToken cancellation = default,
-        int attemptsCount = 1, int priority = 0)
+    public static Task EnqueueAsyncAccess<TResource, TAsyncAccess>(this IWorkQueue queue, int priority = 0, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
     {
         var work = CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess>(priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
-            : queue.EnqueueAsyncWork(work, cancellation);
+            ? priorityQueue.EnqueueAsyncWork(work, priority, 1, cancellation)
+            : queue.EnqueueAsyncWork(work, 1, cancellation);
     }
 
     /// <summary> Enqueue asynchronous access action into work queue with given <paramref name="priority" /> (if supported) </summary>
     /// <param name="queue"> Work queue instance </param>
     /// <param name="priority"> Access action priority </param>
-    /// <param name="cancellation"> Access cancellation token </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
+    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
     /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action completion task </returns>
     [PublicAPI]
-    public static Task<TResult> EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(this IWorkQueue queue, CancellationToken cancellation = default,
-        int attemptsCount = 1, int priority = 0)
+    public static Task<TResult> EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(this IWorkQueue queue, int priority = 0, int attemptsCount = 1,
+        CancellationToken cancellation = default)
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
     {
         var work = CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation)
-            : queue.EnqueueAsyncWork(work, cancellation);
+            ? priorityQueue.EnqueueAsyncWork(work, priority, 1, cancellation)
+            : queue.EnqueueAsyncWork(work, 1, cancellation);
     }
 
 #endregion

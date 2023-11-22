@@ -23,14 +23,14 @@ public static class RepeatedWorkWrapperFactory
     /// <param name="work"> Work instance </param>
     /// <param name="startTime"> Work first execution time </param>
     /// <param name="repeatDelay"> Work repeat delay </param>
-    /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Work cancellation token </param>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     [PublicAPI]
     public static (IScheduledTaskWrapper, IObservable<Maybe<Exception>>) CreateRepeatedWorkWrapper(IWork work, DateTime startTime,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
+        TimeSpan repeatDelay, int execCount = -1, CancellationToken cancellation = default)
     {
         startTime = startTime.ToLocalTime();
         var wrapper = new RepeatedTaskWrapper(work ?? throw new ArgumentNullException(nameof(work)),
@@ -38,10 +38,10 @@ public static class RepeatedWorkWrapperFactory
             repeatDelay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater then 00:00:00.000")
                 : repeatDelay,
-            cancellation,
             execCount is > 0 or -1
                 ? execCount
-                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"),
+            cancellation);
         return (wrapper, wrapper.WorkObservable);
     }
 
@@ -49,15 +49,15 @@ public static class RepeatedWorkWrapperFactory
     /// <param name="work"> Work instance </param>
     /// <param name="startTime"> Work first execution time </param>
     /// <param name="repeatDelay"> Work repeat delay </param>
-    /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     [PublicAPI]
     public static (IScheduledTaskWrapper, IObservable<Try<TResult>>) CreateRepeatedWorkWrapper<TResult>(IWork<TResult> work, DateTime startTime,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
+        TimeSpan repeatDelay, int execCount = -1, CancellationToken cancellation = default)
     {
         startTime = startTime.ToLocalTime();
         var wrapper = new RepeatedTaskWrapper<TResult>(work ?? throw new ArgumentNullException(nameof(work)),
@@ -65,10 +65,10 @@ public static class RepeatedWorkWrapperFactory
             repeatDelay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater then 00:00:00.000")
                 : repeatDelay,
-            cancellation,
             execCount is > 0 or -1
                 ? execCount
-                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"),
+            cancellation);
         return (wrapper, wrapper.WorkObservable);
     }
 
@@ -76,14 +76,14 @@ public static class RepeatedWorkWrapperFactory
     /// <param name="asyncWork"> Work instance </param>
     /// <param name="startTime"> Work first execution time </param>
     /// <param name="repeatDelay"> Work repeat delay </param>
-    /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Work cancellation token </param>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="asyncWork" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     [PublicAPI]
     public static (IScheduledTaskWrapper, IObservable<Maybe<Exception>>) CreateRepeatedWorkWrapper(IAsyncWork asyncWork, DateTime startTime,
-        TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
+        TimeSpan repeatDelay, int execCount = -1, CancellationToken cancellation = default)
     {
         startTime = startTime.ToLocalTime();
         var wrapper = new RepeatedTaskWrapper(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)),
@@ -91,10 +91,10 @@ public static class RepeatedWorkWrapperFactory
             repeatDelay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater then 00:00:00.000")
                 : repeatDelay,
-            cancellation,
             execCount is > 0 or -1
                 ? execCount
-                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"),
+            cancellation);
         return (wrapper, wrapper.WorkObservable);
     }
 
@@ -102,15 +102,15 @@ public static class RepeatedWorkWrapperFactory
     /// <param name="asyncWork"> Work instance </param>
     /// <param name="startTime"> Work first execution time </param>
     /// <param name="repeatDelay"> Work repeat delay </param>
-    /// <param name="cancellation"> Work cancellation token </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
+    /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <exception cref="ArgumentNullException"> Thrown if <paramref name="asyncWork" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater then 00:00:00.000 or <paramref name="execCount" /> is 0 or less then -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     [PublicAPI]
     public static (IScheduledTaskWrapper, IObservable<Try<TResult>>) CreateRepeatedWorkWrapper<TResult>(IAsyncWork<TResult> asyncWork,
-        DateTime startTime, TimeSpan repeatDelay, CancellationToken cancellation = default, int execCount = -1)
+        DateTime startTime, TimeSpan repeatDelay, int execCount = -1, CancellationToken cancellation = default)
     {
         startTime = startTime.ToLocalTime();
         var wrapper = new RepeatedTaskWrapper<TResult>(asyncWork ?? throw new ArgumentNullException(nameof(asyncWork)),
@@ -118,10 +118,10 @@ public static class RepeatedWorkWrapperFactory
             repeatDelay <= TimeSpan.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(repeatDelay), repeatDelay, "Must be greater then 00:00:00.000")
                 : repeatDelay,
-            cancellation,
             execCount is > 0 or -1
                 ? execCount
-                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"));
+                : throw new ArgumentOutOfRangeException(nameof(execCount), execCount, "Must be greater then 0 or -1 for unlimited repeat"),
+            cancellation);
         return (wrapper, wrapper.WorkObservable);
     }
 
@@ -136,8 +136,8 @@ public static class RepeatedWorkWrapperFactory
         private int _execCount;
         private DateTime _nextScheduledTime;
 
-        internal RepeatedTaskWrapper(IAsyncWork asyncWork, DateTime startTime, TimeSpan repeatDelay, CancellationToken innerCancellation,
-            int execCount)
+        internal RepeatedTaskWrapper(IAsyncWork asyncWork, DateTime startTime, TimeSpan repeatDelay, int execCount,
+            CancellationToken innerCancellation)
         {
             _asyncWork = asyncWork;
             _work = null;
@@ -149,7 +149,7 @@ public static class RepeatedWorkWrapperFactory
             _cancellationRegistration = _innerCancellation.Register(_subject.OnCompleted, false);
         }
 
-        internal RepeatedTaskWrapper(IWork work, DateTime startTime, TimeSpan repeatDelay, CancellationToken innerCancellation, int execCount)
+        internal RepeatedTaskWrapper(IWork work, DateTime startTime, TimeSpan repeatDelay, int execCount, CancellationToken innerCancellation)
         {
             _asyncWork = null;
             _work = work;
@@ -197,7 +197,7 @@ public static class RepeatedWorkWrapperFactory
                 return true;
             _subject.OnCompleted();
 #if NETSTANDARD2_0
-                _cancellationRegistration.Dispose();
+            _cancellationRegistration.Dispose();
 #else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
 #endif
@@ -217,8 +217,8 @@ public static class RepeatedWorkWrapperFactory
         private int _execCount;
         private DateTime _nextScheduledTime;
 
-        internal RepeatedTaskWrapper(IAsyncWork<TResult> asyncWork, DateTime startTime, TimeSpan repeatDelay, CancellationToken innerCancellation,
-            int execCount)
+        internal RepeatedTaskWrapper(IAsyncWork<TResult> asyncWork, DateTime startTime, TimeSpan repeatDelay, int execCount,
+            CancellationToken innerCancellation)
         {
             _asyncWork = asyncWork;
             _work = null;
@@ -230,8 +230,8 @@ public static class RepeatedWorkWrapperFactory
             _cancellationRegistration = _innerCancellation.Register(_subject.OnCompleted, false);
         }
 
-        internal RepeatedTaskWrapper(IWork<TResult> work, DateTime startTime, TimeSpan repeatDelay, CancellationToken innerCancellation,
-            int execCount)
+        internal RepeatedTaskWrapper(IWork<TResult> work, DateTime startTime, TimeSpan repeatDelay, int execCount,
+            CancellationToken innerCancellation)
         {
             _asyncWork = null;
             _work = work;
@@ -279,7 +279,7 @@ public static class RepeatedWorkWrapperFactory
                 return true;
             _subject.OnCompleted();
 #if NETSTANDARD2_0
-                _cancellationRegistration.Dispose();
+            _cancellationRegistration.Dispose();
 #else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
 #endif
