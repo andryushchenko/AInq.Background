@@ -1,4 +1,4 @@
-﻿// Copyright 2020-2023 Anton Andryushchenko
+﻿// Copyright 2020-2024 Anton Andryushchenko
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public static class WorkQueueAccessQueueInteraction
     {
         var work = CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority: priority, cancellation: cancellation)
+            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation: cancellation)
             : queue.EnqueueAsyncWork(work, cancellation: cancellation);
     }
 
@@ -58,7 +58,7 @@ public static class WorkQueueAccessQueueInteraction
     {
         var work = CreateQueuedAccess(access ?? throw new ArgumentNullException(nameof(access)), priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority: priority, cancellation: cancellation)
+            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation: cancellation)
             : queue.EnqueueAsyncWork(work, cancellation: cancellation);
     }
 
@@ -77,7 +77,7 @@ public static class WorkQueueAccessQueueInteraction
     {
         var work = CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority: priority, cancellation: cancellation)
+            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation: cancellation)
             : queue.EnqueueAsyncWork(work, cancellation: cancellation);
     }
 
@@ -97,7 +97,7 @@ public static class WorkQueueAccessQueueInteraction
     {
         var work = CreateQueuedAsyncAccess(asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess)), priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority: priority, cancellation: cancellation)
+            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation: cancellation)
             : queue.EnqueueAsyncWork(work, cancellation: cancellation);
     }
 
@@ -121,7 +121,7 @@ public static class WorkQueueAccessQueueInteraction
     {
         var work = CreateQueuedInjectedAccess<TResource, TAccess>(priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority: priority, cancellation: cancellation)
+            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation: cancellation)
             : queue.EnqueueAsyncWork(work, cancellation: cancellation);
     }
 
@@ -142,7 +142,7 @@ public static class WorkQueueAccessQueueInteraction
     {
         var work = CreateQueuedInjectedAccess<TResource, TAccess, TResult>(priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority: priority, cancellation: cancellation)
+            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation: cancellation)
             : queue.EnqueueAsyncWork(work, cancellation: cancellation);
     }
 
@@ -162,7 +162,7 @@ public static class WorkQueueAccessQueueInteraction
     {
         var work = CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess>(priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority: priority, cancellation: cancellation)
+            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation: cancellation)
             : queue.EnqueueAsyncWork(work, cancellation: cancellation);
     }
 
@@ -183,7 +183,7 @@ public static class WorkQueueAccessQueueInteraction
     {
         var work = CreateQueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(priority, attemptsCount);
         return (queue ?? throw new ArgumentNullException(nameof(queue))) is IPriorityWorkQueue priorityQueue
-            ? priorityQueue.EnqueueAsyncWork(work, priority: priority, cancellation: cancellation)
+            ? priorityQueue.EnqueueAsyncWork(work, priority, cancellation: cancellation)
             : queue.EnqueueAsyncWork(work, cancellation: cancellation);
     }
 
