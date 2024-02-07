@@ -1,4 +1,4 @@
-﻿// Copyright 2020-2024 Anton Andryushchenko
+﻿// Copyright 2020 Anton Andryushchenko
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -164,7 +164,7 @@ public static class AccessWrapperFactory
                 _completion.TrySetException(ex);
             }
 #if NETSTANDARD2_0
-                _cancellationRegistration.Dispose();
+            _cancellationRegistration.Dispose();
 #else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
 #endif
@@ -249,7 +249,7 @@ public static class AccessWrapperFactory
                 _completion.TrySetException(ex);
             }
 #if NETSTANDARD2_0
-                _cancellationRegistration.Dispose();
+            _cancellationRegistration.Dispose();
 #else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
 #endif

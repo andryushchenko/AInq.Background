@@ -120,4 +120,4 @@ These packages are in active production use, all fixes and improvements will be 
 If you find a bug, have a question or something else - you are friendly welcome to open an issue.
 
 ## License
-Copyright © 2020-2022 Anton Andryushchenko. AInq.Background is licensed under [Apache License 2.0](LICENSE)
+Copyright © 2020 Anton Andryushchenko. AInq.Background is licensed under [Apache License 2.0](LICENSE)
