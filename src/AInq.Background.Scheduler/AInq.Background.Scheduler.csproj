@@ -9,7 +9,14 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
         <PackageReference Include="Cronos" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
         <PackageReference Include="Nito.AsyncEx.Coordination" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'!='netstandard2.0'">
+        <PackageReference Include="DotNext.Threading" />
     </ItemGroup>
 
     <ItemGroup>

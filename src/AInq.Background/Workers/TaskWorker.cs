@@ -16,6 +16,9 @@ using AInq.Background.Managers;
 using AInq.Background.Processors;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
+#if NETSTANDARD2_0
+using Nito.AsyncEx;
+#endif
 
 namespace AInq.Background.Workers;
 
@@ -57,7 +60,11 @@ public sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposab
 
     async Task IHostedService.StopAsync(CancellationToken cancel)
     {
+#if NETSTANDARD2_0
         _shutdown.Cancel();
+#else
+        await _shutdown.CancelAsync().ConfigureAwait(false);
+#endif
         if (_worker != null)
             await _worker.WaitAsync(cancel).ConfigureAwait(false);
     }

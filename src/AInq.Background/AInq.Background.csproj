@@ -8,7 +8,14 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
         <PackageReference Include="Nito.AsyncEx.Coordination" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'!='netstandard2.0'">
+        <PackageReference Include="DotNext.Threading" />
     </ItemGroup>
 
     <ItemGroup>
@@ -19,7 +26,6 @@
         <Using Include="AInq.Background.Services" />
         <Using Include="Microsoft.Extensions.DependencyInjection" />
         <Using Include="Microsoft.Extensions.Logging" />
-        <Using Include="Nito.AsyncEx" />
         <Using Include="System.Collections.Concurrent" />
     </ItemGroup>
 

@@ -7,26 +7,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
-        <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
-        <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-        <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-        <PackageVersion Include="System.Threading.Channels" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.0" />
+        <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+        <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
+        <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
+        <PackageVersion Include="System.Threading.Channels" Version="9.0.0" />
         <PackageVersion Include="System.Linq.Async" Version="6.0.1" />
         <PackageVersion Include="Nito.AsyncEx.Coordination" Version="5.1.2" />
+        <PackageVersion Include="DotNext.Threading" Version="5.15.0" />
         <PackageVersion Include="Cronos" Version="0.8.4" />
-        <PackageVersion Include="AInq.Optional" Version="3.6.0" />
+        <PackageVersion Include="AInq.Optional" Version="3.7.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <GlobalPackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.4">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </GlobalPackageReference>
-        <GlobalPackageReference Include="DotNet.ReproducibleBuilds.Isolated" Version="1.2.4">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </GlobalPackageReference>
+        <GlobalPackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.25" PrivateAssets="All" />
+        <GlobalPackageReference Include="Microsoft.Build.CopyOnWrite" Version="1.0.334" PrivateAssets="All" />
     </ItemGroup>
 
 </Project>

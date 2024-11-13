@@ -15,12 +15,17 @@
 using AInq.Background.Helpers;
 using AInq.Background.Managers;
 using AInq.Background.Wrappers;
+#if NETSTANDARD2_0
+using Nito.AsyncEx;
+#else
+using DotNext.Threading;
+#endif
 
 namespace AInq.Background.Processors;
 
 internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProcessor<TArgument, TMetadata>, IDisposable, IAsyncDisposable
 {
-    private readonly ConcurrentBag<TArgument> _active = new();
+    private readonly ConcurrentBag<TArgument> _active = [];
     private readonly ConcurrentBag<TArgument> _inactive;
     private readonly AsyncAutoResetEvent _reset = new(false);
 

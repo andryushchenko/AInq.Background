@@ -20,7 +20,7 @@ internal static class DisposableHelper
     {
         if (item is IAsyncDisposable asyncDisposable) return asyncDisposable.DisposeAsync();
         (item as IDisposable)?.Dispose();
-#if NETSTANDARD
+#if NETSTANDARD2_0
         return new ValueTask();
 #else
         return ValueTask.CompletedTask;

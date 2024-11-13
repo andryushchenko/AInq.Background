@@ -17,7 +17,9 @@ using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
+#if NETSTANDARD2_0
 using Nito.AsyncEx;
+#endif
 
 namespace AInq.Background.Workers;
 
@@ -68,7 +70,11 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
 
     async Task IHostedService.StopAsync(CancellationToken cancel)
     {
+#if NETSTANDARD2_0
         _shutdown.Cancel();
+#else
+        await _shutdown.CancelAsync().ConfigureAwait(false);
+#endif
         if (_worker != null)
             await _worker.WaitAsync(cancel).ConfigureAwait(false);
     }
@@ -82,7 +88,7 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
                 var pending = _scheduler.GetUpcomingTasks(_horizon + Beforehand);
                 foreach (var group in pending)
                 foreach (var work in group)
-                    ProcessWork(work, group.Key.ToLocalTime() - DateTime.Now, cancellation.Token).Ignore();
+                    _ = ProcessWork(work, group.Key.ToLocalTime() - DateTime.Now, cancellation.Token);
                 var timeout = _scheduler.GetNextTaskTime()?.ToLocalTime().Subtract(Beforehand).Subtract(DateTime.Now) ?? TimeSpan.MaxValue;
                 if (timeout < Beforehand)
                     continue;

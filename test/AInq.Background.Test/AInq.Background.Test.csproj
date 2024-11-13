@@ -3,7 +3,7 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <IsPackable>false</IsPackable>
-        <TargetFrameworks>net8.0</TargetFrameworks>
+        <TargetFramework>net9.0</TargetFramework>
         <RootNamespace>AInq.Background.Test</RootNamespace>
         <PublishAot>true</PublishAot>
     </PropertyGroup>

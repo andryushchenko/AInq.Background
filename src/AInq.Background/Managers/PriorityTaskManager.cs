@@ -13,6 +13,11 @@
 // limitations under the License.
 
 using AInq.Background.Wrappers;
+#if NETSTANDARD2_0
+using Nito.AsyncEx;
+#else
+using DotNext.Threading;
+#endif
 
 namespace AInq.Background.Managers;
 
@@ -38,7 +43,14 @@ public class PriorityTaskManager<TArgument> : ITaskManager<TArgument, int>
     bool ITaskManager<TArgument, int>.HasTask => _queues.Any(queue => !queue.IsEmpty);
 
     Task ITaskManager<TArgument, int>.WaitForTaskAsync(CancellationToken cancellation)
-        => _queues.Any(queue => !queue.IsEmpty) ? Task.CompletedTask : _newDataEvent.WaitAsync(cancellation);
+        => _queues.Any(queue => !queue.IsEmpty)
+            ? Task.CompletedTask
+#if NETSTANDARD2_0
+            : _newDataEvent.WaitAsync(cancellation);
+#else
+            : _newDataEvent.WaitAsync(cancellation).AsTask();
+#endif
+            
 
     (ITaskWrapper<TArgument>?, int) ITaskManager<TArgument, int>.GetTask()
     {
