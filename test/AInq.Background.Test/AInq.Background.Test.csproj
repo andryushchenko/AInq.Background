@@ -3,7 +3,8 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <IsPackable>false</IsPackable>
-        <TargetFramework>net9.0</TargetFramework>
+        <!--suppress MsbuildTargetFrameworkTagInspection -->
+        <TargetFrameworks>net9.0</TargetFrameworks>
         <RootNamespace>AInq.Background.Test</RootNamespace>
         <PublishAot>true</PublishAot>
     </PropertyGroup>
