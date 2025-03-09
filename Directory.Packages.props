@@ -22,7 +22,7 @@
         <PackageVersion Include="Nito.Disposables" Version="2.5.0" />
         <PackageVersion Include="DotNext.Threading" Version="5.19.1" />
         <PackageVersion Include="Cronos" Version="0.9.0" />
-        <PackageVersion Include="AInq.Optional" Version="3.7.1" />
+        <PackageVersion Include="AInq.Optional" Version="3.7.2" />
     </ItemGroup>
 
     <ItemGroup>
