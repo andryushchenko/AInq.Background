@@ -7,15 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.2" />
-        <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.2" />
-        <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.2" />
-        <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.2" />
-        <PackageVersion Include="System.Threading.Channels" Version="9.0.2" />
-        <PackageVersion Include="System.IO.Hashing" Version="9.0.2" />
-        <PackageVersion Include="System.Collections.Immutable" Version="9.0.2" />
-        <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.0" />
-        <PackageVersion Include="System.Memory" Version="4.6.0" />
+        <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.3" />
+        <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.3" />
+        <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.3" />
+        <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.3" />
+        <PackageVersion Include="System.Threading.Channels" Version="9.0.3" />
+        <PackageVersion Include="System.IO.Hashing" Version="9.0.3" />
+        <PackageVersion Include="System.Collections.Immutable" Version="9.0.3" />
+        <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.2" />
+        <PackageVersion Include="System.Memory" Version="4.6.2" />
         <PackageVersion Include="System.Linq.Async" Version="6.0.1" />
         <PackageVersion Include="Nito.AsyncEx.Coordination" Version="5.1.2" />
         <PackageVersion Include="Nito.Collections.Deque" Version="1.2.1" />
