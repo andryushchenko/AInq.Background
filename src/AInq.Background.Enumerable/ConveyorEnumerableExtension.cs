@@ -36,7 +36,9 @@ public static class ConveyorEnumerableExtension
     {
         _ = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
         var results = (data ?? throw new ArgumentNullException(nameof(data)))
+#if NETSTANDARD
                       .Where(item => item != null)
+#endif
                       .Select(item => conveyor.ProcessDataAsync(item, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
@@ -70,7 +72,9 @@ public static class ConveyorEnumerableExtension
     {
         _ = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
         var results = (data ?? throw new ArgumentNullException(nameof(data)))
+#if NETSTANDARD
                       .Where(item => item != null)
+#endif
                       .Select(item => conveyor.ProcessDataAsync(item, priority, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
@@ -112,7 +116,9 @@ public static class ConveyorEnumerableExtension
         try
         {
             await foreach (var item in data.WithCancellation(cancellation).ConfigureAwait(false))
+#if NETSTANDARD
                 if (item != null)
+#endif
                     await writer.WriteAsync(conveyor.ProcessDataAsync(item, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
@@ -159,7 +165,9 @@ public static class ConveyorEnumerableExtension
         try
         {
             await foreach (var item in data.WithCancellation(cancellation).ConfigureAwait(false))
+#if NETSTANDARD
                 if (item != null)
+#endif
                     await writer.WriteAsync(priorityConveyor.ProcessDataAsync(item, priority, attemptsCount, cancellation), cancellation)
                                 .ConfigureAwait(false);
         }

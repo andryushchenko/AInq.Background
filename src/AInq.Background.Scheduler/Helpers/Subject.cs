@@ -71,7 +71,7 @@ internal sealed class Subject<T> : IObservable<T>
             Subscriber[] subscribers;
             if (state.Value.Length == 1)
             {
-                subscribers = Array.Empty<Subscriber>();
+                subscribers = [];
             }
             else
             {

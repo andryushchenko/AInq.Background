@@ -37,7 +37,9 @@ public static class AccessQueueEnumerableExtension
     {
         _ = accessQueue ?? throw new ArgumentNullException(nameof(accessQueue));
         var results = (accesses ?? throw new ArgumentNullException(nameof(accesses)))
+#if NETSTANDARD
                       .Where(access => access != null)
+#endif
                       .Select(access => accessQueue.EnqueueAccess(access, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
@@ -71,7 +73,9 @@ public static class AccessQueueEnumerableExtension
     {
         _ = priorityAccessQueue ?? throw new ArgumentNullException(nameof(priorityAccessQueue));
         var results = (accesses ?? throw new ArgumentNullException(nameof(accesses)))
+#if NETSTANDARD
                       .Where(access => access != null)
+#endif
                       .Select(access => priorityAccessQueue.EnqueueAccess(access, priority, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
@@ -122,7 +126,9 @@ public static class AccessQueueEnumerableExtension
     {
         _ = accessQueue ?? throw new ArgumentNullException(nameof(accessQueue));
         var results = (asyncAccesses ?? throw new ArgumentNullException(nameof(asyncAccesses)))
+#if NETSTANDARD
                       .Where(access => access != null)
+#endif
                       .Select(access => accessQueue.EnqueueAsyncAccess(access, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
@@ -156,7 +162,9 @@ public static class AccessQueueEnumerableExtension
     {
         _ = priorityAccessQueue ?? throw new ArgumentNullException(nameof(priorityAccessQueue));
         var results = (asyncAccesses ?? throw new ArgumentNullException(nameof(asyncAccesses)))
+#if NETSTANDARD
                       .Where(access => access != null)
+#endif
                       .Select(access => priorityAccessQueue.EnqueueAsyncAccess(access, priority, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
@@ -203,7 +211,9 @@ public static class AccessQueueEnumerableExtension
         try
         {
             await foreach (var access in accesses.WithCancellation(cancellation).ConfigureAwait(false))
+#if NETSTANDARD
                 if (access != null)
+#endif
                     await writer.WriteAsync(accessQueue.EnqueueAccess(access, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
@@ -252,7 +262,9 @@ public static class AccessQueueEnumerableExtension
         try
         {
             await foreach (var access in accesses.WithCancellation(cancellation).ConfigureAwait(false))
+#if NETSTANDARD
                 if (access != null)
+#endif
                     await writer.WriteAsync(priorityAccessQueue.EnqueueAccess(access, priority, attemptsCount, cancellation), cancellation)
                                 .ConfigureAwait(false);
         }
@@ -313,7 +325,9 @@ public static class AccessQueueEnumerableExtension
         try
         {
             await foreach (var access in asyncAccesses.WithCancellation(cancellation).ConfigureAwait(false))
+#if NETSTANDARD
                 if (access != null)
+#endif
                     await writer.WriteAsync(accessQueue.EnqueueAsyncAccess(access, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
@@ -362,7 +376,9 @@ public static class AccessQueueEnumerableExtension
         try
         {
             await foreach (var access in asyncAccesses.WithCancellation(cancellation).ConfigureAwait(false))
+#if NETSTANDARD
                 if (access != null)
+#endif
                     await writer.WriteAsync(priorityAccessQueue.EnqueueAsyncAccess(access, priority, attemptsCount, cancellation), cancellation)
                                 .ConfigureAwait(false);
         }

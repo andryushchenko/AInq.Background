@@ -19,9 +19,9 @@ namespace AInq.Background.Helpers;
 /// <summary> Cron expression parsing utility </summary>
 public static class CronHelper
 {
-    private static readonly char[] Separators = {' '};
+    private static readonly char[] Separators = [' '];
 
-    /// <summary> Parse cron string with format auto detection </summary>
+    /// <summary> Parse cron string with format auto-detection </summary>
     /// <param name="cronExpression"> Cron string </param>
     /// <returns> <see cref="CronExpression" /> instance </returns>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>

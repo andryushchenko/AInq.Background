@@ -34,8 +34,10 @@ public static class WorkQueueEnumerableExtension
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
         var results = (works ?? throw new ArgumentNullException(nameof(works)))
+#if NETSTANDARD
                       .Where(work => work != null)
-                      .Select(work => queue.EnqueueWork(work, attemptsCount, cancellation));
+#endif
+            .Select(work => queue.EnqueueWork(work, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -64,8 +66,10 @@ public static class WorkQueueEnumerableExtension
     {
         _ = priorityQueue ?? throw new ArgumentNullException(nameof(priorityQueue));
         var results = (works ?? throw new ArgumentNullException(nameof(works)))
+#if NETSTANDARD
                       .Where(work => work != null)
-                      .Select(work => priorityQueue.EnqueueWork(work, priority, attemptsCount, cancellation));
+#endif
+            .Select(work => priorityQueue.EnqueueWork(work, priority, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -104,8 +108,10 @@ public static class WorkQueueEnumerableExtension
     {
         _ = queue ?? throw new ArgumentNullException(nameof(queue));
         var results = (asyncWorks ?? throw new ArgumentNullException(nameof(asyncWorks)))
+#if NETSTANDARD
                       .Where(work => work != null)
-                      .Select(work => queue.EnqueueAsyncWork(work, attemptsCount, cancellation));
+#endif
+            .Select(work => queue.EnqueueAsyncWork(work, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -135,8 +141,10 @@ public static class WorkQueueEnumerableExtension
     {
         _ = priorityQueue ?? throw new ArgumentNullException(nameof(priorityQueue));
         var results = (asyncWorks ?? throw new ArgumentNullException(nameof(asyncWorks)))
+#if NETSTANDARD
                       .Where(work => work != null)
-                      .Select(work => priorityQueue.EnqueueAsyncWork(work, priority, attemptsCount, cancellation));
+#endif
+            .Select(work => priorityQueue.EnqueueAsyncWork(work, priority, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -174,7 +182,9 @@ public static class WorkQueueEnumerableExtension
         try
         {
             await foreach (var work in works.WithCancellation(cancellation).ConfigureAwait(false))
+#if NETSTANDARD
                 if (work != null)
+#endif
                     await writer.WriteAsync(queue.EnqueueWork(work, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
@@ -218,7 +228,9 @@ public static class WorkQueueEnumerableExtension
         try
         {
             await foreach (var work in works.WithCancellation(cancellation).ConfigureAwait(false))
+#if NETSTANDARD
                 if (work != null)
+#endif
                     await writer.WriteAsync(priorityQueue.EnqueueWork(work, priority, attemptsCount, cancellation), cancellation)
                                 .ConfigureAwait(false);
         }
@@ -274,7 +286,9 @@ public static class WorkQueueEnumerableExtension
         try
         {
             await foreach (var work in asyncWorks.WithCancellation(cancellation).ConfigureAwait(false))
+#if NETSTANDARD
                 if (work != null)
+#endif
                     await writer.WriteAsync(queue.EnqueueAsyncWork(work, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
@@ -318,7 +332,9 @@ public static class WorkQueueEnumerableExtension
         try
         {
             await foreach (var work in asyncWorks.WithCancellation(cancellation).ConfigureAwait(false))
+#if NETSTANDARD
                 if (work != null)
+#endif
                     await writer.WriteAsync(priorityQueue.EnqueueAsyncWork(work, priority, attemptsCount, cancellation), cancellation)
                                 .ConfigureAwait(false);
         }
