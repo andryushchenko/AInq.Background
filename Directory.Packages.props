@@ -7,22 +7,35 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageVersion Include="System.Linq.Async" Version="6.0.1" />
+        <PackageVersion Include="Cronos" Version="0.9.0" />
+        <PackageVersion Include="AInq.Optional" Version="3.8.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0' or '$(TargetFramework)'=='netstandard2.1'">
+        <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
+        <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
+        <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+        <PackageVersion Include="System.Threading.Channels" Version="8.0.0" />
+        <PackageVersion Include="System.Collections.Immutable" Version="8.0.0" />
+        <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.2" />
+        <PackageVersion Include="System.Memory" Version="4.6.2" />
+        <PackageVersion Include="System.Buffers" Version="4.6.1" />
+        <PackageVersion Include="Nito.AsyncEx.Coordination" Version="5.1.2" />
+        <PackageVersion Include="Nito.Collections.Deque" Version="1.2.1" />
+        <PackageVersion Include="Nito.Disposables" Version="2.5.0" />
+        <PackageVersion Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.1" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'!='netstandard2.0' and '$(TargetFramework)'!='netstandard2.1'">
         <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.3" />
         <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.3" />
         <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.3" />
         <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.3" />
         <PackageVersion Include="System.Threading.Channels" Version="9.0.3" />
         <PackageVersion Include="System.IO.Hashing" Version="9.0.3" />
-        <PackageVersion Include="System.Collections.Immutable" Version="9.0.3" />
-        <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.2" />
-        <PackageVersion Include="System.Memory" Version="4.6.2" />
-        <PackageVersion Include="System.Linq.Async" Version="6.0.1" />
-        <PackageVersion Include="Nito.AsyncEx.Coordination" Version="5.1.2" />
-        <PackageVersion Include="Nito.Collections.Deque" Version="1.2.1" />
-        <PackageVersion Include="Nito.Disposables" Version="2.5.0" />
         <PackageVersion Include="DotNext.Threading" Version="5.20.0" />
-        <PackageVersion Include="Cronos" Version="0.9.0" />
-        <PackageVersion Include="AInq.Optional" Version="3.7.2" />
     </ItemGroup>
 
     <ItemGroup>

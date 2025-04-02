@@ -19,7 +19,7 @@ using System.Collections.Concurrent;
 using static AInq.Background.Wrappers.CronWorkWrapperFactory;
 using static AInq.Background.Wrappers.RepeatedWorkWrapperFactory;
 using static AInq.Background.Wrappers.ScheduledWorkWrapperFactory;
-#if NETSTANDARD2_0
+#if NETSTANDARD
 using Nito.AsyncEx;
 #else
 using DotNext.Threading;
@@ -34,7 +34,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     private ConcurrentBag<IScheduledTaskWrapper> _works = new();
 
     Task IWorkSchedulerManager.WaitForNewTaskAsync(CancellationToken cancellation)
-#if NETSTANDARD2_0
+#if NETSTANDARD
         => _newWorkEvent.WaitAsync(cancellation);
 #else
         => _newWorkEvent.WaitAsync(cancellation).AsTask();

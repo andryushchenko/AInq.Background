@@ -17,7 +17,7 @@ using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
-#if NETSTANDARD2_0
+#if NETSTANDARD
 using Nito.AsyncEx;
 #endif
 
@@ -70,7 +70,7 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
 
     async Task IHostedService.StopAsync(CancellationToken cancel)
     {
-#if NETSTANDARD2_0
+#if NETSTANDARD
         _shutdown.Cancel();
 #else
         await _shutdown.CancelAsync().ConfigureAwait(false);

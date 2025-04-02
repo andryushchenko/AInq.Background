@@ -15,7 +15,7 @@
 using AInq.Background.Helpers;
 using AInq.Background.Managers;
 using AInq.Background.Wrappers;
-#if NETSTANDARD2_0
+#if NETSTANDARD
 using Nito.AsyncEx;
 #else
 using DotNext.Threading;

@@ -3,7 +3,7 @@
     <Sdk Name="DotNet.ReproducibleBuilds.Isolated" Version="1.2.25" />
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net8.0;net9.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
         <Product>AInq.Background</Product>
         <Authors>Anton Andryushchenko</Authors>
         <RepositoryUrl>https://github.com/andryushchenko/AInq.Background</RepositoryUrl>
@@ -12,7 +12,7 @@
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
-        <IsAotCompatible Condition="'$(TargetFramework)'!='netstandard2.0'">true</IsAotCompatible>
+        <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
         <ImplicitUsings>enable</ImplicitUsings>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
