@@ -84,8 +84,7 @@ async Task EnumeratorTestAsync(IServiceProvider provider, CancellationToken canc
 {
     var conveyor = provider.GetRequiredService<IConveyor<int, int>>();
     conveyor = new ConveyorChain<int, int, int>(conveyor, conveyor);
-    await foreach (var result in conveyor.ProcessDataAsync(Enumerable.Range(1, 10).ToAsyncEnumerable(), cancellation: cancellation)
-                                         .ConfigureAwait(false))
+    await foreach (var result in conveyor.ProcessDataAsync(Enumerable.Range(1, 10), cancellation: cancellation).ConfigureAwait(false))
         Console.WriteLine($"{DateTime.Now:T}\tEnumerator test {result}");
 }
 
