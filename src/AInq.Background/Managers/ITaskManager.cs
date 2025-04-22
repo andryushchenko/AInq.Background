@@ -21,16 +21,16 @@ namespace AInq.Background.Managers;
 /// <typeparam name="TMetadata"> Task metadata type </typeparam>
 public interface ITaskManager<TArgument, TMetadata>
 {
-    /// <summary> Check if manager has pending tasks </summary>
+    /// <summary> Check if has pending tasks </summary>
     [PublicAPI]
     bool HasTask { get; }
 
-    /// <summary> Asynchronously wait wor pending tasks </summary>
+    /// <summary> Asynchronously wait for pending tasks </summary>
     /// <param name="cancellation"> Wait cancellation token </param>
     [PublicAPI]
     Task WaitForTaskAsync(CancellationToken cancellation = default);
 
-    /// <summary> Get first pending task </summary>
+    /// <summary> Get the first pending task </summary>
     /// <returns> Task wrapper and task metadata </returns>
     [PublicAPI]
     (ITaskWrapper<TArgument>?, TMetadata) GetTask();

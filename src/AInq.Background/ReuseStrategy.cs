@@ -20,7 +20,7 @@ public enum ReuseStrategy
     /// <summary> Generate once at startup and reuse </summary>
     Static,
 
-    /// <summary> Generate new for each actions batch, reuse in batch </summary>
+    /// <summary> Generate new for each action batch, reuse in batch </summary>
     Reuse,
 
     /// <summary> Generate new for each action </summary>

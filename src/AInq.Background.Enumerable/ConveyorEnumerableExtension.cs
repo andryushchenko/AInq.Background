@@ -21,7 +21,7 @@ public static class ConveyorEnumerableExtension
 
     /// <summary> Batch process data </summary>
     /// <param name="conveyor"> Conveyor instance </param>
-    /// <param name="data"> Data to process </param>
+    /// <param name="data"> Data to be processed </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="enqueueAll"> Option to enqueue all data first </param>
     /// <param name="cancellation"> Processing cancellation token </param>
@@ -55,7 +55,7 @@ public static class ConveyorEnumerableExtension
 
     /// <summary> Batch process data with giver <paramref name="priority" /> </summary>
     /// <param name="conveyor"> Conveyor instance </param>
-    /// <param name="data"> Data to process </param>
+    /// <param name="data"> Data to be processed </param>
     /// <param name="priority"> Operation priority </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="enqueueAll"> Option to enqueue all data first </param>

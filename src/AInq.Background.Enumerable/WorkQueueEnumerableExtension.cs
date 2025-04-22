@@ -21,7 +21,7 @@ public static class WorkQueueEnumerableExtension
 
     /// <summary> Batch process works </summary>
     /// <param name="queue"> Work Queue instance </param>
-    /// <param name="works"> Works to process </param>
+    /// <param name="works"> Works to be processed </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="enqueueAll"> Option to enqueue all data first </param>
     /// <param name="cancellation"> Processing cancellation token </param>
@@ -52,7 +52,7 @@ public static class WorkQueueEnumerableExtension
 
     /// <summary> Batch process works with giver <paramref name="priority" /> </summary>
     /// <param name="priorityQueue"> Work Queue instance </param>
-    /// <param name="works"> Works to process </param>
+    /// <param name="works"> Works to be processed </param>
     /// <param name="priority"> Operation priority </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="enqueueAll"> Option to enqueue all data first </param>
@@ -95,7 +95,7 @@ public static class WorkQueueEnumerableExtension
 
     /// <summary> Batch process asynchronous works </summary>
     /// <param name="queue"> Work Queue instance </param>
-    /// <param name="asyncWorks"> Works to process </param>
+    /// <param name="asyncWorks"> Works to be processed </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="enqueueAll"> Option to enqueue all data first </param>
     /// <param name="cancellation"> Processing cancellation token </param>
@@ -126,7 +126,7 @@ public static class WorkQueueEnumerableExtension
 
     /// <summary> Batch process works asynchronous with giver <paramref name="priority" /> </summary>
     /// <param name="priorityQueue"> Work Queue instance </param>
-    /// <param name="asyncWorks"> Works to process </param>
+    /// <param name="asyncWorks"> Works to be processed </param>
     /// <param name="priority"> Operation priority </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="enqueueAll"> Option to enqueue all data first </param>

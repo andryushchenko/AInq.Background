@@ -21,7 +21,7 @@ public static class AccessQueueEnumerableExtension
 
     /// <summary> Batch process access actions </summary>
     /// <param name="accessQueue"> Access Queue instance </param>
-    /// <param name="accesses"> Access actions to process </param>
+    /// <param name="accesses"> Access actions to be processed </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="enqueueAll"> Option to enqueue all data first </param>
     /// <param name="cancellation"> Processing cancellation token </param>
@@ -56,7 +56,7 @@ public static class AccessQueueEnumerableExtension
 
     /// <summary> Batch process access actions with giver <paramref name="priority" /> </summary>
     /// <param name="priorityAccessQueue"> Access Queue instance </param>
-    /// <param name="accesses"> Access actions to process </param>
+    /// <param name="accesses"> Access actions to be processed </param>
     /// <param name="priority"> Operation priority </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="enqueueAll"> Option to enqueue all data first </param>
@@ -110,7 +110,7 @@ public static class AccessQueueEnumerableExtension
 
     /// <summary> Batch process asynchronous access actions </summary>
     /// <param name="accessQueue"> Access Queue instance </param>
-    /// <param name="asyncAccesses"> Access actions to process </param>
+    /// <param name="asyncAccesses"> Access actions to be processed </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="enqueueAll"> Option to enqueue all data first </param>
     /// <param name="cancellation"> Processing cancellation token </param>
@@ -145,7 +145,7 @@ public static class AccessQueueEnumerableExtension
 
     /// <summary> Batch process asynchronous access actions with giver <paramref name="priority" /> </summary>
     /// <param name="priorityAccessQueue"> Access Queue instance </param>
-    /// <param name="asyncAccesses"> Access actions to process </param>
+    /// <param name="asyncAccesses"> Access actions to be processed </param>
     /// <param name="priority"> Operation priority </param>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="enqueueAll"> Option to enqueue all data first </param>
