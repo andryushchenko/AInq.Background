@@ -13,11 +13,7 @@
 // limitations under the License.
 
 using AInq.Background.Wrappers;
-#if NETSTANDARD
-using Nito.AsyncEx;
-#else
 using DotNext.Threading;
-#endif
 
 namespace AInq.Background.Managers;
 
@@ -32,7 +28,9 @@ public class TaskManager<TArgument> : ITaskManager<TArgument, object?>
 
     Task ITaskManager<TArgument, object?>.WaitForTaskAsync(CancellationToken cancellation)
         => _queue.IsEmpty
-#if NETSTANDARD
+#if NETSTANDARD2_0
+            ? _newDataEvent.Wait(cancellation)
+#elif NETSTANDARD2_1
             ? _newDataEvent.WaitAsync(cancellation)
 #else
             ? _newDataEvent.WaitAsync(cancellation).AsTask()

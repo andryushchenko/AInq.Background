@@ -15,15 +15,11 @@
 using AInq.Background.Helpers;
 using AInq.Background.Services;
 using AInq.Background.Wrappers;
+using DotNext.Threading;
 using System.Collections.Concurrent;
 using static AInq.Background.Wrappers.CronWorkWrapperFactory;
 using static AInq.Background.Wrappers.RepeatedWorkWrapperFactory;
 using static AInq.Background.Wrappers.ScheduledWorkWrapperFactory;
-#if NETSTANDARD
-using Nito.AsyncEx;
-#else
-using DotNext.Threading;
-#endif
 
 namespace AInq.Background.Managers;
 
@@ -31,15 +27,16 @@ namespace AInq.Background.Managers;
 public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
 {
     private readonly AsyncAutoResetEvent _newWorkEvent = new(false);
-    private ConcurrentBag<IScheduledTaskWrapper> _works = new();
+    private ConcurrentBag<IScheduledTaskWrapper> _works = [];
 
     Task IWorkSchedulerManager.WaitForNewTaskAsync(CancellationToken cancellation)
-#if NETSTANDARD
+#if NETSTANDARD2_0
+        => _newWorkEvent.Wait(cancellation);
+#elif NETSTANDARD2_1
         => _newWorkEvent.WaitAsync(cancellation);
 #else
         => _newWorkEvent.WaitAsync(cancellation).AsTask();
 #endif
-        
 
     DateTime? IWorkSchedulerManager.GetNextTaskTime()
     {

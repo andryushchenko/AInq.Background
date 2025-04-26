@@ -18,7 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
 #if NETSTANDARD
-using Nito.AsyncEx;
+using DotNext.Threading.Tasks;
 #endif
 
 namespace AInq.Background.Workers;
@@ -70,13 +70,17 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
 
     async Task IHostedService.StopAsync(CancellationToken cancel)
     {
-#if NETSTANDARD
-        _shutdown.Cancel();
-#else
+#if NET8_0_OR_GREATER
         await _shutdown.CancelAsync().ConfigureAwait(false);
+#else
+        _shutdown.Cancel();
 #endif
         if (_worker != null)
+#if NETSTANDARD
+            await _worker.WaitAsync(TimeSpan.MaxValue, cancel).ConfigureAwait(false);
+#else
             await _worker.WaitAsync(cancel).ConfigureAwait(false);
+#endif
     }
 
     private async Task Worker(CancellationToken abort)

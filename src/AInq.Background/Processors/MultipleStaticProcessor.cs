@@ -15,11 +15,7 @@
 using AInq.Background.Helpers;
 using AInq.Background.Managers;
 using AInq.Background.Wrappers;
-#if NETSTANDARD
-using Nito.AsyncEx;
-#else
 using DotNext.Threading;
-#endif
 
 namespace AInq.Background.Processors;
 
@@ -59,7 +55,11 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
             if (!_active.TryTake(out var argument) && !_inactive.TryTake(out argument))
             {
                 if (_active.IsEmpty && _inactive.IsEmpty)
+#if NETSTANDARD
+                    await _reset.Wait(cancellation).ConfigureAwait(false);
+#else
                     await _reset.WaitAsync(cancellation).ConfigureAwait(false);
+#endif
                 continue;
             }
             var (task, metadata) = manager.GetTask();

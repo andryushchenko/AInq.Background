@@ -15,11 +15,7 @@
 using AInq.Background.Helpers;
 using AInq.Background.Managers;
 using AInq.Background.Wrappers;
-#if NETSTANDARD
-using Nito.AsyncEx;
-#else
 using DotNext.Threading;
-#endif
 
 namespace AInq.Background.Processors;
 
@@ -64,7 +60,11 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                 else
                 {
                     if (_reusable.IsEmpty)
+#if NETSTANDARD
+                        await _reset.Wait(cancellation).ConfigureAwait(false);
+#else
                         await _reset.WaitAsync(cancellation).ConfigureAwait(false);
+#endif
                     continue;
                 }
             }
