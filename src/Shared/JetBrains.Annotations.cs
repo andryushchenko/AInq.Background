@@ -23,14 +23,16 @@ SOFTWARE. */
 #nullable disable
 
 using System;
-// ReSharper disable UnusedType.Global
-
 #pragma warning disable 1591
+// ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable IntroduceOptionalParameters.Global
 // ReSharper disable MemberCanBeProtected.Global
+// ReSharper disable ConvertToPrimaryConstructor
+// ReSharper disable RedundantTypeDeclarationBody
+// ReSharper disable ArrangeNamespaceBody
 // ReSharper disable InconsistentNaming
 
 namespace JetBrains.Annotations
@@ -662,6 +664,18 @@ internal sealed class MustUseReturnValueAttribute : Attribute
     }
 
     [CanBeNull] public string Justification { get; }
+
+    /// <summary>
+    /// Enables the special handling of the "fluent" APIs that perform mutations and return 'this' object.
+    /// In this case the analysis checks the fluent invocations chain and only warns if the initial receiver value
+    /// is probably a temporary value - in this case the very last fluent method return assumed to be temporary as well,
+    /// therefore is a subject of warning if unused. If the initial receiver is a local variable or 'this' reference
+    /// the analysis assumes that fluent invocations were used to mutate the existing value and warning will not be shown.
+    /// </summary>
+    /// <remarks>
+    /// This property must only be used for methods with the return type matching the receiver type.
+    /// </remarks>
+    public bool IsFluentBuilderMethod { get; set; }
   }
 
   /// <summary>
@@ -1047,7 +1061,7 @@ internal enum InjectedLanguage
   /// {
   /// }
   /// </code></example>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
+  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.ReturnValue)]
 internal sealed class LanguageInjectionAttribute : Attribute
   {
     public LanguageInjectionAttribute(InjectedLanguage injectedLanguage)
