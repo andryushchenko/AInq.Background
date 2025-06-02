@@ -8,7 +8,7 @@
 
     <ItemGroup>
         <PackageVersion Include="Cronos" Version="0.11.0" />
-        <PackageVersion Include="AInq.Optional" Version="3.8.3" />       
+        <PackageVersion Include="AInq.Optional" Version="3.8.4" />       
         <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
         <PackageVersion Include="System.Memory" Version="4.6.3" />
         <PackageVersion Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
