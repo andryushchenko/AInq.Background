@@ -34,7 +34,7 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)'=='net8.0' or '$(TargetFramework)'=='net9.0'">
-        <PackageVersion Include="DotNext.Threading" Version="5.25.1" />
+        <PackageVersion Include="DotNext.Threading" Version="5.25.2" />
         <PackageVersion Include="System.IO.Hashing" Version="9.0.9" />
         <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.9" />
     </ItemGroup>
