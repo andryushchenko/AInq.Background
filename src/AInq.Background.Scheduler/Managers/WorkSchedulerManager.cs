@@ -30,17 +30,15 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     private ConcurrentBag<IScheduledTaskWrapper> _works = [];
 
     Task IWorkSchedulerManager.WaitForNewTaskAsync(CancellationToken cancellation)
-#if NETSTANDARD2_0
+#if NETSTANDARD
         => _newWorkEvent.Wait(cancellation);
-#elif NETSTANDARD2_1
-        => _newWorkEvent.WaitAsync(cancellation);
 #else
         => _newWorkEvent.WaitAsync(cancellation).AsTask();
 #endif
 
     DateTime? IWorkSchedulerManager.GetNextTaskTime()
     {
-        var works = Interlocked.Exchange(ref _works, new ConcurrentBag<IScheduledTaskWrapper>());
+        var works = Interlocked.Exchange(ref _works, []);
         DateTime? next = null;
         while (!works.IsEmpty)
             if (works.TryTake(out var work) && work is {IsCanceled: false, NextScheduledTime: not null})
@@ -54,7 +52,7 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
 
     ILookup<DateTime, IScheduledTaskWrapper> IWorkSchedulerManager.GetUpcomingTasks(TimeSpan horizon)
     {
-        var works = Interlocked.Exchange(ref _works, new ConcurrentBag<IScheduledTaskWrapper>());
+        var works = Interlocked.Exchange(ref _works, []);
         var upcoming = new LinkedList<IScheduledTaskWrapper>();
         var time = DateTime.Now.Add(horizon);
         while (!works.IsEmpty)

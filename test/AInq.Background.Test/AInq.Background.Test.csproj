@@ -4,7 +4,7 @@
         <OutputType>Exe</OutputType>
         <IsPackable>false</IsPackable>
         <!--suppress MsbuildTargetFrameworkTagInspection -->
-        <TargetFrameworks>net9.0</TargetFrameworks>
+        <TargetFrameworks>net10.0</TargetFrameworks>
         <RootNamespace>AInq.Background.Test</RootNamespace>
         <PublishAot>true</PublishAot>
     </PropertyGroup>

@@ -28,10 +28,8 @@ public class TaskManager<TArgument> : ITaskManager<TArgument, object?>
 
     Task ITaskManager<TArgument, object?>.WaitForTaskAsync(CancellationToken cancellation)
         => _queue.IsEmpty
-#if NETSTANDARD2_0
+#if NETSTANDARD
             ? _newDataEvent.Wait(cancellation)
-#elif NETSTANDARD2_1
-            ? _newDataEvent.WaitAsync(cancellation)
 #else
             ? _newDataEvent.WaitAsync(cancellation).AsTask()
 #endif

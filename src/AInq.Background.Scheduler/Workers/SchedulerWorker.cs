@@ -70,10 +70,10 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
 
     async Task IHostedService.StopAsync(CancellationToken cancel)
     {
-#if NET8_0_OR_GREATER
-        await _shutdown.CancelAsync().ConfigureAwait(false);
-#else
+#if NETSTANDARD
         _shutdown.Cancel();
+#else
+        await _shutdown.CancelAsync().ConfigureAwait(false);
 #endif
         if (_worker != null)
 #if NETSTANDARD

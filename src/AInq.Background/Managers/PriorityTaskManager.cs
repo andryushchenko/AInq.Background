@@ -41,10 +41,8 @@ public class PriorityTaskManager<TArgument> : ITaskManager<TArgument, int>
     Task ITaskManager<TArgument, int>.WaitForTaskAsync(CancellationToken cancellation)
         => _queues.Any(queue => !queue.IsEmpty)
             ? Task.CompletedTask
-#if NETSTANDARD2_0
+#if NETSTANDARD
             : _newDataEvent.Wait(cancellation);
-#elif NETSTANDARD2_1
-            : _newDataEvent.WaitAsync(cancellation);
 #else
             : _newDataEvent.WaitAsync(cancellation).AsTask();
 #endif
