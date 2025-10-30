@@ -6,14 +6,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="..\Shared\ServiceProviderHelper.cs" Link="Helpers\ServiceProviderHelper.cs" />
-        <Compile Include="..\Shared\InjectedWorkFactory.cs" Link="Tasks\InjectedWorkFactory.cs" />
-        <Compile Include="..\Shared\InjectedAccessFactory.cs" Link="Tasks\InjectedAccessFactory.cs" />
-        <Compile Include="..\Shared\QueuedAccessFactory.cs" Link="Tasks\QueuedAccessFactory.cs" />
+        <Compile Include="..\Shared\ServiceProviderHelper.cs" Link="Helpers\ServiceProviderHelper.cs"/>
+        <Compile Include="..\Shared\InjectedWorkFactory.cs" Link="Tasks\InjectedWorkFactory.cs"/>
+        <Compile Include="..\Shared\InjectedAccessFactory.cs" Link="Tasks\InjectedAccessFactory.cs"/>
+        <Compile Include="..\Shared\QueuedAccessFactory.cs" Link="Tasks\QueuedAccessFactory.cs"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="AInq.Background.Helpers" />
+        <Using Include="AInq.Background.Helpers"/>
     </ItemGroup>
 
 </Project>

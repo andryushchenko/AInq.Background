@@ -53,143 +53,72 @@ internal static class QueuedAccessFactory
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
         => new QueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(priority, attemptsCount);
 
-    private class QueuedAccess<TResource> : IAsyncWork
+    private class QueuedAccess<TResource>(IAccess<TResource> access, int priority, int attemptsCount) : IAsyncWork
         where TResource : notnull
     {
-        private readonly IAccess<TResource> _access;
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-
-        public QueuedAccess(IAccess<TResource> access, int priority, int attemptsCount)
-        {
-            _access = access ?? throw new ArgumentNullException(nameof(access));
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
+        private readonly IAccess<TResource> _access = access ?? throw new ArgumentNullException(nameof(access));
 
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAccess(_access, _priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueAccess(_access, priority, attemptsCount, cancellation);
     }
 
-    private class QueuedAccess<TResource, TResult> : IAsyncWork<TResult>
+    private class QueuedAccess<TResource, TResult>(IAccess<TResource, TResult> access, int priority, int attemptsCount) : IAsyncWork<TResult>
         where TResource : notnull
     {
-        private readonly IAccess<TResource, TResult> _access;
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-
-        public QueuedAccess(IAccess<TResource, TResult> access, int priority, int attemptsCount)
-        {
-            _access = access ?? throw new ArgumentNullException(nameof(access));
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
+        private readonly IAccess<TResource, TResult> _access = access ?? throw new ArgumentNullException(nameof(access));
 
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAccess(_access, _priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueAccess(_access, priority, attemptsCount, cancellation);
     }
 
-    private class QueuedAsyncAccess<TResource> : IAsyncWork
+    private class QueuedAsyncAccess<TResource>(IAsyncAccess<TResource> asyncAccess, int priority, int attemptsCount) : IAsyncWork
         where TResource : notnull
     {
-        private readonly IAsyncAccess<TResource> _asyncAccess;
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-
-        public QueuedAsyncAccess(IAsyncAccess<TResource> asyncAccess, int priority, int attemptsCount)
-        {
-            _asyncAccess = asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess));
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
+        private readonly IAsyncAccess<TResource> _asyncAccess = asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess));
 
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncAccess(_asyncAccess, _priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueAsyncAccess(_asyncAccess, priority, attemptsCount, cancellation);
     }
 
-    private class QueuedAsyncAccess<TResource, TResult> : IAsyncWork<TResult>
+    private class QueuedAsyncAccess<TResource, TResult>(IAsyncAccess<TResource, TResult> asyncAccess, int priority, int attemptsCount)
+        : IAsyncWork<TResult>
         where TResource : notnull
     {
-        private readonly IAsyncAccess<TResource, TResult> _asyncAccess;
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-
-        public QueuedAsyncAccess(IAsyncAccess<TResource, TResult> asyncAccess, int priority, int attemptsCount)
-        {
-            _asyncAccess = asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess));
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
+        private readonly IAsyncAccess<TResource, TResult> _asyncAccess = asyncAccess ?? throw new ArgumentNullException(nameof(asyncAccess));
 
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncAccess(_asyncAccess, _priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueAsyncAccess(_asyncAccess, priority, attemptsCount, cancellation);
     }
 
-    private class QueuedInjectedAccess<TResource, TAccess> : IAsyncWork
+    private class QueuedInjectedAccess<TResource, TAccess>(int priority, int attemptsCount) : IAsyncWork
         where TResource : notnull
         where TAccess : IAccess<TResource>
     {
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-
-        public QueuedInjectedAccess(int priority, int attemptsCount)
-        {
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
-
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAccess<TResource, TAccess>(_priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueAccess<TResource, TAccess>(priority, attemptsCount, cancellation);
     }
 
-    private class QueuedInjectedAccess<TResource, TAccess, TResult> : IAsyncWork<TResult>
+    private class QueuedInjectedAccess<TResource, TAccess, TResult>(int priority, int attemptsCount) : IAsyncWork<TResult>
         where TResource : notnull
         where TAccess : IAccess<TResource, TResult>
     {
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-
-        public QueuedInjectedAccess(int priority, int attemptsCount)
-        {
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
-
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAccess<TResource, TAccess, TResult>(_priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueAccess<TResource, TAccess, TResult>(priority, attemptsCount, cancellation);
     }
 
-    private class QueuedInjectedAsyncAccess<TResource, TAsyncAccess> : IAsyncWork
+    private class QueuedInjectedAsyncAccess<TResource, TAsyncAccess>(int priority, int attemptsCount) : IAsyncWork
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource>
     {
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-
-        public QueuedInjectedAsyncAccess(int priority, int attemptsCount)
-        {
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
-
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncAccess<TResource, TAsyncAccess>(_priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueAsyncAccess<TResource, TAsyncAccess>(priority, attemptsCount, cancellation);
     }
 
-    private class QueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult> : IAsyncWork<TResult>
+    private class QueuedInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(int priority, int attemptsCount) : IAsyncWork<TResult>
         where TResource : notnull
         where TAsyncAccess : IAsyncAccess<TResource, TResult>
     {
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-
-        public QueuedInjectedAsyncAccess(int priority, int attemptsCount)
-        {
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
-
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(_priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(priority, attemptsCount, cancellation);
     }
 }

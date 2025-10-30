@@ -29,12 +29,8 @@ public sealed class WorkSchedulerManager : IWorkScheduler, IWorkSchedulerManager
     private readonly AsyncAutoResetEvent _newWorkEvent = new(false);
     private ConcurrentBag<IScheduledTaskWrapper> _works = [];
 
-    Task IWorkSchedulerManager.WaitForNewTaskAsync(CancellationToken cancellation)
-#if NETSTANDARD
-        => _newWorkEvent.Wait(cancellation);
-#else
-        => _newWorkEvent.WaitAsync(cancellation).AsTask();
-#endif
+    ValueTask IWorkSchedulerManager.WaitForNewTaskAsync(CancellationToken cancellation)
+        => _newWorkEvent.WaitAsync(cancellation);
 
     DateTime? IWorkSchedulerManager.GetNextTaskTime()
     {

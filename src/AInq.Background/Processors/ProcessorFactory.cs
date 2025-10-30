@@ -26,15 +26,12 @@ public static class ProcessorFactory
     /// <returns> Task processor instance </returns>
     [PublicAPI]
     public static ITaskProcessor<object?, TMetadata> CreateNullProcessor<TMetadata>(int maxParallelTasks = 1)
-        => maxParallelTasks <= 1
-            ? new SingleNullProcessor<TMetadata>()
-            : new MultipleNullProcessor<TMetadata>(maxParallelTasks);
+        => maxParallelTasks <= 1 ? new SingleNullProcessor<TMetadata>() : new MultipleNullProcessor<TMetadata>(maxParallelTasks);
 
     /// <summary> Create task processor with single static argument </summary>
     /// <param name="argument"> Task argument </param>
     /// <typeparam name="TArgument"> Task argument type </typeparam>
     /// <typeparam name="TMetadata"> Task metadata type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="argument" /> is NULL </exception>
     /// <returns> Task processor instance </returns>
     [PublicAPI]
     public static ITaskProcessor<TArgument, TMetadata> CreateProcessor<TArgument, TMetadata>(TArgument argument)
@@ -44,7 +41,6 @@ public static class ProcessorFactory
     /// <param name="arguments"> Task arguments collection </param>
     /// <typeparam name="TArgument"> Task argument type </typeparam>
     /// <typeparam name="TMetadata"> Task metadata type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="arguments" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="arguments" /> is empty collection </exception>
     /// <returns> Task processor instance </returns>
     [PublicAPI]
@@ -66,7 +62,6 @@ public static class ProcessorFactory
     /// <param name="maxArgumentsCount"> Max allowed argument instances </param>
     /// <typeparam name="TArgument"> Task argument type </typeparam>
     /// <typeparam name="TMetadata"> Task metadata type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="argumentFactory" /> or <paramref name="provider" /> (if used) is NULL </exception>
     /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
     /// <returns> Task processor instance </returns>
     [PublicAPI]

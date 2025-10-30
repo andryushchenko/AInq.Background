@@ -20,139 +20,125 @@ namespace AInq.Background.Extensions;
 /// <summary> <see cref="IAccessQueue{TResource}" /> and <see cref="IPriorityAccessQueue{T}" /> extensions to enqueue access action from DI </summary>
 public static class AccessQueueDependencyInjectionExtension
 {
-#region BaseDI
-
-    /// <summary> Enqueue access action </summary>
     /// <param name="queue"> Access queue instance </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TAccess"> Access action type </typeparam>
-    /// <returns> Access action completion task </returns>
-    [PublicAPI]
-    public static Task EnqueueAccess<TResource, TAccess>(this IAccessQueue<TResource> queue, int attemptsCount = 1,
-        CancellationToken cancellation = default)
+    extension<TResource>(IAccessQueue<TResource> queue)
         where TResource : notnull
-        where TAccess : IAccess<TResource>
-        => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueAccess(CreateInjectedAccess<TResource, TAccess>(), attemptsCount, cancellation);
+    {
+        /// <summary> Enqueue access action </summary>
+        /// <param name="attemptsCount"> Retry on fail attempts count </param>
+        /// <param name="cancellation"> Access cancellation token </param>
+        /// <typeparam name="TAccess"> Access action type </typeparam>
+        /// <returns> Access action completion task </returns>
+        [PublicAPI]
+        public Task EnqueueAccess<TAccess>(int attemptsCount = 1, CancellationToken cancellation = default)
+            where TAccess : IAccess<TResource>
+            => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAccess(CreateInjectedAccess<TResource, TAccess>(),
+                attemptsCount,
+                cancellation);
 
-    /// <summary> Enqueue access action </summary>
+        /// <summary> Enqueue access action </summary>
+        /// <param name="attemptsCount"> Retry on fail attempts count </param>
+        /// <param name="cancellation"> Access cancellation token </param>
+        /// <typeparam name="TAccess"> Access action type </typeparam>
+        /// <typeparam name="TResult"> Access action result type </typeparam>
+        /// <returns> Access action result task </returns>
+        [PublicAPI]
+        public Task<TResult> EnqueueAccess<TAccess, TResult>(int attemptsCount = 1, CancellationToken cancellation = default)
+            where TAccess : IAccess<TResource, TResult>
+            => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAccess(CreateInjectedAccess<TResource, TAccess, TResult>(),
+                attemptsCount,
+                cancellation);
+
+        /// <summary> Enqueue asynchronous access action </summary>
+        /// <param name="attemptsCount"> Retry on fail attempts count </param>
+        /// <param name="cancellation"> Access cancellation token </param>
+        /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
+        /// <returns> Access action completion task </returns>
+        [PublicAPI]
+        public Task EnqueueAsyncAccess<TAsyncAccess>(int attemptsCount = 1, CancellationToken cancellation = default)
+            where TAsyncAccess : IAsyncAccess<TResource>
+            => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(CreateInjectedAsyncAccess<TResource, TAsyncAccess>(),
+                attemptsCount,
+                cancellation);
+
+        /// <summary> Enqueue asynchronous access action </summary>
+        /// <param name="attemptsCount"> Retry on fail attempts count </param>
+        /// <param name="cancellation"> Access cancellation token </param>
+        /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
+        /// <typeparam name="TResult"> Access action result type </typeparam>
+        /// <returns> Access action result task </returns>
+        [PublicAPI]
+        public Task<TResult> EnqueueAsyncAccess<TAsyncAccess, TResult>(int attemptsCount = 1, CancellationToken cancellation = default)
+            where TAsyncAccess : IAsyncAccess<TResource, TResult>
+            => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(
+                CreateInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(),
+                attemptsCount,
+                cancellation);
+    }
+
     /// <param name="queue"> Access queue instance </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TAccess"> Access action type </typeparam>
-    /// <typeparam name="TResult"> Access action result type </typeparam>
-    /// <returns> Access action result task </returns>
-    [PublicAPI]
-    public static Task<TResult> EnqueueAccess<TResource, TAccess, TResult>(this IAccessQueue<TResource> queue, int attemptsCount = 1,
-        CancellationToken cancellation = default)
+    extension<TResource>(IPriorityAccessQueue<TResource> queue)
         where TResource : notnull
-        where TAccess : IAccess<TResource, TResult>
-        => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueAccess(CreateInjectedAccess<TResource, TAccess, TResult>(), attemptsCount, cancellation);
+    {
+        /// <summary> Enqueue access action </summary>
+        /// <param name="priority"> Access action priority </param>
+        /// <param name="attemptsCount"> Retry on fail attempts count </param>
+        /// <param name="cancellation"> Access cancellation token </param>
+        /// <typeparam name="TAccess"> Access action type </typeparam>
+        /// <returns> Access action completion task </returns>
+        [PublicAPI]
+        public Task EnqueueAccess<TAccess>(int priority, int attemptsCount = 1, CancellationToken cancellation = default)
+            where TAccess : IAccess<TResource>
+            => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAccess(CreateInjectedAccess<TResource, TAccess>(),
+                priority,
+                attemptsCount,
+                cancellation);
 
-    /// <summary> Enqueue asynchronous access action </summary>
-    /// <param name="queue"> Access queue instance </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
-    /// <returns> Access action completion task </returns>
-    [PublicAPI]
-    public static Task EnqueueAsyncAccess<TResource, TAsyncAccess>(this IAccessQueue<TResource> queue, int attemptsCount = 1,
-        CancellationToken cancellation = default)
-        where TResource : notnull
-        where TAsyncAccess : IAsyncAccess<TResource>
-        => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueAsyncAccess(CreateInjectedAsyncAccess<TResource, TAsyncAccess>(), attemptsCount, cancellation);
+        /// <summary> Enqueue access action </summary>
+        /// <param name="priority"> Access action priority </param>
+        /// <param name="attemptsCount"> Retry on fail attempts count </param>
+        /// <param name="cancellation"> Access cancellation token </param>
+        /// <typeparam name="TAccess"> Access action type </typeparam>
+        /// <typeparam name="TResult"> Access action result type </typeparam>
+        /// <returns> Access action result task </returns>
+        [PublicAPI]
+        public Task<TResult> EnqueueAccess<TAccess, TResult>(int priority, int attemptsCount = 1, CancellationToken cancellation = default)
+            where TAccess : IAccess<TResource, TResult>
+            => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAccess(CreateInjectedAccess<TResource, TAccess, TResult>(),
+                priority,
+                attemptsCount,
+                cancellation);
 
-    /// <summary> Enqueue asynchronous access action </summary>
-    /// <param name="queue"> Access queue instance </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
-    /// <typeparam name="TResult"> Access action result type </typeparam>
-    /// <returns> Access action result task </returns>
-    [PublicAPI]
-    public static Task<TResult> EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(this IAccessQueue<TResource> queue, int attemptsCount = 1,
-        CancellationToken cancellation = default)
-        where TResource : notnull
-        where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueAsyncAccess(CreateInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(), attemptsCount, cancellation);
+        /// <summary> Enqueue asynchronous access action </summary>
+        /// <param name="priority"> Access action priority </param>
+        /// <param name="attemptsCount"> Retry on fail attempts count </param>
+        /// <param name="cancellation"> Access cancellation token </param>
+        /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
+        /// <returns> Access action completion task </returns>
+        [PublicAPI]
+        public Task EnqueueAsyncAccess<TAsyncAccess>(int priority, int attemptsCount = 1, CancellationToken cancellation = default)
+            where TAsyncAccess : IAsyncAccess<TResource>
+            => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(CreateInjectedAsyncAccess<TResource, TAsyncAccess>(),
+                priority,
+                attemptsCount,
+                cancellation);
 
-#endregion
-
-#region PriorityDI
-
-    /// <summary> Enqueue access action </summary>
-    /// <param name="queue"> Access queue instance </param>
-    /// <param name="priority"> Access action priority </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TAccess"> Access action type </typeparam>
-    /// <returns> Access action completion task </returns>
-    [PublicAPI]
-    public static Task EnqueueAccess<TResource, TAccess>(this IPriorityAccessQueue<TResource> queue, int priority, int attemptsCount = 1,
-        CancellationToken cancellation = default)
-        where TResource : notnull
-        where TAccess : IAccess<TResource>
-        => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueAccess(CreateInjectedAccess<TResource, TAccess>(), priority, attemptsCount, cancellation);
-
-    /// <summary> Enqueue access action </summary>
-    /// <param name="queue"> Access queue instance </param>
-    /// <param name="priority"> Access action priority </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TAccess"> Access action type </typeparam>
-    /// <typeparam name="TResult"> Access action result type </typeparam>
-    /// <returns> Access action result task </returns>
-    [PublicAPI]
-    public static Task<TResult> EnqueueAccess<TResource, TAccess, TResult>(this IPriorityAccessQueue<TResource> queue, int priority,
-        int attemptsCount = 1, CancellationToken cancellation = default)
-        where TResource : notnull
-        where TAccess : IAccess<TResource, TResult>
-        => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueAccess(CreateInjectedAccess<TResource, TAccess, TResult>(), priority, attemptsCount, cancellation);
-
-    /// <summary> Enqueue asynchronous access action </summary>
-    /// <param name="queue"> Access queue instance </param>
-    /// <param name="priority"> Access action priority </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
-    /// <returns> Access action completion task </returns>
-    [PublicAPI]
-    public static Task EnqueueAsyncAccess<TResource, TAsyncAccess>(this IPriorityAccessQueue<TResource> queue, int priority, int attemptsCount = 1,
-        CancellationToken cancellation = default)
-        where TResource : notnull
-        where TAsyncAccess : IAsyncAccess<TResource>
-        => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueAsyncAccess(CreateInjectedAsyncAccess<TResource, TAsyncAccess>(), priority, attemptsCount, cancellation);
-
-    /// <summary> Enqueue asynchronous access action </summary>
-    /// <param name="queue"> Access queue instance </param>
-    /// <param name="priority"> Access action priority </param>
-    /// <param name="attemptsCount"> Retry on fail attempts count </param>
-    /// <param name="cancellation"> Access cancellation token </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
-    /// <typeparam name="TResult"> Access action result type </typeparam>
-    /// <returns> Access action result task </returns>
-    [PublicAPI]
-    public static Task<TResult> EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(this IPriorityAccessQueue<TResource> queue, int priority,
-        int attemptsCount = 1, CancellationToken cancellation = default)
-        where TResource : notnull
-        where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => (queue ?? throw new ArgumentNullException(nameof(queue)))
-            .EnqueueAsyncAccess(CreateInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(), priority, attemptsCount, cancellation);
-
-#endregion
+        /// <summary> Enqueue asynchronous access action </summary>
+        /// <param name="priority"> Access action priority </param>
+        /// <param name="attemptsCount"> Retry on fail attempts count </param>
+        /// <param name="cancellation"> Access cancellation token </param>
+        /// <typeparam name="TAsyncAccess"> Access action type </typeparam>
+        /// <typeparam name="TResult"> Access action result type </typeparam>
+        /// <returns> Access action result task </returns>
+        [PublicAPI]
+        public Task<TResult> EnqueueAsyncAccess<TAsyncAccess, TResult>(int priority, int attemptsCount = 1, CancellationToken cancellation = default)
+            where TAsyncAccess : IAsyncAccess<TResource, TResult>
+            => (queue ?? throw new ArgumentNullException(nameof(queue))).EnqueueAsyncAccess(
+                CreateInjectedAsyncAccess<TResource, TAsyncAccess, TResult>(),
+                priority,
+                attemptsCount,
+                cancellation);
+    }
 }

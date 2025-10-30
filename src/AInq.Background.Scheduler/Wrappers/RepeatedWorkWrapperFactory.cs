@@ -25,7 +25,6 @@ public static class RepeatedWorkWrapperFactory
     /// <param name="repeatDelay"> Work repeat delay </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00.000 or <paramref name="execCount" /> is 0 or less than -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     [PublicAPI]
@@ -52,7 +51,6 @@ public static class RepeatedWorkWrapperFactory
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00.000 or <paramref name="execCount" /> is 0 or less than -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     [PublicAPI]
@@ -78,7 +76,6 @@ public static class RepeatedWorkWrapperFactory
     /// <param name="repeatDelay"> Work repeat delay </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="asyncWork" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00.000 or <paramref name="execCount" /> is 0 or less than -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     [PublicAPI]
@@ -105,7 +102,6 @@ public static class RepeatedWorkWrapperFactory
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="asyncWork" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00.000 or <paramref name="execCount" /> is 0 or less than -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     [PublicAPI]
@@ -183,12 +179,13 @@ public static class RepeatedWorkWrapperFactory
             }
             catch (OperationCanceledException)
             {
-                if (outerCancellation.IsCancellationRequested)
+                if (outerCancellation.IsCancellationRequested && logger.IsEnabled(LogLevel.Warning))
                     logger.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
                 _subject.OnNext(ex);
                 _nextScheduledTime += _repeatDelay;
                 if (_execCount != -1) _execCount--;
@@ -196,11 +193,7 @@ public static class RepeatedWorkWrapperFactory
             if (_execCount != 0)
                 return true;
             _subject.OnCompleted();
-#if NETSTANDARD2_0
-            _cancellationRegistration.Dispose();
-#else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
             _cancellationRegistration = default;
             return false;
         }
@@ -265,12 +258,13 @@ public static class RepeatedWorkWrapperFactory
             }
             catch (OperationCanceledException)
             {
-                if (outerCancellation.IsCancellationRequested)
+                if (outerCancellation.IsCancellationRequested && logger.IsEnabled(LogLevel.Warning))
                     logger.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
                 _subject.OnNext(ex);
                 _nextScheduledTime += _repeatDelay;
                 if (_execCount != -1) _execCount--;
@@ -278,11 +272,7 @@ public static class RepeatedWorkWrapperFactory
             if (_execCount != 0)
                 return true;
             _subject.OnCompleted();
-#if NETSTANDARD2_0
-            _cancellationRegistration.Dispose();
-#else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
             _cancellationRegistration = default;
             return false;
         }

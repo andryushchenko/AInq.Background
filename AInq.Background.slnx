@@ -1,5 +1,5 @@
 <Solution>
-  
+
     <Folder Name="/Packages/">
         <Project Path="src/AInq.Background.Abstraction/AInq.Background.Abstraction.csproj"/>
         <Project Path="src/AInq.Background.Enumerable/AInq.Background.Enumerable.csproj"/>
@@ -8,7 +8,7 @@
         <Project Path="src/AInq.Background.Startup/AInq.Background.Startup.csproj"/>
         <Project Path="src/AInq.Background/AInq.Background.csproj"/>
     </Folder>
-  
+
     <Folder Name="/Solution Items/">
         <File Path="AInq.png"/>
         <File Path="Directory.Build.props"/>
@@ -17,7 +17,7 @@
         <File Path="nuget.config"/>
         <File Path="README.md"/>
     </Folder>
-  
+
     <Folder Name="/Solution Items/Shared/">
         <File Path="src/Shared/InjectedAccessFactory.cs"/>
         <File Path="src/Shared/InjectedWorkFactory.cs"/>
@@ -26,9 +26,9 @@
         <File Path="src/Shared/QueuedWorkFactory.cs"/>
         <File Path="src/Shared/ServiceProviderHelper.cs"/>
     </Folder>
-  
+
     <Folder Name="/Test/">
         <Project Path="test/AInq.Background.Test/AInq.Background.Test.csproj"/>
     </Folder>
-  
+
 </Solution>

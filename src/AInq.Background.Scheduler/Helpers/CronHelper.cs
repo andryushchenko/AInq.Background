@@ -35,13 +35,7 @@ public static class CronHelper
             {
                 5 => CronExpression.Parse(cronExpression),
                 6 => CronExpression.Parse(cronExpression, CronFormat.IncludeSeconds),
-#if NETSTANDARD2_0
-                _ => cronExpression.StartsWith("@")
-#else
-                _ => cronExpression.StartsWith('@')
-#endif
-                    ? CronExpression.Parse(cronExpression)
-                    : throw new CronFormatException("Unknown format")
+                _ => cronExpression.StartsWith('@') ? CronExpression.Parse(cronExpression) : throw new CronFormatException("Unknown format")
             };
         }
         catch (Exception ex)

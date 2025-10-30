@@ -25,7 +25,6 @@ public static class CronWorkWrapperFactory
     /// <param name="cron"> Cron expression </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less than -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     [PublicAPI]
@@ -47,7 +46,6 @@ public static class CronWorkWrapperFactory
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less than -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     [PublicAPI]
@@ -68,7 +66,6 @@ public static class CronWorkWrapperFactory
     /// <param name="cron"> Cron expression </param>
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less than -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     [PublicAPI]
@@ -90,7 +87,6 @@ public static class CronWorkWrapperFactory
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cron" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less than -1 </exception>
     /// <returns> Wrapper and work result observable </returns>
     [PublicAPI]
@@ -138,9 +134,10 @@ public static class CronWorkWrapperFactory
 
         internal IObservable<Maybe<Exception>> WorkObservable => _subject;
 
-        DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested || _execCount == 0
-            ? null
-            : _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local)?.ToLocalTime();
+        DateTime? IScheduledTaskWrapper.NextScheduledTime
+            => _innerCancellation.IsCancellationRequested || _execCount == 0
+                ? null
+                : _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local)?.ToLocalTime();
 
         bool IScheduledTaskWrapper.IsCanceled => _innerCancellation.IsCancellationRequested;
 
@@ -158,23 +155,20 @@ public static class CronWorkWrapperFactory
             }
             catch (OperationCanceledException)
             {
-                if (outerCancellation.IsCancellationRequested)
-                    logger.LogError("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
+                if (outerCancellation.IsCancellationRequested && logger.IsEnabled(LogLevel.Warning))
+                    logger.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
                 _subject.OnNext(ex);
                 if (_execCount != -1) _execCount--;
             }
             if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue && _execCount != 0)
                 return true;
             _subject.OnCompleted();
-#if NETSTANDARD2_0
-            _cancellationRegistration.Dispose();
-#else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
             _cancellationRegistration = default;
             return false;
         }
@@ -212,9 +206,10 @@ public static class CronWorkWrapperFactory
 
         internal IObservable<Try<TResult>> WorkObservable => _subject;
 
-        DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested || _execCount == 0
-            ? null
-            : _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local)?.ToLocalTime();
+        DateTime? IScheduledTaskWrapper.NextScheduledTime
+            => _innerCancellation.IsCancellationRequested || _execCount == 0
+                ? null
+                : _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local)?.ToLocalTime();
 
         bool IScheduledTaskWrapper.IsCanceled => _innerCancellation.IsCancellationRequested;
 
@@ -232,23 +227,20 @@ public static class CronWorkWrapperFactory
             }
             catch (OperationCanceledException)
             {
-                if (outerCancellation.IsCancellationRequested)
+                if (outerCancellation.IsCancellationRequested && logger.IsEnabled(LogLevel.Warning))
                     logger.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
                 _subject.OnNext(ex);
                 if (_execCount != -1) _execCount--;
             }
             if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue && _execCount != 0)
                 return true;
             _subject.OnCompleted();
-#if NETSTANDARD2_0
-            _cancellationRegistration.Dispose();
-#else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
             _cancellationRegistration = default;
             return false;
         }

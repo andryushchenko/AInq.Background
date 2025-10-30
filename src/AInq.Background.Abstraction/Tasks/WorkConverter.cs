@@ -20,7 +20,6 @@ public static class WorkConverter
     /// <summary> Create <see cref="IAsyncWork" /> from <see cref="IWork" /> </summary>
     /// <param name="work"> Work instance </param>
     /// <returns> <see cref="IAsyncWork{TResult}" /> wrapper instance </returns>
-    /// <exception cref="ArgumentNullException"> Thrown when <paramref name="work" /> is NULL </exception>
     [PublicAPI]
     public static IAsyncWork AsAsync(this IWork work)
         => new AsyncWork(work ?? throw new NullReferenceException(nameof(work)));
@@ -29,17 +28,13 @@ public static class WorkConverter
     /// <param name="work"> Work instance </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> <see cref="IAsyncWork{TResult}" /> wrapper instance </returns>
-    /// <exception cref="ArgumentNullException"> Thrown when <paramref name="work" /> is NULL </exception>
     [PublicAPI]
     public static IAsyncWork<TResult> AsAsync<TResult>(this IWork<TResult> work)
         => new AsyncWork<TResult>(work ?? throw new NullReferenceException(nameof(work)));
 
-    private class AsyncWork : IAsyncWork
+    private class AsyncWork(IWork work) : IAsyncWork
     {
-        private readonly IWork _work;
-
-        internal AsyncWork(IWork work)
-            => _work = work ?? throw new ArgumentNullException(nameof(work));
+        private readonly IWork _work = work ?? throw new ArgumentNullException(nameof(work));
 
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
         {
@@ -55,12 +50,9 @@ public static class WorkConverter
         }
     }
 
-    private class AsyncWork<TResult> : IAsyncWork<TResult>
+    private class AsyncWork<TResult>(IWork<TResult> work) : IAsyncWork<TResult>
     {
-        private readonly IWork<TResult> _work;
-
-        internal AsyncWork(IWork<TResult> work)
-            => _work = work ?? throw new ArgumentNullException(nameof(work));
+        private readonly IWork<TResult> _work = work ?? throw new ArgumentNullException(nameof(work));
 
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
         {

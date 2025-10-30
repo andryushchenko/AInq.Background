@@ -6,25 +6,25 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AInq.Optional" />
+        <PackageReference Include="AInq.Optional"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\AInq.Background.Abstraction\AInq.Background.Abstraction.csproj" />
+        <ProjectReference Include="..\AInq.Background.Abstraction\AInq.Background.Abstraction.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Include="..\Shared\ServiceProviderHelper.cs" Link="Helpers\ServiceProviderHelper.cs" />
-        <Compile Include="..\Shared\InjectedWorkFactory.cs" Link="Tasks\InjectedWorkFactory.cs" />
-        <Compile Include="..\Shared\QueuedAccessFactory.cs" Link="Tasks\QueuedAccessFactory.cs" />
-        <Compile Include="..\Shared\QueuedWorkFactory.cs" Link="Tasks\QueuedWorkFactory.cs" />
+        <Compile Include="..\Shared\ServiceProviderHelper.cs" Link="Helpers\ServiceProviderHelper.cs"/>
+        <Compile Include="..\Shared\InjectedWorkFactory.cs" Link="Tasks\InjectedWorkFactory.cs"/>
+        <Compile Include="..\Shared\QueuedAccessFactory.cs" Link="Tasks\QueuedAccessFactory.cs"/>
+        <Compile Include="..\Shared\QueuedWorkFactory.cs" Link="Tasks\QueuedWorkFactory.cs"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="AInq.Background.Extensions" />
-        <Using Include="AInq.Background.Helpers" />
-        <Using Include="AInq.Background.Services" />
-        <Using Include="AInq.Optional" />
+        <Using Include="AInq.Background.Extensions"/>
+        <Using Include="AInq.Background.Helpers"/>
+        <Using Include="AInq.Background.Services"/>
+        <Using Include="AInq.Optional"/>
     </ItemGroup>
 
 </Project>

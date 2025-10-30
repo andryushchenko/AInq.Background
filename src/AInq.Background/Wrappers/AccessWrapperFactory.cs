@@ -126,11 +126,7 @@ public static class AccessWrapperFactory
             if (_attemptsRemain < 1)
             {
                 _completion.TrySetException(new InvalidOperationException("No attempts left"));
-#if NETSTANDARD2_0
-                _cancellationRegistration.Dispose();
-#else
                 await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
                 _cancellationRegistration = default;
                 return true;
             }
@@ -141,12 +137,13 @@ public static class AccessWrapperFactory
                 aggregateCancellation.Token.ThrowIfCancellationRequested();
                 if (_asyncAccess == null)
                     _access!.Access(argument, provider);
-                else await _asyncAccess.AccessAsync(argument, provider, aggregateCancellation.Token).ConfigureAwait(false);
+                else
+                    await _asyncAccess.AccessAsync(argument, provider, aggregateCancellation.Token).ConfigureAwait(false);
                 _completion.TrySetResult(true);
             }
             catch (OperationCanceledException ex)
             {
-                if (outerCancellation.IsCancellationRequested)
+                if (outerCancellation.IsCancellationRequested && logger.IsEnabled(LogLevel.Warning))
                     logger.LogWarning("Accessing resource {Type} with {Access} canceled by runtime",
                         typeof(TResource),
                         _asyncAccess as object ?? _access);
@@ -158,16 +155,13 @@ public static class AccessWrapperFactory
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error accessing resource {Type} with {Access}", typeof(TResource), _asyncAccess as object ?? _access);
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "Error accessing resource {Type} with {Access}", typeof(TResource), _asyncAccess as object ?? _access);
                 if (_attemptsRemain > 0)
                     return false;
                 _completion.TrySetException(ex);
             }
-#if NETSTANDARD2_0
-            _cancellationRegistration.Dispose();
-#else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
             _cancellationRegistration = default;
             return true;
         }
@@ -212,11 +206,7 @@ public static class AccessWrapperFactory
             if (_attemptsRemain < 1)
             {
                 _completion.TrySetException(new InvalidOperationException("No attempts left"));
-#if NETSTANDARD2_0
-                _cancellationRegistration.Dispose();
-#else
                 await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
                 _cancellationRegistration = default;
                 return true;
             }
@@ -231,7 +221,7 @@ public static class AccessWrapperFactory
             }
             catch (OperationCanceledException ex)
             {
-                if (outerCancellation.IsCancellationRequested)
+                if (outerCancellation.IsCancellationRequested && logger.IsEnabled(LogLevel.Warning))
                     logger.LogWarning("Accessing resource {Type} with {Access} canceled by runtime",
                         typeof(TResource),
                         _asyncAccess as object ?? _access);
@@ -243,16 +233,13 @@ public static class AccessWrapperFactory
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error accessing resource {Type} with {Access}", typeof(TResource), _asyncAccess as object ?? _access);
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "Error accessing resource {Type} with {Access}", typeof(TResource), _asyncAccess as object ?? _access);
                 if (_attemptsRemain > 0)
                     return false;
                 _completion.TrySetException(ex);
             }
-#if NETSTANDARD2_0
-            _cancellationRegistration.Dispose();
-#else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
             _cancellationRegistration = default;
             return true;
         }

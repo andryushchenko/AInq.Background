@@ -29,7 +29,6 @@ public interface IPriorityAccessQueue<out TResource> : IAccessQueue<TResource>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> is NULL </exception>
     [PublicAPI]
     Task EnqueueAccess(IAccess<TResource> access, int priority, int attemptsCount = 1, CancellationToken cancellation = default);
 
@@ -40,7 +39,6 @@ public interface IPriorityAccessQueue<out TResource> : IAccessQueue<TResource>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> is NULL </exception>
     [PublicAPI]
     Task<TResult> EnqueueAccess<TResult>(IAccess<TResource, TResult> access, int priority, int attemptsCount = 1,
         CancellationToken cancellation = default);
@@ -51,7 +49,6 @@ public interface IPriorityAccessQueue<out TResource> : IAccessQueue<TResource>
     /// <param name="attemptsCount"> Retry on fail attempts count </param>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <returns> Access action completion task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> is NULL </exception>
     [PublicAPI]
     Task EnqueueAsyncAccess(IAsyncAccess<TResource> access, int priority, int attemptsCount = 1, CancellationToken cancellation = default);
 
@@ -62,7 +59,6 @@ public interface IPriorityAccessQueue<out TResource> : IAccessQueue<TResource>
     /// <param name="cancellation"> Access cancellation token </param>
     /// <typeparam name="TResult"> Access action result type </typeparam>
     /// <returns> Access action result task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="access" /> is NULL </exception>
     [PublicAPI]
     Task<TResult> EnqueueAsyncAccess<TResult>(IAsyncAccess<TResource, TResult> access, int priority, int attemptsCount = 1,
         CancellationToken cancellation = default);

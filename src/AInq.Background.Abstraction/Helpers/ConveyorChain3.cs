@@ -35,7 +35,6 @@ public class ConveyorChain<TData, TFirstIntermediate, TSecondIntermediate, TResu
     /// <param name="first"> First conveyor </param>
     /// <param name="second"> Second conveyor </param>
     /// <param name="third"> Third conveyor </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="first" />, <paramref name="second" /> or <paramref name="third" /> is NULL </exception>
     public ConveyorChain(IConveyor<TData, TFirstIntermediate> first, IConveyor<TFirstIntermediate, TSecondIntermediate> second,
         IConveyor<TSecondIntermediate, TResult> third)
     {
@@ -49,14 +48,13 @@ public class ConveyorChain<TData, TFirstIntermediate, TSecondIntermediate, TResu
 
     async Task<TResult> IConveyor<TData, TResult>.ProcessDataAsync(TData data, int attemptsCount, CancellationToken cancellation)
         => await _third
-                 .ProcessDataAsync(await _second.ProcessDataAsync(await _first
-                                                                        .ProcessDataAsync(data,
-                                                                            Math.Max(1, Math.Min(_first.MaxAttempts, attemptsCount)),
-                                                                            cancellation)
-                                                                        .ConfigureAwait(false),
-                                                    Math.Max(1, Math.Min(_second.MaxAttempts, attemptsCount)),
-                                                    cancellation)
-                                                .ConfigureAwait(false),
+                 .ProcessDataAsync(
+                     await _second.ProcessDataAsync(
+                                      await _first.ProcessDataAsync(data, Math.Max(1, Math.Min(_first.MaxAttempts, attemptsCount)), cancellation)
+                                                  .ConfigureAwait(false),
+                                      Math.Max(1, Math.Min(_second.MaxAttempts, attemptsCount)),
+                                      cancellation)
+                                  .ConfigureAwait(false),
                      Math.Max(1, Math.Min(_third.MaxAttempts, attemptsCount)),
                      cancellation)
                  .ConfigureAwait(false);

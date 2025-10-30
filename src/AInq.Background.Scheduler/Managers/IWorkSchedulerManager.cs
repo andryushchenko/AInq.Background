@@ -22,7 +22,7 @@ public interface IWorkSchedulerManager
     /// <summary> Asynchronously wait for new scheduled task </summary>
     /// <param name="cancellation"> Wait cancellation token </param>
     [PublicAPI]
-    Task WaitForNewTaskAsync(CancellationToken cancellation);
+    ValueTask WaitForNewTaskAsync(CancellationToken cancellation);
 
     /// <summary> Get next scheduled task execution time </summary>
     /// <returns> Time or NULL if no tasks </returns>
@@ -37,7 +37,6 @@ public interface IWorkSchedulerManager
 
     /// <summary> Revert task to scheduler </summary>
     /// <param name="task"> Task instance </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="task" /> is NULL </exception>
     [PublicAPI]
     void RevertTask(IScheduledTaskWrapper task);
 }

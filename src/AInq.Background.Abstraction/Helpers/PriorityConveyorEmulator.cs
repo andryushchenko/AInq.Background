@@ -20,15 +20,10 @@ namespace AInq.Background.Helpers;
 /// <typeparam name="TData"> Input data type </typeparam>
 /// <typeparam name="TResult"> Processing result type </typeparam>
 [PublicAPI]
-public class PriorityConveyorEmulator<TData, TResult> : IPriorityConveyor<TData, TResult>
+public class PriorityConveyorEmulator<TData, TResult>(IConveyor<TData, TResult> conveyor) : IPriorityConveyor<TData, TResult>
     where TData : notnull
 {
-    private readonly IConveyor<TData, TResult> _conveyor;
-
-    /// <param name="conveyor"> Conveyor instance </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="conveyor" /> is NULL </exception>
-    public PriorityConveyorEmulator(IConveyor<TData, TResult> conveyor)
-        => _conveyor = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
+    private readonly IConveyor<TData, TResult> _conveyor = conveyor ?? throw new ArgumentNullException(nameof(conveyor));
 
     int IConveyor<TData, TResult>.MaxAttempts => _conveyor.MaxAttempts;
 

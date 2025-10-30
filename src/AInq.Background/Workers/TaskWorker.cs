@@ -16,9 +16,6 @@ using AInq.Background.Managers;
 using AInq.Background.Processors;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
-#if NETSTANDARD
-using DotNext.Threading.Tasks;
-#endif
 
 namespace AInq.Background.Workers;
 
@@ -60,17 +57,9 @@ public sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposab
 
     async Task IHostedService.StopAsync(CancellationToken cancel)
     {
-#if NETSTANDARD
-        _shutdown.Cancel();
-#else
         await _shutdown.CancelAsync().ConfigureAwait(false);
-#endif
         if (_worker != null)
-#if NETSTANDARD
-            await _worker.WaitAsync(TimeSpan.MaxValue, cancel).ConfigureAwait(false);
-#else
             await _worker.WaitAsync(cancel).ConfigureAwait(false);
-#endif
     }
 
     private async Task Worker(CancellationToken abort)
@@ -89,7 +78,8 @@ public sealed class TaskWorker<TArgument, TMetadata> : IHostedService, IDisposab
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unhandled error in task processor {ProcessorType}", _processor.GetType());
+                if (_logger.IsEnabled(LogLevel.Error))
+                    _logger.LogError(ex, "Unhandled error in task processor {ProcessorType}", _processor.GetType());
             }
     }
 }

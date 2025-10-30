@@ -38,14 +38,8 @@ public class PriorityTaskManager<TArgument> : ITaskManager<TArgument, int>
 
     bool ITaskManager<TArgument, int>.HasTask => _queues.Any(queue => !queue.IsEmpty);
 
-    Task ITaskManager<TArgument, int>.WaitForTaskAsync(CancellationToken cancellation)
-        => _queues.Any(queue => !queue.IsEmpty)
-            ? Task.CompletedTask
-#if NETSTANDARD
-            : _newDataEvent.Wait(cancellation);
-#else
-            : _newDataEvent.WaitAsync(cancellation).AsTask();
-#endif
+    ValueTask ITaskManager<TArgument, int>.WaitForTaskAsync(CancellationToken cancellation)
+        => _queues.Any(queue => !queue.IsEmpty) ? ValueTask.CompletedTask : _newDataEvent.WaitAsync(cancellation);
 
     (ITaskWrapper<TArgument>?, int) ITaskManager<TArgument, int>.GetTask()
     {
@@ -63,7 +57,6 @@ public class PriorityTaskManager<TArgument> : ITaskManager<TArgument, int>
     /// <summary> Add task to queue </summary>
     /// <param name="task"> Task instance </param>
     /// <param name="priority"> Task priority </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="task" /> is NULL </exception>
     protected void AddTask(ITaskWrapper<TArgument> task, int priority)
     {
         if (task.IsCanceled || task.IsCompleted || task.IsFaulted) return;

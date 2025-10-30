@@ -17,9 +17,6 @@ using AInq.Background.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
-#if NETSTANDARD
-using DotNext.Threading.Tasks;
-#endif
 
 namespace AInq.Background.Workers;
 
@@ -70,17 +67,9 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
 
     async Task IHostedService.StopAsync(CancellationToken cancel)
     {
-#if NETSTANDARD
-        _shutdown.Cancel();
-#else
         await _shutdown.CancelAsync().ConfigureAwait(false);
-#endif
         if (_worker != null)
-#if NETSTANDARD
-            await _worker.WaitAsync(TimeSpan.MaxValue, cancel).ConfigureAwait(false);
-#else
             await _worker.WaitAsync(cancel).ConfigureAwait(false);
-#endif
     }
 
     private async Task Worker(CancellationToken abort)
@@ -97,7 +86,7 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
                 if (timeout < Beforehand)
                     continue;
                 await Task.WhenAny(Task.Delay(timeout < MaxTimeout ? timeout : MaxTimeout, cancellation.Token),
-                              _scheduler.WaitForNewTaskAsync(cancellation.Token))
+                              _scheduler.WaitForNewTaskAsync(cancellation.Token).AsTask())
                           .ConfigureAwait(false);
             }
             catch (OperationCanceledException)
@@ -106,7 +95,8 @@ public sealed class SchedulerWorker : IHostedService, IDisposable
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unhandled error processing scheduled tasks");
+                if (_logger.IsEnabled(LogLevel.Error))
+                    _logger.LogError(ex, "Unhandled error processing scheduled tasks");
             }
     }
 

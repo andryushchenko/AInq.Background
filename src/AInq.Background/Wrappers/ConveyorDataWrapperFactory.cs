@@ -24,6 +24,7 @@ public static class ConveyorDataWrapperFactory
     /// <typeparam name="TData"> Conveyor input data type </typeparam>
     /// <typeparam name="TResult"> Processing result type </typeparam>
     /// <returns> Wrapper and processing result task </returns>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="data" /> is NULL </exception>
     [PublicAPI]
     public static (ITaskWrapper<IConveyorMachine<TData, TResult>>, Task<TResult>) CreateConveyorDataWrapper<TData, TResult>(TData data,
         int attemptsCount = 1, CancellationToken cancellation = default)
@@ -61,11 +62,7 @@ public static class ConveyorDataWrapperFactory
             if (_attemptsRemain < 1)
             {
                 _completion.TrySetException(new InvalidOperationException("No attempts left"));
-#if NETSTANDARD2_0
-                _cancellationRegistration.Dispose();
-#else
                 await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
                 _cancellationRegistration = default;
                 return true;
             }
@@ -78,12 +75,13 @@ public static class ConveyorDataWrapperFactory
             }
             catch (ArgumentException ex)
             {
-                logger.LogError(ex, "Bad data {Data}", _data);
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "Bad data {Data}", _data);
                 _completion.TrySetException(ex);
             }
             catch (OperationCanceledException ex)
             {
-                if (outerCancellation.IsCancellationRequested)
+                if (outerCancellation.IsCancellationRequested && logger.IsEnabled(LogLevel.Warning))
                     logger.LogWarning("Processing data {Data} with machine {Machine} canceled by runtime", _data, argument.GetType());
                 if (!_innerCancellation.IsCancellationRequested)
                     _attemptsRemain++;
@@ -93,16 +91,13 @@ public static class ConveyorDataWrapperFactory
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error processing data {Data} with machine {Machine}", _data, argument.GetType());
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "Error processing data {Data} with machine {Machine}", _data, argument.GetType());
                 if (_attemptsRemain > 0)
                     return false;
                 _completion.TrySetException(ex);
             }
-#if NETSTANDARD2_0
-            _cancellationRegistration.Dispose();
-#else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
             _cancellationRegistration = default;
             return true;
         }

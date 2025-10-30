@@ -31,7 +31,6 @@ public class ConveyorChain<TData, TIntermediate, TResult> : IConveyor<TData, TRe
 
     /// <param name="first"> First conveyor </param>
     /// <param name="second"> Second conveyor </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="first" /> or <paramref name="second" /> is NULL </exception>
     public ConveyorChain(IConveyor<TData, TIntermediate> first, IConveyor<TIntermediate, TResult> second)
     {
         _first = first ?? throw new ArgumentNullException(nameof(first));

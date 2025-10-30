@@ -24,7 +24,6 @@ public interface IWorkScheduler
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater than current time </exception>
     [PublicAPI]
     Task AddScheduledWork(IWork work, DateTime time, CancellationToken cancellation = default);
@@ -35,7 +34,6 @@ public interface IWorkScheduler
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater than current time </exception>
     [PublicAPI]
     Task<TResult> AddScheduledWork<TResult>(IWork<TResult> work, DateTime time, CancellationToken cancellation = default);
@@ -45,7 +43,6 @@ public interface IWorkScheduler
     /// <param name="time"> Work execution time </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater than current time </exception>
     [PublicAPI]
     Task AddScheduledAsyncWork(IAsyncWork work, DateTime time, CancellationToken cancellation = default);
@@ -56,7 +53,6 @@ public interface IWorkScheduler
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result task </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> isn't greater than current time </exception>
     [PublicAPI]
     Task<TResult> AddScheduledAsyncWork<TResult>(IAsyncWork<TResult> work, DateTime time, CancellationToken cancellation = default);
@@ -71,7 +67,6 @@ public interface IWorkScheduler
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less than -1 </exception>
     [PublicAPI]
@@ -84,7 +79,6 @@ public interface IWorkScheduler
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less than -1 </exception>
     [PublicAPI]
@@ -97,7 +91,6 @@ public interface IWorkScheduler
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less than -1 </exception>
     [PublicAPI]
@@ -111,7 +104,6 @@ public interface IWorkScheduler
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> or <paramref name="cronExpression" /> is NULL </exception>
     /// <exception cref="ArgumentException"> Thrown if <paramref name="cronExpression" /> has incorrect syntax </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="execCount" /> is 0 or less than -1 </exception>
     [PublicAPI]
@@ -129,7 +121,6 @@ public interface IWorkScheduler
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00.000 or <paramref name="execCount" /> is 0 or less than -1 </exception>
     [PublicAPI]
     IObservable<Maybe<Exception>> AddRepeatedWork(IWork work, DateTime starTime, TimeSpan repeatDelay, int execCount = -1,
@@ -143,7 +134,6 @@ public interface IWorkScheduler
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00.000 or <paramref name="execCount" /> is 0 or less than -1 </exception>
     [PublicAPI]
     IObservable<Try<TResult>> AddRepeatedWork<TResult>(IWork<TResult> work, DateTime starTime, TimeSpan repeatDelay, int execCount = -1,
@@ -156,7 +146,6 @@ public interface IWorkScheduler
     /// <param name="execCount"> Max work execution count (-1 for unlimited) </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00.000 or <paramref name="execCount" /> is 0 or less than -1 </exception>
     [PublicAPI]
     IObservable<Maybe<Exception>> AddRepeatedAsyncWork(IAsyncWork work, DateTime startTime, TimeSpan repeatDelay, int execCount = -1,
@@ -170,7 +159,6 @@ public interface IWorkScheduler
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
     /// <returns> Work result observable </returns>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="repeatDelay" /> isn't greater than 00:00:00.000 or <paramref name="execCount" /> is 0 or less than -1 </exception>
     [PublicAPI]
     IObservable<Try<TResult>> AddRepeatedAsyncWork<TResult>(IAsyncWork<TResult> work, DateTime startTime, TimeSpan repeatDelay, int execCount = -1,

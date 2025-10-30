@@ -56,11 +56,13 @@ internal static class StartupWorkWrapperFactory
             }
             catch (OperationCanceledException)
             {
-                logger.LogWarning("Startup work {Work} canceled", _asyncWork as object ?? _work);
+                if (logger.IsEnabled(LogLevel.Warning))
+                    logger.LogWarning("Startup work {Work} canceled", _asyncWork as object ?? _work);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error processing startup work {Work}", _asyncWork as object ?? _work);
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "Error processing startup work {Work}", _asyncWork as object ?? _work);
             }
         }
     }
@@ -93,11 +95,13 @@ internal static class StartupWorkWrapperFactory
             }
             catch (OperationCanceledException)
             {
-                logger.LogWarning("Startup work {Work} canceled", _asyncWork as object ?? _work);
+                if (logger.IsEnabled(LogLevel.Warning))
+                    logger.LogWarning("Startup work {Work} canceled", _asyncWork as object ?? _work);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error processing startup work {Work}", _asyncWork as object ?? _work);
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "Error processing startup work {Work}", _asyncWork as object ?? _work);
             }
         }
     }

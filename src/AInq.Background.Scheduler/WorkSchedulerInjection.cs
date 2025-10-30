@@ -23,28 +23,27 @@ namespace AInq.Background;
 /// <summary> Work Scheduler dependency injection </summary>
 public static class WorkSchedulerInjection
 {
-    /// <summary> Create <see cref="IWorkScheduler" /> without service registration </summary>
     /// <param name="services"> Service collection </param>
-    /// <param name="horizon"> Time horizon to look for upcoming tasks </param>
-    [PublicAPI]
-    public static IWorkScheduler CreateWorkScheduler(this IServiceCollection services, TimeSpan? horizon = null)
+    extension(IServiceCollection services)
     {
-        _ = services ?? throw new ArgumentNullException(nameof(services));
-        var scheduler = new WorkSchedulerManager();
-        services.AddSingleton<IHostedService>(provider => new SchedulerWorker(scheduler, provider, horizon));
-        return scheduler;
-    }
+        /// <summary> Create <see cref="IWorkScheduler" /> without service registration </summary>
+        /// <param name="horizon"> Time horizon to look for upcoming tasks </param>
+        [PublicAPI]
+        public IWorkScheduler CreateWorkScheduler(TimeSpan? horizon = null)
+        {
+            _ = services ?? throw new ArgumentNullException(nameof(services));
+            var scheduler = new WorkSchedulerManager();
+            services.AddSingleton<IHostedService>(provider => new SchedulerWorker(scheduler, provider, horizon));
+            return scheduler;
+        }
 
-    /// <summary> Add <see cref="IWorkScheduler" /> service </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="horizon"> Time horizon to look for upcoming tasks </param>
-    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
-    [PublicAPI]
-    public static IServiceCollection AddWorkScheduler(this IServiceCollection services, TimeSpan? horizon = null)
-    {
-        _ = services ?? throw new ArgumentNullException(nameof(services));
-        if (services.Any(service => service.ImplementationType == typeof(IWorkScheduler)))
-            throw new InvalidOperationException("Service already exists");
-        return services.AddSingleton(services.CreateWorkScheduler(horizon));
+        /// <summary> Add <see cref="IWorkScheduler" /> service </summary>
+        /// <param name="horizon"> Time horizon to look for upcoming tasks </param>
+        /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+        [PublicAPI]
+        public IServiceCollection AddWorkScheduler(TimeSpan? horizon = null)
+            => (services ?? throw new ArgumentNullException(nameof(services))).Any(service => service.ImplementationType == typeof(IWorkScheduler))
+                ? throw new InvalidOperationException("Service already exists")
+                : services.AddSingleton(services.CreateWorkScheduler(horizon));
     }
 }

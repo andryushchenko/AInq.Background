@@ -21,7 +21,6 @@ public static class ScheduledWorkWrapperFactory
     /// <param name="work"> Work instance </param>
     /// <param name="time"> Scheduled time </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Wrapper and work result task </returns>
     [PublicAPI]
@@ -39,7 +38,6 @@ public static class ScheduledWorkWrapperFactory
     /// <param name="time"> Scheduled time </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="work" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Wrapper and work result task </returns>
     [PublicAPI]
@@ -57,7 +55,6 @@ public static class ScheduledWorkWrapperFactory
     /// <param name="asyncWork"> Work instance </param>
     /// <param name="time"> Scheduled time </param>
     /// <param name="cancellation"> Work cancellation token </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="asyncWork" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Wrapper and work result task </returns>
     [PublicAPI]
@@ -76,7 +73,6 @@ public static class ScheduledWorkWrapperFactory
     /// <param name="time"> Scheduled time </param>
     /// <param name="cancellation"> Work cancellation token </param>
     /// <typeparam name="TResult"> Work result type </typeparam>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="asyncWork" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="time" /> is less or equal to current time </exception>
     /// <returns> Wrapper and work result task </returns>
     [PublicAPI]
@@ -133,21 +129,18 @@ public static class ScheduledWorkWrapperFactory
             }
             catch (OperationCanceledException)
             {
-                if (outerCancellation.IsCancellationRequested)
+                if (outerCancellation.IsCancellationRequested && logger.IsEnabled(LogLevel.Warning))
                     logger.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
                 return true;
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
                 _completion.TrySetException(ex);
             }
             _nextScheduledTime = null;
-#if NETSTANDARD2_0
-            _cancellationRegistration.Dispose();
-#else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
             _cancellationRegistration = default;
             return false;
         }
@@ -197,21 +190,18 @@ public static class ScheduledWorkWrapperFactory
             }
             catch (OperationCanceledException)
             {
-                if (outerCancellation.IsCancellationRequested)
+                if (outerCancellation.IsCancellationRequested && logger.IsEnabled(LogLevel.Warning))
                     logger.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
                 return true;
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "Error processing scheduled work {Work}", _asyncWork as object ?? _work);
                 _completion.TrySetException(ex);
             }
             _nextScheduledTime = null;
-#if NETSTANDARD2_0
-            _cancellationRegistration.Dispose();
-#else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
             _cancellationRegistration = default;
             return false;
         }

@@ -44,139 +44,67 @@ internal static class QueuedWorkFactory
         where TAsyncWork : IAsyncWork<TResult>
         => new QueuedInjectedAsyncWork<TAsyncWork, TResult>(priority, attemptsCount);
 
-    private class QueuedWork : IAsyncWork
+    private class QueuedWork(IWork work, int priority, int attemptsCount) : IAsyncWork
 
     {
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-        private readonly IWork _work;
-
-        public QueuedWork(IWork work, int priority, int attemptsCount)
-        {
-            _work = work ?? throw new ArgumentNullException(nameof(work));
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
+        private readonly IWork _work = work ?? throw new ArgumentNullException(nameof(work));
 
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueWork(_work, _priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueWork(_work, priority, attemptsCount, cancellation);
     }
 
-    private class QueuedWork<TResult> : IAsyncWork<TResult>
+    private class QueuedWork<TResult>(IWork<TResult> work, int priority, int attemptsCount) : IAsyncWork<TResult>
 
     {
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-        private readonly IWork<TResult> _work;
-
-        public QueuedWork(IWork<TResult> work, int priority, int attemptsCount)
-        {
-            _work = work ?? throw new ArgumentNullException(nameof(work));
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
+        private readonly IWork<TResult> _work = work ?? throw new ArgumentNullException(nameof(work));
 
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueWork(_work, _priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueWork(_work, priority, attemptsCount, cancellation);
     }
 
-    private class QueuedAsyncWork : IAsyncWork
+    private class QueuedAsyncWork(IAsyncWork asyncWork, int priority, int attemptsCount) : IAsyncWork
 
     {
-        private readonly IAsyncWork _asyncWork;
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-
-        public QueuedAsyncWork(IAsyncWork asyncWork, int priority, int attemptsCount)
-        {
-            _asyncWork = asyncWork ?? throw new ArgumentNullException(nameof(asyncWork));
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
+        private readonly IAsyncWork _asyncWork = asyncWork ?? throw new ArgumentNullException(nameof(asyncWork));
 
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncWork(_asyncWork, _priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueAsyncWork(_asyncWork, priority, attemptsCount, cancellation);
     }
 
-    private class QueuedAsyncWork<TResult> : IAsyncWork<TResult>
+    private class QueuedAsyncWork<TResult>(IAsyncWork<TResult> asyncWork, int priority, int attemptsCount) : IAsyncWork<TResult>
 
     {
-        private readonly IAsyncWork<TResult> _asyncWork;
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-
-        public QueuedAsyncWork(IAsyncWork<TResult> asyncWork, int priority, int attemptsCount)
-        {
-            _asyncWork = asyncWork ?? throw new ArgumentNullException(nameof(asyncWork));
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
+        private readonly IAsyncWork<TResult> _asyncWork = asyncWork ?? throw new ArgumentNullException(nameof(asyncWork));
 
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncWork(_asyncWork, _priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueAsyncWork(_asyncWork, priority, attemptsCount, cancellation);
     }
 
-    private class QueuedInjectedWork<TWork> : IAsyncWork
+    private class QueuedInjectedWork<TWork>(int priority, int attemptsCount) : IAsyncWork
         where TWork : IWork
     {
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-
-        public QueuedInjectedWork(int priority, int attemptsCount)
-        {
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
-
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueWork<TWork>(_priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueWork<TWork>(priority, attemptsCount, cancellation);
     }
 
-    private class QueuedInjectedWork<TWork, TResult> : IAsyncWork<TResult>
+    private class QueuedInjectedWork<TWork, TResult>(int priority, int attemptsCount) : IAsyncWork<TResult>
         where TWork : IWork<TResult>
     {
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-
-        public QueuedInjectedWork(int priority, int attemptsCount)
-        {
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
-
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueWork<TWork, TResult>(_priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueWork<TWork, TResult>(priority, attemptsCount, cancellation);
     }
 
-    private class QueuedInjectedAsyncWork<TAsyncWork> : IAsyncWork
+    private class QueuedInjectedAsyncWork<TAsyncWork>(int priority, int attemptsCount) : IAsyncWork
         where TAsyncWork : IAsyncWork
     {
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-
-        public QueuedInjectedAsyncWork(int priority, int attemptsCount)
-        {
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
-
         Task IAsyncWork.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncWork<TAsyncWork>(_priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueAsyncWork<TAsyncWork>(priority, attemptsCount, cancellation);
     }
 
-    private class QueuedInjectedAsyncWork<TAsyncWork, TResult> : IAsyncWork<TResult>
+    private class QueuedInjectedAsyncWork<TAsyncWork, TResult>(int priority, int attemptsCount) : IAsyncWork<TResult>
         where TAsyncWork : IAsyncWork<TResult>
     {
-        private readonly int _attemptsCount;
-        private readonly int _priority;
-
-        public QueuedInjectedAsyncWork(int priority, int attemptsCount)
-        {
-            _attemptsCount = attemptsCount;
-            _priority = priority;
-        }
-
         Task<TResult> IAsyncWork<TResult>.DoWorkAsync(IServiceProvider serviceProvider, CancellationToken cancellation)
-            => serviceProvider.EnqueueAsyncWork<TAsyncWork, TResult>(_priority, _attemptsCount, cancellation);
+            => serviceProvider.EnqueueAsyncWork<TAsyncWork, TResult>(priority, attemptsCount, cancellation);
     }
 }

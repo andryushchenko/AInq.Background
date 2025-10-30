@@ -38,7 +38,8 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error creating argument {Type} with {Fabric}", typeof(TArgument), _argumentFabric);
+            if (logger.IsEnabled(LogLevel.Error))
+                logger.LogError(ex, "Error creating argument {Type} with {Fabric}", typeof(TArgument), _argumentFabric);
             return;
         }
         try
@@ -48,7 +49,8 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
+            if (logger.IsEnabled(LogLevel.Error))
+                logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
             await argument.TryDisposeAsync().ConfigureAwait(false);
             return;
         }
@@ -81,7 +83,8 @@ internal sealed class SingleReusableProcessor<TArgument, TMetadata> : ITaskProce
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
+            if (logger.IsEnabled(LogLevel.Error))
+                logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
         }
         finally
         {

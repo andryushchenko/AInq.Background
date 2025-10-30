@@ -54,7 +54,8 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error creating argument {Type} with {Fabric}", typeof(TArgument), _argumentFabric);
+            if (logger.IsEnabled(LogLevel.Error))
+                logger.LogError(ex, "Error creating argument {Type} with {Fabric}", typeof(TArgument), _argumentFabric);
             manager.RevertTask(task, metadata);
             _semaphore.Release();
             return;
@@ -66,7 +67,8 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
+            if (logger.IsEnabled(LogLevel.Error))
+                logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
             manager.RevertTask(task, metadata);
             _semaphore.Release();
             await argument.TryDisposeAsync().ConfigureAwait(false);
@@ -81,7 +83,8 @@ internal class MultipleOneTimeProcessor<TArgument, TMetadata> : ITaskProcessor<T
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
+            if (logger.IsEnabled(LogLevel.Error))
+                logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
         }
         finally
         {

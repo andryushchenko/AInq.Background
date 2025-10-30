@@ -52,7 +52,8 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                     }
                     catch (Exception ex)
                     {
-                        logger.LogError(ex, "Error creating argument {Type} with {Fabric}", typeof(TArgument), _argumentFabric);
+                        if (logger.IsEnabled(LogLevel.Error))
+                            logger.LogError(ex, "Error creating argument {Type} with {Fabric}", typeof(TArgument), _argumentFabric);
                         continue;
                     }
                     Interlocked.Increment(ref _currentArgumentCount);
@@ -60,11 +61,7 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
                 else
                 {
                     if (_reusable.IsEmpty)
-#if NETSTANDARD
-                        await _reset.Wait(cancellation).ConfigureAwait(false);
-#else
                         await _reset.WaitAsync(cancellation).ConfigureAwait(false);
-#endif
                     continue;
                 }
             }
@@ -89,7 +86,8 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
+            if (logger.IsEnabled(LogLevel.Error))
+                logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
             manager.RevertTask(task, metadata);
             Interlocked.Decrement(ref _currentArgumentCount);
             _reset.Set();
@@ -131,7 +129,8 @@ internal sealed class MultipleReusableProcessor<TArgument, TMetadata> : ITaskPro
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
+            if (logger.IsEnabled(LogLevel.Error))
+                logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
         }
         finally
         {

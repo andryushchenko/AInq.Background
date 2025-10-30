@@ -111,11 +111,7 @@ public static class WorkWrapperFactory
             if (_attemptsRemain < 1)
             {
                 _completion.TrySetException(new InvalidOperationException("No attempts left"));
-#if NETSTANDARD2_0
-                _cancellationRegistration.Dispose();
-#else
                 await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
                 _cancellationRegistration = default;
                 return true;
             }
@@ -131,7 +127,7 @@ public static class WorkWrapperFactory
             }
             catch (OperationCanceledException ex)
             {
-                if (outerCancellation.IsCancellationRequested)
+                if (outerCancellation.IsCancellationRequested && logger.IsEnabled(LogLevel.Warning))
                     logger.LogWarning("Queued work {Work} canceled by runtime", _asyncWork as object ?? _work);
                 if (!_innerCancellation.IsCancellationRequested)
                     _attemptsRemain++;
@@ -141,16 +137,13 @@ public static class WorkWrapperFactory
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error processing queued work {Work}", _asyncWork as object ?? _work);
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "Error processing queued work {Work}", _asyncWork as object ?? _work);
                 if (_attemptsRemain > 0)
                     return false;
                 _completion.TrySetException(ex);
             }
-#if NETSTANDARD2_0
-            _cancellationRegistration.Dispose();
-#else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
             _cancellationRegistration = default;
             return true;
         }
@@ -194,11 +187,7 @@ public static class WorkWrapperFactory
             if (_attemptsRemain < 1)
             {
                 _completion.TrySetException(new InvalidOperationException("No attempts left"));
-#if NETSTANDARD2_0
-                _cancellationRegistration.Dispose();
-#else
                 await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
                 _cancellationRegistration = default;
                 return true;
             }
@@ -213,7 +202,7 @@ public static class WorkWrapperFactory
             }
             catch (OperationCanceledException ex)
             {
-                if (outerCancellation.IsCancellationRequested)
+                if (outerCancellation.IsCancellationRequested && logger.IsEnabled(LogLevel.Warning))
                     logger.LogWarning("Queued work {Work} canceled by runtime", _asyncWork as object ?? _work);
                 if (!_innerCancellation.IsCancellationRequested)
                     _attemptsRemain++;
@@ -223,16 +212,13 @@ public static class WorkWrapperFactory
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error processing queued work {Work}", _asyncWork as object ?? _work);
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "Error processing queued work {Work}", _asyncWork as object ?? _work);
                 if (_attemptsRemain > 0)
                     return false;
                 _completion.TrySetException(ex);
             }
-#if NETSTANDARD2_0
-            _cancellationRegistration.Dispose();
-#else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
-#endif
             _cancellationRegistration = default;
             return true;
         }

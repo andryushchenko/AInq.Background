@@ -44,7 +44,8 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error starting stoppable argument {Argument}", _argument);
+            if (logger.IsEnabled(LogLevel.Error))
+                logger.LogError(ex, "Error starting stoppable argument {Argument}", _argument);
             return;
         }
         while (manager.HasTask && !cancellation.IsCancellationRequested)
@@ -71,7 +72,8 @@ internal sealed class SingleStaticProcessor<TArgument, TMetadata> : ITaskProcess
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error stopping stoppable argument {Argument}", _argument);
+            if (logger.IsEnabled(LogLevel.Error))
+                logger.LogError(ex, "Error stopping stoppable argument {Argument}", _argument);
         }
     }
 }

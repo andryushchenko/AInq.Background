@@ -16,9 +16,12 @@ namespace AInq.Background.Helpers;
 
 internal static class ServiceProviderHelper
 {
-    public static T? Service<T>(this IServiceProvider provider)
-        => provider.GetService(typeof(T)) is T service ? service : default;
+    extension(IServiceProvider provider)
+    {
+        public T? Service<T>()
+            => provider.GetService(typeof(T)) is T service ? service : default;
 
-    public static T RequiredService<T>(this IServiceProvider provider)
-        => provider.GetService(typeof(T)) is T service ? service : throw new InvalidOperationException("Service not exists");
+        public T RequiredService<T>()
+            => provider.GetService(typeof(T)) is T service ? service : throw new InvalidOperationException("Service not exists");
+    }
 }

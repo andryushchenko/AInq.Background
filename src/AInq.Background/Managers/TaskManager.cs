@@ -26,14 +26,8 @@ public class TaskManager<TArgument> : ITaskManager<TArgument, object?>
 
     bool ITaskManager<TArgument, object?>.HasTask => !_queue.IsEmpty;
 
-    Task ITaskManager<TArgument, object?>.WaitForTaskAsync(CancellationToken cancellation)
-        => _queue.IsEmpty
-#if NETSTANDARD
-            ? _newDataEvent.Wait(cancellation)
-#else
-            ? _newDataEvent.WaitAsync(cancellation).AsTask()
-#endif
-            : Task.CompletedTask;
+    ValueTask ITaskManager<TArgument, object?>.WaitForTaskAsync(CancellationToken cancellation)
+        => _queue.IsEmpty ? _newDataEvent.WaitAsync(cancellation) : ValueTask.CompletedTask;
 
     (ITaskWrapper<TArgument>?, object?) ITaskManager<TArgument, object?>.GetTask()
     {
@@ -49,7 +43,6 @@ public class TaskManager<TArgument> : ITaskManager<TArgument, object?>
 
     /// <summary> Add task to queue </summary>
     /// <param name="task"> Task instance </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="task" /> is NULL </exception>
     protected void AddTask(ITaskWrapper<TArgument> task)
     {
         if (task.IsCanceled || task.IsCompleted || task.IsFaulted) return;

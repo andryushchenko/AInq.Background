@@ -55,11 +55,7 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
             if (!_active.TryTake(out var argument) && !_inactive.TryTake(out argument))
             {
                 if (_active.IsEmpty && _inactive.IsEmpty)
-#if NETSTANDARD
-                    await _reset.Wait(cancellation).ConfigureAwait(false);
-#else
                     await _reset.WaitAsync(cancellation).ConfigureAwait(false);
-#endif
                 continue;
             }
             var (task, metadata) = manager.GetTask();
@@ -86,7 +82,8 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
+            if (logger.IsEnabled(LogLevel.Error))
+                logger.LogError(ex, "Error starting stoppable argument {Argument}", argument);
             manager.RevertTask(task, metadata);
             _inactive.Add(argument);
             _reset.Set();
@@ -125,7 +122,8 @@ internal sealed class MultipleStaticProcessor<TArgument, TMetadata> : ITaskProce
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
+            if (logger.IsEnabled(LogLevel.Error))
+                logger.LogError(ex, "Error stopping stoppable argument {Argument}", argument);
         }
         finally
         {

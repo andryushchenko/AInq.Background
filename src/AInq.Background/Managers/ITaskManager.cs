@@ -28,7 +28,7 @@ public interface ITaskManager<TArgument, TMetadata>
     /// <summary> Asynchronously wait for pending tasks </summary>
     /// <param name="cancellation"> Wait cancellation token </param>
     [PublicAPI]
-    Task WaitForTaskAsync(CancellationToken cancellation = default);
+    ValueTask WaitForTaskAsync(CancellationToken cancellation = default);
 
     /// <summary> Get the first pending task </summary>
     /// <returns> Task wrapper and task metadata </returns>
@@ -38,7 +38,6 @@ public interface ITaskManager<TArgument, TMetadata>
     /// <summary> Revert uncompleted task to manager </summary>
     /// <param name="task"> Task instance </param>
     /// <param name="metadata"> Task metadata </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="task" /> or <paramref name="metadata" /> is NULL </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Thrown if <paramref name="metadata" /> has incorrect value </exception>
     [PublicAPI]
     void RevertTask(ITaskWrapper<TArgument> task, TMetadata metadata);

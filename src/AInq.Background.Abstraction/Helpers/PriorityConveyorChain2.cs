@@ -32,7 +32,6 @@ public class PriorityConveyorChain<TData, TIntermediate, TResult> : IPriorityCon
 
     /// <param name="first"> First conveyor </param>
     /// <param name="second"> Second conveyor </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="first" /> or <paramref name="second" /> is NULL </exception>
     public PriorityConveyorChain(IPriorityConveyor<TData, TIntermediate> first, IPriorityConveyor<TIntermediate, TResult> second)
     {
         _first = first ?? throw new ArgumentNullException(nameof(first));
@@ -43,7 +42,6 @@ public class PriorityConveyorChain<TData, TIntermediate, TResult> : IPriorityCon
 
     /// <param name="first"> First conveyor </param>
     /// <param name="second"> Second conveyor </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="first" /> or <paramref name="second" /> is NULL </exception>
     public PriorityConveyorChain(IConveyor<TData, TIntermediate> first, IPriorityConveyor<TIntermediate, TResult> second)
     {
         _first = new PriorityConveyorEmulator<TData, TIntermediate>(first ?? throw new ArgumentNullException(nameof(first)));
@@ -54,7 +52,6 @@ public class PriorityConveyorChain<TData, TIntermediate, TResult> : IPriorityCon
 
     /// <param name="first"> First conveyor </param>
     /// <param name="second"> Second conveyor </param>
-    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="first" /> or <paramref name="second" /> is NULL </exception>
     public PriorityConveyorChain(IPriorityConveyor<TData, TIntermediate> first, IConveyor<TIntermediate, TResult> second)
     {
         _first = first ?? throw new ArgumentNullException(nameof(first));
@@ -75,8 +72,8 @@ public class PriorityConveyorChain<TData, TIntermediate, TResult> : IPriorityCon
 
     int IPriorityConveyor<TData, TResult>.MaxPriority => _maxPriority;
 
-    async Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority,
-        int attemptsCount, CancellationToken cancellation)
+    async Task<TResult> IPriorityConveyor<TData, TResult>.ProcessDataAsync(TData data, int priority, int attemptsCount,
+        CancellationToken cancellation)
         => await _second
                  .ProcessDataAsync(await _first.ProcessDataAsync(data,
                                                    Math.Min(_first.MaxPriority, Math.Max(0, priority)),

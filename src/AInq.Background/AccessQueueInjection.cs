@@ -23,320 +23,299 @@ namespace AInq.Background;
 /// <summary> Shared resource Access Queue dependency injection </summary>
 public static class AccessQueueInjection
 {
-    /// <summary> Create <see cref="IAccessQueue{TResource}" /> with single static shared resource without service registration </summary>
     /// <param name="services"> Service collection </param>
-    /// <param name="resource"> Shared resource instance </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    [PublicAPI]
-    public static IAccessQueue<TResource> CreateAccessQueue<TResource>(this IServiceCollection services, TResource resource,
-        int maxAttempts = int.MaxValue)
-        where TResource : notnull
+    extension(IServiceCollection services)
     {
-        _ = services ?? throw new ArgumentNullException(nameof(services));
-        _ = resource ?? throw new ArgumentNullException(nameof(resource));
-        var manager = new AccessQueueManager<TResource>(maxAttempts);
-        services.AddSingleton<IHostedService>(provider
-            => new TaskWorker<TResource, object?>(provider, manager, CreateProcessor<TResource, object?>(resource)));
-        return manager;
-    }
+        /// <summary> Create <see cref="IAccessQueue{TResource}" /> with single static shared resource without service registration </summary>
+        /// <param name="resource"> Shared resource instance </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        [PublicAPI]
+        public IAccessQueue<TResource> CreateAccessQueue<TResource>(TResource resource, int maxAttempts = int.MaxValue)
+            where TResource : notnull
+        {
+            _ = services ?? throw new ArgumentNullException(nameof(services));
+            _ = resource ?? throw new ArgumentNullException(nameof(resource));
+            var manager = new AccessQueueManager<TResource>(maxAttempts);
+            services.AddSingleton<IHostedService>(provider
+                => new TaskWorker<TResource, object?>(provider, manager, CreateProcessor<TResource, object?>(resource)));
+            return manager;
+        }
 
-    /// <summary> Add <see cref="IAccessQueue{TResource}" /> service with single static shared resource </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="resource"> Shared resource instance </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
-    [PublicAPI]
-    public static IServiceCollection AddAccessQueue<TResource>(this IServiceCollection services, TResource resource, int maxAttempts = int.MaxValue)
-        where TResource : notnull
-    {
-        _ = services ?? throw new ArgumentNullException(nameof(services));
-        if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
-            throw new InvalidOperationException("Service already exists");
-        return services.AddSingleton(services.CreateAccessQueue(resource, maxAttempts));
-    }
+        /// <summary> Add <see cref="IAccessQueue{TResource}" /> service with single static shared resource </summary>
+        /// <param name="resource"> Shared resource instance </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+        [PublicAPI]
+        public IServiceCollection AddAccessQueue<TResource>(TResource resource, int maxAttempts = int.MaxValue)
+            where TResource : notnull
+            => (services ?? throw new ArgumentNullException(nameof(services))).Any(service
+                => service.ImplementationType == typeof(IAccessQueue<TResource>))
+                ? throw new InvalidOperationException("Service already exists")
+                : services.AddSingleton(services.CreateAccessQueue(resource, maxAttempts));
 
-    /// <summary> Create <see cref="IPriorityAccessQueue{TResource}" /> with single static shared resource without service registration </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="resource"> Shared resource instance </param>
-    /// <param name="maxPriority"> Max allowed operation priority </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    [PublicAPI]
-    public static IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(this IServiceCollection services, TResource resource,
-        int maxPriority = 100, int maxAttempts = int.MaxValue)
-        where TResource : notnull
-    {
-        _ = services ?? throw new ArgumentNullException(nameof(services));
-        _ = resource ?? throw new ArgumentNullException(nameof(resource));
-        var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);
-        services.AddSingleton<IHostedService>(
-            provider => new TaskWorker<TResource, int>(provider, manager, CreateProcessor<TResource, int>(resource)));
-        return manager;
-    }
+        /// <summary> Create <see cref="IPriorityAccessQueue{TResource}" /> with single static shared resource without service registration </summary>
+        /// <param name="resource"> Shared resource instance </param>
+        /// <param name="maxPriority"> Max allowed operation priority </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        [PublicAPI]
+        public IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(TResource resource, int maxPriority = 100,
+            int maxAttempts = int.MaxValue)
+            where TResource : notnull
+        {
+            _ = services ?? throw new ArgumentNullException(nameof(services));
+            _ = resource ?? throw new ArgumentNullException(nameof(resource));
+            var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);
+            services.AddSingleton<IHostedService>(provider
+                => new TaskWorker<TResource, int>(provider, manager, CreateProcessor<TResource, int>(resource)));
+            return manager;
+        }
 
-    /// <summary> Add <see cref="IPriorityAccessQueue{TResource}" /> and <see cref="IAccessQueue{TResource}" /> services with single static shared resource </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="resource"> Shared resource instance </param>
-    /// <param name="maxPriority"> Max allowed operation priority </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
-    [PublicAPI]
-    public static IServiceCollection AddPriorityAccessQueue<TResource>(this IServiceCollection services, TResource resource, int maxPriority = 100,
-        int maxAttempts = int.MaxValue)
-        where TResource : notnull
-    {
-        _ = services ?? throw new ArgumentNullException(nameof(services));
-        if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
-            throw new InvalidOperationException("Service already exists");
-        var queue = services.CreatePriorityAccessQueue(resource, maxPriority, maxAttempts);
-        return services.AddSingleton<IAccessQueue<TResource>>(queue).AddSingleton(queue);
-    }
+        /// <summary> Add <see cref="IPriorityAccessQueue{TResource}" /> and <see cref="IAccessQueue{TResource}" /> services with single static shared resource </summary>
+        /// <param name="resource"> Shared resource instance </param>
+        /// <param name="maxPriority"> Max allowed operation priority </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+        [PublicAPI]
+        public IServiceCollection AddPriorityAccessQueue<TResource>(TResource resource, int maxPriority = 100, int maxAttempts = int.MaxValue)
+            where TResource : notnull
+        {
+            _ = services ?? throw new ArgumentNullException(nameof(services));
+            if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
+                throw new InvalidOperationException("Service already exists");
+            var queue = services.CreatePriorityAccessQueue(resource, maxPriority, maxAttempts);
+            return services.AddSingleton<IAccessQueue<TResource>>(queue).AddSingleton(queue);
+        }
 
-    /// <summary> Create <see cref="IAccessQueue{TResource}" /> with static shared resources without service registration </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="resources"> Shared resources collection </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
-    [PublicAPI]
-    public static IAccessQueue<TResource> CreateAccessQueue<TResource>(this IServiceCollection services, IEnumerable<TResource> resources,
-        int maxAttempts = int.MaxValue)
-        where TResource : notnull
-    {
-        _ = services ?? throw new ArgumentNullException(nameof(services));
-        var arguments = (resources ?? throw new ArgumentNullException(nameof(resources)))
-                        .Select(resource => resource ?? throw new ArgumentNullException(nameof(resource)))
-                        .ToList();
-        if (arguments.Count == 0) throw new ArgumentException("Empty collection", nameof(resources));
-        var manager = new AccessQueueManager<TResource>(maxAttempts);
-        services.AddSingleton<IHostedService>(provider
-            => new TaskWorker<TResource, object?>(provider, manager, CreateProcessor<TResource, object?>(arguments)));
-        return manager;
-    }
+        /// <summary> Create <see cref="IAccessQueue{TResource}" /> with static shared resources without service registration </summary>
+        /// <param name="resources"> Shared resources collection </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
+        [PublicAPI]
+        public IAccessQueue<TResource> CreateAccessQueue<TResource>(IEnumerable<TResource> resources, int maxAttempts = int.MaxValue)
+            where TResource : notnull
+        {
+            _ = services ?? throw new ArgumentNullException(nameof(services));
+            var arguments = (resources ?? throw new ArgumentNullException(nameof(resources)))
+                            .Select(resource => resource ?? throw new ArgumentNullException(nameof(resource)))
+                            .ToList();
+            if (arguments.Count == 0) throw new ArgumentException("Empty collection", nameof(resources));
+            var manager = new AccessQueueManager<TResource>(maxAttempts);
+            services.AddSingleton<IHostedService>(provider
+                => new TaskWorker<TResource, object?>(provider, manager, CreateProcessor<TResource, object?>(arguments)));
+            return manager;
+        }
 
-    /// <summary> Add <see cref="IAccessQueue{TResource}" /> service with static shared resources </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="resources"> Shared resources collection </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
-    /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
-    [PublicAPI]
-    public static IServiceCollection AddAccessQueue<TResource>(this IServiceCollection services, IEnumerable<TResource> resources,
-        int maxAttempts = int.MaxValue)
-        where TResource : notnull
-    {
-        _ = services ?? throw new ArgumentNullException(nameof(services));
-        if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
-            throw new InvalidOperationException("Service already exists");
-        return services.AddSingleton(services.CreateAccessQueue(resources, maxAttempts));
-    }
+        /// <summary> Add <see cref="IAccessQueue{TResource}" /> service with static shared resources </summary>
+        /// <param name="resources"> Shared resources collection </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+        /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
+        [PublicAPI]
+        public IServiceCollection AddAccessQueue<TResource>(IEnumerable<TResource> resources, int maxAttempts = int.MaxValue)
+            where TResource : notnull
+            => (services ?? throw new ArgumentNullException(nameof(services))).Any(service
+                => service.ImplementationType == typeof(IAccessQueue<TResource>))
+                ? throw new InvalidOperationException("Service already exists")
+                : services.AddSingleton(services.CreateAccessQueue(resources, maxAttempts));
 
-    /// <summary> Create <see cref="IPriorityAccessQueue{TResource}" /> with static shared resources without service registration </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="resources"> Shared resources collection </param>
-    /// <param name="maxPriority"> Max allowed operation priority </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
-    [PublicAPI]
-    public static IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(this IServiceCollection services,
-        IEnumerable<TResource> resources, int maxPriority = 100, int maxAttempts = int.MaxValue)
-        where TResource : notnull
-    {
-        _ = services ?? throw new ArgumentNullException(nameof(services));
-        var arguments = (resources ?? throw new ArgumentNullException(nameof(resources)))
-                        .Select(resource => resource ?? throw new ArgumentNullException(nameof(resource)))
-                        .ToList();
-        if (arguments.Count == 0) throw new ArgumentException("Empty collection", nameof(resources));
-        var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);
-        services.AddSingleton<IHostedService>(provider
-            => new TaskWorker<TResource, int>(provider, manager, CreateProcessor<TResource, int>(arguments)));
-        return manager;
-    }
+        /// <summary> Create <see cref="IPriorityAccessQueue{TResource}" /> with static shared resources without service registration </summary>
+        /// <param name="resources"> Shared resources collection </param>
+        /// <param name="maxPriority"> Max allowed operation priority </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
+        [PublicAPI]
+        public IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(IEnumerable<TResource> resources, int maxPriority = 100,
+            int maxAttempts = int.MaxValue)
+            where TResource : notnull
+        {
+            _ = services ?? throw new ArgumentNullException(nameof(services));
+            var arguments = (resources ?? throw new ArgumentNullException(nameof(resources)))
+                            .Select(resource => resource ?? throw new ArgumentNullException(nameof(resource)))
+                            .ToList();
+            if (arguments.Count == 0) throw new ArgumentException("Empty collection", nameof(resources));
+            var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);
+            services.AddSingleton<IHostedService>(provider
+                => new TaskWorker<TResource, int>(provider, manager, CreateProcessor<TResource, int>(arguments)));
+            return manager;
+        }
 
-    /// <summary> Add <see cref="IPriorityAccessQueue{TResource}" /> and <see cref="IAccessQueue{TResource}" /> services with static shared resources </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="resources"> Shared resources collection </param>
-    /// <param name="maxPriority"> Max allowed operation priority </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
-    /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
-    [PublicAPI]
-    public static IServiceCollection AddPriorityAccessQueue<TResource>(this IServiceCollection services, IEnumerable<TResource> resources,
-        int maxPriority = 100, int maxAttempts = int.MaxValue)
-        where TResource : notnull
-    {
-        _ = services ?? throw new ArgumentNullException(nameof(services));
-        if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
-            throw new InvalidOperationException("Service already exists");
-        var queue = services.CreatePriorityAccessQueue(resources, maxPriority, maxAttempts);
-        return services.AddSingleton<IAccessQueue<TResource>>(queue).AddSingleton(queue);
-    }
+        /// <summary> Add <see cref="IPriorityAccessQueue{TResource}" /> and <see cref="IAccessQueue{TResource}" /> services with static shared resources </summary>
+        /// <param name="resources"> Shared resources collection </param>
+        /// <param name="maxPriority"> Max allowed operation priority </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+        /// <exception cref="ArgumentException"> Thrown if <paramref name="resources" /> collection is empty </exception>
+        [PublicAPI]
+        public IServiceCollection AddPriorityAccessQueue<TResource>(IEnumerable<TResource> resources, int maxPriority = 100,
+            int maxAttempts = int.MaxValue)
+            where TResource : notnull
+        {
+            _ = services ?? throw new ArgumentNullException(nameof(services));
+            if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
+                throw new InvalidOperationException("Service already exists");
+            var queue = services.CreatePriorityAccessQueue(resources, maxPriority, maxAttempts);
+            return services.AddSingleton<IAccessQueue<TResource>>(queue).AddSingleton(queue);
+        }
 
-    /// <summary> Create <see cref="IAccessQueue{TResource}" /> with given shared resources reuse <paramref name="strategy" /> without service registration </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="resourceFactory"> Shared resource factory function </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
-    /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
-    [PublicAPI]
-    public static IAccessQueue<TResource> CreateAccessQueue<TResource>(this IServiceCollection services,
-        Func<IServiceProvider, TResource> resourceFactory, ReuseStrategy strategy, int maxResourceInstances = 1, int maxAttempts = int.MaxValue)
-        where TResource : notnull
-    {
-        _ = services ?? throw new ArgumentNullException(nameof(services));
-        _ = resourceFactory ?? throw new ArgumentNullException(nameof(resourceFactory));
-        if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
-            throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
-        var manager = new AccessQueueManager<TResource>(maxAttempts);
-        services.AddSingleton<IHostedService>(provider => new TaskWorker<TResource, object?>(provider,
-            manager,
-            CreateProcessor<TResource, object?>(resourceFactory, strategy, provider, maxResourceInstances)));
-        return manager;
-    }
+        /// <summary> Create <see cref="IAccessQueue{TResource}" /> with given shared resources reuse <paramref name="strategy" /> without service registration </summary>
+        /// <param name="resourceFactory"> Shared resource factory function </param>
+        /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
+        /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+        [PublicAPI]
+        public IAccessQueue<TResource> CreateAccessQueue<TResource>(Func<IServiceProvider, TResource> resourceFactory, ReuseStrategy strategy,
+            int maxResourceInstances = 1, int maxAttempts = int.MaxValue)
+            where TResource : notnull
+        {
+            _ = services ?? throw new ArgumentNullException(nameof(services));
+            _ = resourceFactory ?? throw new ArgumentNullException(nameof(resourceFactory));
+            if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
+                throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
+            var manager = new AccessQueueManager<TResource>(maxAttempts);
+            services.AddSingleton<IHostedService>(provider => new TaskWorker<TResource, object?>(provider,
+                manager,
+                CreateProcessor<TResource, object?>(resourceFactory, strategy, provider, maxResourceInstances)));
+            return manager;
+        }
 
-    /// <summary> Add <see cref="IAccessQueue{TResource}" /> service with given shared resources reuse <paramref name="strategy" /> </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="resourceFactory"> Shared resource factory function </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
-    /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
-    /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
-    [PublicAPI]
-    public static IServiceCollection AddAccessQueue<TResource>(this IServiceCollection services, Func<IServiceProvider, TResource> resourceFactory,
-        ReuseStrategy strategy, int maxResourceInstances = 1, int maxAttempts = int.MaxValue)
-        where TResource : notnull
-    {
-        _ = services ?? throw new ArgumentNullException(nameof(services));
-        if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
-            throw new InvalidOperationException("Service already exists");
-        return services.AddSingleton(services.CreateAccessQueue(resourceFactory, strategy, maxResourceInstances, maxAttempts));
-    }
+        /// <summary> Add <see cref="IAccessQueue{TResource}" /> service with given shared resources reuse <paramref name="strategy" /> </summary>
+        /// <param name="resourceFactory"> Shared resource factory function </param>
+        /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
+        /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+        /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+        [PublicAPI]
+        public IServiceCollection AddAccessQueue<TResource>(Func<IServiceProvider, TResource> resourceFactory, ReuseStrategy strategy,
+            int maxResourceInstances = 1, int maxAttempts = int.MaxValue)
+            where TResource : notnull
+            => (services ?? throw new ArgumentNullException(nameof(services))).Any(service
+                => service.ImplementationType == typeof(IAccessQueue<TResource>))
+                ? throw new InvalidOperationException("Service already exists")
+                : services.AddSingleton(services.CreateAccessQueue(resourceFactory, strategy, maxResourceInstances, maxAttempts));
 
-    /// <summary> Create <see cref="IPriorityAccessQueue{TResource}" /> with given shared resources reuse <paramref name="strategy" /> without service registration </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="resourceFactory"> Shared resource factory function </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
-    /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
-    /// <param name="maxPriority"> Max allowed operation priority </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
-    [PublicAPI]
-    public static IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(this IServiceCollection services,
-        Func<IServiceProvider, TResource> resourceFactory, ReuseStrategy strategy, int maxResourceInstances = 1, int maxPriority = 100,
-        int maxAttempts = int.MaxValue)
-        where TResource : notnull
-    {
-        _ = services ?? throw new ArgumentNullException(nameof(services));
-        _ = resourceFactory ?? throw new ArgumentNullException(nameof(resourceFactory));
-        if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
-            throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
-        var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);
-        services.AddSingleton<IHostedService>(provider => new TaskWorker<TResource, int>(provider,
-            manager,
-            CreateProcessor<TResource, int>(resourceFactory, strategy, provider, maxResourceInstances)));
-        return manager;
-    }
+        /// <summary> Create <see cref="IPriorityAccessQueue{TResource}" /> with given shared resources reuse <paramref name="strategy" /> without service registration </summary>
+        /// <param name="resourceFactory"> Shared resource factory function </param>
+        /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
+        /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
+        /// <param name="maxPriority"> Max allowed operation priority </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+        [PublicAPI]
+        public IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(Func<IServiceProvider, TResource> resourceFactory,
+            ReuseStrategy strategy, int maxResourceInstances = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
+            where TResource : notnull
+        {
+            _ = services ?? throw new ArgumentNullException(nameof(services));
+            _ = resourceFactory ?? throw new ArgumentNullException(nameof(resourceFactory));
+            if (strategy != ReuseStrategy.Static && strategy != ReuseStrategy.Reuse && strategy != ReuseStrategy.OneTime)
+                throw new InvalidEnumArgumentException(nameof(strategy), (int) strategy, typeof(ReuseStrategy));
+            var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);
+            services.AddSingleton<IHostedService>(provider => new TaskWorker<TResource, int>(provider,
+                manager,
+                CreateProcessor<TResource, int>(resourceFactory, strategy, provider, maxResourceInstances)));
+            return manager;
+        }
 
-    /// <summary> Add <see cref="IPriorityAccessQueue{TResource}" /> and <see cref="IAccessQueue{TResource}" /> services with given shared resources reuse <paramref name="strategy" /> </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="resourceFactory"> Shared resource factory function </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
-    /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
-    /// <param name="maxPriority"> Max allowed operation priority </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
-    /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
-    [PublicAPI]
-    public static IServiceCollection AddPriorityAccessQueue<TResource>(this IServiceCollection services,
-        Func<IServiceProvider, TResource> resourceFactory, ReuseStrategy strategy, int maxResourceInstances = 1, int maxPriority = 100,
-        int maxAttempts = int.MaxValue)
-        where TResource : notnull
-    {
-        _ = services ?? throw new ArgumentNullException(nameof(services));
-        if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
-            throw new InvalidOperationException("Service already exists");
-        var queue = services.CreatePriorityAccessQueue(resourceFactory, strategy, maxResourceInstances, maxPriority, maxAttempts);
-        return services.AddSingleton<IAccessQueue<TResource>>(queue).AddSingleton(queue);
-    }
+        /// <summary> Add <see cref="IPriorityAccessQueue{TResource}" /> and <see cref="IAccessQueue{TResource}" /> services with given shared resources reuse <paramref name="strategy" /> </summary>
+        /// <param name="resourceFactory"> Shared resource factory function </param>
+        /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
+        /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
+        /// <param name="maxPriority"> Max allowed operation priority </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+        /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+        [PublicAPI]
+        public IServiceCollection AddPriorityAccessQueue<TResource>(Func<IServiceProvider, TResource> resourceFactory, ReuseStrategy strategy,
+            int maxResourceInstances = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
+            where TResource : notnull
+        {
+            _ = services ?? throw new ArgumentNullException(nameof(services));
+            if (services.Any(service => service.ImplementationType == typeof(IAccessQueue<TResource>)))
+                throw new InvalidOperationException("Service already exists");
+            var queue = services.CreatePriorityAccessQueue(resourceFactory, strategy, maxResourceInstances, maxPriority, maxAttempts);
+            return services.AddSingleton<IAccessQueue<TResource>>(queue).AddSingleton(queue);
+        }
 
-    /// <summary> Create <see cref="IAccessQueue{TResource}" /> with given shared resources reuse <paramref name="strategy" /> without service registration </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
-    /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
-    [PublicAPI]
-    public static IAccessQueue<TResource> CreateAccessQueue<TResource>(this IServiceCollection services, ReuseStrategy strategy,
-        int maxResourceInstances = 1, int maxAttempts = int.MaxValue)
-        where TResource : notnull
-        => (services ?? throw new ArgumentNullException(nameof(services)))
-            .CreateAccessQueue(provider => provider.GetRequiredService<TResource>(), strategy, maxResourceInstances, maxAttempts);
+        /// <summary> Create <see cref="IAccessQueue{TResource}" /> with given shared resources reuse <paramref name="strategy" /> without service registration </summary>
+        /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
+        /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+        [PublicAPI]
+        public IAccessQueue<TResource> CreateAccessQueue<TResource>(ReuseStrategy strategy, int maxResourceInstances = 1,
+            int maxAttempts = int.MaxValue)
+            where TResource : notnull
+            => (services ?? throw new ArgumentNullException(nameof(services))).CreateAccessQueue(provider => provider.GetRequiredService<TResource>(),
+                strategy,
+                maxResourceInstances,
+                maxAttempts);
 
-    /// <summary> Add <see cref="IAccessQueue{TResource}" /> service with given shared resources reuse <paramref name="strategy" /> </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
-    /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
-    /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
-    [PublicAPI]
-    public static IServiceCollection AddAccessQueue<TResource>(this IServiceCollection services, ReuseStrategy strategy, int maxResourceInstances = 1,
-        int maxAttempts = int.MaxValue)
-        where TResource : notnull
-        => (services ?? throw new ArgumentNullException(nameof(services)))
-            .AddAccessQueue(provider => provider.GetRequiredService<TResource>(), strategy, maxResourceInstances, maxAttempts);
+        /// <summary> Add <see cref="IAccessQueue{TResource}" /> service with given shared resources reuse <paramref name="strategy" /> </summary>
+        /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
+        /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+        /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+        [PublicAPI]
+        public IServiceCollection AddAccessQueue<TResource>(ReuseStrategy strategy, int maxResourceInstances = 1, int maxAttempts = int.MaxValue)
+            where TResource : notnull
+            => (services ?? throw new ArgumentNullException(nameof(services))).AddAccessQueue(provider => provider.GetRequiredService<TResource>(),
+                strategy,
+                maxResourceInstances,
+                maxAttempts);
 
-    /// <summary> Create <see cref="IPriorityAccessQueue{TResource}" /> with given shared resources reuse <paramref name="strategy" /> without service registration </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
-    /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
-    /// <param name="maxPriority"> Max allowed operation priority </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
-    /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
-    [PublicAPI]
-    public static IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(this IServiceCollection services, ReuseStrategy strategy,
-        int maxResourceInstances = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
-        where TResource : notnull
-        => (services ?? throw new ArgumentNullException(nameof(services)))
-            .CreatePriorityAccessQueue(provider => provider.GetRequiredService<TResource>(),
+        /// <summary> Create <see cref="IPriorityAccessQueue{TResource}" /> with given shared resources reuse <paramref name="strategy" /> without service registration </summary>
+        /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
+        /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
+        /// <param name="maxPriority"> Max allowed operation priority </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+        /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+        [PublicAPI]
+        public IPriorityAccessQueue<TResource> CreatePriorityAccessQueue<TResource>(ReuseStrategy strategy, int maxResourceInstances = 1,
+            int maxPriority = 100, int maxAttempts = int.MaxValue)
+            where TResource : notnull
+            => (services ?? throw new ArgumentNullException(nameof(services))).CreatePriorityAccessQueue(
+                provider => provider.GetRequiredService<TResource>(),
                 strategy,
                 maxResourceInstances,
                 maxPriority,
                 maxAttempts);
 
-    /// <summary> Add <see cref="IPriorityAccessQueue{TResource}" /> and <see cref="IAccessQueue{TResource}" /> services with given shared resources reuse <paramref name="strategy" /> </summary>
-    /// <param name="services"> Service collection </param>
-    /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
-    /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
-    /// <param name="maxPriority"> Max allowed operation priority </param>
-    /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
-    /// <typeparam name="TResource"> Shared resource type </typeparam>
-    /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
-    /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
-    [PublicAPI]
-    public static IServiceCollection AddPriorityAccessQueue<TResource>(this IServiceCollection services, ReuseStrategy strategy,
-        int maxResourceInstances = 1, int maxPriority = 100, int maxAttempts = int.MaxValue)
-        where TResource : notnull
-        => (services ?? throw new ArgumentNullException(nameof(services)))
-            .AddPriorityAccessQueue(provider => provider.GetRequiredService<TResource>(),
+        /// <summary> Add <see cref="IPriorityAccessQueue{TResource}" /> and <see cref="IAccessQueue{TResource}" /> services with given shared resources reuse <paramref name="strategy" /> </summary>
+        /// <param name="strategy"> Conveyor machines reuse strategy <seealso cref="ReuseStrategy" /> </param>
+        /// <param name="maxResourceInstances"> Max allowed shared resource instances count </param>
+        /// <param name="maxPriority"> Max allowed operation priority </param>
+        /// <param name="maxAttempts"> Max allowed retry on fail attempts </param>
+        /// <typeparam name="TResource"> Shared resource type </typeparam>
+        /// <exception cref="InvalidOperationException"> Thrown if service already exists </exception>
+        /// <exception cref="InvalidEnumArgumentException"> Thrown if <paramref name="strategy" /> has incorrect value </exception>
+        [PublicAPI]
+        public IServiceCollection AddPriorityAccessQueue<TResource>(ReuseStrategy strategy, int maxResourceInstances = 1, int maxPriority = 100,
+            int maxAttempts = int.MaxValue)
+            where TResource : notnull
+            => (services ?? throw new ArgumentNullException(nameof(services))).AddPriorityAccessQueue(
+                provider => provider.GetRequiredService<TResource>(),
                 strategy,
                 maxResourceInstances,
                 maxPriority,
                 maxAttempts);
+    }
 }

@@ -20,87 +20,105 @@ namespace AInq.Background.Interaction;
 /// <remarks> <see cref="IPriorityAccessQueue{TResource}" /> or <see cref="IAccessQueue{TResource}" /> service should be registered on host to run queued access </remarks>
 public static class WorkQueueAccessQueueServiceProviderInteraction
 {
+    /// <param name="provider"> Service provider instance </param>
+    extension(IServiceProvider provider)
+    {
 #region QueueAccess
 
-    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource}" />
-    [PublicAPI]
-    public static Task EnqueueAccess<TResource>(this IServiceProvider provider, IAccess<TResource> access, int priority = 0, int attemptsCount = 1,
-        CancellationToken cancellation = default)
-        where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider)))
-           .RequiredService<IWorkQueue>()
-           .EnqueueAccess(access ?? throw new ArgumentNullException(nameof(access)), priority, attemptsCount, cancellation);
+        /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource}" />
+        [PublicAPI]
+        public Task EnqueueAccess<TResource>(IAccess<TResource> access, int priority = 0, int attemptsCount = 1,
+            CancellationToken cancellation = default)
+            where TResource : notnull
+            => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
+                                                                              .EnqueueAccess(
+                                                                                  access ?? throw new ArgumentNullException(nameof(access)),
+                                                                                  priority,
+                                                                                  attemptsCount,
+                                                                                  cancellation);
 
-    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource,TResult}(IWorkQueue,IAccess{TResource,TResult},int,int,CancellationToken)" />
-    [PublicAPI]
-    public static Task<TResult> EnqueueAccess<TResource, TResult>(this IServiceProvider provider, IAccess<TResource, TResult> access,
-        int priority = 0, int attemptsCount = 1, CancellationToken cancellation = default)
-        where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider)))
-           .RequiredService<IWorkQueue>()
-           .EnqueueAccess(access ?? throw new ArgumentNullException(nameof(access)), priority, attemptsCount, cancellation);
+        /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource,TResult}(IWorkQueue,IAccess{TResource,TResult},int,int,CancellationToken)" />
+        [PublicAPI]
+        public Task<TResult> EnqueueAccess<TResource, TResult>(IAccess<TResource, TResult> access, int priority = 0, int attemptsCount = 1,
+            CancellationToken cancellation = default)
+            where TResource : notnull
+            => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
+                                                                              .EnqueueAccess(
+                                                                                  access ?? throw new ArgumentNullException(nameof(access)),
+                                                                                  priority,
+                                                                                  attemptsCount,
+                                                                                  cancellation);
 
-    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource}" />
-    [PublicAPI]
-    public static Task EnqueueAsyncAccess<TResource>(this IServiceProvider provider, IAsyncAccess<TResource> access, int priority = 0,
-        int attemptsCount = 1, CancellationToken cancellation = default)
-        where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider)))
-           .RequiredService<IWorkQueue>()
-           .EnqueueAsyncAccess(access ?? throw new ArgumentNullException(nameof(access)), priority, attemptsCount, cancellation);
+        /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource}" />
+        [PublicAPI]
+        public Task EnqueueAsyncAccess<TResource>(IAsyncAccess<TResource> access, int priority = 0, int attemptsCount = 1,
+            CancellationToken cancellation = default)
+            where TResource : notnull
+            => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
+                                                                              .EnqueueAsyncAccess(
+                                                                                  access ?? throw new ArgumentNullException(nameof(access)),
+                                                                                  priority,
+                                                                                  attemptsCount,
+                                                                                  cancellation);
 
-    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource,TResult}(IWorkQueue,IAsyncAccess{TResource,TResult},int,int,CancellationToken)" />
-    [PublicAPI]
-    public static Task<TResult> EnqueueAsyncAccess<TResource, TResult>(this IServiceProvider provider, IAsyncAccess<TResource, TResult> access,
-        int priority = 0, int attemptsCount = 1, CancellationToken cancellation = default)
-        where TResource : notnull
-        => (provider ?? throw new ArgumentNullException(nameof(provider)))
-           .RequiredService<IWorkQueue>()
-           .EnqueueAsyncAccess(access ?? throw new ArgumentNullException(nameof(access)), priority, attemptsCount, cancellation);
+        /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource,TResult}(IWorkQueue,IAsyncAccess{TResource,TResult},int,int,CancellationToken)" />
+        [PublicAPI]
+        public Task<TResult> EnqueueAsyncAccess<TResource, TResult>(IAsyncAccess<TResource, TResult> access, int priority = 0, int attemptsCount = 1,
+            CancellationToken cancellation = default)
+            where TResource : notnull
+            => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
+                                                                              .EnqueueAsyncAccess(
+                                                                                  access ?? throw new ArgumentNullException(nameof(access)),
+                                                                                  priority,
+                                                                                  attemptsCount,
+                                                                                  cancellation);
 
 #endregion
 
 #region QueueAccessDI
 
-    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource,TAccess}(IWorkQueue,int,int,CancellationToken)" />
-    [PublicAPI]
-    public static Task EnqueueAccess<TResource, TAccess>(this IServiceProvider provider, int priority = 0, int attemptsCount = 1,
-        CancellationToken cancellation = default)
-        where TResource : notnull
-        where TAccess : IAccess<TResource>
-        => (provider ?? throw new ArgumentNullException(nameof(provider)))
-           .RequiredService<IWorkQueue>()
-           .EnqueueAccess<TResource, TAccess>(priority, attemptsCount, cancellation);
+        /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource,TAccess}(IWorkQueue,int,int,CancellationToken)" />
+        [PublicAPI]
+        public Task EnqueueAccess<TResource, TAccess>(int priority = 0, int attemptsCount = 1, CancellationToken cancellation = default)
+            where TResource : notnull
+            where TAccess : IAccess<TResource>
+            => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
+                                                                              .EnqueueAccess<TResource, TAccess>(priority,
+                                                                                  attemptsCount,
+                                                                                  cancellation);
 
-    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource,TAccess,TResult}" />
-    [PublicAPI]
-    public static Task<TResult> EnqueueAccess<TResource, TAccess, TResult>(this IServiceProvider provider, int priority = 0, int attemptsCount = 1,
-        CancellationToken cancellation = default)
-        where TResource : notnull
-        where TAccess : IAccess<TResource, TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider)))
-           .RequiredService<IWorkQueue>()
-           .EnqueueAccess<TResource, TAccess, TResult>(priority, attemptsCount, cancellation);
+        /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAccess{TResource,TAccess,TResult}" />
+        [PublicAPI]
+        public Task<TResult> EnqueueAccess<TResource, TAccess, TResult>(int priority = 0, int attemptsCount = 1,
+            CancellationToken cancellation = default)
+            where TResource : notnull
+            where TAccess : IAccess<TResource, TResult>
+            => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
+                                                                              .EnqueueAccess<TResource, TAccess, TResult>(priority,
+                                                                                  attemptsCount,
+                                                                                  cancellation);
 
-    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource,TAsyncAccess}(IWorkQueue,int,int,CancellationToken)" />
-    [PublicAPI]
-    public static Task EnqueueAsyncAccess<TResource, TAsyncAccess>(this IServiceProvider provider, int priority = 0, int attemptsCount = 1,
-        CancellationToken cancellation = default)
-        where TResource : notnull
-        where TAsyncAccess : IAsyncAccess<TResource>
-        => (provider ?? throw new ArgumentNullException(nameof(provider)))
-           .RequiredService<IWorkQueue>()
-           .EnqueueAsyncAccess<TResource, TAsyncAccess>(priority, attemptsCount, cancellation);
+        /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource,TAsyncAccess}(IWorkQueue,int,int,CancellationToken)" />
+        [PublicAPI]
+        public Task EnqueueAsyncAccess<TResource, TAsyncAccess>(int priority = 0, int attemptsCount = 1, CancellationToken cancellation = default)
+            where TResource : notnull
+            where TAsyncAccess : IAsyncAccess<TResource>
+            => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
+                                                                              .EnqueueAsyncAccess<TResource, TAsyncAccess>(priority,
+                                                                                  attemptsCount,
+                                                                                  cancellation);
 
-    /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource,TAsyncAccess,TResult}" />
-    [PublicAPI]
-    public static Task<TResult> EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(this IServiceProvider provider, int priority = 0,
-        int attemptsCount = 1, CancellationToken cancellation = default)
-        where TResource : notnull
-        where TAsyncAccess : IAsyncAccess<TResource, TResult>
-        => (provider ?? throw new ArgumentNullException(nameof(provider)))
-           .RequiredService<IWorkQueue>()
-           .EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(priority, attemptsCount, cancellation);
+        /// <inheritdoc cref="WorkQueueAccessQueueInteraction.EnqueueAsyncAccess{TResource,TAsyncAccess,TResult}" />
+        [PublicAPI]
+        public Task<TResult> EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(int priority = 0, int attemptsCount = 1,
+            CancellationToken cancellation = default)
+            where TResource : notnull
+            where TAsyncAccess : IAsyncAccess<TResource, TResult>
+            => (provider ?? throw new ArgumentNullException(nameof(provider))).RequiredService<IWorkQueue>()
+                                                                              .EnqueueAsyncAccess<TResource, TAsyncAccess, TResult>(priority,
+                                                                                  attemptsCount,
+                                                                                  cancellation);
 
 #endregion
+    }
 }

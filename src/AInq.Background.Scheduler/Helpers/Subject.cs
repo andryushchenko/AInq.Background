@@ -83,16 +83,9 @@ internal sealed class Subject<T> : IObservable<T>
         }
     }
 
-    private sealed class Subscriber : IDisposable
+    private sealed class Subscriber(IObserver<T> observer, Subject<T>? owner) : IDisposable
     {
-        private readonly IObserver<T> _observer;
-        private Subject<T>? _owner;
-
-        public Subscriber(IObserver<T> observer, Subject<T>? owner)
-        {
-            _observer = observer;
-            _owner = owner;
-        }
+        private Subject<T>? _owner = owner;
 
         void IDisposable.Dispose()
         {
@@ -101,9 +94,9 @@ internal sealed class Subject<T> : IObservable<T>
         }
 
         public void OnCompleted()
-            => _observer.OnCompleted();
+            => observer.OnCompleted();
 
         public void OnNext(T value)
-            => _observer.OnNext(value);
+            => observer.OnNext(value);
     }
 }

@@ -9,7 +9,7 @@
 Background work utilities for .NET Core apps based on Hosted services. Originally designed for accessing API with strict request-per-second limit.
 
 - **Background work queue** with configurable parallelism and optional prioritizing
-- **Shared resource access queue** with different resource reuse strategies and optional prioritizing 
+- **Shared resource access queue** with different resource reuse strategies and optional prioritizing
 - **Background data processing conveyor** with different conveyor machine reuse strategies and optional prioritizing
 - **Work scheduler** with Cron support
 - **Startup work** utility
@@ -17,87 +17,96 @@ Background work utilities for .NET Core apps based on Hosted services. Originall
 ## New in 4.1
 
 - **BREAKING CHANGES**
-  - **Startup work** utility moved to separate package **AInq.Background.Startup**
+    - **Startup work** utility moved to separate package **AInq.Background.Startup**
 - Minor bug fix and internal optimization
 
 ## New in 4.0
 
 - **BREAKING CHANGES**
-  - Background work Scheduler interfaces moved to separate package **AInq.Background.Scheduler.Abstraction**
-  - Background work Scheduler now uses `Try` and `Maybe` from **AInq.Optional** to pass errors logically correct to Observable
+    - Background work Scheduler interfaces moved to separate package **AInq.Background.Scheduler.Abstraction**
+    - Background work Scheduler now uses `Try` and `Maybe` from **AInq.Optional
+      ** to pass errors logically correct to Observable
 - Background work Scheduler now uses **System.Reactive** instead of custom buggy `IObservable<T>` implementation
 
 ## New in 3.0
 
 - **GENERAL BUGFIX**
 - **New features**
-  - Service interaction extensions
-  - Batch processing extension
-  - Repeated work in `IWorkScheduler`
-  - Work results in `IWorkScheduler`
+    - Service interaction extensions
+    - Batch processing extension
+    - Repeated work in `IWorkScheduler`
+    - Work results in `IWorkScheduler`
 - **Refactoring**
-  - Simplify basic interfaces: non-basic methods moved to extensions
-  - Cleanup Helpers and Extensions classes struct
+    - Simplify basic interfaces: non-basic methods moved to extensions
+    - Cleanup Helpers and Extensions classes struct
 - **BREAKING CHANGES**
-  - Removed some unused methods from `WorkFactory` and `AccessFactory`
-  - Some extension methods moved form `AInq.Background.Helpers` namespace to `AInq.Background.Extensions` and `AInq.Background.Interaction`
-  - ~~`IActivatable`~~ `IStartStopppable`
- 
+    - Removed some unused methods from `WorkFactory` and `AccessFactory`
+    - Some extension methods moved form `AInq.Background.Helpers` namespace to `AInq.Background.Extensions` and
+      `AInq.Background.Interaction`
+    - ~~`IActivatable`~~ `IStartStopppable`
 
 ## Packages description
+
 #### [![Nuget](https://img.shields.io/nuget/v/AInq.Background.Abstraction)](https://www.nuget.org/packages/AInq.Background.Abstraction/) AInq.Background.Abstraction
 
 Basic interfaces and helpers library.
 
 - Basic interfaces and factory classes:
-  - Work interfaces: `IWork`, `IWork<TResult>`, `IAsyncWork`, `IAsyncWork<TResult>`
-  - `WorkFactory` for creating simple work instances from delegates
-  - Resource access interfaces: `IAccess<TResource>`, `IAccess<TResource, TResult>`, `IAsyncAccess<TResource>`, `IAsyncAccess<TResource, TResult>`
-  - `AccessFactory` for creating simple access instances from delegates
-  - `IConveyorMachine<TData, TResult>` for conveyor data processing machines
-  - `IActivatable` and `IThrottling` for shared resources and conveyor machines with particular usage strategies
+    - Work interfaces: `IWork`, `IWork<TResult>`, `IAsyncWork`, `IAsyncWork<TResult>`
+    - `WorkFactory` for creating simple work instances from delegates
+    - Resource access interfaces: `IAccess<TResource>`, `IAccess<TResource, TResult>`, `IAsyncAccess<TResource>`,
+      `IAsyncAccess<TResource, TResult>`
+    - `AccessFactory` for creating simple access instances from delegates
+    - `IConveyorMachine<TData, TResult>` for conveyor data processing machines
+    - `IActivatable` and `IThrottling` for shared resources and conveyor machines with particular usage strategies
 - Service interfaces
-  - `IWorkQueue` and `IPriorityWorkQueue` for background task queue
-  - `IAccessQueue<TResource>` and `IPriorityAccessQueue<TResource>` for shared resource access queue
-  - `IConveyor<TData, TResult>` and `IPriorityConveyor<TData, TResult>` for background data processing conveyor
-- Helpers and extensions including methods to use services together (e.g. enqueue `IAccess<TResource>` to `IWorkQueue`) if needed
+    - `IWorkQueue` and `IPriorityWorkQueue` for background task queue
+    - `IAccessQueue<TResource>` and `IPriorityAccessQueue<TResource>` for shared resource access queue
+    - `IConveyor<TData, TResult>` and `IPriorityConveyor<TData, TResult>` for background data processing conveyor
+- Helpers and extensions including methods to use services together (e.g. enqueue `IAccess<TResource>` to
+  `IWorkQueue`) if needed
 
 #### [![Nuget](https://img.shields.io/nuget/v/AInq.Background)](https://www.nuget.org/packages/AInq.Background/) AInq.Background
 
 Queues and conveyor implementations.
 
 - Background work queue
-  - Optional support for configurable parallelism
-  - Optional support for prioritizing
-  - Use `WorkQueueInjection` to register service or create for internal usage
+    - Optional support for configurable parallelism
+    - Optional support for prioritizing
+    - Use `WorkQueueInjection` to register service or create for internal usage
 - Shared resource access queue
-  - Support single or many resource instances with different lifetime
-  - Optional support for prioritizing
-  - Use `AccessQueueInjection` to register service or create for internal usage
+    - Support single or many resource instances with different lifetime
+    - Optional support for prioritizing
+    - Use `AccessQueueInjection` to register service or create for internal usage
 - Background data processing conveyor
-  - Support single or many conveyor machines with different lifetime
-  - Optional support for prioritizing
-  - Use `ConveyorInjection` to register service or create for internal usage
+    - Support single or many conveyor machines with different lifetime
+    - Optional support for prioritizing
+    - Use `ConveyorInjection` to register service or create for internal usage
 
-You can extend functionality by implementing custom `ITaskWrapper`, `ITaskManager` or `ITaskProcessor` and combine with existing ones to create more service variants. 
+You can extend functionality by implementing custom `ITaskWrapper`, `ITaskManager` or
+`ITaskProcessor` and combine with existing ones to create more service variants.
 
 #### [![Nuget](https://img.shields.io/nuget/v/AInq.Background.Scheduler.Abstraction)](https://www.nuget.org/packages/AInq.Background.Scheduler.Abstraction/) AInq.Background.Scheduler.Abstraction
 
 Work scheduler interfaces and helpers library.
 
 - Service interfaces
-  - `IWorkScheduler` for background work scheduler
-- Helpers and extensions including methods to use services together (e.g. schedule `IAccess<TResource>` to `IWorkScheduler`) if needed
+    - `IWorkScheduler` for background work scheduler
+- Helpers and extensions including methods to use services together (e.g. schedule `IAccess<TResource>` to
+  `IWorkScheduler`) if needed
 
 #### [![Nuget](https://img.shields.io/nuget/v/AInq.Background.Scheduler)](https://www.nuget.org/packages/AInq.Background.Scheduler/) AInq.Background.Scheduler
 
 Work scheduler implementation.
+
 - Support delayed, time-scheduled, and cron-scheduled work
 - Use `WorkSchedulerInjection` to register service or create for internal usage
 
-You can extend functionality by implementing custom `IScheduledTaskWrapper` or `IWorkSchedulerManager` and combine with existing ones to create more service variants. 
+You can extend functionality by implementing custom `IScheduledTaskWrapper` or
+`IWorkSchedulerManager` and combine with existing ones to create more service variants.
 
-**NOTE:** [Cronos](https://github.com/HangfireIO/Cronos) is used for parsing Cron expressions - follow documentation for supported options. Format with seconds is supported.
+**NOTE:
+** [Cronos](https://github.com/HangfireIO/Cronos) is used for parsing Cron expressions - follow documentation for supported options. Format with seconds is supported.
 
 #### [![Nuget](https://img.shields.io/nuget/v/AInq.Background.Enumerable)](https://www.nuget.org/packages/AInq.Background.Enumerable/) AInq.Background.Enumerable
 
@@ -120,4 +129,5 @@ These packages are in active production use, all fixes and improvements will be 
 If you find a bug, have a question or something else - you are friendly welcome to open an issue.
 
 ## License
+
 Copyright © 2020 Anton Andryushchenko. AInq.Background is licensed under [Apache License 2.0](LICENSE)
