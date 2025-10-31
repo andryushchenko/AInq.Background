@@ -143,7 +143,7 @@ public static class ScheduledWorkWrapperFactory
                 _completion.TrySetException(ex);
             }
             _nextScheduledTime = null;
-#if NETSTANDARD2_0
+#if NETSTANDARD
             _cancellationRegistration.Dispose();
 #else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
@@ -207,7 +207,7 @@ public static class ScheduledWorkWrapperFactory
                 _completion.TrySetException(ex);
             }
             _nextScheduledTime = null;
-#if NETSTANDARD2_0
+#if NETSTANDARD
             _cancellationRegistration.Dispose();
 #else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);

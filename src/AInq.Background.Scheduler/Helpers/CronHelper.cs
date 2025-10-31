@@ -35,7 +35,7 @@ public static class CronHelper
             {
                 5 => CronExpression.Parse(cronExpression),
                 6 => CronExpression.Parse(cronExpression, CronFormat.IncludeSeconds),
-#if NETSTANDARD2_0
+#if NETSTANDARD
                 _ => cronExpression.StartsWith("@")
 #else
                 _ => cronExpression.StartsWith('@')

@@ -111,7 +111,7 @@ public static class WorkWrapperFactory
             if (_attemptsRemain < 1)
             {
                 _completion.TrySetException(new InvalidOperationException("No attempts left"));
-#if NETSTANDARD2_0
+#if NETSTANDARD
                 _cancellationRegistration.Dispose();
 #else
                 await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
@@ -146,7 +146,7 @@ public static class WorkWrapperFactory
                     return false;
                 _completion.TrySetException(ex);
             }
-#if NETSTANDARD2_0
+#if NETSTANDARD
             _cancellationRegistration.Dispose();
 #else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
@@ -194,7 +194,7 @@ public static class WorkWrapperFactory
             if (_attemptsRemain < 1)
             {
                 _completion.TrySetException(new InvalidOperationException("No attempts left"));
-#if NETSTANDARD2_0
+#if NETSTANDARD
                 _cancellationRegistration.Dispose();
 #else
                 await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
@@ -228,7 +228,7 @@ public static class WorkWrapperFactory
                     return false;
                 _completion.TrySetException(ex);
             }
-#if NETSTANDARD2_0
+#if NETSTANDARD
             _cancellationRegistration.Dispose();
 #else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);

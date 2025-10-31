@@ -159,7 +159,7 @@ public static class CronWorkWrapperFactory
             catch (OperationCanceledException)
             {
                 if (outerCancellation.IsCancellationRequested)
-                    logger.LogError("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
+                    logger.LogWarning("Scheduled work {Work} canceled by runtime", _asyncWork as object ?? _work);
             }
             catch (Exception ex)
             {
@@ -170,7 +170,7 @@ public static class CronWorkWrapperFactory
             if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue && _execCount != 0)
                 return true;
             _subject.OnCompleted();
-#if NETSTANDARD2_0
+#if NETSTANDARD
             _cancellationRegistration.Dispose();
 #else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
@@ -244,7 +244,7 @@ public static class CronWorkWrapperFactory
             if (_cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local).HasValue && _execCount != 0)
                 return true;
             _subject.OnCompleted();
-#if NETSTANDARD2_0
+#if NETSTANDARD
             _cancellationRegistration.Dispose();
 #else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);

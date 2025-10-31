@@ -196,7 +196,7 @@ public static class RepeatedWorkWrapperFactory
             if (_execCount != 0)
                 return true;
             _subject.OnCompleted();
-#if NETSTANDARD2_0
+#if NETSTANDARD
             _cancellationRegistration.Dispose();
 #else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
@@ -278,7 +278,7 @@ public static class RepeatedWorkWrapperFactory
             if (_execCount != 0)
                 return true;
             _subject.OnCompleted();
-#if NETSTANDARD2_0
+#if NETSTANDARD
             _cancellationRegistration.Dispose();
 #else
             await _cancellationRegistration.DisposeAsync().ConfigureAwait(false);
