@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)'!='netstandard2.0'">
-        <PackageVersion Include="DotNext.Threading" Version="5.26.0" />
+        <PackageVersion Include="DotNext.Threading" Version="5.26.1" />
     </ItemGroup>
 
     <ItemGroup>
