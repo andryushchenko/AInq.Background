@@ -71,8 +71,8 @@ public static class AccessQueueInjection
         _ = services ?? throw new ArgumentNullException(nameof(services));
         _ = resource ?? throw new ArgumentNullException(nameof(resource));
         var manager = new PriorityAccessQueueManager<TResource>(maxPriority, maxAttempts);
-        services.AddSingleton<IHostedService>(
-            provider => new TaskWorker<TResource, int>(provider, manager, CreateProcessor<TResource, int>(resource)));
+        services.AddSingleton<IHostedService>(provider
+            => new TaskWorker<TResource, int>(provider, manager, CreateProcessor<TResource, int>(resource)));
         return manager;
     }
 

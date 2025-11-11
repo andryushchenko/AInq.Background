@@ -40,7 +40,7 @@ public static class AccessQueueEnumerableExtension
 #if NETSTANDARD
                       .Where(access => access != null)
 #endif
-                      .Select(access => accessQueue.EnqueueAccess(access, attemptsCount, cancellation));
+            .Select(access => accessQueue.EnqueueAccess(access, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -76,7 +76,7 @@ public static class AccessQueueEnumerableExtension
 #if NETSTANDARD
                       .Where(access => access != null)
 #endif
-                      .Select(access => priorityAccessQueue.EnqueueAccess(access, priority, attemptsCount, cancellation));
+            .Select(access => priorityAccessQueue.EnqueueAccess(access, priority, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -129,7 +129,7 @@ public static class AccessQueueEnumerableExtension
 #if NETSTANDARD
                       .Where(access => access != null)
 #endif
-                      .Select(access => accessQueue.EnqueueAsyncAccess(access, attemptsCount, cancellation));
+            .Select(access => accessQueue.EnqueueAsyncAccess(access, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -165,7 +165,7 @@ public static class AccessQueueEnumerableExtension
 #if NETSTANDARD
                       .Where(access => access != null)
 #endif
-                      .Select(access => priorityAccessQueue.EnqueueAsyncAccess(access, priority, attemptsCount, cancellation));
+            .Select(access => priorityAccessQueue.EnqueueAsyncAccess(access, priority, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -214,7 +214,7 @@ public static class AccessQueueEnumerableExtension
 #if NETSTANDARD
                 if (access != null)
 #endif
-                    await writer.WriteAsync(accessQueue.EnqueueAccess(access, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
+                await writer.WriteAsync(accessQueue.EnqueueAccess(access, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
         {
@@ -265,8 +265,8 @@ public static class AccessQueueEnumerableExtension
 #if NETSTANDARD
                 if (access != null)
 #endif
-                    await writer.WriteAsync(priorityAccessQueue.EnqueueAccess(access, priority, attemptsCount, cancellation), cancellation)
-                                .ConfigureAwait(false);
+                await writer.WriteAsync(priorityAccessQueue.EnqueueAccess(access, priority, attemptsCount, cancellation), cancellation)
+                            .ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
         {
@@ -328,7 +328,7 @@ public static class AccessQueueEnumerableExtension
 #if NETSTANDARD
                 if (access != null)
 #endif
-                    await writer.WriteAsync(accessQueue.EnqueueAsyncAccess(access, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
+                await writer.WriteAsync(accessQueue.EnqueueAsyncAccess(access, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
         {
@@ -379,8 +379,8 @@ public static class AccessQueueEnumerableExtension
 #if NETSTANDARD
                 if (access != null)
 #endif
-                    await writer.WriteAsync(priorityAccessQueue.EnqueueAsyncAccess(access, priority, attemptsCount, cancellation), cancellation)
-                                .ConfigureAwait(false);
+                await writer.WriteAsync(priorityAccessQueue.EnqueueAsyncAccess(access, priority, attemptsCount, cancellation), cancellation)
+                            .ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
         {

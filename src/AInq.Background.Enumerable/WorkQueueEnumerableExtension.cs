@@ -185,7 +185,7 @@ public static class WorkQueueEnumerableExtension
 #if NETSTANDARD
                 if (work != null)
 #endif
-                    await writer.WriteAsync(queue.EnqueueWork(work, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
+                await writer.WriteAsync(queue.EnqueueWork(work, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
         {
@@ -231,8 +231,8 @@ public static class WorkQueueEnumerableExtension
 #if NETSTANDARD
                 if (work != null)
 #endif
-                    await writer.WriteAsync(priorityQueue.EnqueueWork(work, priority, attemptsCount, cancellation), cancellation)
-                                .ConfigureAwait(false);
+                await writer.WriteAsync(priorityQueue.EnqueueWork(work, priority, attemptsCount, cancellation), cancellation)
+                            .ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
         {
@@ -289,7 +289,7 @@ public static class WorkQueueEnumerableExtension
 #if NETSTANDARD
                 if (work != null)
 #endif
-                    await writer.WriteAsync(queue.EnqueueAsyncWork(work, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
+                await writer.WriteAsync(queue.EnqueueAsyncWork(work, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
         {
@@ -335,8 +335,8 @@ public static class WorkQueueEnumerableExtension
 #if NETSTANDARD
                 if (work != null)
 #endif
-                    await writer.WriteAsync(priorityQueue.EnqueueAsyncWork(work, priority, attemptsCount, cancellation), cancellation)
-                                .ConfigureAwait(false);
+                await writer.WriteAsync(priorityQueue.EnqueueAsyncWork(work, priority, attemptsCount, cancellation), cancellation)
+                            .ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
         {

@@ -39,7 +39,7 @@ public static class ConveyorEnumerableExtension
 #if NETSTANDARD
                       .Where(item => item != null)
 #endif
-                      .Select(item => conveyor.ProcessDataAsync(item, attemptsCount, cancellation));
+            .Select(item => conveyor.ProcessDataAsync(item, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -75,7 +75,7 @@ public static class ConveyorEnumerableExtension
 #if NETSTANDARD
                       .Where(item => item != null)
 #endif
-                      .Select(item => conveyor.ProcessDataAsync(item, priority, attemptsCount, cancellation));
+            .Select(item => conveyor.ProcessDataAsync(item, priority, attemptsCount, cancellation));
         if (enqueueAll) results = results.ToList();
         foreach (var result in results)
             yield return await result.ConfigureAwait(false);
@@ -119,7 +119,7 @@ public static class ConveyorEnumerableExtension
 #if NETSTANDARD
                 if (item != null)
 #endif
-                    await writer.WriteAsync(conveyor.ProcessDataAsync(item, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
+                await writer.WriteAsync(conveyor.ProcessDataAsync(item, attemptsCount, cancellation), cancellation).ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
         {
@@ -168,8 +168,8 @@ public static class ConveyorEnumerableExtension
 #if NETSTANDARD
                 if (item != null)
 #endif
-                    await writer.WriteAsync(priorityConveyor.ProcessDataAsync(item, priority, attemptsCount, cancellation), cancellation)
-                                .ConfigureAwait(false);
+                await writer.WriteAsync(priorityConveyor.ProcessDataAsync(item, priority, attemptsCount, cancellation), cancellation)
+                            .ConfigureAwait(false);
         }
         catch (OperationCanceledException ex)
         {
