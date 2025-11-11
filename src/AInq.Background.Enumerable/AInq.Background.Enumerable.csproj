@@ -6,19 +6,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\AInq.Background.Abstraction\AInq.Background.Abstraction.csproj"/>
+        <ProjectReference Include="..\AInq.Background.Abstraction\AInq.Background.Abstraction.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Include="..\Shared\ServiceProviderHelper.cs" Link="Helpers\ServiceProviderHelper.cs"/>
+        <Compile Include="..\Shared\ServiceProviderHelper.cs" Link="Helpers\ServiceProviderHelper.cs" />
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="AInq.Background.Helpers"/>
-        <Using Include="AInq.Background.Services"/>
-        <Using Include="AInq.Background.Tasks"/>
-        <Using Include="System.Runtime.CompilerServices"/>
-        <Using Include="System.Threading.Channels"/>
+        <Using Include="AInq.Background.Helpers" />
+        <Using Include="AInq.Background.Services" />
+        <Using Include="AInq.Background.Tasks" />
+        <Using Include="System.Runtime.CompilerServices" />
+        <Using Include="System.Threading.Channels" />
     </ItemGroup>
 
 </Project>

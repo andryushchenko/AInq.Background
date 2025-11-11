@@ -1,16 +1,16 @@
 <Project>
 
-    <Sdk Name="DotNet.ReproducibleBuilds.Isolated" Version="1.2.39"/>
+    <Sdk Name="DotNet.ReproducibleBuilds.Isolated" Version="1.2.39" />
 
     <PropertyGroup>
-        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+        <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
         <Product>AInq.Background</Product>
         <Authors>Anton Andryushchenko</Authors>
         <RepositoryUrl>https://github.com/andryushchenko/AInq.Background</RepositoryUrl>
         <Copyright>Copyright (c) Anton Andryushchenko</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
-        <LangVersion>preview</LangVersion>
+        <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <IsAotCompatible>true</IsAotCompatible>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -24,14 +24,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
-        <None Include="..\..\AInq.png" Pack="true" PackagePath="\"/>
-        <Compile Include="..\..\src\Shared\JetBrains.Annotations.cs"/>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\..\AInq.png" Pack="true" PackagePath="\" />
+        <Compile Include="..\..\src\Shared\JetBrains.Annotations.cs" />
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="JetBrains.Annotations"/>
-        <Using Include="AInq.Background.Tasks"/>
+        <Using Include="JetBrains.Annotations" />
+        <Using Include="AInq.Background.Tasks" />
     </ItemGroup>
 
 </Project>
