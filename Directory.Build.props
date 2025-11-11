@@ -4,12 +4,6 @@
 
     <PropertyGroup>
         <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
-        <Product>AInq.Background</Product>
-        <Authors>Anton Andryushchenko</Authors>
-        <RepositoryUrl>https://github.com/andryushchenko/AInq.Background</RepositoryUrl>
-        <Copyright>Copyright (c) Anton Andryushchenko</Copyright>
-        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <IsAotCompatible>true</IsAotCompatible>
@@ -19,6 +13,15 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
         <RootNamespace>AInq.Background</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Product>AInq.Background</Product>
+        <Authors>Anton Andryushchenko</Authors>
+        <RepositoryUrl>https://github.com/andryushchenko/AInq.Background</RepositoryUrl>
+        <Copyright>Copyright (c) Anton Andryushchenko</Copyright>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/andryushchenko/AInq.Background</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>AInq.png</PackageIcon>
     </PropertyGroup>
