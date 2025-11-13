@@ -23,6 +23,7 @@ SOFTWARE. */
 #nullable disable
 
 using System;
+using System.Diagnostics;
 #pragma warning disable 1591
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
@@ -42,9 +43,10 @@ namespace JetBrains.Annotations
   /// so checking for <c>null</c> is required before its usage.
   /// </summary>
   /// <example><code>
-  /// [CanBeNull] object Test() => null;
+  /// [CanBeNull] object Test() { ... }
   /// 
-  /// void UseTest() {
+  /// void UseTest()
+  /// {
   ///   var p = Test();
   ///   var s = p.ToString(); // Warning: Possible 'System.NullReferenceException'
   /// }
@@ -59,7 +61,8 @@ internal sealed class CanBeNullAttribute : Attribute { }
   /// Indicates that the value of the marked element can never be <c>null</c>.
   /// </summary>
   /// <example><code>
-  /// [NotNull] object Foo() {
+  /// [NotNull] object Foo()
+  /// {
   ///   return null; // Warning: Possible 'null' assignment
   /// }
   /// </code></example>
@@ -77,9 +80,12 @@ internal sealed class NotNullAttribute : Attribute { }
   /// <example><code>
   /// public void Foo([ItemNotNull]List&lt;string&gt; books)
   /// {
-  ///   foreach (var book in books) {
+  ///   foreach (var book in books)
+  ///   {
   ///     if (book != null) // Warning: Expression is always true
-  ///      Console.WriteLine(book.ToUpper());
+  ///     {
+  ///       Console.WriteLine(book.ToUpper());
+  ///     }
   ///   }
   /// }
   /// </code></example>
@@ -115,9 +121,10 @@ internal sealed class ItemCanBeNullAttribute : Attribute { }
   /// </summary>
   /// <example><code>
   /// [StringFormatMethod("message")]
-  /// void ShowError(string message, params object[] args) { /* do something */ }
+  /// void ShowError(string message, params object[] args) { ... }
   /// 
-  /// void Foo() {
+  /// void Foo()
+  /// {
   ///   ShowError("Failed: {0}"); // Warning: Non-existing argument in format string
   /// }
   /// </code></example>
@@ -143,15 +150,16 @@ internal sealed class StringFormatMethodAttribute : Attribute
   /// the following arguments in the order in which they appear.
   /// </summary>
   /// <example><code>
-  /// void LogInfo([StructuredMessageTemplate]string message, params object[] args) { /* do something */ }
+  /// void LogInfo([StructuredMessageTemplate]string message, params object[] args) { ... }
   /// 
-  /// void Foo() {
+  /// void Foo()
+  /// {
   ///   LogInfo("User created: {username}"); // Warning: Non-existing argument in format string
   /// }
   /// </code></example>
   /// <seealso cref="StringFormatMethodAttribute"/>
   [AttributeUsage(AttributeTargets.Parameter)]
-internal sealed class StructuredMessageTemplateAttribute : Attribute {}
+internal sealed class StructuredMessageTemplateAttribute : Attribute { }
 
   /// <summary>
   /// Use this annotation to specify a type that contains static or const fields
@@ -199,8 +207,10 @@ internal sealed class ValueProviderAttribute : Attribute
   /// Values of interval boundaries are included in the interval.
   /// </summary>
   /// <example><code>
-  /// void Foo([ValueRange(0, 100)] int value) {
-  ///   if (value == -1) { // Warning: Expression is always 'false'
+  /// void Foo([ValueRange(0, 100)] int value)
+  /// {
+  ///   if (value == -1) // Warning: Expression is always 'false'
+  ///   {
   ///     ...
   ///   }
   /// }
@@ -241,8 +251,10 @@ internal sealed class ValueRangeAttribute : Attribute
   /// Indicates that the integral value never falls below zero.
   /// </summary>
   /// <example><code>
-  /// void Foo([NonNegativeValue] int value) {
-  ///   if (value == -1) { // Warning: Expression is always 'false'
+  /// void Foo([NonNegativeValue] int value)
+  /// {
+  ///   if (value == -1) // Warning: Expression is always 'false'
+  ///   {
   ///     ...
   ///   }
   /// }
@@ -258,7 +270,8 @@ internal sealed class NonNegativeValueAttribute : Attribute { }
   /// like <c>string paramName</c> parameter of the <see cref="System.ArgumentNullException"/> constructor.
   /// </summary>
   /// <example><code>
-  /// void Foo(string param) {
+  /// void Foo(string param)
+  /// {
   ///   if (param == null)
   ///     throw new ArgumentNullException("par"); // Warning: Cannot resolve symbol
   /// }
@@ -282,7 +295,8 @@ internal sealed class InvokerParameterNameAttribute : Attribute { }
   /// </list>
   /// </remarks>
   /// <example><code>
-  /// public class Foo : INotifyPropertyChanged {
+  /// public class ObservableBase : INotifyPropertyChanged
+  /// {
   ///   public event PropertyChangedEventHandler PropertyChanged;
   /// 
   ///   [NotifyPropertyChangedInvocator]
@@ -290,7 +304,8 @@ internal sealed class InvokerParameterNameAttribute : Attribute { }
   ///
   ///   string _name;
   /// 
-  ///   public string Name {
+  ///   public string Name
+  ///   {
   ///     get { return _name; }
   ///     set { _name = value; NotifyChanged("LastName"); /* Warning */ }
   ///   }
@@ -382,7 +397,8 @@ internal sealed class ContractAnnotationAttribute : Attribute
   /// </summary>
   /// <example><code>
   /// [LocalizationRequiredAttribute(true)]
-  /// class Foo {
+  /// class Foo
+  /// {
   ///   string str = "my string"; // Warning: Localizable string
   /// }
   /// </code></example>
@@ -409,12 +425,15 @@ internal sealed class LocalizationRequiredAttribute : Attribute
   /// [CannotApplyEqualityOperator]
   /// class NoEquality { }
   /// 
-  /// class UsesNoEquality {
-  ///   void Test() {
-  ///     var ca1 = new NoEquality();
-  ///     var ca2 = new NoEquality();
-  ///     if (ca1 != null) { // OK
-  ///       bool condition = ca1 == ca2; // Warning
+  /// class UsesNoEquality
+  /// {
+  ///   void Test()
+  ///   {
+  ///     var instance1 = new NoEquality();
+  ///     var instance2 = new NoEquality();
+  ///     if (instance1 != null) // OK
+  ///     {
+  ///       bool condition = instance1 == instance2; // Warning
   ///     }
   ///   }
   /// }
@@ -434,24 +453,35 @@ internal sealed class CannotApplyEqualityOperatorAttribute : Attribute { }
   /// equality comparer is passed to the constructor.
   /// </remarks>
   /// <example><code>
-  /// struct StructWithDefaultEquality { }
+  /// struct StructWithDefaultEquality { /* no Equals &amp; GetHashCode override */ }
   /// 
-  /// class MySet&lt;[DefaultEqualityUsage] T&gt; { }
+  /// class MySet&lt;[DefaultEqualityUsage] T&gt; { ... }
   /// 
-  /// static class Extensions {
-  ///     public static MySet&lt;T&gt; ToMySet&lt;[DefaultEqualityUsage] T&gt;(this IEnumerable&lt;T&gt; items) =&gt; new();
+  /// static class Extensions
+  /// {
+  ///   public static MySet&lt;T&gt; ToMySet&lt;[DefaultEqualityUsage] T&gt;(this IEnumerable&lt;T&gt; items) { ... }
   /// }
   /// 
-  /// class MyList&lt;T&gt; { public int IndexOf([DefaultEqualityUsage] T item) =&gt; 0; }
+  /// class MyList&lt;T&gt;
+  /// {
+  ///   public int IndexOf([DefaultEqualityUsage] T item) { ... }
+  /// }
   /// 
-  /// class UsesDefaultEquality {
-  ///     void Test() {
-  ///         var list = new MyList&lt;StructWithDefaultEquality&gt;();
-  ///         list.IndexOf(new StructWithDefaultEquality()); // Warning: Default equality of struct 'StructWithDefaultEquality' is used
-  ///         
-  ///         var set = new MySet&lt;StructWithDefaultEquality&gt;(); // Warning: Default equality of struct 'StructWithDefaultEquality' is used
-  ///         var set2 = new StructWithDefaultEquality[1].ToMySet(); // Warning: Default equality of struct 'StructWithDefaultEquality' is used
-  ///     }
+  /// class UsesDefaultEquality
+  /// {
+  ///   void Test()
+  ///   {
+  ///     var list = new MyList&lt;StructWithDefaultEquality&gt;();
+  ///
+  ///     // Warning: Default equality of struct 'StructWithDefaultEquality' is used
+  ///     list.IndexOf(new StructWithDefaultEquality());
+  ///
+  ///     // Warning: Default equality of struct 'StructWithDefaultEquality' is used
+  ///     var set1 = new MySet&lt;StructWithDefaultEquality&gt;();
+  ///
+  ///     // Warning: Default equality of struct 'StructWithDefaultEquality' is used
+  ///     var set2 = new StructWithDefaultEquality[1].ToMySet();
+  ///   }
   /// }
   /// </code></example>
   [AttributeUsage(AttributeTargets.GenericParameter | AttributeTargets.Parameter | AttributeTargets.ReturnValue)]
@@ -488,16 +518,16 @@ internal sealed class BaseTypeRequiredAttribute : Attribute
   /// </summary>
   /// <example><code>
   /// [UsedImplicitly]
-  /// public class TypeConverter {}
+  /// public class TypeConverter { }
   /// 
   /// public class SummaryData
   /// {
   ///   [UsedImplicitly(ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature)]
-  ///   public SummaryData() {}
+  ///   public SummaryData() { }
   /// }
   /// 
   /// [UsedImplicitly(ImplicitUseTargetFlags.WithInheritors | ImplicitUseTargetFlags.Default)]
-  /// public interface IService {}
+  /// public interface IService { }
   /// </code></example>
   [AttributeUsage(AttributeTargets.All)]
 internal sealed class UsedImplicitlyAttribute : Attribute
@@ -561,15 +591,19 @@ internal sealed class MeansImplicitUseAttribute : Attribute
 internal enum ImplicitUseKindFlags
   {
     Default = Access | Assign | InstantiatedWithFixedConstructorSignature,
+
     /// <summary>Only entity marked with attribute considered used.</summary>
     Access = 1,
+
     /// <summary>Indicates implicit assignment to a member.</summary>
     Assign = 2,
+
     /// <summary>
-    /// Indicates implicit instantiation of a type with fixed constructor signature.
+    /// Indicates implicit instantiation of a type with a fixed constructor signature.
     /// That means any unused constructor parameters will not be reported as such.
     /// </summary>
     InstantiatedWithFixedConstructorSignature = 4,
+
     /// <summary>Indicates implicit instantiation of a type.</summary>
     InstantiatedNoFixedConstructorSignature = 8,
   }
@@ -582,11 +616,16 @@ internal enum ImplicitUseKindFlags
 internal enum ImplicitUseTargetFlags
   {
     Default = Itself,
+
+    /// <summary>Code entity itself.</summary>
     Itself = 1,
+
     /// <summary>Members of the type marked with the attribute are considered used.</summary>
     Members = 2,
+
     /// <summary> Inherited entities are considered used. </summary>
     WithInheritors = 4,
+
     /// <summary>Entity marked with the attribute and all its members considered used.</summary>
     WithMembers = Itself | Members
   }
@@ -635,7 +674,8 @@ internal sealed class InstantHandleAttribute : Attribute
   /// <example><code>
   /// [Pure] int Multiply(int x, int y) => x * y;
   /// 
-  /// void M() {
+  /// void M()
+  /// {
   ///   Multiply(123, 42); // Warning: Return value of pure method is not used
   /// }
   /// </code></example>
@@ -718,7 +758,7 @@ internal sealed class MustDisposeResourceAttribute : Attribute
   }
 
   /// <summary>
-  /// Indicates that method or class instance acquires resource ownership and will dispose it after use.
+  /// Indicates that the method or class instance acquires resource ownership and will dispose it after use.
   /// </summary>
   /// <remarks>
   /// Annotation of <c>out</c> parameters with this attribute is meaningless.<br/>
@@ -757,10 +797,12 @@ internal sealed class RequireStaticDelegateAttribute : Attribute
   /// and stored somewhere, meaning that all other ways to get this value must be consolidated with the existing one.
   /// </summary>
   /// <example><code>
-  /// class Foo {
+  /// class Foo
+  /// {
   ///   [ProvidesContext] IBarService _barService = ...;
   /// 
-  ///   void ProcessNode(INode node) {
+  ///   void ProcessNode(INode node)
+  ///   {
   ///     DoSomething(node, node.GetGlobalServices().Bar);
   ///     //              ^ Warning: use value of '_barService' field
   ///   }
@@ -806,9 +848,11 @@ internal sealed class PathReferenceAttribute : Attribute
   /// of enumerable types, producing an ordinary C# <c>foreach</c> statement and placing the caret inside the block:
   /// <code>
   /// [SourceTemplate]
-  /// public static void forEach&lt;T&gt;(this IEnumerable&lt;T&gt; xs) {
-  ///   foreach (var x in xs) {
-  ///      //$ $END$
+  /// public static void forEach&lt;T&gt;(this IEnumerable&lt;T&gt; xs)
+  /// {
+  ///   foreach (var x in xs)
+  ///   {
+  ///     //$ $END$
   ///   }
   /// }
   /// </code>
@@ -854,8 +898,10 @@ internal enum SourceTemplateTargetExpression
   /// Applying the attribute to a source template method:
   /// <code>
   /// [SourceTemplate, Macro(Target = "item", Expression = "suggestVariableName()")]
-  /// public static void forEach&lt;T&gt;(this IEnumerable&lt;T&gt; collection) {
-  ///   foreach (var item in collection) {
+  /// public static void forEach&lt;T&gt;(this IEnumerable&lt;T&gt; collection)
+  /// {
+  ///   foreach (var item in collection)
+  ///   {
   ///     //$ $END$
   ///   }
   /// }
@@ -863,7 +909,8 @@ internal enum SourceTemplateTargetExpression
   /// Applying the attribute to a template method parameter:
   /// <code>
   /// [SourceTemplate]
-  /// public static void something(this Entity x, [Macro(Expression = "guid()", Editable = -1)] string newguid) {
+  /// public static void something(this Entity x, [Macro(Expression = "guid()", Editable = -1)] string newguid)
+  /// {
   ///   /*$ var $x$Id = "$newguid$" + x.ToString();
   ///   x.DoSomething($x$Id); */
   /// }
@@ -915,6 +962,7 @@ internal sealed class MacroAttribute : Attribute
   ///     return this.ElementAt(0);
   ///   }
   /// }
+  ///
   /// class Test
   /// {
   ///   public void Foo()
@@ -943,12 +991,15 @@ internal sealed class CollectionAccessAttribute : Attribute
   [Flags]
 internal enum CollectionAccessType
   {
-    /// <summary>Method does not use or modify content of the collection.</summary>
+    /// <summary>Method does not use or modify the content of the collection.</summary>
     None = 0,
-    /// <summary>Method only reads content of the collection but does not modify it.</summary>
+
+    /// <summary>Method only reads the content of the collection but does not modify it.</summary>
     Read = 1,
-    /// <summary>Method can change content of the collection but does not add new elements.</summary>
+
+    /// <summary>Method can change the content of the collection but does not add new elements.</summary>
     ModifyExistingContent = 2,
+
     /// <summary>Method can add new elements to the collection.</summary>
     UpdatedContent = ModifyExistingContent | 4
   }
@@ -985,10 +1036,13 @@ internal enum AssertionConditionType
   {
     /// <summary>Marked parameter should be evaluated to true.</summary>
     IS_TRUE = 0,
+
     /// <summary>Marked parameter should be evaluated to false.</summary>
     IS_FALSE = 1,
+
     /// <summary>Marked parameter should be evaluated to null value.</summary>
     IS_NULL = 2,
+
     /// <summary>Marked parameter should be evaluated to not null value.</summary>
     IS_NOT_NULL = 3,
   }
@@ -1074,16 +1128,16 @@ internal sealed class LanguageInjectionAttribute : Attribute
       InjectedLanguageName = injectedLanguage;
     }
 
-    /// <summary>Specifies a language of the injected code fragment.</summary>
+    /// <summary>Specifies the language of the injected code fragment.</summary>
     public InjectedLanguage InjectedLanguage { get; }
 
-    /// <summary>Specifies a language name of the injected code fragment.</summary>
+    /// <summary>Specifies the language name of the injected code fragment.</summary>
     [CanBeNull] public string InjectedLanguageName { get; }
 
-    /// <summary>Specifies a string that 'precedes' the injected string literal.</summary>
+    /// <summary>Specifies the string that 'precedes' the injected string literal.</summary>
     [CanBeNull] public string Prefix { get; set; }
 
-    /// <summary>Specifies a string that 'follows' the injected string literal.</summary>
+    /// <summary>Specifies the string that 'follows' the injected string literal.</summary>
     [CanBeNull] public string Suffix { get; set; }
   }
 
@@ -1251,15 +1305,9 @@ internal sealed class NoReorderAttribute : Attribute { }
   /// <seealso href="https://www.jetbrains.com/help/resharper/Code_Analysis__Find_and_Update_Obsolete_APIs.html">
   /// Find and update deprecated APIs</seealso>
   [AttributeUsage(
-    AttributeTargets.Method
-    | AttributeTargets.Constructor
-    | AttributeTargets.Property
-    | AttributeTargets.Field
-    | AttributeTargets.Event
-    | AttributeTargets.Interface
-    | AttributeTargets.Class
-    | AttributeTargets.Struct
-    | AttributeTargets.Enum,
+    AttributeTargets.Method | AttributeTargets.Constructor | AttributeTargets.Property |
+    AttributeTargets.Field | AttributeTargets.Event | AttributeTargets.Interface |
+    AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Enum,
     AllowMultiple = true,
     Inherited = false)]
 internal sealed class CodeTemplateAttribute : Attribute
@@ -1329,9 +1377,7 @@ internal sealed class CodeTemplateAttribute : Attribute
   /// should not be checked for spelling or grammar errors.
   /// </summary>
   [AttributeUsage(AttributeTargets.Parameter)]
-internal sealed class IgnoreSpellingAndGrammarErrorsAttribute : Attribute
-  {
-  }
+internal sealed class IgnoreSpellingAndGrammarErrorsAttribute : Attribute { }
 
   #region ASP.NET
 
@@ -1610,7 +1656,8 @@ internal sealed class AspMvcViewComponentViewAttribute : Attribute { }
   /// </summary>
   /// <example><code>
   /// [ActionName("Foo")]
-  /// public ActionResult Login(string returnUrl) {
+  /// public ActionResult Login(string returnUrl)
+  /// {
   ///   ViewBag.ReturnUrl = Url.Action("Foo"); // OK
   ///   return RedirectToAction("Bar"); // Error: Cannot resolve action
   /// }
@@ -1921,7 +1968,8 @@ internal sealed class XamlItemStyleOfItemsControlAttribute : Attribute { }
   /// XAML attribute. Indicates that DependencyProperty has <c>OneWay</c> binding mode by default.
   /// </summary>
   /// <remarks>
-  /// This attribute must be applied to DependencyProperty's CLR accessor property if it is present, or to a DependencyProperty descriptor field otherwise.
+  /// This attribute must be applied to DependencyProperty's CLR accessor property if it is present,
+  /// or to a DependencyProperty descriptor field otherwise.
   /// </remarks>
   [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 internal sealed class XamlOneWayBindingModeByDefaultAttribute : Attribute { }
@@ -1930,7 +1978,8 @@ internal sealed class XamlOneWayBindingModeByDefaultAttribute : Attribute { }
   /// XAML attribute. Indicates that DependencyProperty has <c>TwoWay</c> binding mode by default.
   /// </summary>
   /// <remarks>
-  /// This attribute must be applied to DependencyProperty's CLR accessor property if it is present, or to a DependencyProperty descriptor field otherwise.
+  /// This attribute must be applied to DependencyProperty's CLR accessor property if it is present,
+  /// or to a DependencyProperty descriptor field otherwise.
   /// </remarks>
   [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 internal sealed class XamlTwoWayBindingModeByDefaultAttribute : Attribute { }
@@ -1946,7 +1995,10 @@ internal sealed class XamlTwoWayBindingModeByDefaultAttribute : Attribute { }
   /// This information can be used by the IDE to navigate between tests and tested types,
   /// or by test runners to group tests by subject and to provide better test reports.
   /// </remarks>
-  [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = true)]
+  [AttributeUsage(
+    AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Class |
+    AttributeTargets.Interface,
+    AllowMultiple = true)]
 internal sealed class TestSubjectAttribute : Attribute
   {
     /// <summary>
@@ -1984,12 +2036,181 @@ internal sealed class TestSubjectAttribute : Attribute
   ///   [Test]
   ///   public void Should_add_two_numbers()
   ///   {
-  ///      Assert.That(Component.Add(2, 3), Is.EqualTo(5));
+  ///     Assert.That(Component.Add(2, 3), Is.EqualTo(5));
   ///   }
   /// }
   /// </code></example>
   [AttributeUsage(AttributeTargets.GenericParameter)]
 internal sealed class MeansTestSubjectAttribute : Attribute { }
+
+  #endregion
+
+  #region CQRS Support
+
+  /// <summary>
+  /// A declaration marked with this attribute will be recognized as a CQRS Command.
+  /// Its naming and adherence to the CQRS pattern will be checked.
+  /// </summary>
+  /// <example><code>
+  /// public class User
+  /// {
+  ///   private string Name;
+  /// 
+  ///   [CqrsCommand]
+  ///   public void SetUserNameCommand(string newName)
+  ///   {
+  ///     if (newName == GetUserName()) // Warning about 'GetUserName' is called from Command but belongs to the Query
+  ///       return;
+  /// 
+  ///     Name = newName;
+  ///   }
+  /// 
+  ///   [CqrsQuery]
+  ///   public string GetUserName() // Suggestion to rename it to the 'GetUserNameQuery'
+  ///   {
+  ///     return Name;
+  ///   }
+  /// }
+  /// </code></example>
+  [AttributeUsage(
+    AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface |
+    AttributeTargets.Constructor | AttributeTargets.Method | AttributeTargets.Property)]
+internal sealed class CqrsCommandAttribute : Attribute { }
+
+  /// <summary>
+  /// A declaration marked with this attribute will be recognized as a CQRS Query.
+  /// Its naming and adherence to the CQRS pattern will be checked.
+  /// </summary>
+  /// <example><code>
+  /// public class User
+  /// {
+  ///   private string Name;
+  /// 
+  ///   [CqrsCommand]
+  ///   public void SetUserNameCommand(string newName)
+  ///   {
+  ///     if (newName == GetUserName()) // Warning about 'GetUserName' is called from Command but belongs to the Query
+  ///       return;
+  /// 
+  ///     Name = newName;
+  ///   }
+  /// 
+  ///   [CqrsQuery]
+  ///   public string GetUserName() // Suggestion to rename it to the 'GetUserNameQuery'
+  ///   {
+  ///     return Name;
+  ///   }
+  /// }
+  /// </code></example>
+  [AttributeUsage(
+    AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface |
+    AttributeTargets.Constructor | AttributeTargets.Method | AttributeTargets.Property)]
+internal sealed class CqrsQueryAttribute : Attribute { }
+
+  /// <summary>
+  /// A declaration marked with this attribute will be recognized as a CQRS CommandHandler.
+  /// Its naming and adherence to the CQRS pattern will be checked.
+  /// </summary>
+  /// <example><code>
+  /// [CqrsCommandHandler]
+  /// public class UserCommandHandler
+  /// {
+  ///   public void Handle(SetUserNameCommand command)
+  ///   {
+  ///     var query = new GetUserNameQuery() { Id = command.Id }; // Warning about Query use inside Command
+  ///     var handler = new UserQuery(); // Warning about using Query inside Command
+  /// 
+  ///     if (command.Name == handler.Handle(query)) // Warning about using Query inside Command
+  ///       return;
+  /// 
+  ///     // ...
+  ///   }
+  /// }
+  /// 
+  /// [CqrsQueryHandler]
+  /// public class UserQuery // Suggestion to rename to the 'UserQueryHandler'
+  /// {
+  ///   public string Handle(GetUserNameQuery query)
+  ///   {
+  ///     return ...;
+  ///   }
+  /// }
+  /// </code></example>
+  [AttributeUsage(
+    AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface |
+    AttributeTargets.Constructor | AttributeTargets.Method | AttributeTargets.Property)]
+internal sealed class CqrsCommandHandlerAttribute : Attribute { }
+
+  /// <summary>
+  /// A declaration marked with this attribute will be recognized as a CQRS QueryHandler.
+  /// Its naming and adherence to the CQRS pattern will be checked.
+  /// </summary>
+  /// <example><code>
+  /// [CqrsCommandHandler]
+  /// public class UserCommandHandler
+  /// {
+  ///   public void Handle(SetUserNameCommand command)
+  ///   {
+  ///     var query = new GetUserNameQuery() { Id = command.Id }; // Warning about using Query inside Command
+  ///     var handler = new UserQuery(); // Warning about using Query inside Command
+  /// 
+  ///     if (command.Name == handler.Handle(query)) // Warning about using Query inside Command
+  ///       return;
+  ///
+  ///     // ...
+  ///   }
+  /// }
+  /// 
+  /// [CqrsQueryHandler]
+  /// public class UserQuery // Suggestion to rename to the 'UserQueryHandler'
+  /// {
+  ///   public string Handle(GetUserNameQuery query)
+  ///   {
+  ///     return ...;
+  ///   }
+  /// }
+  /// </code></example>
+  [AttributeUsage(
+    AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface |
+    AttributeTargets.Constructor | AttributeTargets.Method | AttributeTargets.Property)]
+internal sealed class CqrsQueryHandlerAttribute : Attribute { }
+
+  /// <summary>
+  /// Indicates that the marked element must be excluded from CQRS-related analysis.
+  /// </summary>
+  /// <example><code>
+  /// public class User
+  /// {
+  ///   private string Name;
+  /// 
+  ///   [CqrsCommand]
+  ///   public void SetUserNameCommand(string newName)
+  ///   {
+  ///     if (newName == GetUserName()) // Warning about 'GetUserName' being called from Command but belongs to the Query
+  ///       return;
+  /// 
+  ///     Name = newName;
+  ///     CheckName();
+  ///   }
+  /// 
+  ///   [CqrsQuery]
+  ///   public string GetUserName() // Suggestion to rename it to the 'GetUserNameQuery'
+  ///   {
+  ///     CheckName();
+  ///     return Name;
+  ///   }
+  /// 
+  ///   [CqrsExcludeFromAnalysis]
+  ///   public bool CheckName() // Although this method is used both in Command and Query, will be ignored in all CQRS analyzes
+  ///   {
+  ///     ...
+  ///   }
+  /// }
+  /// </code></example>
+  [AttributeUsage(
+    AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface |
+    AttributeTargets.Constructor | AttributeTargets.Method | AttributeTargets.Property)]
+internal sealed class CqrsExcludeFromAnalysisAttribute : Attribute { }
 
   #endregion
 }
