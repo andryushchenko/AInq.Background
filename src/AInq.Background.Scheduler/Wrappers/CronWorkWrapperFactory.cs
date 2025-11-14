@@ -134,10 +134,9 @@ public static class CronWorkWrapperFactory
 
         internal IObservable<Maybe<Exception>> WorkObservable => _subject;
 
-        DateTime? IScheduledTaskWrapper.NextScheduledTime
-            => _innerCancellation.IsCancellationRequested || _execCount == 0
-                ? null
-                : _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local)?.ToLocalTime();
+        DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested || _execCount == 0
+            ? null
+            : _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local)?.ToLocalTime();
 
         bool IScheduledTaskWrapper.IsCanceled => _innerCancellation.IsCancellationRequested;
 
@@ -206,10 +205,9 @@ public static class CronWorkWrapperFactory
 
         internal IObservable<Try<TResult>> WorkObservable => _subject;
 
-        DateTime? IScheduledTaskWrapper.NextScheduledTime
-            => _innerCancellation.IsCancellationRequested || _execCount == 0
-                ? null
-                : _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local)?.ToLocalTime();
+        DateTime? IScheduledTaskWrapper.NextScheduledTime => _innerCancellation.IsCancellationRequested || _execCount == 0
+            ? null
+            : _cron.GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local)?.ToLocalTime();
 
         bool IScheduledTaskWrapper.IsCanceled => _innerCancellation.IsCancellationRequested;
 

@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.ComponentModel;
 using AInq.Background.Managers;
 using AInq.Background.Workers;
 using Microsoft.Extensions.Hosting;
-using System.ComponentModel;
 using static AInq.Background.Processors.ProcessorFactory;
 
 namespace AInq.Background;
