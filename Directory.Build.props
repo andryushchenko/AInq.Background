@@ -26,7 +26,6 @@
     <ItemGroup>
         <None Include="..\..\README.md" Pack="true" PackagePath="\" />
         <None Include="..\..\AInq.png" Pack="true" PackagePath="\" />
-        <Compile Include="..\..\src\Shared\JetBrains.Annotations.cs" />
     </ItemGroup>
 
     <ItemGroup>

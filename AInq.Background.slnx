@@ -10,6 +10,7 @@
     </Folder>
 
     <Folder Name="/Solution Items/">
+        <File Path=".editorconfig" />
         <File Path="AInq.png" />
         <File Path="Directory.Build.props" />
         <File Path="Directory.Packages.props" />
@@ -22,7 +23,6 @@
     <Folder Name="/Solution Items/Shared/">
         <File Path="src/Shared/InjectedAccessFactory.cs" />
         <File Path="src/Shared/InjectedWorkFactory.cs" />
-        <File Path="src/Shared/JetBrains.Annotations.cs" />
         <File Path="src/Shared/QueuedAccessFactory.cs" />
         <File Path="src/Shared/QueuedWorkFactory.cs" />
         <File Path="src/Shared/ServiceProviderHelper.cs" />
